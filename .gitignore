@@ -2,8 +2,6 @@
 db/*.sqlite3
 log/*.log
 tmp/**/*
-config/config.yml
-config/config.yml.local
 public/stylesheets/compiled
 .idea
 public/images/image
@@ -20,4 +18,3 @@ public/uploads/tmp
 public/parts_lists
 app/assets/stylesheets/.gitkeep
 app/assets/images/category_images/*
-config/initializers/secret_token.rb
