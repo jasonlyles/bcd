@@ -1,0 +1,45 @@
+- if @user.email.blank? || !@user.valid?
+  =h2('Register an email address')
+- else
+  =h2('Update email info')
+%br
+- if @cart.has_physical_item?
+  %br
+  .centered_text
+    We'll need your email address to have a way to communicate with you.
+  %br
+- elsif @cart.has_digital_item?
+  %br
+  .centered_text
+    We'll need your email address to have somewhere to send download links to.
+  %br
+%br
+%div#regular_signup_div
+  = form_for(@user, :url => '/register_guest', :html => {:method => :post}) do |f|
+    = f.label :email
+    %br
+    = f.text_field :email, :class => 'login_form_text_field', :title => 'Email'
+    %br
+    %br
+    - if @user.email.blank? || !@user.valid?
+      = f.check_box :tos_accepted
+      = f.label :tos_accepted, "I have read and agree to the "
+      = link_to 'Terms of Service', terms_of_service_path
+      and
+      = link_to 'Privacy Policy', privacy_policy_path, :style => "color:red;"
+      %br
+      %br
+    Email Preferences
+    %br
+    = f.radio_button :email_preference, 2
+    = f.label :email_preference, "I want them all!... promotions, discounts, new model announcements, etc.", :value => 2
+    %br
+    = f.radio_button :email_preference, 1
+    = f.label :email_preference, "Just important emails, like when you update a parts list or PDF that I own.", :value => 1
+    %br
+    = f.radio_button :email_preference, 0
+    = f.label :email_preference, "No emails please. (You'll only get order confirmation emails.)", :value => 0
+    %br
+    %br
+    = f.submit "Submit", :class => 'nice_signup_button', :disable_with => 'Submit'
+    %br

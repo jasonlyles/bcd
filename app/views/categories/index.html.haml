@@ -1,0 +1,26 @@
+%h1 Listing categories
+%br
+%table.admin_table
+  %tr
+    %th Name
+    %th Description
+    %th Live?
+    %th
+    %th
+    %th
+
+  - @categories.each do |category|
+    %tr
+      %td= category.name
+      %td= snippet(category.description, :word_count => 10)
+      - if category.ready_for_public == true
+        %td.happy= category.ready_for_public
+      - else
+        %td.sad= category.ready_for_public
+      %td= link_to 'Show', category
+      %td= link_to 'Edit', edit_category_path(category)
+      %td= link_to 'Destroy', category, data: {confirm: 'Are you sure?'}, :method => :delete
+
+%br
+= link_to 'New Category', new_category_path
+

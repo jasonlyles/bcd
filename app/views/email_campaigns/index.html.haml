@@ -1,0 +1,25 @@
+%h1 Listing Email Campaigns
+
+%table.admin_table
+  %tr
+    %th Description
+    %th Click throughs
+    %th Created At
+    %th Updated At
+    %th
+    %th
+    %th
+
+  - @email_campaigns.each do |email_campaign|
+    %tr
+      %td= snippet(email_campaign.description)
+      %td= email_campaign.click_throughs
+      %td= email_campaign.created_at.strftime("%D %r")
+      %td= email_campaign.updated_at.strftime("%D %r")
+      %td= link_to 'Show', email_campaign
+      %td= link_to 'Edit', edit_email_campaign_path(email_campaign)
+      %td= link_to 'Destroy', email_campaign, data: {confirm: 'Are you sure?'}, :method => :delete
+
+%br
+
+= link_to 'New Email Campaign', new_email_campaign_path

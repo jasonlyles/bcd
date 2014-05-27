@@ -1,0 +1,31 @@
+= render partial: 'shared/email_header'
+Hello #{@user.email}
+%br
+%br
+%br
+%p
+  We had to make a change to the instructions for #{@model.product_code} #{@model.name}. Even if you have already
+  used up all your downloads, you will still be able to download an updated version of the instructions.
+%br
+%br
+%p
+  What's changed?
+%br
+%br
+%div{align: 'center'}
+  %p{style: "background-color:#CCC;width:80%;padding:5px;", align: 'center'}
+    = @message
+%br
+%br
+%p
+  Head over to #{link_to 'Your Account Page', "#{@host}/account"} to download the updated instructions.
+%br
+%br
+%br
+Thank you for your business.
+%br
+Brick City Depot
+%br
+%br
+%br
+= render partial: 'shared/email_footer'

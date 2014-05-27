@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sorry, this action can't be processed now.</title>
+  <style type="text/css">
+      * {
+          margin: 0;
+          padding: 0;
+      }
+
+      #main:before {
+          /* Opera and IE8 "redraw" bug fix */
+          content: "";
+          float: left;
+          height: 100%;
+          margin-top: -999em;
+      }
+
+      * html #main {
+          /* IE6 workaround */
+          height: 100%;
+      }
+
+      html {
+          height: 100%;
+      }
+
+      body {
+          color: #666;
+          text-align: center;
+          font-family: arial, sans-serif;
+          height: 100%;
+          margin: 0;
+          line-height: 18px;
+
+          background-repeat: no-repeat;
+          background-image: -moz-linear-gradient(top, #26396A, #9FB3E4);
+          background-image: -ms-linear-gradient(top, #26396A, #9FB3E4);
+          background-image: -o-linear-gradient(top, #26396A, #9FB3E4);
+          background-image: -webkit-gradient(linear, left top, left bottom, from(#26396A), to(#9FB3E4));
+          background-image: -webkit-linear-gradient(top, #26396A, #9FB3E4);
+          background-image: linear-gradient(top, #26396A, #9FB3E4);
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorStr = #26396A, EndColorStr = #9FB3E4);
+      }
+
+      div#main {
+          min-height: 100%;
+          margin-left: auto;
+          margin-right: auto;
+          width: 960px;
+          background-color: #ccc;
+      }
+
+      div#footer {
+          width: 960px;
+          margin-left: auto;
+          margin-right: auto;
+          height: 500px;
+          margin: -600px auto 0; /* negative margin-top equals height of #foot */
+          background: url(/assets/422.png);
+      }
+
+      div.dialog {
+          width: 25em;
+          padding: 0 4em;
+          margin: 4em auto 0 auto;
+      }
+
+      h1 {
+          font-size: 100%;
+          color: #f00;
+          line-height: 1.5em;
+      }
+  </style>
+</head>
+
+<body>
+    <div id='main'>
+        <br/>
+        <br/>
+        <br/>
+        <div class="dialog">
+            <p>
+                Sorry, this action can't be processed now.
+            </p>
+            <br/>
+            <p>
+                Head back <a href="http://www.brickcitydepot.com">Home</a>
+            </p>
+        </div>
+        <br/>
+    </div>
+    <div id="footer">
+    </div>
+</body>
+</html>

@@ -1,0 +1,73 @@
+%p
+  %b Name:
+  = @product.name
+%p
+  %b Type:
+  = @product.product_type.name
+%p
+  %b Quantity:
+  = @product.quantity
+%p
+  %b Category:
+  = @product.category.name
+%p
+  %b Subcategory:
+  = @product.subcategory.name
+%p
+  %b Product code:
+  = @product.product_code
+%p
+  %b Description:
+  = @product.description
+%p
+  %b Images:
+  %br
+  - @product.images.each do |image|
+    =image_tag(image.url.thumb.url)
+%p
+  %b Parts Lists:
+  %br
+  - @product.parts_lists.each do |pl|
+    = pl.filename
+    %br
+%p
+  %b Discount percentage:
+  = @product.discount_percentage
+%p
+  %b Price:
+  = number_to_currency(@product.price)
+- if @product.free?
+  %p.happy
+    %b Free for all!
+- if @product.ready_for_public == true
+  %p.happy
+    %b Ready for Public!
+- else
+  %p.sad
+    %b NOT Ready for Public!
+%p
+  %b Alternative build?
+  = @product.alternative_build?
+%p
+  %b Youtube Url:
+  - if @product.youtube_url && !@product.youtube_url.blank?
+    = @product.youtube_url
+    %br
+    %iframe{:allowfullscreen => "", :frameborder => "0", :height => "315", :src => "http://www.youtube.com/embed/#{@product.youtube_url}?rel=0", :width => "420"}
+%br
+= link_to "Add Image", new_image_path(:product_id => @product.id)
+\|
+= link_to 'Edit', edit_product_path(@product)
+\|
+= link_to 'Back', products_path
+\|
+= link_to 'Add Derivative Product', new_product_path(:product_code => @product.product_code)
+%br
+%br
+= form_for(:product, :url => {:action => :retire_product}) do |f|
+  = f.hidden_field :id, :value => @product.id
+  .actions
+    = f.submit 'Retire Product'
+* Retiring a product will set 'ready for public' to false and the category and subcategory to the "Retired" cat/subcats.
+This leaves it around for reporting, but takes it out of public view. To un-retire a product, edit it, and see notes
+about un-retiring the product.

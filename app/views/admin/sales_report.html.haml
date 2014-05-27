@@ -1,0 +1,37 @@
+%h1 Sales Report
+%br
+%br
+%p
+  %b
+    A quick note about how this form works.
+%br
+%p
+  If you want a report for a single month, make sure the same month is selected for both the start and end month. If you
+  ran the report before the month was completed, and you want to run it again for a more up to date report, click the
+  "Force Regeneration" button. If you want to run a report for multiple
+  months, you need to first run the single month reports. For example, if you want to see complete sales reports from
+  January to March, first run the single month reports for January, February and March individually. Then you can see the
+  sales numbers for all 3 months. The "Force Regeneration" button is not used for multi-month reports.
+%br
+%br
+= form_for @report, :url => sales_report_monthly_stats_path, :remote => true do |f|
+  .float_left
+    Start Month
+    %br
+    = select_month(Date.today, :field_name => 'month', :use_short_month => true, :prefix => 'start_date')
+    = select_year(Date.today, :field_name => 'year', :start_year => 2010, :prefix => 'start_date')
+  .float_left{:style => 'width:10px;'}
+    %br
+  .float_left
+    End Month
+    %br
+    = select_month(Date.today, :field_name => 'month', :use_short_month => true, :prefix => 'end_date', :include_blank => true)
+    = select_year(Date.today, :field_name => 'year', :start_year => 2010, :prefix => 'end_date', :include_blank => true)
+  .clear
+  %br
+  .actions
+    = f.submit 'Generate Report', :disable_with => 'Disabling...'
+    = f.submit 'Force Regeneration', :disable_with => 'Regenerating...'
+%br
+#sales_report
+

@@ -1,0 +1,22 @@
+%p
+  %b Partner:
+  = link_to @advertising_campaign.partner.name, :controller => :partners, :action => :show, :id => @advertising_campaign.partner_id
+%p
+  %b Reference code:
+  = @advertising_campaign.reference_code
+%p
+  %b Is Campaign Live?
+  - if @advertising_campaign.campaign_live?
+    %b.happy YES
+  - else
+    %b.sad NO
+%p
+  %b Description
+  = @advertising_campaign.description
+%p
+  %b New Users from this Campaign:
+  = @advertising_campaign.user_count
+%br
+= link_to 'Edit', edit_advertising_campaign_path(@advertising_campaign)
+\|
+= link_to 'Back', advertising_campaigns_path

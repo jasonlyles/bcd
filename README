@@ -1,0 +1,27 @@
+DEPLOYING
+
+When checking in code to gitography, just `git push` or `git push origin`
+When deploying to heroku, `git push staging master`
+For prod: 'git push production master --app bcd-prod'
+For deploying the db: 'heroku run rake db:migrate --remote staging --app bcd-stg'
+For restarting: `heroku restart --app bcd-stg`
+For tailing: `heroku logs --tail --app bcd-stg`
+
+MAINTENANCE
+
+When putting app in maint mode, use `heroku maintenance:on`
+Do your work
+Take it back out of maint. mode with `heroku maintenance:off`
+
+GEMS USED
+
+Exception Notification https://github.com/smartinez87/exception_notification
+
+JAVASCRIPT USED:
+
+http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone
+
+NOTES
+
+For multiple file uploads in a model with a carrierwave mount and a nested form, I used the instructions in this:
+http://lucapette.com/rails/multiple-files-upload-with-carrierwave-and-nested_form/

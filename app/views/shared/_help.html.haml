@@ -1,0 +1,9 @@
+<input type="image" src="/assets/question_mark.gif" alt="Help" onClick="alert_box();"/>
+:javascript
+  function alert_box() {
+    $.msgBox({
+      title:"#{title}",
+      content:"#{content}",
+      type:"#{type}"
+    });
+  }

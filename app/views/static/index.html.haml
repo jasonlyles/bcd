@@ -1,0 +1,56 @@
+- content_for :head do
+  <script>
+  $(document).ready(function() {
+  $('#homepage_slideshow').cycle({
+  timeout: 12000,
+  pause: 1,
+  prev: '#prev',
+  next: '#next'
+  });
+  });
+  </script>
+= h1("Welcome to Brick City Depot")
+%br
+%p At Brick City Depot, we focus on making affordable, high quality instructions to help you expand your Lego&reg; collection and building skills.
+%br
+%div.main_item_div#homepage_slideshow
+  - @updates.each do |item|
+    .main_item
+      = link_to image_tag(item.image), item.link, :class => 'image_link' if item.image?
+.clear
+.prev_next_centered
+  &nbsp;<a id='prev' href="#">Prev</a>&nbsp; | &nbsp;<a id='next' href="#">Next</a>
+%br
+.featured_item.float_right
+  - product = featured_item
+  .news_item_header.drop_shadow
+    %h3 Featured Product
+  .news_item.drop_shadow
+    - unless product.nil?
+      %table
+        %tr
+          %td
+            -if product.images[0]
+              -if product.images[0].url
+                - image_url = product.images[0].url
+                = link_to(image_tag(image_url.thumb.url), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => string_to_snake_case(product.name)}, :class => 'image_link') unless image_url.blank?
+          %td.table_cell_spacer
+          %td
+            %b= "#{product.product_code} #{product.name}"
+            %br
+            = snippet(product.description)
+            = link_to "More", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => string_to_snake_case(product.name)}
+.under_construction.float_left
+  .news_item_header.drop_shadow
+    %h3 New site still under construction!
+  .news_item.drop_shadow
+    %table
+      %tr
+        %td
+          = image_tag("/assets/construction_dude.png")
+        %td.table_cell_spacer
+        %td
+          We're still under construction so this site will be changing as we tweak things and add new functionality. If things don't look right in your favorite browser, let us know so we can fix it. Thanks!
+.clear
+%br
+

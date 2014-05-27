@@ -1,0 +1,34 @@
+%br
+- if @products.blank?
+  %br
+  %br
+  .centered_text
+    = "Sorry, there are currently no #{product} for sale."
+= paginate @products
+.centered_products_table
+  %table.products_table
+    - until @products.length == 0
+      - products = @products.pop(4).reverse!
+      %tr
+        - products.each do |p|
+          %td
+            .products_detail_thumb.drop_shadow
+              .centered_product_thumb
+                .thumb_image_div
+                  - image = p.images
+                  - image_url = image[0].url.thumb.url unless image.blank?
+                  = link_to(image_tag(image_url), {:action => :product_details, :product_code => p.product_code, :product_name => string_to_snake_case(p.name)}, :class => 'image_link') if !image_url.blank?
+                %br
+                .thumb_details
+                  .model_name
+                    = link_to p.name, {:action => :product_details, :product_code => p.product_code, :product_name => string_to_snake_case(p.name)}
+                  %b Model #:
+                  = p.product_code
+                  %br
+                  %b Price:
+                  = number_to_currency(p.price)
+                %br
+                .add_to_cart_div
+                  = button_to "Add to Cart", {:action => "add_to_cart", :product_code => p.product_code}, :class => 'add_to_cart_button', :disable_with => 'Adding...'
+                %br
+= paginate @products

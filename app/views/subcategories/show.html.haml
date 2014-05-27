@@ -1,0 +1,29 @@
+%h1 Subcategory Details
+%br
+%p
+  %b Name:
+  = @subcategory.name
+%br
+%p
+  %b Code:
+  = @subcategory.code
+%br
+%p
+  %b Category:
+  = @subcategory.category.name
+%br
+%p
+  %b Description:
+  = @subcategory.description
+%br
+%p
+  %b Products:
+  %br
+  - @subcategory.products.each do |product|
+    %br
+    = link_to "#{product.product_code} #{product.name}", :controller => :products, :action => :show, :id => product.id
+%br
+%br
+= link_to 'Edit', edit_subcategory_path(@subcategory)
+\|
+= link_to 'Back', subcategories_path

@@ -1,0 +1,90 @@
+= content_for(:title, "#{@product.product_code} #{@product.name} - #{@product.product_type.name}")
+.centered_text
+  %h1= "#{@product.product_code} #{@product.name}"
+- if @product.ready_for_public?
+  %br
+  #{@product.category.name}/#{@product.subcategory.name}
+  %br
+  %table
+    %tr
+      %td{:rowspan => '2'}
+        %div#slider
+          - if @product.youtube_url && !@product.youtube_url.blank?
+            %a{href: "https://www.youtube.com/watch?v=#{@product.youtube_url}", rel: "prettyPhoto[mixed]", :class => 'image_link'}
+              %img{src: "/assets/youtube_logo.png", width: 100}
+          - unless @product.images.empty?
+            - @product.images.each do |image|
+              %a{href: image.url, rel: 'prettyPhoto[mixed]', :class => 'image_link'}
+                %img{src: image.url.thumb}
+
+      %td#product_details_description
+        %p= @product.description
+    %tr
+      %td#product_details_action_items
+        %p
+          - if @product.is_physical_product?
+            - if @product.out_of_stock?
+              %span.sad
+                Out of Stock!
+
+            - else
+              %span.sad
+                Only
+                %b=@product.quantity
+                available!
+            %br
+            %b= @product.product_type.name
+            What do I get?
+
+          - else
+            %b Instructions only!
+            What do I get?
+          = render :partial => 'shared/help', :locals => {:title => @product.product_type.comes_with_title, :content => @product.product_type.comes_with_description, :type => 'info'}
+          %br
+          %br
+          - if @product.is_free?
+            %h2 FREE for users with an account!
+            %br
+            %p
+              (Go to the #{link_to "My Account", account_path} page to download instructions)
+          -else
+            %b Price:
+            = number_to_currency(@product.price)
+          %br
+        %div{:style => 'margin-left:12px;'}
+          - unless @product.out_of_stock? || @product.is_free?
+            = button_to "Add to Cart", {:action => "add_to_cart", :product_code => @product.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'}
+  .clear
+  %br
+  %br
+  .social_media
+    <span class='st_facebook_vcount' displayText='Facebook'></span>
+    <span class='st_twitter_vcount' displayText='Tweet'></span>
+    <span class='st_pinterest_vcount' displayText='Pinterest'></span>
+    <span class='st_googleplus_vcount' displayText='Google +'></span>
+    <span class='st_digg_vcount' displayText='Digg'></span>
+  .clear
+  %br
+  %br
+  %br
+  %br
+- else
+  %br
+  %br
+  .centered_text
+    .sad
+      %b
+        Sorry! This model is not currently available.
+    %br
+    %br
+= render :partial => 'similar_products'
+
+:javascript
+  $(document).ready(function(){
+    $("a[rel^='prettyPhoto']").prettyPhoto({
+      theme: 'facebook',
+      social_tools: '<div class="pp_social"><div class="twitter"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></scr'+'ipt></div><div class="facebook"><iframe src="http://www.facebook.com/plugins/like.php?locale=en_US&href='+location.href+'&amp;layout=button_count&amp;show_faces=true&amp;width=500&amp;action=like&amp;font&amp;colorscheme=light&amp;height=23&amp;share=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:500px; height:23px;" allowTransparency="true"></iframe></div></div>',
+      deeplinking: false
+    });
+  });
+

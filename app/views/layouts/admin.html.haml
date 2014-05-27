@@ -1,0 +1,47 @@
+!!!
+%html
+  %head
+    %title Brick City Depot
+
+    //= stylesheet_link_tag 'screen.css', :media => 'screen, projection'
+    //= stylesheet_link_tag 'print.css', :media => 'print'
+    ///[if IE]
+    //  = stylesheet_link_tag 'ie.css', :media => 'screen, projection'
+    = stylesheet_link_tag 'application.css'
+
+    //= stylesheet_link_tag :all
+    //= javascript_include_tag 'jquery'
+    = javascript_include_tag 'application'
+    = csrf_meta_tag
+    = yield :head
+  %body
+    .content
+      .header
+        .admin_navigation
+          = render :partial => 'shared/admin_navigation'
+      .admin_main
+        - if notice
+          #alert_wrapper
+            #speech_bubble_thing
+              %img{:src => "/assets/speech_bubble_thing.png"}
+            #lego_head
+              %img{:src => "/assets/happy_head.png"}
+            #notice
+              #alert_message
+                = notice
+          %br
+        - if alert
+          #alert_wrapper
+            #speech_bubble_thing
+              %img{:src => "/assets/speech_bubble_thing.png"}
+            #lego_head
+              %img{:src => "/assets/happy_head.png"}
+            #alert
+              #alert_message
+                = alert
+          %br
+        .clear
+        %br
+        = yield
+      .footer
+        = render :partial => 'shared/footer'

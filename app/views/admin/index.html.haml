@@ -1,0 +1,40 @@
+%h1 Admin Tools
+%br
+= link_to "Maintenance Mode", maintenance_mode_path
+%br
+= link_to "Edit Admin profile", admin_profile_admin_path(current_radmin.id)
+%br
+%br
+%h2 User Tools
+%br
+= link_to "Lookup User Info", account_info_path
+%br
+= link_to "Notify Users of PDF/parts list fix", update_users_download_counts_path
+%br
+%br
+%h2 Product Tools
+%br
+= link_to "Add new Category", new_category_path
+%br
+= link_to "Add new Subcategory", new_subcategory_path
+%br
+= link_to 'Add new Product', new_product_path
+%br
+= link_to 'Add an Image!', new_image_path
+%br
+= link_to 'Add a Product Type', new_product_type_path
+%br
+%br
+%h2 Marketing Tools
+%br
+= link_to 'Partners', partners_path
+%br
+= link_to 'Advertising Campaigns', advertising_campaigns_path
+%br
+%br
+%h2 Order Info
+%br
+= link_to 'Order Fulfillment', order_fulfillment_path
+%br
+= link_to 'Sales Reporting', sales_report_path
+

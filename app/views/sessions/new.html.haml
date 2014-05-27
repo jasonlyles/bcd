@@ -1,0 +1,69 @@
+%br
+%br
+%br
+- if resource_name.to_s == "user"
+  %div#auth_login_div
+    %a{:href => "/auth/facebook", :class => 'facebook_login auth_provider'}
+    %a{:href => "/auth/twitter", :class => 'twitter_login auth_provider'}
+    %br
+    .clear
+    %br
+  %br
+- if session[:show_guest_checkout_link]
+  .clear
+  %br
+  %hr.centered
+  %br
+  %br
+  .centered_text.guest_checkout_info
+    No thanks! I want to
+    = link_to("Checkout as a guest", "/guest_registration")
+  %br
+  %br
+  %br
+  %br
+  .centered_text.guest_checkout_info
+    Why create a Brick City Depot account using your Twitter/Facebook login?
+  %br
+  %p
+    %b
+      What we do for those with accounts:
+    %br
+    %b
+      1.
+    Give you free instructions.
+    %br
+    %b
+      2.
+    Keep you informed of sales, new models, etc. Update you when we've had to make changes to the PDF or parts
+    lists for a set of instructions you bought. (If you want us to, you can always opt out.)
+    %br
+    %b
+      3.
+    Download your instructions any time. You won't need to keep track of an order confirmation email we send you
+    with a download link. Computer crashed? Lost the files? No problem. Just sign in and go to the 'My Account' page and
+    download from there.
+  %br
+  %p
+    %b
+      What we don't do for those with accounts:
+    %br
+    %b
+      1.
+    Sell your information (We wouldn't do that to guests either.)
+    %br
+    %b
+      2.
+    Email you if you don't want us to. The exception would be emails relating specifically to your orders.
+- else
+  .centered_text
+    %p
+      Don't worry if you don't want to use a Twitter or Facebook account.
+      %br
+      %br
+      You can still check out as a guest.
+
+:javascript
+  $(document).ready(function(){
+      $.hint({ skipStyles: ['padding-top', 'padding-right', 'padding-bottom', 'padding-left'] });
+  });

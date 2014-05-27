@@ -1,0 +1,94 @@
+!!!
+%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    %meta{:name => "keywords", :content => meta_keywords}/
+    %meta{:name => "description", :content => meta_description}/
+    %meta{:property => "og:image", :content => "#{opengraph_metadata[:image]}" }/
+    %meta{:property => "og:title", :content => content_for?(:title) ? yield(:title) : "Brick City Depot" }/
+    %meta{:property => "og:description", :content => "#{opengraph_metadata[:description]}" }/
+    %meta{:property => "fb:app_id", :content => "#{opengraph_metadata[:app_id]}" }/
+    %meta{:property => "og:site_name", :content => "#{opengraph_metadata[:site_name]}" }/
+    %meta{:property => "og:url", :content => "#{opengraph_metadata[:url]}" }/
+    %title
+      = content_for?(:title) ? yield(:title) : "Brick City Depot"
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    = stylesheet_link_tag 'application.css'
+    <!--[if IE]>
+    = stylesheet_link_tag 'ie', :media => "all"
+    <![endif]-->
+
+    = javascript_include_tag 'application'
+
+    = csrf_meta_tag
+    <!--[if !IE7]>
+    <style type="text/css">
+    .content{style: 'display:table;height:100%;'}
+    </style>
+    <![endif]-->
+    = yield :head
+    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">stLight.options({publisher: "ur-1371f185-fe25-98ba-28b6-848939c08f14", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+  %body
+    .content
+      .logo
+        %img{:src => "/assets/logo180x115.png", :alt => "BCD logo", :title => "Brick City Depot"}
+      .header
+      .navigation
+        = render :partial => 'shared/navigation'
+      .header_spacer
+      .rounded_corner_cart_tie-in
+        %img{:src => "/assets/bottom_right_rounded_corner.png", :alt => "bottom_right_rounded_corner", :title => "Corner"}
+      .cart_stuff
+        = render :partial => 'shared/cart_info'
+
+      .clear
+      .sidebar_wrapper
+        .sidebar_div1
+          = render :partial => 'shared/categories'
+        .sidebar_div3
+          = render :partial => 'shared/resources'
+      .main
+        - if notice
+          #alert_wrapper
+            #speech_bubble_thing
+              %img{:src => "/assets/speech_bubble_thing.png"}
+            #lego_head
+              %img{:src => "/assets/happy_head.png"}
+            #notice
+              #alert_message
+                = notice
+          %br
+          %br
+        - if alert
+          #alert_wrapper
+            #speech_bubble_thing
+              %img{:src => "/assets/speech_bubble_thing.png"}
+            #lego_head
+              %img{:src => "/assets/happy_head.png", :height => '50px'}
+            #alert
+              #alert_message
+                = alert
+          %br
+          %br
+        .clear
+        .centered_text
+          %h1
+            = yield(:h1) || "Welcome to Brick City Depot"
+        .centered_text
+          %h2
+            = yield(:h2)
+        .clear
+
+        - if @cart && @cart.errors.any?
+          %ul.cart_errors
+            - @cart.errors.full_messages.each do |msg|
+              %li.cart_error
+                = msg
+        .main_content
+          = yield
+    .footer
+      = render :partial => 'shared/footer'
+    = render :partial => 'shared/google_analytics_code'

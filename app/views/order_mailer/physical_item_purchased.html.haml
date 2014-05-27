@@ -1,0 +1,38 @@
+Hey Brian/Jason
+%br
+%p
+  Just wanted to let you know you sold a physical item and need to be thinking about boxing up that junk and shipping it out!
+%br
+Order ID: #{@order.id}
+%br
+Order Confirmation ID: #{@order.request_id}
+%br
+Transaction ID: #{@order.transaction_id}
+%br
+User email: #{@user.email}
+%br
+Physical Items:
+%ul
+  - @order.line_items.each do |line_item|
+    - if line_item.product.is_physical_product?
+      %li #{line_item.product.product_code} #{line_item.product.name}
+%br
+%p
+  Fulfill this order and mark it as fulfilled in the order fulfillment page dealy or else you'll keep getting reminder
+  emails until you've obeyed. (Not implemented yet)
+%br
+Send to:
+%br
+= @order.address_name
+%br
+#{@order.first_name} #{@order.last_name}
+%br
+= @order.address_street_1
+- unless @order.address_street_2.blank?
+  %br
+  = @order.address_street_2
+%br
+#{@order.address_city}, #{@order.address_state} #{@order.address_zip}
+%br
+= @order.address_country
+

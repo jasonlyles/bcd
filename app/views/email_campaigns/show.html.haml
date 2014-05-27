@@ -1,0 +1,19 @@
+%p
+  %b Description:
+  = @email_campaign.description
+%br
+%p
+  %b Click throughs:
+  = @email_campaign.click_throughs
+%br
+%p
+  %b Created At:
+  = @email_campaign.created_at.strftime("%D %r")
+%br
+%p
+  %b Updated At:
+  = @email_campaign.updated_at.strftime("%D %r")
+%br
+= link_to 'Edit', edit_email_campaign_path(@email_campaign)
+\|
+= link_to 'Back', email_campaigns_path

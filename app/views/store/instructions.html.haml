@@ -1,0 +1,13 @@
+=h1('Instructions')
+%br
+%br
+.top_level_categories
+  %table.categories_table
+    - until @top_categories.length == 0
+      - categories = @top_categories.pop(3).reverse!
+      %tr
+        - categories.each do |category|
+          %td
+            = link_to image_tag("/assets/category_images/#{string_to_snake_case(category.name)}_logo.png"), {:controller => :store, :action => :categories, :name => category.name}
+            %br
+            %p #{category.description}

@@ -1,0 +1,84 @@
+I started this file on 2012-11-06 because I kept forgetting things I had already done, and tried to do them again.
+
+Brian wants to sell physical items. Accommodate it.
+
+    DONE:
+    a. Make sure that the logic that tells users they don't need to purchase again doesn't apply to physical items, and only to instructions.
+    b. Do physical item orders show up in the My Account area? If so, are they in an entirely different area than the instructions? (Currently displaying them in the same place, but with logic if they don't have instructions to go with them)
+    c. Updated the backend product pages to include Qty
+    d. There needs to be a check in place when the user submits the cart to make sure the quantity desired is still available.
+    e. Make a distinction in the shopping cart as to what type of product they're buying.
+    f. Display on the model page how many are in inventory.
+    g. If a physical items quantity is 0, don't display the product. If user somehow gets to the page, let them know the product is out of stock, and don't let them add to cart.
+    h. If a user buys more than 1 set of a model/kit, they get the same number of instruction downloads.
+    i. Need to make sure that models/kits include instructions PDF/zipped folder. Otherwise, might try to download an item that doesn't exist. This will lead to a set of instructions being uploaded to Amazon twice,
+       meaning if there needs to be an update, I need to update both sets of instructions. So maybe models/kits need to be able to link to an existing set of instructions. Maybe models should share same number as
+       instructions, but with a suffix, such as instructions are CB002 and the model would be CB002M. That way, I can just fetch instructions via download by using the main portion of the product code, CB002.
+       Solved this by using the bse_product_code approach, where CB002 represents instructions and CB002K represents the kit, and CB002M represents the model, etc. Product.find_by_base_product_code allows me to send
+       any version of the product code, and return the base product for download file path purposes.
+    j. Need to update forms to take quantity into account, for items that aren't instructions. Might want to still display quantities for instructions, but gray it out and make the quantity unchangeable.
+    k. Need to remove the "Remove" button in the cart in favor of a Qty text field and "update qty" button Taking qty down to 0 removes item from cart. For Instructions I might still want to have the remove button.
+    l. Make sure I'm sending the correct amount to paypal when purchasing instructions and models, and more than one of a given model.
+    m. Need to review how I send traffic to paypal, and what I ask of paypal. I may have only set this interaction up with downloads in mind.
+    n. Need to have some form of inventory that gets decremented by users buying items. When should the
+       inventory get decremented? After a successful paypal transaction, or after the user submits the cart? If it's after the user
+       submits their cart to protect someone else from adding non-existent products to their cart, then I need to have some way
+       of returning those items to inventory if the transaction fails. But what if the user wants to complete that transaction,
+       by working it out with us via email, but the item has been sold out? I've decided to decrement inventory when I get the
+       IPN back from Paypal and find that it's valid. If the conflict arises where a user tries to buy an item that has been
+       sold after they loaded the page, I'll let the sale go through and then just contact the buyer and let them know we're
+       out of stock, and ask if they want to wait.
+    o. Orders that include physical items need to trigger emails to Brian/me so that we'll know when a physical item is sold and
+       we need to either work out additional shipping for intl customers, or just plain out ship the thing. Email should include
+       all relevant information so we won't have to go back the site to look up information. For now, just basic information for
+       using to look up paypal transactions is being included.
+    p. Capture street addresses in order record for orders that include a physical item.
+
+EMAIL
+       1. Set up email addresses for staging and prod. lylesjt@yahoo.com for staging sales@ and service@brickcitydepot.com for prod.
+
+
+
+ENVIRONMENTS:
+       1. Set up a staging environment
+
+SECURITY:
+       1. Make sure I'm protecting against XSS in my forms. - current as of 2012-11-07
+
+REPORTING:
+        1. I need some sort of basic order reporting so I can get a sense of how things are going.
+            a. Once I've created a sales report for a month that has completed, I need to have some way of saving that report so I
+            don't have to generate it again next time I want to see those numbers. One method would be to save a report to Amazon S3
+            that I could just GET if I wanted to see it again. Probably a better option would be to have a summary table or 2 that
+            stored counts for products for a given month. This would allow me to use those numbers to run reports for month-to-month
+            trends and/or totals.
+            b. Might create a sales report like this: If month is in the past (i.e. not the current month or a future month) and there
+            is no saved sales report, select * from Orders where creation_date between 1st of month and 1st of the next month. Get those
+            into an array, and for each one, get its line_items. Throw all the line_items into a big array. At this point, at some time
+            in the future, this might be getting kind of big. See if I can do the next part in batches. For each line_item, take the
+            product_type, quantity, price(because this can change due to reduction in price or sales-type discounts) and product_id. Use the product_id as a key and throw everything into a hash, incrementing the values
+            as needed. Once I've done this, I can go through the hashes and look up the products by ID to get details about the product,
+            and use that information for the report. I then need to take all my values and dump them into a table with the following fields:
+            id, product_id, quantity, total_revenue. To make the report run faster by running less queries, I probably need to also
+            dump product name and model code to one field. Doing that will probably be everything I need for the monthly report, and won't
+            require joining to any other tables in the future. I'll only need to hit this sales summary table to generate a report for
+            a given month. Actually, I have a total_revenue column because people could pay different amounts for the same item during
+            the month if we have discounts. So, for each line_item, I need to get price and add that to a running total for price for that
+            particular product. And then save that total to a revenue column.
+
+CONFIG:
+        1. Change the config files to use the env variables.
+        2. Go to Facebook and Twitter developer centers and set up apps for each environment, dev, staging and prod.
+        3. Set up all keys that are in ENV vars locally in heroku.
+
+DOWNLOADS:
+        1. Set up prod and staging to redirect back to account/index after a download
+        2. Set up download buttons to first redirect to the download action, and then in the background redirect back to /account page
+            so user can see updated download count.
+
+DEV CONVENIENCES:
+        1. After submitting cart, I have an after_filter that updates the order with what a successful transaction would
+            update the record with after hearing from paypal. This allows me to mock out the paypal flow somewhat.
+
+ADMIN FEATURES:
+        1. Added ability to retire a product

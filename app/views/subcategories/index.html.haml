@@ -1,0 +1,24 @@
+%h1 Listing subcategories
+%br
+%table.admin_table
+  %tr
+    %th Category
+    %th Subcategory
+    %th Code
+    %th Description
+    %th
+    %th
+    %th
+
+  - @subcategories.each do |subcategory|
+    %tr
+      %td= subcategory.category.name
+      %td= subcategory.name
+      %td= subcategory.code
+      %td= snippet(subcategory.description, :word_count => 10) if subcategory.description
+      %td= link_to 'Show', subcategory
+      %td= link_to 'Edit', edit_subcategory_path(subcategory)
+      %td= link_to 'Destroy', subcategory, data: {confirm: 'Are you sure?'}, :method => :delete
+
+%br
+= link_to 'New Subcategory', new_subcategory_path

@@ -1,0 +1,84 @@
+- unless @submission_method.nil?
+  - if @submission_method == "form"
+    .div#form_selected
+  - else
+    .div#paypal_selected
+=h2("Enter Address")
+%br
+%br
+We noticed that you have a physical item in your cart. In order for us to be able to ship it to you, we'll need your
+street address. If you want us to ship to the address you have registered with Paypal, select "Use my Paypal address".
+Otherwise, select "Enter my address here".
+%br
+%br
+= form_for(@order, :url => "validate_street_address", :html => { :method => :post }) do |f|
+  %p
+    = f.radio_button :address_submission_method, 'paypal', :onclick => 'hideAddressForm()'
+    = f.label :address_submission_method_paypal, 'Use my Paypal address (Use this if you live somewhere other than the United States)'
+    %br
+    = f.radio_button :address_submission_method, 'form', :checked => true, :onclick => 'showAddressForm()'
+    = f.label :address_submission_method_form, 'Enter my address here'
+  %br
+  .div#address_form
+    %p
+      = f.label :first_name
+      %br
+      = f.text_field :first_name, :size => "20"
+    %p
+      = f.label :last_name
+      %br
+      = f.text_field :last_name, :size => "20"
+    %p
+      = f.label :address_street_1, "Address 1"
+      %br
+      = f.text_field :address_street_1
+    %p
+      = f.label :address_street_2, "Address 2"
+      %br
+      = f.text_field :address_street_2
+    %p
+      = f.label :address_city, "City"
+      %br
+      = f.text_field :address_city, :size => "15"
+    %p
+      = f.label :address_state, "State"
+      %br
+      = f.select(:address_state, @states, {:prompt => 'Select State'})
+    %p
+      = f.label :address_zip, "Zip"
+      %br
+      = f.text_field :address_zip, :size => "5", :maxlength => "5"
+    %p
+      = f.label :address_country, "Country"
+      %br
+      = f.select(:address_country, @countries)
+    %br
+  %p
+    = f.submit "Submit", :class => 'update_preferences_button', :disable_with => 'Submitting...'
+
+:javascript
+  $(document).ready(function(){
+      window.onload = showAddressForm();
+  });
+
+  function showAddressForm(){
+    var paypalDiv = document.getElementById('paypal_selected');
+    var formDiv = document.getElementById('form_selected');
+    var addressForm = document.getElementById('address_form');
+    var paypalRadio = document.getElementById('order_address_submission_method_paypal');
+    var formRadio = document.getElementById('order_address_submission_method_form');
+    if (formDiv === null && paypalDiv === null){//ns
+      addressForm.style.display = 'block';
+    } else if (formDiv === null && paypalDiv != null){//s+p
+      paypalDiv.parentNode.removeChild(paypalDiv);
+      addressForm.style.display = 'none';
+      paypalRadio.checked = true;
+    } else {
+      formDiv.parentNode.removeChild(formDiv);
+      addressForm.style.display = 'block';//s+f
+    }
+  }
+
+  function hideAddressForm(){
+    document.getElementById('address_form').style.display = 'none';
+  }

@@ -1,0 +1,33 @@
+%h1 Listing updates
+%br
+= paginate @updates
+%table.admin_table
+  %tr
+    %th Title
+    %th Description
+    %th Body
+    %th Image
+    %th Link
+    %th Live?
+    %th
+    %th
+    %th
+
+  - @updates.each do |update|
+    %tr
+      %td= update.title
+      %td= snippet(update.description) if update.description
+      %td= snippet(update.body) if update.body
+      %td= update.image
+      %td= update.link
+      - if update.live?
+        %td.happy= update.live
+      - else
+        %td.sad= update.live
+      %td= link_to 'Show', update
+      %td= link_to 'Edit', edit_update_path(update)
+      %td= link_to 'Destroy', update, data: {confirm: 'Are you sure?'}, :method => :delete
+
+%br
+
+= link_to 'New Update', new_update_path

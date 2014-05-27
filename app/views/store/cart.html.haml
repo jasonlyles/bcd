@@ -1,0 +1,58 @@
+= h1("My Cart")
+%br
+%br
+- if !@cart.empty?
+  = render :partial => 'shared/cart_nav_buttons'
+  .clear
+  %br
+  %p
+    %table.cart_table
+      %tr
+        %th{:colspan => 2} Model
+        %th Type
+        %th Price
+        %th Quantity
+      - @cart.cart_items.each do |item|
+        %tr{:id => "#{item.product.product_code}", :class => errant_cart_item?(item.product.product_code) ? "cart_errors" : ''}
+          - image = item.product.images[0]
+          - image_url = image.url.thumb if !image.blank?
+          %td.left_most_cell= image_tag(image_url.url) if !image_url.blank?
+          %td= link_to "#{item.product.product_code} #{item.product.name}", {:action => :product_details, :product_code => item.product.product_code, :product_name => string_to_snake_case(item.product.name)}
+          %td #{item.product.product_type.name}
+          %td #{number_to_currency(item.price)}
+          %td.right_most_cell
+            - if item.product.is_physical_product?
+              = form_for(:cart, :url => {:action => :update_item_in_cart}) do |f|
+                = f.hidden_field :item_id, :value => item.id
+                = f.text_field :quantity, :value => item.quantity, :size => 1
+                = f.submit 'Update', {:style => 'cursor:pointer', :disable_with => 'Updating'}
+            - else
+              = form_for(:cart, :url => {:action => :update_item_in_cart}) do |f|
+                = f.hidden_field :item_id, :value => item.id
+                = f.hidden_field :quantity, :value => 0
+                = f.text_field :display_quantity, :value => 1, :size => 1, :disabled => true
+                = f.submit 'Remove', {:style => 'cursor:pointer', :disable_with => 'Removing'}
+      %tr
+        %td.spacer_row{:colspan => 6}
+      %tr
+        %td.no_border{:colspan => 3}
+        %td.left_subtotal_cell{:colspan => 1}
+          %b Items:
+          %br
+          %br
+          %b Subtotal:
+        %td.right_subtotal_cell
+          #{@cart.total_quantity}
+          %br
+          %br
+          #{number_to_currency @cart.total_price}
+  %br
+  = render :partial => 'shared/cart_nav_buttons'
+- else
+  .centered_text
+    %br
+    %br
+    Your cart is empty.
+    %br
+    %br
+    = link_to "Return to Shopping", store_path

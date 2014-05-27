@@ -1,0 +1,23 @@
+.products_detail_thumb.drop_shadow
+  .centered_product_thumb
+    .thumb_image_div
+      - image = product.images
+      - image_url = image[0].url.thumb.url unless image.blank?
+      = link_to(image_tag(image_url), {:action => :product_details, :product_code => product.product_code, :product_name => string_to_snake_case(product.name)}, :class => 'image_link') if !image_url.blank?
+    .thumb_details
+      .model_name
+        = link_to product.name, {:action => :product_details, :product_code => product.product_code, :product_name => string_to_snake_case(product.name)}
+    %b Model #:
+    = product.product_code
+    - unless product.is_free?
+      %br
+      %b Price:
+      = number_to_currency(product.price)
+    %br
+    %br
+    .add_to_cart_div
+      - if product.is_free?
+        %h2 FREE
+      - else
+        = button_to "Add to Cart", {:action => "add_to_cart", :product_code => product.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'}
+    %br

@@ -1,0 +1,43 @@
+%h1 Listing products
+%br
+= paginate @products
+%table.admin_table
+  %tr
+    %th Product
+    %th Type
+    %th Cat/Subcat
+    %th Qty
+    %th Imgs
+    %th Discount%
+    %th Price
+    %th Live?
+    %th Free?
+    %th
+    %th
+
+  - @products.each do |product|
+    %tr
+      %td= link_to "#{product.product_code} #{product.name}", product
+      %td= product.product_type.name
+      %td= "#{product.category.name}/#{product.subcategory.name}"
+      - if product.product_type.name == 'Instructions'
+        %td.sad N/A
+      - else
+        %td= product.quantity
+      %td= product.images.count
+      %td= product.discount_percentage
+      %td= number_to_currency(product.price)
+      - if product.ready_for_public == true
+        %td.happy= product.ready_for_public
+      - else
+        %td.sad= product.ready_for_public
+      - if product.free?
+        %td.sad FREE
+      - else
+        %td $$$
+      %td= link_to 'Edit', edit_product_path(product)
+      %td= link_to 'Destroy', product, data: {confirm: 'Are you sure?'}, :method => :delete
+= paginate @products
+%br
+= link_to 'New Product', new_product_path
+

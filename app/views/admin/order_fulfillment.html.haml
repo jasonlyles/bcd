@@ -1,0 +1,14 @@
+%h1 Order Fulfillment
+%br
+%br
+ALL INCOMPLETE ORDERS
+%br
+%br
+= render :partial => 'order_fulfillment_table', :locals => {:orders => @incomplete_orders, :paginate_it => true}
+
+%br
+%br
+LAST 10 COMPLETED ORDERS
+%br
+%br
+= render :partial => 'order_fulfillment_table', :locals => {:orders => @completed_orders, :paginate_it => false}

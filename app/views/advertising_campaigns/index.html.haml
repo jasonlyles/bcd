@@ -1,0 +1,28 @@
+%h1 Listing Advertising Campaigns
+%br
+%table.admin_table
+  %tr
+    %th Partner
+    %th Reference code
+    %th Is Campaign Live?
+    %th
+    %th
+    %th.sad ONLY DESTROY IF UNUSED
+
+  - @advertising_campaigns.each do |advertising_campaign|
+    %tr
+      %td= advertising_campaign.partner.name
+      %td= advertising_campaign.reference_code
+      - if advertising_campaign.campaign_live?
+        %td
+          %b.happy YES
+      - else
+        %td
+          %b.sad NO
+      %td= link_to 'Show', advertising_campaign
+      %td= link_to 'Edit', edit_advertising_campaign_path(advertising_campaign)
+      %td= link_to 'Destroy', advertising_campaign, data: {confirm: 'Are you sure?'}, :method => :delete
+
+%br
+
+= link_to 'New Advertising campaign', new_advertising_campaign_path

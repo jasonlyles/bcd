@@ -1,0 +1,47 @@
+en:
+  errors:
+    messages:
+      not_found: "not found"
+      already_confirmed: "was already confirmed"
+      not_locked: "was not locked"
+
+  devise:
+    failure:
+      unauthenticated: 'You need to sign in or sign up before continuing.'
+      unconfirmed: 'You have to confirm your account before continuing.'
+      locked: 'Your account is locked.'
+      invalid: 'Invalid email or password.'
+      invalid_token: 'Invalid authentication token.'
+      timeout: 'Your session expired, please sign in again to continue.'
+      inactive: 'Your account was not activated yet.'
+      additional_authentication_failure: 'Something went wrong. Please try adding the authentication method again.'
+    sessions:
+      signed_in: 'Signed in successfully.'
+      signed_out: 'Signed out successfully.'
+      user_cancelled: 'Sorry, your account has been cancelled. If this is not what you expected, please contact us.'
+    passwords:
+      send_instructions: 'You will receive an email with instructions about how to reset your Brick City Depot password in a few minutes.'
+      updated: 'Your password was changed successfully. You are now signed in.'
+      forgot: 'Forgot your password?'
+    confirmations:
+      send_instructions: 'You will receive an email with instructions about how to confirm your account in a few minutes.'
+      confirmed: 'Your account was successfully confirmed. You are now signed in.'
+    registrations:
+      signed_up: 'You have signed up successfully.'
+      updated: 'You updated your account successfully.'
+      destroyed: "Bye! Your account was successfully cancelled. We're sorry to see you go!"
+      additional_authentication: 'Authentication Successful'
+      destroyed_additional_authentication: 'Successfully deleted authentication.'
+      signed_up_but_unconfirmed: 'A message with a confirmation link has been sent to your email address. Please open the link to activate your account.'
+      signed_up_but_inactive: 'You have signed up successfully. However, we could not sign you in because your account is not yet activated.'
+      signed_up_but_locked: 'You have signed up successfully. However, we could not sign you in because your account is locked.'
+    unlocks:
+      send_instructions: 'You will receive an email with instructions about how to unlock your account in a few minutes.'
+      unlocked: 'Your account was successfully unlocked. You are now signed in.'
+    mailer:
+      confirmation_instructions:
+        subject: 'Confirmation instructions'
+      reset_password_instructions:
+        subject: 'Password reset instructions'
+      unlock_instructions:
+        subject: 'Unlock Instructions'

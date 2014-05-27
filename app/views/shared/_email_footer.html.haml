@@ -1,0 +1,11 @@
+%table{:width => "80%", :border => "0", :align => "center"}
+  %tr
+    %td
+      = link_to "Privacy Policy", "#{@host}/privacy_policy"
+    %td
+      = link_to "Brick City Depot", "#{@host}"
+    %td
+      = link_to "Account Preferences", "#{@host}/account/edit"
+    - unless defined?(hide_unsubscribe)
+      %td
+        = link_to 'Unsubscribe here', "#{@host}/unsubscribe?id=#{@user.guid}&token=#{@user.unsubscribe_token}", :target => '_blank'

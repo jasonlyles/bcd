@@ -1,0 +1,10 @@
+- products = @product.find_live_products_from_same_category
+- if products.length > 0
+  %b
+    Check out these other great models from Brick City Depot
+  .centered_products_table
+    %table.products_table
+      %tr
+        - products.each do |p|
+          %td
+            = render :partial => 'product_teaser', :locals => {:product => p}

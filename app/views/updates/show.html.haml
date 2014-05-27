@@ -1,0 +1,39 @@
+%p
+  %b Title:
+  = @update.title
+%br
+%p
+  %b Description:
+  = @update.description
+%br
+%p
+  %b Body:
+  = @update.body
+%br
+%p
+  %b Link:
+  = @update.link
+%br
+%p
+  %b Image: (This is basically a preview. If it doesn't look good here. It won't look good on the front page.)
+%div.main_item_div#homepage_slideshow
+  .main_item
+    = link_to(image_tag(@update.image), @update.link) if @update.image?
+%br
+= form_for @update do |f|
+  - if @update.live?
+    .field
+      %b.happy Update is live
+      = f.check_box :live, {:checked => @update.live, :hidden => true},0,1
+    .actions
+      = f.submit 'Disable Update'
+  - else
+    .field
+      %b.sad Update is disabled
+      = f.check_box :live, {:checked => @update.live, :hidden => true},0,1
+    .actions
+      = f.submit 'Enable Update'
+%br
+= link_to 'Edit', edit_update_path(@update)
+\|
+= link_to 'Back', updates_path

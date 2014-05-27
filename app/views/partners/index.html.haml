@@ -1,0 +1,24 @@
+%h1 Listing partners
+%br
+%br
+%table.admin_table
+  %tr
+    %th Name
+    %th Url
+    %th Contact Email
+    %th
+    %th
+    %th.sad ONLY DESTROY IF NO ADVERTISING CAMPAIGNS
+
+  - @partners.each do |partner|
+    %tr
+      %td= partner.name
+      %td= partner.url
+      %td= partner.contact
+      %td= link_to 'Show', partner
+      %td= link_to 'Edit', edit_partner_path(partner)
+      %td= link_to 'Destroy', partner, data: {confirm: 'Are you sure?'}, :method => :delete
+
+%br
+
+= link_to 'New Partner', new_partner_path

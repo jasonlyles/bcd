@@ -1,0 +1,29 @@
+%h1 Listing Product Types
+%br
+%br
+%table.admin_table
+  %tr
+    %th Name
+    %th Image
+    %th Ready for public?
+    %th Digital?
+    %th
+    %th
+    %th
+
+  - @product_types.each do |product_type|
+    %tr
+      %td= product_type.name
+      %td= product_type.image
+      - if product_type.ready_for_public
+        %td.happy= product_type.ready_for_public
+      - else
+        %td.sad= product_type.ready_for_public
+      %td= product_type.digital_product
+      %td= link_to 'Show', product_type
+      %td= link_to 'Edit', edit_product_type_path(product_type)
+      %td= link_to 'Destroy', product_type, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Product type', new_product_type_path

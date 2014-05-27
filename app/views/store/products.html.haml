@@ -1,0 +1,20 @@
+=h1(@product_type.name)
+%br
+%br
+%p
+  = @product_type.description
+%br
+%br
+.top_level_categories
+  %table.categories_table
+    - if @product_type.name == 'Instructions'
+      - until @top_categories.length == 0
+        - categories = @top_categories.pop(3).reverse!
+        %tr
+          - categories.each do |category|
+            %td
+              = link_to image_tag("/assets/category_images/#{string_to_snake_case(category.name)}_logo.png"), {:controller => :store, :action => :categories, :product_type_name => @product_type.name, :category_name => category.name}
+              %br
+              %p #{category.description}
+    - else
+      = render :partial => 'products_list', :locals => {:product => @product_type.name}

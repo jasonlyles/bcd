@@ -1,0 +1,81 @@
+%br
+%br
+%br
+%div#auth_login_div
+  %a{:href => "/auth/facebook", :class => 'facebook_login auth_provider', :id => 'facebook_link'}
+  %a{:href => "/auth/twitter", :class => 'twitter_login auth_provider', :id => 'twitter_link'}
+  %br
+  .clear
+  %br
+%br
+-if session["omniauth"]
+  - if resource.email.blank?
+    %div#omniauth_text
+      %p
+        We will need your email as a way to identify you in our system.
+      %br
+      %br
+  %div#changed_mind_about_auth
+    = link_to "Changed your mind about using #{session["omniauth"]["provider"].capitalize}?", clear_authentications_path, method: :post
+    %br
+    %br
+  %div#regular_signup_div
+    = form_for(@user, :url => registration_path(resource_name)) do |f|
+      - if resource.email.blank?
+        = f.text_field :email, :class => 'login_form_text_field', :title => 'Email'
+        %br
+        %br
+      - else
+        = f.hidden_field :email, :class => 'login_form_text_field'
+      = f.check_box :tos_accepted, {:checked => false}#,1,0
+      = f.label :tos_accepted, "I have read and agree to the "
+      = link_to 'Terms of Service', terms_of_service_path
+      and
+      = link_to 'Privacy Policy', privacy_policy_path, :style => "color:red;"
+      %br
+      %br
+      = f.submit "Sign up", :class => 'nice_signup_button', data: {disable_with: 'Sign Up'}
+      %br
+- else
+  .centered_text
+    %p
+      Don't worry if you don't want to use a Twitter or Facebook account.
+      %br
+      %br
+      You can still check out as a guest.
+
+:javascript
+  $(document).ready(function(){
+      $.hint({ skipStyles: ['padding-top', 'padding-right', 'padding-bottom', 'padding-left'] });
+      //window.onload = enableButtonsIfChecked();
+  });
+
+  function enableButtons(){
+    var fb = document.getElementById('facebook_link');
+    var twit = document.getElementById('twitter_link');
+    if (document.getElementById('user_terms_of_service2').checked){
+      fb.href = '/auth/facebook';
+      twit.href = '/auth/twitter';
+      fb.className = fb.className.replace(/(?:^|)facebook_login_disabled(?!S)/,'facebook_login');
+      twit.className = twit.className.replace(/(?:^|)twitter_login_disabled(?!S)/,'twitter_login');
+    } else {
+      fb.href = '#';
+      twit.href = '#';
+      fb.className = fb.className.replace(/(?:^|)facebook_login(?!S)/,'facebook_login_disabled');
+      twit.className = twit.className.replace(/(?:^|)twitter_login(?!S)/,'twitter_login_disabled');
+    }
+  }
+
+  function enableButtonsIfChecked(){
+    var fb = document.getElementById('facebook_link');
+    var twit = document.getElementById('twitter_link');
+    if (document.getElementById('user_terms_of_service2').checked){
+      fb.href = '/auth/facebook';
+      twit.href = '/auth/twitter';
+      fb.className = fb.className.replace(/(?:^|)facebook_login_disabled(?!S)/,'facebook_login');
+      twit.className = twit.className.replace(/(?:^|)twitter_login_disabled(?!S)/,'twitter_login');
+    } else {
+      fb.href = '#';
+      twit.href = '#';
+    }
+  }
