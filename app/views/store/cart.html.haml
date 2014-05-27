@@ -25,13 +25,13 @@
               = form_for(:cart, :url => {:action => :update_item_in_cart}) do |f|
                 = f.hidden_field :item_id, :value => item.id
                 = f.text_field :quantity, :value => item.quantity, :size => 1
-                = f.submit 'Update', {:style => 'cursor:pointer', :disable_with => 'Updating'}
+                = f.submit 'Update', :style => 'cursor:pointer', data: {disable_with: 'Updating'}
             - else
               = form_for(:cart, :url => {:action => :update_item_in_cart}) do |f|
                 = f.hidden_field :item_id, :value => item.id
                 = f.hidden_field :quantity, :value => 0
                 = f.text_field :display_quantity, :value => 1, :size => 1, :disabled => true
-                = f.submit 'Remove', {:style => 'cursor:pointer', :disable_with => 'Removing'}
+                = f.submit 'Remove', :style => 'cursor:pointer', data: {disable_with: 'Removing'}
       %tr
         %td.spacer_row{:colspan => 6}
       %tr

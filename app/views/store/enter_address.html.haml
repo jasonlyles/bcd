@@ -54,7 +54,7 @@ Otherwise, select "Enter my address here".
       = f.select(:address_country, @countries)
     %br
   %p
-    = f.submit "Submit", :class => 'update_preferences_button', :disable_with => 'Submitting...'
+    = f.submit "Submit", :class => 'update_preferences_button', data: {disable_with: 'Submitting...'}
 
 :javascript
   $(document).ready(function(){

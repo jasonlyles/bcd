@@ -54,4 +54,4 @@
   = form_for(:order, :url => {:action => :complete_order}) do |f|
     = f.hidden_field :id, :value => @order.id
     .actions
-      = f.submit 'Complete Order', :disable_with => 'Completing...'
+      = f.submit 'Complete Order', data: {disable_with: 'Completing...'}

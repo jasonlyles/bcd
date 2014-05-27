@@ -63,7 +63,7 @@
   %br
   Total: #{number_to_currency @cart.total_price}
   %br
-  = button_to "Submit Order!", {:action => :submit_order,:order => {:user_id => @user.id}}, {:style => 'cursor:pointer', :disable_with => 'Submitting...'}
+  = button_to "Submit Order!", {:action => :submit_order,:order => {:user_id => @user.id}}, {:style => 'cursor:pointer', data: {disable_with: 'Submitting...'}}
   %br
   .paypal_icons
     = image_tag('icons/paypal_icons.gif')

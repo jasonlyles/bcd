@@ -12,7 +12,7 @@
     = f.password_field :password_confirmation, :class => 'forgot_password_text_field', :title => 'Password Confirmation'
     %br
     %br
-    = f.submit "Change my password", :class => 'forgot_password_button', :disable_with => 'Changing...'
+    = f.submit "Change my password", :class => 'forgot_password_button', data: {disable_with: 'Changing...'}
 :javascript
   $(document).ready(function(){
       $.hint({ skipStyles: ['padding-top', 'padding-right', 'padding-bottom', 'padding-left'] });

@@ -55,7 +55,7 @@
       = f.label :email_preference, "No emails please. (You'll only get order confirmation emails.)", :value => 0
     %br
     %br
-    %p= f.submit "Update", :class => 'update_preferences_button', :disable_with => 'Updating...'
+    %p= f.submit "Update", :class => 'update_preferences_button', data: {disable_with: 'Updating...'}
 %br
 %br
 %p.centered_text

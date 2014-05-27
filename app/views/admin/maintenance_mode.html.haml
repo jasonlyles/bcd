@@ -15,9 +15,9 @@
 = form_for(:switches, :url => {:action => :switch_maintenance_mode}) do |f|
   .actions
     - if @mm_switch.on?
-      = f.submit 'Take app out of Maintenance Mode', :disable_with => 'Going in...'
+      = f.submit 'Take app out of Maintenance Mode', data: {disable_with: 'Going in...'}
     - else
-      = f.submit 'Put app into Maintenance Mode', :disable_with => 'Going out...'
+      = f.submit 'Put app into Maintenance Mode', data: {disable_with: 'Going out...'}
 
 %br
 - if @mm_switch.on?

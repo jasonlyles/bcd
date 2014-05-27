@@ -30,8 +30,8 @@
   .clear
   %br
   .actions
-    = f.submit 'Generate Report', :disable_with => 'Disabling...'
-    = f.submit 'Force Regeneration', :disable_with => 'Regenerating...'
+    = f.submit 'Generate Report', data: {disable_with: 'Generating...'}
+    = f.submit 'Force Regeneration', data: {disable_with: 'Regenerating...'}
 %br
 #sales_report
 

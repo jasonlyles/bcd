@@ -9,7 +9,7 @@
     = f.text_field :email, :class => 'forgot_password_text_field', :title => 'Email'
     %br
     %br
-    = f.submit "Send me reset password instructions", :class => 'forgot_password_button', :disable_with => 'Sending...'
+    = f.submit "Send me reset password instructions", :class => 'forgot_password_button', data: {disable_with: 'Sending...'}
 
 :javascript
   $(document).ready(function(){

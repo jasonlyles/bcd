@@ -29,6 +29,6 @@
                   = number_to_currency(p.price)
                 %br
                 .add_to_cart_div
-                  = button_to "Add to Cart", {:action => "add_to_cart", :product_code => p.product_code}, :class => 'add_to_cart_button', :disable_with => 'Adding...'
+                  = button_to "Add to Cart", {:action => "add_to_cart", :product_code => p.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'}
                 %br
 = paginate @products

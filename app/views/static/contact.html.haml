@@ -28,7 +28,7 @@ Random stuff to say? Idea for a model we should build? Let us hear it!
   %br
   %br
   .actions
-    = f.submit 'Send Email', :class => 'nice_email_button', :disable_with => 'Sending...'
+    = f.submit 'Send Email', :class => 'nice_email_button', data: {disable_with: 'Sending...'}
 
 :javascript
   $(document).ready(function(){

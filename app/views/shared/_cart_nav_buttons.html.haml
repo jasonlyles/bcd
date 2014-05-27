@@ -8,4 +8,4 @@
       %td
         = link_to "Checkout", checkout_path
       %td
-        = button_to "Empty Cart", empty_cart_path, :class => 'empty_cart_button', :disable_with => "Emptying..."
+        = button_to "Empty Cart", empty_cart_path, :class => 'empty_cart_button', data: {disable_with: 'Emptying...'}
