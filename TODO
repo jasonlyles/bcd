@@ -114,11 +114,9 @@ display categories.
 
 16. I really need to spend some time cleaning and DRYing up my tests.
 
-17. replace disable_with with data:{disable_with: ''}
+17. Look into pros/cons of moving from thin to unicorn on heroku
 
-18. Look into pros/cons of moving from thin to unicorn on heroku
-
-19. Work on adding titles to most of the customer facing pages. Also, I might want to do a little more customization
+18. Work on adding titles to most of the customer facing pages. Also, I might want to do a little more customization
    on the facebook meta tags to reflect the current page. Maybe the product pages could have the image be the medium image.
    The description could be the product description, etc. If I'm going to do that, I'm going to need to feed that data in
    on a per page basis via some helper. I think I may have to do one or more content_for-style helpers, feed them args
