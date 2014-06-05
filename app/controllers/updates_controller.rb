@@ -1,5 +1,9 @@
 class UpdatesController < ApplicationController
   before_filter :authenticate_radmin!
+  skip_before_filter :find_cart
+  skip_before_filter :get_categories
+  skip_before_filter :set_users_referrer_code
+  skip_before_filter :set_locale
   layout proc { |c| c.request.xhr? ? false : "admin" }
 
   # GET /updates
@@ -51,7 +55,7 @@ class UpdatesController < ApplicationController
         format.xml  { render :xml => @update, :status => :created, :location => @update }
       else
         flash[:alert] = "Update was NOT created."
-        format.html { render :action => "new" }
+        format.html { render "new" }
         format.xml  { render :xml => @update.errors, :status => :unprocessable_entity }
       end
     end
@@ -68,7 +72,7 @@ class UpdatesController < ApplicationController
         format.xml  { head :ok }
       else
         flash[:alert] = "Update was NOT updated."
-        format.html { render :action => "edit" }
+        format.html { render "edit" }
         format.xml  { render :xml => @update.errors, :status => :unprocessable_entity }
       end
     end

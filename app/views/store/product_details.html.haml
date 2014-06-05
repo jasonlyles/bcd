@@ -77,7 +77,7 @@
         Sorry! This model is not currently available.
     %br
     %br
-= render :partial => 'similar_products'
+= render 'similar_products', similar_products: @similar_products
 
 :javascript
   $(document).ready(function(){

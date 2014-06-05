@@ -71,6 +71,15 @@ describe ApplicationController do
     end
   end
 
+  describe 'get_categories_for_admin' do
+    it "should populate @categories" do
+      FactoryGirl.create(:category)
+      controller.send(:get_categories_for_admin)
+
+      assigns(:categories).should == [["City", 1]]
+    end
+  end
+
   describe "set_users_referrer_code" do
     it "should set the users referrer code" do
       controller.params[:referrer_code] = 'blar'

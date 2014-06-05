@@ -4,11 +4,11 @@
 ALL INCOMPLETE ORDERS
 %br
 %br
-= render :partial => 'order_fulfillment_table', :locals => {:orders => @incomplete_orders, :paginate_it => true}
+= render 'order_fulfillment_table', orders: @incomplete_orders, paginate_it: true, shipping_statuses: @shipping_statuses
 
 %br
 %br
 LAST 10 COMPLETED ORDERS
 %br
 %br
-= render :partial => 'order_fulfillment_table', :locals => {:orders => @completed_orders, :paginate_it => false}
+= render 'order_fulfillment_table', orders: @completed_orders, paginate_it: false, shipping_statuses: @shipping_statuses

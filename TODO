@@ -7,28 +7,29 @@ guest checkout still works at the same time.
 
 2. Make sure all users have to agree to TOS before checking out.
 
+3. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
+help me clean up testing code also.
+
+4. Work on plain and html versions of the emails
+
 GETTING READY FOR PROD #######################################################
 
-1. Work on getting prod environment set up.
-    a. Figure out how to use Amazon RDS, and make sure I have a way of backing up the database set up before I go to
-    prod. Get this set up in staging first. https://devcenter.heroku.com/articles/amazon_rds
-    b. Buy a ssl cert, set up with Heroku. https://addons.heroku.com/SSL
-    c. Make sure all prod env vars are set up on Heroku. Currently a few behind staging.
+1. Make sure all prod env vars are set up on Heroku. Currently a few behind staging.
 
-2. Email stuff!
-    a. Get production access in Amazon.
-
-   http://aws.amazon.com/ses/
-   http://robots.thoughtbot.com/post/3105121049/delivering-email-with-amazon-ses-in-a-rails-3-app
-   http://www.ceban.it/2011/04/rails-amazon-ses-send-email-with-amazon/
-   https://github.com/drewblas/aws-ses
-
-3. Paypal!
+2. Paypal!
     a. Set up paypal account for BCD. (temporarily using one just for dev.)
     b. Set it to redirect to the thank you page.
     c. Be sure I'm parsing paypal IPNs correctly.
 
-4. Set up a cname for my S3 instruction bucket.
+3. Set up a cname for my S3 instruction bucket.
+
+4. Set up SSL on heroku. Buy SSL cert first https://addons.heroku.com/SSL
+
+5. Make sure all http traffic redirects to https
+
+6. Set up a database through heroku.
+
+7. Need to figure out what I did with GK so that the app doesnt keep getting unloaded in heroku.
 
 
 ###########################

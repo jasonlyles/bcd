@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "updated_at"
   end
 
+  add_index "advertising_campaigns", ["partner_id"], name: "index_advertising_campaigns_on_partner_id"
+
   create_table "authentications", force: true do |t|
     t.integer  "user_id"
     t.string   "provider"
@@ -29,6 +31,8 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "authentications", ["user_id"], name: "index_authentications_on_user_id"
 
   create_table "cart_items", force: true do |t|
     t.integer  "cart_id"
@@ -38,11 +42,16 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "updated_at"
   end
 
+  add_index "cart_items", ["cart_id"], name: "index_cart_items_on_cart_id"
+  add_index "cart_items", ["product_id"], name: "index_cart_items_on_product_id"
+
   create_table "carts", force: true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "carts", ["user_id"], name: "index_carts_on_user_id"
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -63,6 +72,9 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "updated_at"
   end
 
+  add_index "downloads", ["product_id"], name: "index_downloads_on_product_id"
+  add_index "downloads", ["user_id"], name: "index_downloads_on_user_id"
+
   create_table "email_campaigns", force: true do |t|
     t.text     "description"
     t.integer  "click_throughs"
@@ -79,6 +91,9 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "updated_at"
   end
 
+  add_index "images", ["category_id"], name: "index_images_on_category_id"
+  add_index "images", ["product_id"], name: "index_images_on_product_id"
+
   create_table "line_items", force: true do |t|
     t.integer  "order_id"
     t.integer  "product_id"
@@ -87,6 +102,9 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "line_items", ["order_id"], name: "index_line_items_on_order_id"
+  add_index "line_items", ["product_id"], name: "index_line_items_on_product_id"
 
   create_table "orders", force: true do |t|
     t.integer  "user_id"
@@ -107,6 +125,8 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "updated_at"
   end
 
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id"
+
   create_table "partners", force: true do |t|
     t.string   "name",       limit: 40
     t.string   "url",        limit: 40
@@ -122,6 +142,8 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "parts_lists", ["product_id"], name: "index_parts_lists_on_product_id"
 
   create_table "product_types", force: true do |t|
     t.string   "name"
@@ -154,6 +176,10 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "products", ["category_id"], name: "index_products_on_category_id"
+  add_index "products", ["product_type_id"], name: "index_products_on_product_type_id"
+  add_index "products", ["subcategory_id"], name: "index_products_on_subcategory_id"
 
   create_table "radmins", force: true do |t|
     t.string   "email",                  default: "", null: false
@@ -191,6 +217,9 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "updated_at"
   end
 
+  add_index "sales_summaries", ["product_id"], name: "index_sales_summaries_on_product_id"
+  add_index "sales_summaries", ["sales_report_id"], name: "index_sales_summaries_on_sales_report_id"
+
   create_table "sessions", force: true do |t|
     t.string   "session_id", null: false
     t.text     "data"
@@ -210,6 +239,8 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "subcategories", ["category_id"], name: "index_subcategories_on_category_id"
 
   create_table "switches", force: true do |t|
     t.string   "switch",     limit: 30

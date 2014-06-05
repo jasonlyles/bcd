@@ -1,7 +1,11 @@
 class ProductsController < ApplicationController
   before_filter :authenticate_radmin!
-  before_filter :get_categories
+  before_filter :get_categories_for_admin
   before_filter :get_type, :only => [:new, :edit, :create, :update]
+  skip_before_filter :find_cart
+  skip_before_filter :get_categories
+  skip_before_filter :set_users_referrer_code
+  skip_before_filter :set_locale
   layout proc{ |c| c.request.xhr? ? false : "admin" }
 
   # GET /products
@@ -65,7 +69,7 @@ class ProductsController < ApplicationController
         format.xml  { render :xml => @product, :status => :created, :location => @product }
       else
         flash[:alert] = "Product was NOT created"
-        format.html { render :action => "new" }
+        format.html { render "new" }
         format.xml  { render :xml => @product.errors, :status => :unprocessable_entity }
       end
     end
@@ -81,7 +85,7 @@ class ProductsController < ApplicationController
         format.xml  { head :ok }
       else
         flash[:alert] = "Product was NOT updated"
-        format.html { render :action => "edit" }
+        format.html { render "edit" }
         format.xml  { render :xml => @product.errors, :status => :unprocessable_entity }
       end
     end
@@ -109,16 +113,6 @@ class ProductsController < ApplicationController
   end
 
   private
-
-  def get_categories
-    categories = Category.all
-    @categories = []
-    categories.each{|x|@categories << [x.name,x.id]}
-  end
-
-  #def get_subcategories
-  #  subategories = Category.find
-  #end
 
   def get_type
     @product_types = ProductType.all.collect{|x| [x.name,x.id]}

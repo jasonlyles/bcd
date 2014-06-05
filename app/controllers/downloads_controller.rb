@@ -1,11 +1,11 @@
 class DownloadsController < ApplicationController
   before_filter :authenticate_user!, :only => [:download, :download_parts_list]
   before_filter :valid_guest, :only => [:guest_download_parts_list]
-  #after_filter :increment_download_count, :only => [:download, :guest_download]
+
 
   def download_parts_list
     @parts_list = PartsList.find(params[:parts_list_id])
-    unless @parts_list.nil?
+    if @parts_list
       @product = Product.find(@parts_list.product_id)
       #Check users completed orders and see if they're entitled to the parts lists
       #Make sure I test this via unit tests  and actually clicking around in the browser
@@ -28,8 +28,7 @@ class DownloadsController < ApplicationController
         return redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
       end
       unless products.include?(@parts_list.product_id)
-        flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download the parts lists."
-        return redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
+        return redirect_cheater_to_product_page
       end
 
       if Rails.env != "development"
@@ -45,7 +44,7 @@ class DownloadsController < ApplicationController
 
   def guest_download_parts_list
     @parts_list = PartsList.find(params[:parts_list_id])
-    unless @parts_list.nil?
+    if @parts_list
       @product = Product.find(@parts_list.product_id)
       #Check users completed orders and see if they're entitled to the parts lists
       #Make sure I test this via unit tests  and actually clicking around in the browser
@@ -68,8 +67,7 @@ class DownloadsController < ApplicationController
       end
 
       unless products.include?(@parts_list.product_id)
-        flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download the parts lists."
-        return redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
+        return redirect_cheater_to_product_page
       end
 
       if Rails.env != "development"
@@ -88,7 +86,7 @@ class DownloadsController < ApplicationController
     @downloads_remaining = get_users_downloads_remaining(@product.id)
     if @downloads_remaining == 0
       redirect_to :back, :notice => "You have already reached your maximum allowed number of downloads for #{@product.base_product_code} #{@product.name}.", :only_path => true
-    elsif @downloads_remaining.nil? && !@product.is_free?
+    elsif @downloads_remaining.blank? && !@product.is_free?
       flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download them."
       redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
     else
@@ -119,24 +117,21 @@ class DownloadsController < ApplicationController
   def guest_download
     #Look up download record by token and user id, which I get from a ID passed in, which is the users guid
     #if download record is found, increment count, decrement remaining, and redirect to an S3 url for the PDF
-    user_guid = params[:id]
-    download_token = params[:token]
-    if user_guid.blank? || download_token.blank?
-      return redirect_to download_error_path
-    end
+    user_guid, download_token = params[:id], params[:token]
+    return redirect_to download_error_path if user_guid.blank? || download_token.blank?
+
     user = User.where(["guid = ?", user_guid]).first
-    if user.blank?
-      return redirect_to download_error_path
-    end
+    return redirect_to download_error_path if user.blank?
+
     @download = Download.where(["user_id = ? and download_token = ?",user.id,download_token]).first
     if @download.blank?
       return redirect_to download_error_path
     else
       @downloads_remaining = @download.remaining
-      @product = Product.find(@download.product_id)
       if @downloads_remaining == 0
-        return redirect_to '/', :notice => "You have already reached your maximum allowed number of downloads for #{@product.base_product_code} #{@product.name}."
+        return redirect_to '/', :notice => "You have already reached your maximum allowed number of downloads for these instructions."
       else
+        @product = Product.find(@download.product_id)
         if Rails.env != "development"
           download_from_amazon(@product.pdf.path)
         else
@@ -145,11 +140,15 @@ class DownloadsController < ApplicationController
         end
       end
     end
-
     increment_download_count(user)
   end
 
   private
+
+  def redirect_cheater_to_product_page
+    flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download the parts lists."
+    redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
+  end
 
   def download_from_amazon(file)
     begin
@@ -188,7 +187,7 @@ class DownloadsController < ApplicationController
     current_user
     if current_user.owns_product?(product_id)
       @download = Download.find_by_user_id_and_product_id(current_user,product_id)
-      @download.nil? ? MAX_DOWNLOADS : @download.remaining
+      @download.blank? ? MAX_DOWNLOADS : @download.remaining
     else
       nil
     end

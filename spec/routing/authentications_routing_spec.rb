@@ -2,10 +2,6 @@ require "spec_helper"
 
 describe AuthenticationsController do
   describe "routing" do
-    it "recognizes and generates index" do
-      {:get => "/authentications"}.should route_to(:controller => "authentications", :action => "index")
-    end
-
     it "recognizes and generates clear_authentications" do
       {:post => "/authentications/clear_authentications"}.should route_to(:controller => "authentications", :action => "clear_authentications")
     end

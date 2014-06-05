@@ -18,38 +18,28 @@ class AccountController < ApplicationController
   end
 
   def order
-    @order = Order.find_by_request_id(params[:request_id])
-    if @order
-      if current_user.id != @order.user_id
-        @order = nil
-        #Had been a 403, but decided to just throw a 500 so any bad guys won't realize they're just not authorized.
-        raise ZeroDivisionError #Masking the real error
-      end
-    else
-      #Throw a 500 so users won't monkey around looking for a valid request ID
-      raise ZeroDivisionError #Masking the real error
+    @order = Order.where('request_id=? and user_id=?', params[:request_id], current_user.id).first
+    if @order.blank?
+      flash[:notice] = "We couldn't find that order. Please contact us and let us know what order is giving you trouble."
+      return redirect_to action: :order_history
     end
   end
 
   def unsubscribe_from_emails
     guid = params[:id]
     token = params[:token]
-    user = User.where(["guid=? and unsubscribe_token=?",guid,token]).first
-    error = false
-    if user.nil?
-      error = true
+    @user = User.where(["guid=? and unsubscribe_token=?",guid,token]).first
+    unless @user
       logger.error("FAIL unsubscribe_from_emails couldn't find user. ID=#{guid} TOKEN=#{token}")
     else
-      user.email_preference = 0
-      if user.save
-        return render :action => :unsubscribed
+      @user.email_preference = 0
+      if @user.save
+        return render :unsubscribed
       else
-        error = true
         logger.error("FAIL unsubscribe_from_emails couldn't save user record. ID=#{guid} TOKEN=#{token}")
       end
     end
-    if error == true
-      return render :action => :still_subscribed
-    end
+
+    return render :still_subscribed
   end
 end

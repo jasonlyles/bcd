@@ -32,7 +32,7 @@ class SalesReport < ActiveRecord::Base
       end_month = "0#{end_month}" if end_month.to_s.length == 1
     end
 
-    if end_month.nil? || end_year.nil?
+    if end_month.blank? || end_year.blank?
       sales_reports = SalesReport.where("report_date = ?", "#{start_year}-#{start_month}-01")
     else
       sales_reports = SalesReport.where("report_date >= ? AND report_date < ?","#{start_year}-#{start_month}-01","#{Date.parse("#{end_month}/#{end_year}").next_month.strftime("%Y-%m-01")}")

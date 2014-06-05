@@ -7,6 +7,9 @@ class CreateCartItems < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :cart_items, :cart_id
+    add_index :cart_items, :product_id
   end
 
   def self.down

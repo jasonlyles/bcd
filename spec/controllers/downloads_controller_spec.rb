@@ -257,7 +257,7 @@ describe DownloadsController do
           get :guest_download, :id => '12345', :token => '67890'
 
           assigns(:download).should_not be_nil
-          flash[:notice].should eq('You have already reached your maximum allowed number of downloads for CB001 Colonial Revival House.')
+          flash[:notice].should eq('You have already reached your maximum allowed number of downloads for these instructions.')
           response.should redirect_to('/')
         end
       end

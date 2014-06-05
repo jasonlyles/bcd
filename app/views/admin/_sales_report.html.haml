@@ -1,15 +1,15 @@
-- unless @report.multiple_months?
-  %h2= @report.single_month_display
+- unless report.multiple_months?
+  %h2= report.single_month_display
   %br
   %i
-    (Last generated #{@report.created_at.strftime("%m/%d/%Y")})
+    (Last generated #{report.created_at.strftime("%m/%d/%Y")})
   %br
   %br
   Download:
-  = link_to 'CSV', transactions_by_month_path(format: "csv", date: @report.report_date)
+  = link_to 'CSV', transactions_by_month_path(format: "csv", date: report.report_date)
   %br
 - else
-  %h2= @report.multiple_months_display
+  %h2= report.multiple_months_display
 - total_revenue, total_quantity = 0,0
 %br
 %table.sales_report_table
@@ -17,8 +17,8 @@
     %td Model
     %td Quantity
     %td Revenue
-  - unless @summaries.blank?
-    - @summaries.each do |item|
+  - unless summaries.blank?
+    - summaries.each do |item|
       - total_revenue += item[1]['revenue']
       - total_quantity += item[1]['qty']
       - product = Product.find item[0]

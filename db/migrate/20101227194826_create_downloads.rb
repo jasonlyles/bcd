@@ -9,6 +9,9 @@ class CreateDownloads < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :downloads, :product_id
+    add_index :downloads, :user_id
   end
 
   def self.down

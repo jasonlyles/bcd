@@ -227,7 +227,7 @@ describe AdminController do
       sign_in @radmin
       get :update_users_download_counts
 
-      assigns(:models).should == [["#{@product.product_code} #{@product.name}", @product.id]]
+      assigns(:products).should == [["#{@product.product_code} #{@product.name}", @product.id]]
     end
   end
 

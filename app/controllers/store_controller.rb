@@ -27,9 +27,9 @@ class StoreController < ApplicationController
 
   def cart
     item_list = check_for_errant_items
-    unless item_list.nil?
+    if item_list
       flash[:notice] = "The following item(s) are not available in the quantities you have in your cart: #{item_list.to_sentence}. Please reduce quantities or remove the item(s) from your cart."
-      render :action => :cart
+      render :cart
     end
   end
 
@@ -60,7 +60,7 @@ class StoreController < ApplicationController
 
   def add_to_cart
     product = Product.find_by_product_code(params[:product_code].upcase) #Doing this just to make sure a valid product is being used.
-    if product.nil?
+    if product.blank?
       logger.error("Attempt to access invalid product: #{params[:product_code]}")
       return redirect_to :back, :notice => "Invalid Product"
     end
@@ -68,13 +68,13 @@ class StoreController < ApplicationController
       return redirect_to :back, :notice => "You don't need to add free instructions to your cart. Just go to your account page to download them."
     end
     @current_item = @cart.add_product(product)
-    if @current_item.nil?
-      return redirect_to :back, :notice => "You already have #{product.name} in your cart. You don't need to purchase more than 1 set of the same instructions.", :only_path => true
-    else
+    if @current_item
       return redirect_to :back, :notice => "Item added to cart."
+    else
+      return redirect_to :back, :notice => "You already have #{product.name} in your cart. You don't need to purchase more than 1 set of the same instructions.", :only_path => true
     end
   end
-  
+
   def remove_item_from_cart
     @cart.remove_product(params[:id])
     return redirect_to :back, :notice => "Item removed from cart"
@@ -94,7 +94,7 @@ class StoreController < ApplicationController
       @order = Order.new
     end
     unless @order.valid?
-      return render :action => :enter_address
+      return render :enter_address
     else
       @order = nil
       session[:address_submitted] = params[:order]
@@ -105,7 +105,7 @@ class StoreController < ApplicationController
   def checkout
     session.delete(:return_to_checkout)
     @user = current_customer
-    if @user.nil?
+    unless @user
       return redirect_to :controller => :sessions, :action => :guest_registration
     end
     if session[:address_submitted]
@@ -118,7 +118,7 @@ class StoreController < ApplicationController
       redirect_to :back, :notice => "Your cart is empty."
     else
       item_list = check_for_errant_items
-      unless item_list.nil?
+      if item_list
         return redirect_to :cart, :notice => "The following item(s) are not available in the quantities you have in your cart: #{item_list.to_sentence}. Please reduce quantities or remove the item(s) from our cart."
       end
     end
@@ -160,6 +160,7 @@ class StoreController < ApplicationController
 
   def product_details
     @product = Product.where(["product_code=?",params[:product_code].upcase]).first || not_found
+    @similar_products = @product.find_live_products_from_same_category
   end
 
   #This action listens for Instant Payment Notifications from Paypal. It makes sure the IPN is valid, and performs
@@ -176,12 +177,8 @@ class StoreController < ApplicationController
     logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXX")
     @order = Order.find_by_request_id(@ipn.custom)
 
-    #If we can't find the order, just tell paypal to forget about it
-    if @order.nil?
-      return render :nothing => true
-    end
-    #I don't want to update an order that has been completed.
-    if !@order.status.blank? && @order.status.upcase == 'COMPLETED'
+    #If we can't find the order, or the order has already been completed, just tell paypal to forget about it
+    if @order.blank? || (!@order.status.blank? && @order.status.upcase == 'COMPLETED')
       return render :nothing => true
     end
 
@@ -191,7 +188,7 @@ class StoreController < ApplicationController
       if @order.has_physical_item?
         #Assuming that because the street address is blank, there is no other address info, and we can save address info
         #coming to us from paypal
-        if @order.address_street_1.blank?
+        unless @order.address_street_1?
           @order.first_name = @ipn.first_name
           @order.last_name = @ipn.last_name
           @order.address_city = @ipn.address_city
@@ -346,7 +343,7 @@ class StoreController < ApplicationController
   end
 
   def get_users_physical_address
-    if @cart.has_physical_item? && session[:address_submitted].nil? #&& params[:order].nil? #&& maybe test for a condition to see if a logged in user has an address stored already. Should have a user or guest by this point, and so I'll be able to check if user has an address on file.
+    if @cart.has_physical_item? && session[:address_submitted].blank?
       redirect_to :enter_address
     end
   end

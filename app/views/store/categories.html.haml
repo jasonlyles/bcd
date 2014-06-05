@@ -18,7 +18,7 @@
     - until @products.length == 0
       - products = @products.pop(4).reverse!
       %tr
-        - products.each do |p|
+        - products.each do |product|
           %td
-            = render :partial => 'product_teaser', :locals => {:product => p}
+            = render 'product_teaser', :product => product
 = paginate @products

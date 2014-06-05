@@ -40,7 +40,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   #end
 
   #def url
-    #Overriding this to hide full path to where the images are stored in S3, and to force the images to be served through the cloudfront. I'm sure there's a better way than this, and this might 
+    #Overriding this to hide full path to where the images are stored in S3, and to force the images to be served through the cloudfront. I'm sure there's a better way than this, and this might
       # screw something else up, but until I can figure out a better way, I'm probably going to leave it like this.
   #  "http://images.brickcitydepot.com/#{store_dir}/#{model.url.to_s.match(/\w+\.\w+$/).to_s}"
   #end

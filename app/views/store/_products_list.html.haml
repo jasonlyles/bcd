@@ -1,14 +1,14 @@
 %br
-- if @products.blank?
+- if products.blank?
   %br
   %br
   .centered_text
-    = "Sorry, there are currently no #{product} for sale."
-= paginate @products
+    = "Sorry, there are currently no #{product_type} for sale."
+= paginate products
 .centered_products_table
   %table.products_table
-    - until @products.length == 0
-      - products = @products.pop(4).reverse!
+    - until products.length == 0
+      - products = products.pop(4).reverse!
       %tr
         - products.each do |p|
           %td
@@ -31,4 +31,4 @@
                 .add_to_cart_div
                   = button_to "Add to Cart", {:action => "add_to_cart", :product_code => p.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'}
                 %br
-= paginate @products
+= paginate products

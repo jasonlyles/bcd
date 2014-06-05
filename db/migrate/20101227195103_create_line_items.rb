@@ -8,6 +8,9 @@ class CreateLineItems < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :line_items, :order_id
+    add_index :line_items, :product_id
   end
 
   def self.down

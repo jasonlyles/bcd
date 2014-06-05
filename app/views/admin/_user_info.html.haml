@@ -1,20 +1,20 @@
-- if @user
-  Account Status: 
-  - if @user.account_status == "A"
-    %b.happy Active 
+- if user
+  Account Status:
+  - if user.account_status == "A"
+    %b.happy Active
     = form_for(:user, :url => {:action => :change_user_status, :email => /.*/},:remote => true) do |f|
-      =f.hidden_field :email, :value => @user.email
+      =f.hidden_field :email, :value => user.email
       =f.hidden_field :account_status, :value => "C"
       =f.submit 'Cancel Account', :confirm => "Are you sure you want to CANCEL this account?"
-  - elsif @user.account_status == "C"
+  - elsif user.account_status == "C"
     %b.sad Cancelled
     = form_for(:user, :url => {:action => :change_user_status, :email => /.*/},:remote => true) do |f|
-      =f.hidden_field :email, :value => @user.email
+      =f.hidden_field :email, :value => user.email
       =f.hidden_field :account_status, :value => "A"
       =f.submit 'Activate Account', :confirm => "Are you sure you want to ACTIVATE this account?"
   %br
-  = @user.email
-  = link_to "I shall become #{@user.email}!", become_admin_path(@user.id)
+  = user.email
+  = link_to "I shall become #{user.email}!", become_admin_path(user.id)
   %br
   %br
   %h3 Login Info
@@ -26,11 +26,11 @@
       %th Current IP
       %th Last IP
     %tr
-      %td= @user.sign_in_count
-      %td= @user.current_sign_in_at.to_s(:date_time12) if @user.current_sign_in_at
-      %td= @user.last_sign_in_at.to_s(:date_time12) if @user.last_sign_in_at
-      %td= @user.current_sign_in_ip
-      %td= @user.last_sign_in_ip
+      %td= user.sign_in_count
+      %td= user.current_sign_in_at.to_s(:date_time12) if user.current_sign_in_at
+      %td= user.last_sign_in_at.to_s(:date_time12) if user.last_sign_in_at
+      %td= user.current_sign_in_ip
+      %td= user.last_sign_in_ip
   %br
   %h3 Alternative Logins
   %table.admin_table
@@ -39,14 +39,14 @@
       %th User ID
       %th Created
       %th Updated
-    - @user.authentications.each do |auth|
+    - user.authentications.each do |auth|
       %tr
         %td= auth.provider
         %td= auth.uid
         %td= auth.created_at.to_s(:date_time12) if auth.created_at
         %td= auth.updated_at.to_s(:date_time12) if auth.updated_at
 
-  %br 
+  %br
   %h3 User Location
   %p Working on this. Until I can automate something based on our stored IPs, if you really need to know where a user is from, go to iplocationtools.com  Was thinking I would use this to determine 1. Users country, 2. Users timezone.  This may not be super important, but it might end up helping me troubleshoot users issues.
 
@@ -57,8 +57,8 @@
       %th Reset Pswd Token
       %th Rememember Token Created
     %tr
-      %td= @user.reset_password_token
-      %td= @user.remember_created_at.to_s(:date_time12) if @user.remember_created_at
+      %td= user.reset_password_token
+      %td= user.remember_created_at.to_s(:date_time12) if user.remember_created_at
 
   %br
   %h3 Account Info
@@ -67,8 +67,8 @@
       %th Created
       %th Info Last Updated
     %tr
-      %td= @user.created_at.to_s(:date_time12)
-      %td= @user.updated_at.to_s(:date_time12)
+      %td= user.created_at.to_s(:date_time12)
+      %td= user.updated_at.to_s(:date_time12)
 
   %br
   %h3 Order Info
@@ -80,7 +80,7 @@
       %th Status
       %th Created At
       %th Updated At
-    -@user.orders.each do |order|
+    -user.orders.each do |order|
       %tr
         %td= link_to order.id, {:controller => :admin, :action => :order, :id => order.id}
         %td= order.request_id

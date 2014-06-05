@@ -153,15 +153,6 @@ describe SubcategoriesController do
     end
   end
 
-  describe "get_categories" do
-    it "should populate @categories" do
-      FactoryGirl.create(:category)
-      controller.send(:get_categories)
-
-      assigns(:categories).should == [["City", 1]]
-    end
-  end
-
   describe "model_code" do
     it "should get a suggested model_code" do
       @category = FactoryGirl.create(:category)

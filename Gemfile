@@ -64,6 +64,7 @@ group :development, :test do
   gem "rspec-rails"
   gem 'simplecov', :require => false
   #gem 'brakeman'
+  gem 'metric_fu'
 end
 
 group :production do

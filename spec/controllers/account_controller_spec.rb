@@ -27,18 +27,12 @@ describe AccountController do
       assigns(:order).transaction_id.should == '555'
     end
 
-    it "should throw a 500 if the order doesn't belong to the current user" do
+    it "should set order to nil if order could not be found by request_id and user_id" do
       order = FactoryGirl.create(:order, :user_id => 3000, :request_id => '12344321')
       sign_in @user
+      get :order, :request_id => '12344321'
 
-      expect{get :order, :request_id => '12344321'}.to raise_error
-    end
-
-    it "should throw a 500 if the order can't be found in the database" do
-      order = FactoryGirl.create(:order, :request_id => '88889999')
-      sign_in @user
-
-      expect{get :order, :request_id => '66667777'}.to raise_error
+      assigns(:order).should be_nil
     end
   end
 

@@ -1,4 +1,4 @@
-- if @user.email.blank? || !@user.valid?
+- if !@user.email? || !@user.valid?
   =h2('Register an email address')
 - else
   =h2('Update email info')
@@ -21,7 +21,7 @@
     = f.text_field :email, :class => 'login_form_text_field', :title => 'Email'
     %br
     %br
-    - if @user.email.blank? || !@user.valid?
+    - if !@user.email? || !@user.valid?
       = f.check_box :tos_accepted
       = f.label :tos_accepted, "I have read and agree to the "
       = link_to 'Terms of Service', terms_of_service_path

@@ -28,7 +28,7 @@ Send to:
 #{@order.first_name} #{@order.last_name}
 %br
 = @order.address_street_1
-- unless @order.address_street_2.blank?
+- if @order.address_street_2?
   %br
   = @order.address_street_2
 %br

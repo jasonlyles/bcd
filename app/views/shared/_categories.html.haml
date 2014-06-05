@@ -3,16 +3,16 @@
 %br
 %b Shop by Category:
 %br
-- for category in @categories
+- for category in categories
   = link_to "#{category.name} (#{category.products.find_instructions_for_sale.count})", "/store/products/Instructions/#{category.name}"
   %br
-- unless @alternatives.blank?
-  = link_to "Alternative Builds (#{@alternatives.class == 'Array' ? @alternatives.length : 1})", "/store/products/#{@product_type.name}/#{category.name}"
+- unless alternatives.blank?
+  = link_to "Alternative Builds (#{alternatives.class == 'Array' ? alternatives.length : 1})", "/store/products/#{product_type.name}/#{category.name}"
 %br
 %br
 %b Shop by Price:
 %br
-- for price_group in @price_groups
+- for price_group in price_groups
   -if price_group[0] == 0
     = link_to "Free!!! (#{price_group[1]})", "/store/products/Instructions/group_on_price?price=free"
     %br

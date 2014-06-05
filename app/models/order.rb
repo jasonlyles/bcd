@@ -2,15 +2,17 @@ class Order < ActiveRecord::Base
   has_many :line_items, :dependent => :destroy
   belongs_to :user
 
-  attr_accessible :request_id, :status, :transaction_id, :user_id, :first_name, :last_name, :address_street_1, :address_street_2,
-                  :address_city, :address_state, :address_country, :address_zip, :address_submission_method
+  attr_accessible :request_id, :status, :transaction_id, :user_id, :first_name, :last_name,
+                  :address_street_1, :address_street_2, :address_city, :address_state, :address_country,
+                  :address_zip, :address_submission_method
   attr_accessor :address_submission_method
 
   #Need some form of validation, but probably not this, or not the traditional
   #Rails way anyway. Don't want to show these errors to the user.
   #validates :user_id, :presence => true
   #validates :confirmation_number => true
-  validates :first_name, :last_name, :address_street_1, :address_city, :address_state, :address_country, :address_zip, presence: true, if: "address_submission_method == 'form'"
+  validates :first_name, :last_name, :address_street_1, :address_city, :address_state, :address_country,
+            :address_zip, presence: true, if: "address_submission_method == 'form'"
   validates :address_zip, length: {is: 5}, if: "address_submission_method == 'form'"
   validates :address_zip, numericality: {only_integer: true}, if: "address_submission_method == 'form'"
 
@@ -91,7 +93,10 @@ class Order < ActiveRecord::Base
         if xml_list
           links << ["#{product_name} XML Parts List for Bricklink Wanted List Feature","/guest_download_parts_list/#{xml_list.id}/#{self.id}"]
         end
-        download = Download.where(["user_id=? and product_id=?",self.user_id,product.id]).first_or_create(:download_token => SecureRandom.hex(20), :product_id => product.id, :user_id => self.user_id)
+        download = Download.where(["user_id=? and product_id=?",self.user_id,product.id]).
+            first_or_create(:download_token => SecureRandom.hex(20),
+                            :product_id => product.id,
+                            :user_id => self.user_id)
         guid = self.user.guid
         links << ["#{product_name} PDF", "/guest_download?id=#{guid}&token=#{download.download_token}"]
       end

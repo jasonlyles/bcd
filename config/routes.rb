@@ -63,7 +63,7 @@ BrickCity::Application.routes.draw do
 
     end
   end
-  resources :authentications do
+  resources :authentications, only: [:create, :destroy] do
     collection do
       post :clear_authentications, :as => :clear
     end

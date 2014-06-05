@@ -72,14 +72,6 @@ class Product < ActiveRecord::Base
   def self.find_instructions_for_sale
     Product.sellable_instructions
   end
-#TODO: Replace/remove these 2:
-  def self.find_models_for_sale
-    Product.ready.where("quantity > 0 and product_type_id = #{ProductType.find_by_name('Models').id}")
-  end
-
-  def self.find_kits_for_sale
-    Product.ready.where("quantity > 0 and product_type_id = #{ProductType.find_by_name('Kits').id}")
-  end
 
   def self.freebies
     Product.ready_instructions.where("free = 't'")
@@ -88,11 +80,6 @@ class Product < ActiveRecord::Base
   def find_live_products_from_same_category
     Product.ready.where(["free != 't' and quantity >= 1 and category_id = ? and id <> ?", category_id, id]).limit(4)
   end
-
-  #def get_image(image_type)
-  #  image = self.images.where("location = '#{image_type} Page'")
-  #  image[0].url if !image.blank?
-  #end
 
   def has_orders?
     line_item = LineItem.where(["product_id = ?",self.id]).limit(1)

@@ -1,5 +1,9 @@
 class EmailCampaignsController < ApplicationController
   before_filter :authenticate_radmin!
+  skip_before_filter :find_cart
+  skip_before_filter :get_categories
+  skip_before_filter :set_users_referrer_code
+  skip_before_filter :set_locale
   layout proc{ |c| c.request.xhr? ? false : "admin" }
   # GET /email_campaigns
   # GET /email_campaigns.xml
@@ -50,7 +54,7 @@ class EmailCampaignsController < ApplicationController
         format.xml  { render :xml => @email_campaign, :status => :created, :location => @email_campaign }
       else
         flash[:alert] = "Email Campaign was NOT created"
-        format.html { render :action => "new" }
+        format.html { render "new" }
         format.xml  { render :xml => @email_campaign.errors, :status => :unprocessable_entity }
       end
     end
@@ -67,7 +71,7 @@ class EmailCampaignsController < ApplicationController
         format.xml  { head :ok }
       else
         flash[:alert] = "Email campaign was NOT updated"
-        format.html { render :action => "edit" }
+        format.html { render "edit" }
         format.xml  { render :xml => @email_campaign.errors, :status => :unprocessable_entity }
       end
     end

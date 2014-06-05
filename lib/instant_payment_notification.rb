@@ -31,7 +31,7 @@ class InstantPaymentNotification
   #I don't think I want to use this. I think paypal might call back to me a couple of times for a transaction to update me
   def unique_transaction?
     order = Order.find_by_transaction_id(@txn_id)
-    order.nil?
+    !order
   end
 
   #@custom is the generated RequestID

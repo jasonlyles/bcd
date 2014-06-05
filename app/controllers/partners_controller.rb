@@ -1,6 +1,9 @@
 class PartnersController < ApplicationController
   before_filter :authenticate_radmin!
-
+  skip_before_filter :find_cart
+  skip_before_filter :get_categories
+  skip_before_filter :set_users_referrer_code
+  skip_before_filter :set_locale
   layout proc { |c| c.request.xhr? ? false : "admin" }
 
   # GET /partners
@@ -52,7 +55,7 @@ class PartnersController < ApplicationController
         format.xml  { render :xml => @partner, :status => :created, :location => @partner }
       else
         flash[:alert] = "Partner was NOT created"
-        format.html { render :action => "new" }
+        format.html { render "new" }
         format.xml  { render :xml => @partner.errors, :status => :unprocessable_entity }
       end
     end
@@ -69,7 +72,7 @@ class PartnersController < ApplicationController
         format.xml  { head :ok }
       else
         flash[:alert] = "Partner was NOT updated"
-        format.html { render :action => "edit" }
+        format.html { render "edit" }
         format.xml  { render :xml => @partner.errors, :status => :unprocessable_entity }
       end
     end
@@ -80,7 +83,7 @@ class PartnersController < ApplicationController
   def destroy
     @partner = Partner.find(params[:id])
     deleted = @partner.destroy
-    if deleted.nil?
+    unless deleted
       flash[:alert] = "Sorry. You can't delete a partner that has advertising campaigns that have been used."
       return redirect_to(partners_url)
     end

@@ -35,7 +35,7 @@ class AdminController < ApplicationController
     @radmin = Radmin.find(params[:id])
 
     respond_to do |format|
-      if !params[:radmin][:email].nil? || @radmin.is_valid_password?(params[:radmin][:current_password])
+      if !params[:radmin][:email].blank? || @radmin.is_valid_password?(params[:radmin][:current_password])
         #Deleting the current_password from the params because it's protected from mass assignment, and doesn't get saved.
         params[:radmin].delete(:current_password)
         if @radmin.update_attributes(params[:radmin])
@@ -44,12 +44,12 @@ class AdminController < ApplicationController
           format.html { redirect_to(admin_profile_admin_url, :notice => 'Profile was successfully updated.') }
           format.xml { head :ok }
         else
-          format.html { render :action => "admin_profile" }
+          format.html { render "admin_profile" }
           format.xml { render :xml => @radmin.errors, :status => :unprocessable_entity }
         end
       else
         @radmin.errors.add(:current_password, "is invalid.")
-        format.html { render :action => "admin_profile" }
+        format.html { render "admin_profile" }
         format.xml { render :xml => @radmin.errors, :status => :unprocessable_entity }
       end
     end
@@ -57,8 +57,9 @@ class AdminController < ApplicationController
 
   #TODO: Change this action to accept users ID. Will make for a cleaner action and test.
   def change_user_status
-    @user = User.find_by_email(params[:user][:email])
-    @user.update_attributes(:account_status => params[:user][:account_status])
+    user = params[:user]
+    @user = User.find_by_email(user[:email])
+    @user.update_attributes(:account_status => user[:account_status])
     respond_to do |format|
       format.js
     end
@@ -68,9 +69,8 @@ class AdminController < ApplicationController
     @order = Order.find(params[:id])
   end
 
-  #def update_users_download_counts
-
-  #end
+  def update_users_download_counts
+  end
 
   def complete_order
     @order = Order.find(params[:order][:id])
@@ -117,18 +117,22 @@ class AdminController < ApplicationController
   end
 
   def sales_report_monthly_stats
-    @report = SalesReport.new(:start_date => params[:start_date], :end_date => params[:end_date])
-    @report.report_date = "#{params[:start_date]['year']}-#{params[:start_date]['month']}-01"
+    start_date = params[:start_date]
+    start_month = start_date['month']
+    start_year = start_date['year']
+    end_date = params[:end_date]
+    @report = SalesReport.new(:start_date => start_date, :end_date => end_date)
+    @report.report_date = "#{start_year}-#{start_month}-01"
 
     if @report.multiple_months?
-      @summaries = SalesReport.get_sweet_stats(params[:start_date]['month'],params[:start_date]['year'],params[:end_date]['month'],params[:end_date]['year'])
+      @summaries = SalesReport.get_sweet_stats(start_month,start_year,end_date['month'],end_date['year'])
     else
       report = SalesReport.find_by_report_date("#{@report.report_date}")
       if params['commit'] == "Force Regeneration"
-        report.destroy unless report.nil?
+        report.destroy if report
         report = nil
       end
-      if report.nil?
+      unless report
         #Can't find one, let's create one
         @report.save
         @summaries = @report.generate_sales_report
@@ -138,7 +142,7 @@ class AdminController < ApplicationController
           report.sales_summaries.destroy_all
           @summaries = report.generate_sales_report
         else
-          @summaries = SalesReport.get_sweet_stats(params[:start_date]['month'],params[:start_date]['year'],nil,nil)
+          @summaries = SalesReport.get_sweet_stats(start_month,start_year,nil,nil)
         end
         @report = report
       end
@@ -163,7 +167,8 @@ class AdminController < ApplicationController
 
   private
 
-  #TODO: Might be nice to figure out a way to return how many emails were actually sent, so it can be displayed on the admin page
+  #TODO: Might be nice to figure out a way to return how many emails were actually sent, so it
+  # can be displayed on the admin page
   def email_users_about_updated_instructions(users, model, message)
     users.each do |user|
       #Don't send this email to users who don't want emails from us
@@ -174,8 +179,8 @@ class AdminController < ApplicationController
   end
 
   def arrange_products_in_a_nice_way
-    models = Product.find_products_for_sale
-    @models = []
-    models.each { |x| @models << ["#{x.product_code} #{x.name}", x.id] }
+    products = Product.find_products_for_sale
+    @products = []
+    products.each { |product| @products << ["#{product.product_code} #{product.name}", product.id] }
   end
 end

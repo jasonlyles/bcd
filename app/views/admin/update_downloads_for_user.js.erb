@@ -1,1 +1,6 @@
-$("#update_info").html("<%= escape_javascript(render(:partial => 'updated_download_count'))%>");
+$("#update_info").html("<%= escape_javascript(render(:partial => 'updated_download_count',
+                                                        locals: {user: @user,
+                                                                 users: @users,
+                                                                 download: @download,
+                                                                 model: @model
+}))%>");

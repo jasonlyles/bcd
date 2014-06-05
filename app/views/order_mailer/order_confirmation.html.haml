@@ -34,7 +34,7 @@ Items you purchased:
     %br
     = @order.address_street_1
     %br
-    - unless @order.address_street_2.blank?
+    - if @order.address_street_2?
       = @order.address_street_2
       %br
     #{@order.address_city}, #{@order.address_state} #{@order.address_zip}
@@ -60,3 +60,7 @@ Items you purchased:
 Thank you for your business.
 %br
 Brick City Depot
+%br
+%br
+%br
+= render partial: 'shared/email_footer', locals: {hide_unsubscribe: true, user: @user, host: @host}

@@ -1,1 +1,1 @@
-$("#account_info").html("<%= escape_javascript(render(:partial => 'user_info'))%>");
+$("#account_info").html("<%= escape_javascript(render(:partial => 'user_info', locals: {user: @user}))%>");

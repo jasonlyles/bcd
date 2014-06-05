@@ -16,6 +16,6 @@
           %br
           =order.request_id
         %td= order.user.email
-        %td= select_tag(:shipping_status, options_for_select(@shipping_statuses,order.shipping_status))
+        %td= select_tag(:shipping_status, options_for_select(shipping_statuses,order.shipping_status))
         %td= f.submit "Update Order"
 = paginate orders if paginate_it == true

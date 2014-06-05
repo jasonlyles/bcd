@@ -1,6 +1,10 @@
 class AdvertisingCampaignsController < ApplicationController
   before_filter :authenticate_radmin!
   before_filter :get_partners, :only => [:new, :create, :edit, :update]
+  skip_before_filter :find_cart
+  skip_before_filter :get_categories
+  skip_before_filter :set_users_referrer_code
+  skip_before_filter :set_locale
   layout proc { |c| c.request.xhr? ? false : "admin" }
 
   # GET /advertising_campaigns
@@ -56,7 +60,7 @@ class AdvertisingCampaignsController < ApplicationController
         format.xml  { render :xml => @advertising_campaign, :status => :created, :location => @advertising_campaign }
       else
         flash[:alert] = "Advertising Campaign was NOT created"
-        format.html { render :action => "new" }
+        format.html { render "new" }
         format.xml  { render :xml => @advertising_campaign.errors, :status => :unprocessable_entity }
       end
     end
@@ -73,7 +77,7 @@ class AdvertisingCampaignsController < ApplicationController
         format.xml  { head :ok }
       else
         flash[:alert] = "Advertising Campaign was NOT updated"
-        format.html { render :action => "edit" }
+        format.html { render "edit" }
         format.xml  { render :xml => @advertising_campaign.errors, :status => :unprocessable_entity }
       end
     end

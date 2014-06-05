@@ -19,6 +19,10 @@ class CreateProducts < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :products, :product_type_id
+    add_index :products, :category_id
+    add_index :products, :subcategory_id
   end
 
   def self.down

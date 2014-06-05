@@ -1,6 +1,6 @@
 %br
 %br
-= nested_form_for @product, :html => {:multipart => true} do |f|
+= nested_form_for product, :html => {:multipart => true} do |f|
   .field
     = f.label :name, "Name (i.e. Colonial Revival House)"
     %br
@@ -8,7 +8,7 @@
   .field
     = f.label :product_type_id, 'Product Type'
     %br
-    = f.select :product_type_id, @product_types
+    = f.select :product_type_id, product_types
   .field
     = f.label :quantity, 'Quantity (Only fill this out if product is a physical item.)'
     %br
@@ -16,11 +16,11 @@
   .field
     = f.label :category_id
     %br
-    = f.select :category_id, @categories, :prompt => true
+    = f.select :category_id, categories, :prompt => true
   .field
     = f.label :subcategory_id
     %br
-    = f.select :subcategory_id, Subcategory.where("category_id=?",@product.category_id).map{|p| [p['name'],p['id']]}
+    = f.select :subcategory_id, Subcategory.where("category_id=?",product.category_id).map{|p| [p['name'],p['id']]}
   .field
     = f.label :product_code, "Product Code *, **"
     %br
@@ -39,7 +39,7 @@
     = f.text_field :price, :size => 4
   .field
     = f.label :ready_for_public, "Ready for public? ***"
-    = f.check_box :ready_for_public, {:checked => @product.ready_for_public},1,0
+    = f.check_box :ready_for_public, {:checked => product.ready_for_public},1,0
   .field
     = f.label :youtube_url, "Youtube Video ID (If full url is http://www.youtube.com/watch?v=oavMtUWDBTM I just want oavMtUWDBTM)"
     %br
@@ -54,7 +54,7 @@
       %p
         = image_form.label :url, "Image"
         %br
-        - if @product.images && @product.images.length >= field_count
+        - if product.images && product.images.length >= field_count
           = image_form.text_field :url, :disabled => true
         - else
           = image_form.file_field :url
@@ -62,7 +62,7 @@
         = image_form.link_to_remove "Remove this image"
   = f.link_to_add "Add Image", :images
   %br
-  - if @product.is_digital_product?
+  - if product.is_digital_product?
     %br
     %b Instructions specific fields
     %br
@@ -74,7 +74,7 @@
         %p
           = pl_form.label :name, "Parts List"
           %br
-          - if @product.parts_lists && @product.parts_lists.length >= field_count
+          - if product.parts_lists && product.parts_lists.length >= field_count
             = pl_form.text_field :name, :disabled => true
           - else
             = pl_form.file_field :name
@@ -85,10 +85,10 @@
       = f.link_to_add "Add Parts List", :parts_lists
     %br
     .field
-      - if @product.pdf? && !@product.pdf.blank?
+      - if product.pdf? && !product.pdf.blank?
         = f.label :pdf, "PDF"
         %br
-        - if @product.pdf_cache
+        - if product.pdf_cache
           = f.text_field :pdf_cache, :disabled => true
         - else
           = f.text_field :pdf, :disabled => true
@@ -98,16 +98,16 @@
       %br
       = f.file_field :pdf
       = f.hidden_field :pdf_cache
-      - if @product.pdf?
+      - if product.pdf?
         .field
           = f.label :delete_pdf, "Delete PDF"
           = f.check_box :remove_pdf
     .field
       = f.label :free
-      = f.check_box :free, {:checked => @product.free},1,0
+      = f.check_box :free, {:checked => product.free},1,0
     .field
       = f.label :alternative_build
-      = f.check_box :alternative_build, {:checked => @product.alternative_build},1,0
+      = f.check_box :alternative_build, {:checked => product.alternative_build},1,0
   %br
   .actions
     = f.submit 'Save'

@@ -20,7 +20,7 @@
     %br
     = @order.address_street_1
     %br
-    - unless @order.address_street_2.blank?
+    - if @order.address_street_2?
       = @order.address_street_2
       %br
     = "#{@order.address_city}, #{@order.address_state} #{@order.address_zip}"

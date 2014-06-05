@@ -10,6 +10,13 @@ class ApplicationController < ActionController::Base
 
   private
 
+  #This is used on the admin side to get all categories for product and subcategory forms
+  def get_categories_for_admin
+    categories = Category.all
+    @categories = []
+    categories.each{|x|@categories << [x.name,x.id]}
+  end
+
   def set_locale
     hal = HttpAcceptLanguage::Parser.new(request.env['HTTP_ACCEPT_LANGUAGE'])
     I18n.locale = hal.language_region_compatible_from(SUPPORTED_LOCALES) || I18n.default_locale
@@ -49,35 +56,27 @@ class ApplicationController < ActionController::Base
     Rails.env == 'test' ? false : Switch.maintenance_mode.on?
   end
 
-  #Might want to do a little bit of refactoring here, since some of the same code gets called in all 3 main blocks
   def find_cart
-    #instead of throwing all my product objects into the session[:cart], I want to create a Cart here (if one doesn't exist) and save it to the database, and then get the Cart ID into the session[:cart_id]
-    #First look for a cart in the session"
     if session[:cart_id]
-      begin
-        @cart = Cart.find(session[:cart_id])
-      rescue ActiveRecord::RecordNotFound
-        #Do nothing
-      end
-      if @cart && @cart.user_id.nil? && current_customer #if cart is in session, but doesn't belong to a user, this will assign a user to the cart if there is a current_user
+      @cart = Cart.find(session[:cart_id])
+      #if cart is in session, but doesn't belong to a user, this will assign a user to
+      # the cart if there is a current_user
+      if @cart && @cart.user_id.blank? && current_customer
         @cart.user_id = current_customer.id
         @cart.save
-      elsif @cart.nil?
+      elsif !@cart
         set_new_cart
       end
     #if no cart, look for a current_user
     elsif current_customer
-      begin
-        @cart = Cart.users_most_recent_cart(current_customer.id) #Get the users most recent cart. This can come in handy in case sessions got cleared out, but there was still a saved cart for the user
-      rescue
-        #Nothing
+      #Get the users most recent cart. This can come in handy in case sessions got cleared out,
+      # but there was still a saved cart for the user
+      @cart = Cart.users_most_recent_cart(current_customer.id)
+      if @cart
+        session[:cart_id] = @cart.id
+      else
+        set_new_cart
       end
-      if @cart.nil?
-        @cart = Cart.new
-        @cart.user_id = current_customer.id
-        @cart.save
-      end
-      session[:cart_id] = @cart.id
     #if neither cart in session nor current_user, then create a cart and add to session
     else
       set_new_cart

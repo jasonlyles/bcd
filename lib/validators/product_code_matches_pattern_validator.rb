@@ -8,7 +8,7 @@ class ProductCodeMatchesPatternValidator < ActiveModel::EachValidator
       if !value.match(/^[A-Z]{2}\d{3}M$/)
         object.errors[attribute] << (options[:message] || "Model product codes must follow the pattern CB002M.")
       else
-        if Product.find_by_base_product_code(value).nil?
+        unless Product.find_by_base_product_code(value)
           object.errors[attribute] << (options[:message] || "Model product codes must have a base model with a product code of #{value.match(/^[A-Z]{2}\d{3}/)}")
         end
       end
@@ -16,7 +16,7 @@ class ProductCodeMatchesPatternValidator < ActiveModel::EachValidator
       if !value.match(/^[A-Z]{2}\d{3}K$/)
         object.errors[attribute] << (options[:message] || "Kit product codes must follow the pattern CB002K.")
       else
-        if Product.find_by_base_product_code(value).nil?
+        unless Product.find_by_base_product_code(value)
           object.errors[attribute] << (options[:message] || "Kit product codes must have a base model with a product code of #{value.match(/^[A-Z]{2}\d{3}/)}")
         end
       end

@@ -42,12 +42,13 @@
       .rounded_corner_cart_tie-in
         %img{:src => "/assets/bottom_right_rounded_corner.png", :alt => "bottom_right_rounded_corner", :title => "Corner"}
       .cart_stuff
-        = render :partial => 'shared/cart_info'
+        = render :partial => 'shared/cart_info', locals: {cart: @cart}
 
       .clear
       .sidebar_wrapper
         .sidebar_div1
-          = render :partial => 'shared/categories'
+          = render :partial => 'shared/categories', locals: {categories: @categories, alternatives: @alternatives,
+                                                    product_type: @product_type, price_groups: @price_groups}
         .sidebar_div3
           = render :partial => 'shared/resources'
       .main

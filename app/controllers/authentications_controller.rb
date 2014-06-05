@@ -1,8 +1,5 @@
 class AuthenticationsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:create, :index, :clear_authentications]
-  #def index
-  #  @authentications = current_user.authentications if current_user
-  #end
+  before_filter :authenticate_user!, :except => [:create, :clear_authentications]
 
   def create
     omniauth = request.env["omniauth.auth"]
@@ -30,7 +27,7 @@ class AuthenticationsController < ApplicationController
     else
       user = User.new
       user.apply_omniauth(omniauth)
-      if user.email.nil? || user.email.empty?
+      unless user.email?
         session[:omniauth] = omniauth.except('extra')
         return redirect_to new_user_registration_url, :notice => "Was not able to retrieve your email address from #{omniauth['provider'].capitalize}. Please add an email address below."
       end

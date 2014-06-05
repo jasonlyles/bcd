@@ -1,5 +1,9 @@
 class CategoriesController < ApplicationController
   before_filter :authenticate_radmin!
+  skip_before_filter :find_cart
+  skip_before_filter :get_categories
+  skip_before_filter :set_users_referrer_code
+  skip_before_filter :set_locale
   layout proc{ |c| c.request.xhr? ? false : "admin" }
   # GET /categories
   # GET /categories.xml
@@ -57,7 +61,7 @@ class CategoriesController < ApplicationController
         format.xml  { render :xml => @category, :status => :created, :location => @category }
       else
         flash[:alert] = "Category was NOT created"
-        format.html { render :action => "new" }
+        format.html { render "new" }
         format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
       end
     end
@@ -74,7 +78,7 @@ class CategoriesController < ApplicationController
         format.xml  { head :ok }
       else
         flash[:alert] = "Category was NOT updated"
-        format.html { render :action => "edit" }
+        format.html { render "edit" }
         format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
       end
     end

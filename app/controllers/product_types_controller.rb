@@ -1,6 +1,10 @@
 class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy]
   before_filter :authenticate_radmin!
+  skip_before_filter :find_cart
+  skip_before_filter :get_categories
+  skip_before_filter :set_users_referrer_code
+  skip_before_filter :set_locale
   layout proc{ |c| c.request.xhr? ? false : "admin" }
 
   # GET /product_types
@@ -28,7 +32,7 @@ class ProductTypesController < ApplicationController
     if @product_type.save
       redirect_to @product_type, notice: 'Product type was successfully created.'
     else
-      render action: 'new'
+      render 'new'
     end
   end
 
@@ -37,7 +41,7 @@ class ProductTypesController < ApplicationController
     if @product_type.update(product_type_params)
       redirect_to @product_type, notice: 'Product type was successfully updated.'
     else
-      render action: 'edit'
+      render 'edit'
     end
   end
 

@@ -9,6 +9,8 @@ class CreateSubcategories < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :subcategories, :category_id
   end
 
   def self.down

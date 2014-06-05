@@ -1,7 +1,7 @@
 include AWS::S3
 module Amazon
   class Storage
-    
+
     def self.download(file_name)
       data = S3Object.find(file_name,AmazonConfig.config.instruction_bucket)
       data.value

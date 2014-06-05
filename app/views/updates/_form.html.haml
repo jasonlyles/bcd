@@ -1,6 +1,6 @@
 %br
 %br
-= form_for @update, :html => {:multipart => true} do |f|
+= form_for update, :html => {:multipart => true} do |f|
   .field
     = f.label :title
     %br
@@ -17,7 +17,7 @@
     = f.label :body, "Body, disabled for now"
     %br
     = f.text_area :body, :disabled => true
-  - if @update.image?
+  - if update.image?
     .field
       = f.label :delete_image
       = f.check_box :remove_image

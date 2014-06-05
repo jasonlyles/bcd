@@ -1,6 +1,6 @@
 %br
 %br
-= form_for @product_type, :html => {:multipart => true} do |f|
+= form_for product_type, :html => {:multipart => true} do |f|
   .field
     = f.label :name
     %br
@@ -18,23 +18,23 @@
     %br
     = f.text_area :description, :class => 'form_text_area'
   .field
-    = f.text_field :image, :disable => true if @product_type.image?
+    = f.text_field :image, :disable => true if product_type.image?
     %br
     = f.label :image
     %br
     = f.file_field :image
     = f.hidden_field :image_cache
-    - if @product_type.image?
+    - if product_type.image?
       .field
         = f.label :delete_image
         = f.check_box :remove_image
   .field
     = f.label :digital_product
     %br
-    = f.check_box :digital_product, {:checked => @product_type.digital_product},1,0
+    = f.check_box :digital_product, {:checked => product_type.digital_product},1,0
   .field
     = f.label :ready_for_public
     %br
-    = f.check_box :ready_for_public, {:checked => @product_type.ready_for_public},1,0
+    = f.check_box :ready_for_public, {:checked => product_type.ready_for_public},1,0
   .actions
     = f.submit 'Save'

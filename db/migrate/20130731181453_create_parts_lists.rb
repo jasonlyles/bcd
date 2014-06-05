@@ -7,5 +7,7 @@ class CreatePartsLists < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :parts_lists, :product_id
   end
 end

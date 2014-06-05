@@ -8,6 +8,8 @@ class CreateAdvertisingCampaigns < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :advertising_campaigns, :partner_id
   end
 
   def self.down

@@ -1,1 +1,2 @@
-$("#sales_report").html("<%= escape_javascript(render(:partial => 'sales_report'))%>");
+$("#sales_report").html("<%= escape_javascript(render(:partial => 'sales_report', locals: {report: @report,
+                                                                                           summaries: @summaries}))%>");

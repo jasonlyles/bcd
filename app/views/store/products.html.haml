@@ -17,4 +17,4 @@
               %br
               %p #{category.description}
     - else
-      = render :partial => 'products_list', :locals => {:product => @product_type.name}
+      = render 'products_list', product_type: @product_type.name, products: @products

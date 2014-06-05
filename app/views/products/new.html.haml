@@ -7,6 +7,6 @@
 - else
   %h1 New product
 
-= render 'form'
+= render 'form', product: @product, product_types: @product_types, categories: @categories
 
 = link_to 'Back', products_path

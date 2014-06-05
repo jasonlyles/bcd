@@ -4,35 +4,8 @@ class Download < ActiveRecord::Base
 
   attr_accessible :product_id, :user_id, :count, :remaining, :download_token
 
-  def increment_download_count(current_user,product_id,token=nil)
-    if token.blank?
-      #download = Download.find_or_create_by_user_id_and_product_id(current_user.id,product_id)
-      download = Download.find_or_create_by(user_id: current_user.id, product_id: product_id)
-    else
-      download = Download.find_by_user_id_and_download_token(current_user.id,token)
-    end
-    #if download.count < MAX_DOWNLOADS
-      download.count += 1
-      download.save
-    #end
-  end
-
-  def decrement_remaining_downloads(current_user,product_id,token=nil)
-    if token.blank?
-      #download = Download.find_or_create_by_user_id_and_product_id(current_user.id,product_id)
-      download = Download.find_or_create_by(user_id: current_user.id, product_id: product_id)
-    else
-      download = Download.find_by_user_id_and_download_token(current_user.id,token)
-    end
-    if download.remaining > 0
-      download.remaining -= 1
-      download.save
-    end
-  end
-
   def self.update_download_counts(current_user,product_id,token=nil)
     if token.blank?
-      #download = Download.find_or_create_by_user_id_and_product_id(current_user.id,product_id)
       download = Download.find_or_create_by(user_id: current_user.id, product_id: product_id)
     else
       download = Download.find_by_user_id_and_download_token(current_user.id,token)

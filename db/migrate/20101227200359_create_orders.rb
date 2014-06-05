@@ -18,6 +18,8 @@ class CreateOrders < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :orders, :user_id
   end
 
   def self.down

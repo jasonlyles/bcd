@@ -4,13 +4,6 @@ describe AuthenticationsController do
   fixtures :all
   render_views
 
-  describe "index" do
-    it "should render index template" do
-      get :index
-      response.should render_template(:index)
-    end
-  end
-
   describe "create" do
     it "should not create new user and render new template when model is invalid" do
       request.env["omniauth.auth"] = {}

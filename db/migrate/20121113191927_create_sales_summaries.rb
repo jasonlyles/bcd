@@ -8,6 +8,9 @@ class CreateSalesSummaries < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :sales_summaries, :sales_report_id
+    add_index :sales_summaries, :product_id
   end
 
   def down
