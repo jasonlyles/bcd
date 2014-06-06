@@ -18,7 +18,7 @@ class StoreController < ApplicationController
       @product_type = ProductType.where("name=?",params[:product_type_name])[0]
       @top_categories = @categories.dup
       @products = @product_type.products.in_stock.page(params[:page]).per(12)
-    rescue NoMethodError, ActiveRecord::RecordNotFound => e
+    rescue NoMethodError, ActiveRecord::RecordNotFound => error
       logger.error("Failed to get store#products. ProductType Name: #{params[:product_type_name]}")
       flash[:notice] = "Sorry. We don't have any of those."
       redirect_to('/store')
@@ -128,8 +128,8 @@ class StoreController < ApplicationController
     @order = Order.new(params[:order])
     @order.add_line_items_from_cart(@cart)
     item_amount_string = ""
-    @order.line_items.each_with_index do |item,i|
-      item_amount_string += "&item_name_#{i+1}=#{item.product.product_code} #{item.product.name}&amount_#{i+1}=#{item.product.price.to_f}&quantity_#{i+1}=#{item.quantity}"
+    @order.line_items.each_with_index do |item,index|
+      item_amount_string += "&item_name_#{index+1}=#{item.product.product_code} #{item.product.name}&amount_#{index+1}=#{item.product.price.to_f}&quantity_#{index+1}=#{item.quantity}"
     end
     @order.request_id = SecureRandom.hex(20)
     if @order.save
@@ -210,8 +210,8 @@ class StoreController < ApplicationController
         else
           OrderMailer.order_confirmation(@order.user,@order).deliver
         end
-      rescue => e
-        ExceptionNotifier.notify_exception(e, :env => request.env, :data => {:message => "Failed trying to send order confirmation email for #{@order.to_yaml}."})
+      rescue => error
+        ExceptionNotifier.notify_exception(error, :env => request.env, :data => {:message => "Failed trying to send order confirmation email for #{@order.to_yaml}."})
       end
       handle_physical_items
     else

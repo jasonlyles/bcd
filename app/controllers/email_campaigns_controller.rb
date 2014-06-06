@@ -4,7 +4,7 @@ class EmailCampaignsController < ApplicationController
   skip_before_filter :get_categories
   skip_before_filter :set_users_referrer_code
   skip_before_filter :set_locale
-  layout proc{ |c| c.request.xhr? ? false : "admin" }
+  layout proc{ |controller| controller.request.xhr? ? false : "admin" }
   # GET /email_campaigns
   # GET /email_campaigns.xml
   def index

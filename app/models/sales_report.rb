@@ -38,7 +38,7 @@ class SalesReport < ActiveRecord::Base
       sales_reports = SalesReport.where("report_date >= ? AND report_date < ?","#{start_year}-#{start_month}-01","#{Date.parse("#{end_month}/#{end_year}").next_month.strftime("%Y-%m-01")}")
     end
 
-    blk = lambda{|h,k| h[k] = Hash.new(&blk)}
+    blk = lambda{|hash,key| hash[key] = Hash.new(&blk)}
     models = Hash.new(&blk)
 
     sales_reports.each do |report|
@@ -76,7 +76,7 @@ class SalesReport < ActiveRecord::Base
   end
 
   def arrange_sales_summaries(orders)
-    blk = lambda{|h,k| h[k] = Hash.new(&blk)}
+    blk = lambda{|hash,key| hash[key] = Hash.new(&blk)}
     models = Hash.new(&blk)
 
     orders.find_each do |order|

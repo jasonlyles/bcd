@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  layout proc{ |c| c.request.xhr? ? false : "application" }
+  layout proc{ |controller| controller.request.xhr? ? false : "application" }
   #Need to find a way to not call these before_filters on certain controllers, or maybe these should just be on the controllers with urls a customer might hit.
   before_filter :check_admin_mode, :except => [:maintenance]
   before_filter :find_cart
@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   def get_categories_for_admin
     categories = Category.all
     @categories = []
-    categories.each{|x|@categories << [x.name,x.id]}
+    categories.each{|category|@categories << [category.name,category.id]}
   end
 
   def set_locale
@@ -84,9 +84,9 @@ class ApplicationController < ActionController::Base
   end
 
   def string_to_snake_case(string)
-    x = string.downcase
-    x = x.gsub(' ','_')
-    x
+    new_string = string.downcase
+    new_string = new_string.gsub(' ','_')
+    new_string
   end
 
   def set_new_cart

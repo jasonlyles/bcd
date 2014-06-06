@@ -5,7 +5,7 @@ class ImagesController < ApplicationController
   skip_before_filter :get_categories
   skip_before_filter :set_users_referrer_code
   skip_before_filter :set_locale
-  layout proc{ |c| c.request.xhr? ? false : "admin" }
+  layout proc{ |controller| controller.request.xhr? ? false : "admin" }
 
   # GET /images
   # GET /images.xml
@@ -100,6 +100,6 @@ class ImagesController < ApplicationController
   def get_products
     products = Product.all.order("name")
     @products = []
-    products.each { |x| @products << [x.name, x.id] }
+    products.each { |product| @products << [product.name, product.id] }
   end
 end

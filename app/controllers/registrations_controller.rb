@@ -3,12 +3,11 @@ class RegistrationsController < Devise::RegistrationsController
   before_filter :authenticate_user!, :only => [:update, :destroy]
 
   def create
-    #super
     signup_params = {}
     user_params = ['email', 'tos_accepted']
-    params['user'].each do |k,v|
-      if user_params.include?(k)
-        signup_params[k] = v
+    params['user'].each do |key,value|
+      if user_params.include?(key)
+        signup_params[key] = value
       end
     end
     clean_up_guest if session[:guest] #If I have a guest that has a change of heart and wants to sign up, ditch the guest record

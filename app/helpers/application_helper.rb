@@ -7,7 +7,7 @@ module ApplicationHelper
   def featured_item
     #This might not be a pretty way to get a random product, but it would take us having a lot of products to make this slow, I would guess
     @products = Product.find_products_for_sale
-    ids = @products.collect{|x| x.id}
+    ids = @products.collect{|product| product.id}
     random_array_index = rand(ids.length)
     product_id = ids[random_array_index]
     if product_id.blank?
@@ -48,8 +48,8 @@ module ApplicationHelper
   end
 
   def string_to_snake_case(string)
-    x = string.downcase
-    x = x.gsub(' ','_')
-    x
+    new_string = string.downcase
+    new_string = new_string.gsub(' ','_')
+    new_string
   end
 end

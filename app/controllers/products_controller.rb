@@ -6,7 +6,7 @@ class ProductsController < ApplicationController
   skip_before_filter :get_categories
   skip_before_filter :set_users_referrer_code
   skip_before_filter :set_locale
-  layout proc{ |c| c.request.xhr? ? false : "admin" }
+  layout proc{ |controller| controller.request.xhr? ? false : "admin" }
 
   # GET /products
   # GET /products.xml
@@ -115,6 +115,6 @@ class ProductsController < ApplicationController
   private
 
   def get_type
-    @product_types = ProductType.all.collect{|x| [x.name,x.id]}
+    @product_types = ProductType.all.collect{|product_type| [product_type.name,product_type.id]}
   end
 end

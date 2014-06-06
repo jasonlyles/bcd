@@ -7,7 +7,7 @@ class InstantPaymentNotification
 
   def initialize(params)
     @params = params
-    @params.each{|k,v| eval("@#{k}=v")}
+    @params.each{|key,v| eval("@#{key}=v")}
     find_order
   end
 
@@ -48,8 +48,8 @@ class InstantPaymentNotification
     path = "/cgi-bin/webscr"
     query = "cmd=_notify-validate"
     #Might need to URL.encode the query string
-    @params.each do |k,v|
-      query += "&#{k}=#{v}"
+    @params.each do |key,value|
+      query += "&#{key}=#{value}"
     end
     response = http.post(path,query)
 

@@ -41,7 +41,7 @@ class Product < ActiveRecord::Base
   end
 
   def self.sort_by_price
-    blk = lambda{|h,k| h[k] = Hash.new(&blk)}
+    blk = lambda{|hash,key| hash[key] = Hash.new(&blk)}
     price_groups = Hash.new(&blk)
     products = Product.ready_instructions.order(:price)
     products.each do |product|
