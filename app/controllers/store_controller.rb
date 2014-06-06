@@ -223,8 +223,8 @@ class StoreController < ApplicationController
   end
 
   def order_confirmation_email_test
-    @order = Order.find_by_user_id 27  #Jason
-    #@order = Order.find_by_user_id 3  #Brian
+    #@order = Order.find_by_user_id 1  #Jason
+    @order = Order.find_by_user_id 3  #Brian
     #OrderMailer.order_confirmation(@order.user, @order).deliver
     download_links = @order.get_link_to_downloads
     OrderMailer.guest_order_confirmation(@order.user, @order, download_links).deliver

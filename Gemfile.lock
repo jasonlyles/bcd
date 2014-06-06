@@ -190,6 +190,8 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    mail_view (2.0.4)
+      tilt
     main (6.0.0)
       arrayfields (>= 4.7.4)
       chronic (>= 0.6.2)
@@ -418,6 +420,7 @@ DEPENDENCIES
   hpricot
   jquery-rails
   kaminari
+  mail_view (~> 2.0.4)
   metric_fu
   mini_magick
   nested_form

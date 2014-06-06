@@ -74,7 +74,7 @@ class DownloadsController < ApplicationController
         download_from_amazon(@parts_list.name.path)
       else
         #In case I need to test downloads locally
-        download_From_local(@parts_list.name.path)
+        download_from_local(@parts_list.name.path)
       end
     else
       logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")

@@ -26,3 +26,7 @@ NOTES
 
 For multiple file uploads in a model with a carrierwave mount and a nested form, I used the instructions in this:
 http://lucapette.com/rails/multiple-files-upload-with-carrierwave-and-nested_form/
+
+HTML EMAILS
+
+Used this as a template and reference: https://github.com/InterNations/antwort  http://internations.github.io/antwort/index.html

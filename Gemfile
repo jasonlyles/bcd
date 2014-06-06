@@ -65,6 +65,7 @@ group :development, :test do
   gem 'simplecov', :require => false
   #gem 'brakeman'
   gem 'metric_fu'
+  gem 'mail_view', "~> 2.0.4"
 end
 
 group :production do

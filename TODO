@@ -12,6 +12,8 @@ help me clean up testing code also.
 
 4. Work on plain and html versions of the emails
 
+
+
 GETTING READY FOR PROD #######################################################
 
 1. Make sure all prod env vars are set up on Heroku. Currently a few behind staging.
@@ -123,6 +125,11 @@ display categories.
    on a per page basis via some helper. I think I may have to do one or more content_for-style helpers, feed them args
    and if those args are populated, use the values, else use a default. Similar to the way I set up the title in the
    application layout.
+
+19. Think about adding a Bricklink Seller model. This could be the basis of a preferred BL seller for a given model. Say
+    I arranged deals with various BL sellers to try and keep in stock the pieces needed to make a model. Then I could
+    create a BL Seller, and have a join table with a BL seller ID and product ID  to tie preferred BL sellers to a given
+    model.
 
 ########################################################################################################################
 V1.2 AND BEYOND:

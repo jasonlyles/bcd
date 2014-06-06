@@ -9,8 +9,10 @@ describe ContactMailer do
       mail.subject.should == "Brick City Depot contact form"
       mail.to.should == ["lylesjt@yahoo.com"]
       mail.from.should == ["jimbob@legolover.org"]
-      mail.body.should match("Name: Jim Bob")
-      mail.body.should match("Hey ya'll. I like the Legos")
+      mail.body.parts.each do |part|
+        part.body.should match("Name: Jim Bob")
+        part.body.should match("Hey ya'll. I like the Legos")
+      end
     end
   end
 end

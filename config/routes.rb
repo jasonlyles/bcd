@@ -37,6 +37,13 @@ BrickCity::Application.routes.draw do
   resources :updates
   resources :images
 
+  if Rails.env.development?
+    #MailPreview routes
+    mount ContactMailer::Preview => 'contact_preview'
+    mount UpdateMailer::Preview => 'update_preview'
+    mount OrderMailer::Preview => 'order_preview'
+  end
+
   devise_for :radmins
   devise_for :users, :controllers => {:registrations => 'registrations', :sessions => 'sessions', :passwords => 'passwords'}
   devise_scope :user do
