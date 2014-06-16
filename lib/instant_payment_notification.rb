@@ -12,6 +12,8 @@ class InstantPaymentNotification
   end
 
   def valid_business_value?
+    Rails.logger.debug("BUSINESS: #{@business.inspect}")
+    Rails.logger.debug("BUSINESS EMAIL: #{PaypalConfig.config.business_email}")
     @business == PaypalConfig.config.business_email
   end
 
@@ -24,6 +26,7 @@ class InstantPaymentNotification
   end
 
   def valid_payment_status?
+    Rails.logger.debug("PAYMENT STATUS: #{@payment_status.upcase}")
     @payment_status.upcase == "COMPLETED"
   end
 
