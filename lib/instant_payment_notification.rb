@@ -12,9 +12,9 @@ class InstantPaymentNotification
   end
 
   def valid_business_value?
-    Rails.logger.debug("BUSINESS: #{@business.inspect}")
+    Rails.logger.debug("BUSINESS: #{@receiver_email.inspect}")
     Rails.logger.debug("BUSINESS EMAIL: #{PaypalConfig.config.business_email}")
-    @business == PaypalConfig.config.business_email
+    @receiver_email == PaypalConfig.config.business_email
   end
 
   def valid_currency?
