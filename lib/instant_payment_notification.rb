@@ -52,7 +52,9 @@ class InstantPaymentNotification
       query += "&#{key}=#{value}"
     end
     response = http.post(path,query)
-
+    Rails.logger.debug("RESPONSE: #{response.inspect}")
+    Rails.logger.debug("RESPONSE CODE: #{response.code}")
+    Rails.logger.debug("RESPONSE BODY: #{response.body}")
     if response && response.code == '200' && response.body == 'VERIFIED'
       return true
     else
@@ -61,6 +63,12 @@ class InstantPaymentNotification
   end
 
   def valid?
+    Rails.logger.debug("VALID IPN: #{valid_ipn?}")
+    Rails.logger.debug("VALID AMOUNT: #{valid_amount?}")
+    Rails.logger.debug("VALID CURRENCY: #{valid_currency?}")
+    Rails.logger.debug("VALID BUSINESS VALUE: #{valid_business_value?}")
+    Rails.logger.debug("VALID PAYMENT STATUS: #{valid_payment_status?}")
+
     valid_ipn? && valid_amount? && valid_currency? && valid_business_value? && valid_payment_status?
   end
 end
