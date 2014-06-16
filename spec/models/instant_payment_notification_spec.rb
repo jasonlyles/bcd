@@ -88,7 +88,7 @@ describe InstantPaymentNotification do
 
   describe 'valid_business_value?' do
     it "should return true for a valid business value" do
-      @ipn = InstantPaymentNotification.new({:business => 'gotkay_1243894360_biz@yahoo.com'})
+      @ipn = InstantPaymentNotification.new({:business => ENV['BCD_PAYPAL_EMAIL']})
 
       @ipn.valid_business_value?.should eq(true)
     end
