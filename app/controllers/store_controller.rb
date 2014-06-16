@@ -176,19 +176,24 @@ class StoreController < ApplicationController
     logger.debug("PAYPAL IPN: #{@ipn.inspect}")
     logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXX")
     @order = Order.find_by_request_id(@ipn.custom)
-
+    logger.debug("ORDER: #{@order.inspect}")
+    logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXX")
     #If we can't find the order, or the order has already been completed, just tell paypal to forget about it
     if @order.blank? || (!@order.status.blank? && @order.status.upcase == 'COMPLETED')
+      logger.debug("Order was blank or status was incorrect")
       return render :nothing => true
     end
 
     if @ipn.valid?
+      logger.debug("PAYPAL IPN is valid")
       @order.transaction_id = @ipn.txn_id
       @order.status = @ipn.payment_status.upcase if @ipn.payment_status
       if @order.has_physical_item?
+        logger.debug("Order has physical item")
         #Assuming that because the street address is blank, there is no other address info, and we can save address info
         #coming to us from paypal
         unless @order.address_street_1?
+          logger.debug("No stored street address, using street address from Paypal")
           @order.first_name = @ipn.first_name
           @order.last_name = @ipn.last_name
           @order.address_city = @ipn.address_city
@@ -205,20 +210,26 @@ class StoreController < ApplicationController
       #Now that the order is validated and everything is saved, I'll email the user to let them know about it.
       begin
         if @order.user.guest?
+          logger.debug('Sending email for Guest')
           link_to_downloads = @order.get_link_to_downloads
           OrderMailer.guest_order_confirmation(@order.user,@order,link_to_downloads).deliver
         else
+          logger.debug('Sending email for User')
           OrderMailer.order_confirmation(@order.user,@order).deliver
         end
       rescue => error
         ExceptionNotifier.notify_exception(error, :env => request.env, :data => {:message => "Failed trying to send order confirmation email for #{@order.to_yaml}."})
       end
-      handle_physical_items
+      if @order.has_physical_item?
+        handle_physical_items
+      end
     else
+      logger.debug("PAYPAL IPN is invalid")
       @order.transaction_id = @ipn.txn_id
       @order.status = @ipn.payment_status
       @order.save
     end
+    logger.debug("IPN post was successful")
     return render :nothing => true
   end
 

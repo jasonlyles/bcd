@@ -10,6 +10,8 @@ guest checkout still works at the same time.
 3. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
 help me clean up testing code also.
 
+4. Need to figure out how to rescue remote resources not getting loaded, such as sharethis, called in my
+application layout
 
 
 GETTING READY FOR PROD #######################################################
