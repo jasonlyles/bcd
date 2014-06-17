@@ -8,7 +8,8 @@ module Amazon
     end
 
     def self.authenticated_url(file_name)
-      S3Object.url_for(file_name,AmazonConfig.config.instruction_bucket)
+      pretty_filename = file_name.match(/\w+\.\w+/).to_s
+      S3Object.url_for(file_name,AmazonConfig.config.instruction_bucket, :query => {'response-content-disposition' => "attachment;filename=#{pretty_filename}"})
     end
 
     def self.connect
