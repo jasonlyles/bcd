@@ -34,10 +34,10 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
   config.after(:all) do
-    # Get rid of the linked images
+    #Clean up test artifacts
     if Rails.env.test? || Rails.env.cucumber?
-      FileUtils.rm_rf(Dir["#{Rails.root}/public/pdfs/[^.]*"])
-      #FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads/[^.]*"])
+      FileUtils.rm_rf(Dir["#{Rails.root}/public/pdfs/test/[^.]*"])
+      FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads/tmp/[^.]*"])
       FileUtils.rm_rf(Dir["#{Rails.root}/public/carrierwave/[^.]*"])
     end
   end

@@ -26,7 +26,7 @@ describe PdfUploader do
   end
 
   it 'should create a storage dir based on model category, subcategory and code' do
-    @uploader.store_dir.should == 'pdfs/City/Vehicles/CB001'
+    @uploader.store_dir.should match(/\/City\/Vehicles\/CB001/)
   end
 
   it 'should create a custom filename using a UUID' do
