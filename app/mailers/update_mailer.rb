@@ -12,7 +12,7 @@ class UpdateMailer < ActionMailer::Base
     mail(to: @user.email, subject: "Instructions for #{@model.product_code} #{@model.name} have been updated")
   end
 end
-
+#:nocov:
 if Rails.env.development?
   class UpdateMailer::Preview < MailView
     def updated_instructions
@@ -24,3 +24,4 @@ if Rails.env.development?
     end
   end
 end
+#:nocov:

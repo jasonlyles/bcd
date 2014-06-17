@@ -34,8 +34,10 @@ class DownloadsController < ApplicationController
       if Rails.env != "development"
         download_from_amazon(@parts_list.name.path)
       else
+        #:nocov:
         #In case I need to test downloads locally
         download_from_local(@parts_list.name.path)
+        #:nocov:
       end
     else
       logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
@@ -73,8 +75,10 @@ class DownloadsController < ApplicationController
       if Rails.env != "development"
         download_from_amazon(@parts_list.name.path)
       else
+        #:nocov:
         #In case I need to test downloads locally
         download_from_local(@parts_list.name.path)
+        #:nocov:
       end
     else
       logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
@@ -93,8 +97,10 @@ class DownloadsController < ApplicationController
       if Rails.env != "development"
         download_from_amazon(@product.pdf.path)
       else
+        #:nocov:
         #In case I need to test downloads locally
         download_from_local(@product.pdf.path)
+        #:nocov:
       end
     end
     increment_download_count
@@ -135,8 +141,10 @@ class DownloadsController < ApplicationController
         if Rails.env != "development"
           download_from_amazon(@product.pdf.path)
         else
+          #:nocov:
           #In case I need to test downloads locally
           download_from_local(@product.pdf.path)
+          #:nocov:
         end
       end
     end
@@ -160,10 +168,12 @@ class DownloadsController < ApplicationController
     end
   end
 
+  #:nocov:
   def download_from_local(file)
     filename = file.match(/\w+\.\w+/).to_s
     send_file(file, :type => 'application/pdf', :filename => filename, :disposition => "attachment")
   end
+  #:nocov:
 
   def valid_guest
     if session[:guest_has_arrived_for_downloads].blank?

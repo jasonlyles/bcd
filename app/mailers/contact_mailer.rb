@@ -11,6 +11,7 @@ class ContactMailer < ActionMailer::Base
   end
 end
 
+#:nocov:
 if Rails.env.development?
   class ContactMailer::Preview < MailView
     def new_contact_email
@@ -19,3 +20,4 @@ if Rails.env.development?
     end
   end
 end
+#:nocov:

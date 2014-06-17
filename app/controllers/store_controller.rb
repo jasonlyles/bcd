@@ -5,9 +5,12 @@ class StoreController < ApplicationController
   before_filter :check_users_previous_orders, :only => [:checkout], unless: :user_is_guest?
   before_filter :get_users_physical_address, :only => [:checkout]
   before_filter :get_address_form_data, :only => [:enter_address, :validate_street_address]
+
+  #:nocov:
   if Rails.env.development?
     after_filter :mock_paypal_call_to_listener, :only => [:submit_order]
   end
+  #:nocov:
 
   def index
     @product_types = ProductType.find_live_product_types
@@ -237,6 +240,7 @@ class StoreController < ApplicationController
     return render :nothing => true
   end
 
+  #:nocov:
   def order_confirmation_email_test
     #@order = Order.find_by_user_id 1  #Jason
     @order = Order.find_by_user_id 3  #Brian
@@ -244,11 +248,14 @@ class StoreController < ApplicationController
     download_links = @order.get_link_to_downloads
     OrderMailer.guest_order_confirmation(@order.user, @order, download_links).deliver
   end
+  #:nocov:
 
+  #:nocov:
   def physical_order_email_test
     @order = Order.find 9
     OrderMailer.physical_item_purchased(@order.user, @order).deliver
   end
+  #:nocov:
 
   def thank_you_for_your_order
   end
@@ -315,6 +322,7 @@ class StoreController < ApplicationController
     item_list
   end
 
+  #:nocov:
   #This action is used in dev to mock a call from paypal to the app to confirm the order was ok
   def mock_paypal_call_to_listener
     @order.transaction_id = SecureRandom.hex(20)
@@ -330,6 +338,7 @@ class StoreController < ApplicationController
       OrderMailer.order_confirmation(@order.user,@order).deliver
     end
   end
+  #:nocov:
 
   def handle_physical_items
     physical_items = []

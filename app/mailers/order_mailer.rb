@@ -30,6 +30,7 @@ class OrderMailer < ActionMailer::Base
   end
 end
 
+#:nocov:
 if Rails.env.development?
   class OrderMailer::Preview < MailView
     def order_confirmation
@@ -55,3 +56,4 @@ if Rails.env.development?
     end
   end
 end
+#:nocov:
