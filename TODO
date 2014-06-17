@@ -2,12 +2,7 @@ TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
 
-1. I've been testing guest checkout, need to make sure that a user signed in to their account still works. Make sure
-guest checkout still works at the same time.
-
-2. Make sure all users have to agree to TOS before checking out.
-
-3. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
+1. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
 help me clean up testing code also.
 
 

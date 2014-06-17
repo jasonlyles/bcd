@@ -159,9 +159,11 @@ class DownloadsController < ApplicationController
   end
 
   def download_from_amazon(file)
+    filename = file.match(/\w+\.\w+/).to_s
+    disposition = "response-content-disposition=attachment;filename=#{filename}"
     begin
       Amazon::Storage.connect
-      link = Amazon::Storage.authenticated_url(file)
+      link = "#{Amazon::Storage.authenticated_url(file)}&#{disposition}"
       redirect_to link
     ensure
       Amazon::Storage.disconnect

@@ -60,6 +60,7 @@ describe DownloadsController do
       #Instead of trying to match where we get redirected to, I'm just matching against response.header["Location"],
       # which is where we're getting redirected to anyways
       response.header["Location"].should include "s3.amazonaws.com/brickcitydepot-instructions-dev"
+      response.header["Location"].should include "response-content-disposition=attachment;filename="
       response.header["Location"].should include "/#{@free_product.id}/"
       response.header["Location"].should include ".html"
     end
@@ -81,6 +82,7 @@ describe DownloadsController do
       #Instead of trying to match where we get redirected to, I'm just matching against response.header["Location"],
       # which is where we're getting redirected to anyways
       response.header["Location"].should include "s3.amazonaws.com/brickcitydepot-instructions-dev"
+      response.header["Location"].should include "response-content-disposition=attachment;filename="
       response.header["Location"].should include "/#{@product.id}/"
       response.header["Location"].should include ".html"
     end
@@ -174,6 +176,7 @@ describe DownloadsController do
         get :guest_download_parts_list, :parts_list_id => @parts_list.id, :order_id => @order.id
 
         response.header["Location"].should include "s3.amazonaws.com/brickcitydepot-instructions-dev"
+        response.header["Location"].should include "response-content-disposition=attachment;filename="
         response.header["Location"].should include "/#{@product.id}/"
         response.header["Location"].should include ".html"
       end
@@ -276,6 +279,7 @@ describe DownloadsController do
           get :guest_download, :id => '12345', :token => '67890'
 
           response.header["Location"].should include "s3.amazonaws.com/brickcitydepot-instructions-dev"
+          response.header["Location"].should include "response-content-disposition=attachment;filename="
           response.header["Location"].should include "/#{@product.product_code}/"
           response.header["Location"].should include ".pdf"
         end
@@ -334,6 +338,7 @@ describe DownloadsController do
       #Instead of trying to match where we get redirected to, I'm just matching against response.header["Location"],
       # which is where we're getting redirected to anyways
       response.header["Location"].should include "s3.amazonaws.com/brickcitydepot-instructions-dev"
+      response.header["Location"].should include "response-content-disposition=attachment;filename="
       response.header["Location"].should include @product.product_code
       response.header["Location"].should include ".pdf"
     end
