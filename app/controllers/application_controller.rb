@@ -58,7 +58,11 @@ class ApplicationController < ActionController::Base
 
   def find_cart
     if session[:cart_id]
-      @cart = Cart.find(session[:cart_id])
+      begin
+        @cart = Cart.find(session[:cart_id])
+      rescue ActiveRecord::RecordNotFound
+        @cart = nil
+      end
       #if cart is in session, but doesn't belong to a user, this will assign a user to
       # the cart if there is a current_user
       if @cart && @cart.user_id.blank? && current_customer

@@ -21,6 +21,16 @@ describe ApplicationController do
       cart.should == assigns(:cart)
     end
 
+    it "should set a new cart if the cart # in session can't be found in the database" do
+      @user = FactoryGirl.create(:user)
+      session[:cart_id] = 15000 #non-existent
+      Cart.should_receive(:find).with(session[:cart_id]).and_raise(ActiveRecord::RecordNotFound)
+      controller.send(:find_cart)
+
+      expect(assigns(:cart)).not_to be_nil
+      expect(session[:cart_id]).not_to eq 15000
+    end
+
     it "should assign a cart in session to a current user if there is a current user" do
       @user = FactoryGirl.create(:user)
       cart = FactoryGirl.create(:cart)
