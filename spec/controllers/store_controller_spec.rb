@@ -324,6 +324,18 @@ describe StoreController do
   end
 
   describe "submit_order" do
+    it "should delete session[:guest]" do
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      FactoryGirl.create(:product)
+      @cart = FactoryGirl.create(:cart_with_cart_items, :user_id => @user.id)
+      session[:guest] = @user.id
+      post :submit_order, :order => {:user_id => @user.id}
+
+      expect(session[:guest]).to be_nil
+    end
+
     it "should submit the order to paypal" do
       @user = FactoryGirl.create(:user)
       FactoryGirl.create(:category)
