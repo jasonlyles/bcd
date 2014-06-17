@@ -13,9 +13,7 @@ help me clean up testing code also.
 4. Need to figure out how to rescue remote resources not getting loaded, such as sharethis, called in my
 application layout
 
-5. Change BCD logo used for paypal checkout.
-
-6. Add a pic of right-click dialog, and instruct users to save PDF instead of just clicking the PDF link on the
+5. Add a pic of right-click dialog, and instruct users to save PDF instead of just clicking the PDF link on the
 guest_downloads page
 
 GETTING READY FOR PROD #######################################################

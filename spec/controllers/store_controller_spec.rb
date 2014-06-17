@@ -346,7 +346,7 @@ describe StoreController do
       post :submit_order, :order => {:user_id => @user.id}
 
       #I don't like this, but I'm not sure how else to do it.
-      response.should redirect_to("https://www.#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=http://brickcitydepot.com/uploads/4/8/0/4/4804115/4994570.jpg&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=1")
+      response.should redirect_to("https://www.#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=1")
     end
 
     it "should send the right quantity and amount when sending the order to paypal" do
@@ -359,7 +359,7 @@ describe StoreController do
       post :submit_order, :order => {:user_id => @user.id}
 
       #I don't like this, but I'm not sure how else to do it.
-      response.should redirect_to("https://www.#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=http://brickcitydepot.com/uploads/4/8/0/4/4804115/4994570.jpg&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=2")
+      response.should redirect_to("https://www.#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=2")
     end
 
     it "should redirect to cart with an 'uh-oh' message if the order couldn't be submitted" do
