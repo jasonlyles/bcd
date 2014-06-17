@@ -5,6 +5,7 @@ class StoreController < ApplicationController
   before_filter :check_users_previous_orders, :only => [:checkout], unless: :user_is_guest?
   before_filter :get_users_physical_address, :only => [:checkout]
   before_filter :get_address_form_data, :only => [:enter_address, :validate_street_address]
+  skip_before_filter :find_cart, only: [:listener, :thank_you_for_your_order]
 
   #:nocov:
   if Rails.env.development?

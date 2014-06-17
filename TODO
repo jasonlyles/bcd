@@ -19,9 +19,7 @@ application layout
 
 7. Update specs related to IPN to use as many ENV vars as I can
 
-8. Hitting the listener, a cart is created because the previous one has been destroyed. Fix that.
-
-9. Add a pic of right-click dialog, and instruct users to save PDF instead of just clicking the PDF link on the
+8. Add a pic of right-click dialog, and instruct users to save PDF instead of just clicking the PDF link on the
 guest_downloads page
 
 GETTING READY FOR PROD #######################################################
