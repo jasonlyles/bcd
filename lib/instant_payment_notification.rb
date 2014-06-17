@@ -12,9 +12,7 @@ class InstantPaymentNotification
   end
 
   def valid_business_value?
-    Rails.logger.debug("BUSINESS: #{@receiver_email.inspect}")
-    Rails.logger.debug("BUSINESS EMAIL: #{PaypalConfig.config.business_email}")
-    @receiver_email == PaypalConfig.config.business_email
+    @business == PaypalConfig.config.business_email
   end
 
   def valid_currency?
@@ -26,7 +24,6 @@ class InstantPaymentNotification
   end
 
   def valid_payment_status?
-    Rails.logger.debug("PAYMENT STATUS: #{@payment_status.upcase}")
     @payment_status.upcase == "COMPLETED"
   end
 
@@ -55,9 +52,6 @@ class InstantPaymentNotification
       query += "&#{key}=#{value}"
     end
     response = http.post(path,query)
-    Rails.logger.debug("RESPONSE: #{response.inspect}")
-    Rails.logger.debug("RESPONSE CODE: #{response.code}")
-    Rails.logger.debug("RESPONSE BODY: #{response.body}")
     if response && response.code == '200' && response.body == 'VERIFIED'
       return true
     else
@@ -66,12 +60,6 @@ class InstantPaymentNotification
   end
 
   def valid?
-    Rails.logger.debug("VALID IPN: #{valid_ipn?}")
-    Rails.logger.debug("VALID AMOUNT: #{valid_amount?}")
-    Rails.logger.debug("VALID CURRENCY: #{valid_currency?}")
-    Rails.logger.debug("VALID BUSINESS VALUE: #{valid_business_value?}")
-    Rails.logger.debug("VALID PAYMENT STATUS: #{valid_payment_status?}")
-
     valid_ipn? && valid_amount? && valid_currency? && valid_business_value? && valid_payment_status?
   end
 end
