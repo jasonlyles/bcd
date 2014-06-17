@@ -464,7 +464,7 @@ body:before{
   .table_cell_spacer{
     width:5px;
   }
-  
+
   .news_item_image {
     float:left;
     padding: 0 20px 4px 0;
@@ -539,6 +539,14 @@ body:before{
  .float_right{
     float:right;
  }
+ .right_click_menu{
+  float: right;
+ }
+
+.right_click_menu_description{
+  float: left;
+  width: 400px;
+}
 
  .cart_table{
     //border: 1px solid #CCC;
@@ -615,7 +623,7 @@ body:before{
 .footer {
     width:945px;
     margin:-64px auto 0px auto;
-    text-align: center;  
+    text-align: center;
     position:relative;
     height:62px;
     clear:both;

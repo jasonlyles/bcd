@@ -10,8 +10,6 @@ guest checkout still works at the same time.
 3. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
 help me clean up testing code also.
 
-4. Add a pic of right-click dialog, and instruct users to save PDF instead of just clicking the PDF link on the
-guest_downloads page
 
 GETTING READY FOR PROD #######################################################
 
