@@ -29,6 +29,81 @@ describe Order do
     end
   end
 
+  describe "has_digital_item?" do
+    it "should return true if the order has at least one digital product" do
+      @category = FactoryGirl.create(:category)
+      @subcategory = FactoryGirl.create(:subcategory)
+      product1 = FactoryGirl.create(:product)
+      li1 = LineItem.new :product_id => product1.id, :quantity => 1, :total_price => 5
+      order = Order.new
+      order.line_items << li1
+      order.has_digital_item?.should == true
+    end
+
+    it "should return false if the order doesn't have at least one digital product" do
+      @product_type = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
+      @category = FactoryGirl.create(:category)
+      @subcategory = FactoryGirl.create(:subcategory)
+      FactoryGirl.create(:product)
+      product2 = FactoryGirl.create(:physical_product, :product_type_id => @product_type.id)
+      li1 = LineItem.new :product_id => product2.id, :quantity => 1, :total_price => 5
+      order = Order.new
+      order.line_items << li1
+
+      order.has_digital_item?.should == false
+    end
+  end
+
+  describe "get_digital_items" do
+    it "should return an array of digital products if the order includes digital products" do
+      @product_type = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
+      @category = FactoryGirl.create(:category)
+      @subcategory = FactoryGirl.create(:subcategory)
+      product1 = FactoryGirl.create(:product)
+      product2 = FactoryGirl.create(:product, name: 'fake', product_code: 'CB099', price: 10)
+      product3 = FactoryGirl.create(:physical_product)
+      li1 = LineItem.new product_id: product1.id, quantity: 1, total_price: 5
+      li2 = LineItem.new product_id: product2.id, quantity: 1, total_price: 10
+      li3 = LineItem.new product_id: product3.id, quantity: 1, total_price: 25
+      order = Order.new
+      order.line_items << li1
+      order.line_items << li2
+      order.line_items << li3
+
+      expect(order.get_digital_items.length).to eq 2
+    end
+
+    it "should return an empty array if the order doesn't include digital products" do
+      @product_type = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
+      @category = FactoryGirl.create(:category)
+      @subcategory = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:product)
+      product1 = FactoryGirl.create(:physical_product)
+      li1 = LineItem.new product_id: product1.id, quantity: 1, total_price: 5
+      order = Order.new
+      order.line_items << li1
+
+      expect(order.get_digital_items).to eq []
+    end
+  end
+
+=begin
+  def has_digital_item?
+    items = get_digital_items
+    items.blank? ? false : true
+  end
+
+  def get_digital_items
+    items = []
+    self.line_items.each do |item|
+      if item.product.is_digital_product?
+        items << item
+      end
+    end
+    items
+  end
+=end
+
   describe "self.shipping_status_not_complete" do
     it "should get records where shipping status is not complete" do
       order1 = FactoryGirl.create(:order, {:shipping_status => '1'})

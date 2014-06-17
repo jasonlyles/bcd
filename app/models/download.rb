@@ -37,4 +37,10 @@ class Download < ActiveRecord::Base
     #return an array of affected users, and their email preference
     users
   end
+
+  def restock
+    self.remaining += MAX_DOWNLOADS
+    self.save
+    self
+  end
 end

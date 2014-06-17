@@ -89,4 +89,15 @@ describe Download do
       end
     end
   end
+
+  describe 'restock' do
+    it 'should add MAX_DOWNLOADS to @remaining' do
+      @user = FactoryGirl.create(:user)
+      @product = FactoryGirl.create(:product)
+      @download = FactoryGirl.create(:download, remaining: 1)
+      @download.restock
+
+      expect(@download.remaining).to eq MAX_DOWNLOADS+1
+    end
+  end
 end

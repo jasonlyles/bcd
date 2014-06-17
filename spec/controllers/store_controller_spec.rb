@@ -461,6 +461,32 @@ describe StoreController do
     end
   end
 
+  describe "restock_downloads" do
+    it 'should restock downloads if downloads already existed' do
+      setup_products
+      @user = FactoryGirl.create(:user)
+      @order = FactoryGirl.create(:order)
+      @download = FactoryGirl.create(:download, remaining: 1, user_id: @user.id, product_id: @product1.id)
+      li1 = LineItem.new product_id: @product1.id, quantity: 1, total_price: 5
+      @order.line_items << li1
+      controller.send(:restock_downloads, @order)
+
+      expect(@download.reload.remaining).to eq MAX_DOWNLOADS+1
+    end
+
+    it 'should not restock downloads if the app cannot find an existing download record' do
+      setup_products
+      @user = FactoryGirl.create(:user)
+      @order = FactoryGirl.create(:order)
+      li1 = LineItem.new product_id: @product1.id, quantity: 1, total_price: 5
+      @order.line_items << li1
+      Download.any_instance.should_not_receive(:restock)
+      controller.send(:restock_downloads, @order)
+
+      expect(Download.count).to eq 0
+    end
+  end
+
   describe "listener" do
     it "should save address details if order includes physical item" do
       @product_type2 = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
@@ -555,17 +581,17 @@ describe StoreController do
   end
 
   def setup_products
-    category1 = FactoryGirl.create(:category)
-    category2 = FactoryGirl.create(:category, :name => "Random Stuff")
-    category3 = FactoryGirl.create(:category, :name => 'Alternative Builds')
-    subcategory1 = FactoryGirl.create(:subcategory)
-    subcategory2 = FactoryGirl.create(:subcategory, :category_id => 2, :code => "RS")
-    subcategory3 = FactoryGirl.create(:subcategory, :category_id => category3.id, :code => 'XV')
-    product1 = FactoryGirl.create(:product)
-    product2 = FactoryGirl.create(:product, :product_code => "XX001", :name => "Ninja Fortress", :price => 5)
-    product3 = FactoryGirl.create(:product, :product_code => 'XX002', :name => "Giant Thing", :ready_for_public => 'f', :price => 5)
-    product4 = FactoryGirl.create(:product, :product_code => 'XX003', :name => 'Gangsta Hideout', :category_id => 2, :price => 3)
-    product5 = FactoryGirl.create(:product, :product_code => 'XV001', :name => 'PeeWees Playhouse', :category_id => category3.id, :price => 3, :alternative_build => 't')
-    product6 = FactoryGirl.create(:product, :product_code => 'XX004', :name => 'Fruitcake Palace', :price => 0, :free => 't')
+    @category1 = FactoryGirl.create(:category)
+    @category2 = FactoryGirl.create(:category, :name => "Random Stuff")
+    @category3 = FactoryGirl.create(:category, :name => 'Alternative Builds')
+    @subcategory1 = FactoryGirl.create(:subcategory)
+    @subcategory2 = FactoryGirl.create(:subcategory, :category_id => 2, :code => "RS")
+    @subcategory3 = FactoryGirl.create(:subcategory, :category_id => @category3.id, :code => 'XV')
+    @product1 = FactoryGirl.create(:product)
+    @product2 = FactoryGirl.create(:product, :product_code => "XX001", :name => "Ninja Fortress", :price => 5)
+    @product3 = FactoryGirl.create(:product, :product_code => 'XX002', :name => "Giant Thing", :ready_for_public => 'f', :price => 5)
+    @product4 = FactoryGirl.create(:product, :product_code => 'XX003', :name => 'Gangsta Hideout', :category_id => 2, :price => 3)
+    @product5 = FactoryGirl.create(:product, :product_code => 'XV001', :name => 'PeeWees Playhouse', :category_id => @category3.id, :price => 3, :alternative_build => 't')
+    @product6 = FactoryGirl.create(:product, :product_code => 'XX004', :name => 'Fruitcake Palace', :price => 0, :free => 't')
   end
 end

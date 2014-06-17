@@ -207,6 +207,10 @@ class StoreController < ApplicationController
       end
       @order.save
 
+      if @order.has_digital_item?
+        restock_downloads(@order)
+      end
+
       #Now that the order is validated and everything is saved, I'll email the user to let them know about it.
       begin
         if @order.user.guest?
@@ -267,6 +271,17 @@ class StoreController < ApplicationController
 
   private
 
+  def restock_downloads(order)
+    items = order.get_digital_items
+    items.each do |item|
+      download = Download.find_by_user_id_and_product_id(order.user, item.product.id)
+      #If the download record exists, user is trying to buy more downloads, so restock
+      unless download.blank?
+        download.restock
+      end
+    end
+  end
+
   def set_return_to_checkout
     session[:return_to_checkout] = true
   end
@@ -305,7 +320,15 @@ class StoreController < ApplicationController
     @order.transaction_id = SecureRandom.hex(20)
     @order.status = 'COMPLETED'
     @order.save
-    OrderMailer.order_confirmation(@order.user,@order).deliver
+    if @order.has_digital_item?
+      restock_downloads(@order)
+    end
+    if @order.user.guest?
+      link_to_downloads = @order.get_link_to_downloads
+      OrderMailer.guest_order_confirmation(@order.user,@order,link_to_downloads).deliver
+    else
+      OrderMailer.order_confirmation(@order.user,@order).deliver
+    end
   end
 
   def handle_physical_items

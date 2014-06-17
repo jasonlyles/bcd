@@ -26,6 +26,21 @@ class Order < ActiveRecord::Base
     return false
   end
 
+  def has_digital_item?
+    items = get_digital_items
+    items.blank? ? false : true
+  end
+
+  def get_digital_items
+    items = []
+    self.line_items.each do |item|
+      if item.product.is_digital_product?
+        items << item
+      end
+    end
+    items
+  end
+
   def self.shipping_status_not_complete
     Order.where("shipping_status <> 0").order("created_at DESC")
   end
