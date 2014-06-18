@@ -13,9 +13,9 @@ class PdfUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     if Rails.env.test?
-      "pdfs/test/#{model.category.name}/#{model.subcategory.name}/#{model.product_code}"
+      "pdfs/test/#{model.category.name.despace}/#{model.subcategory.name.despace}/#{model.product_code}"
     else
-      "pdfs/#{model.category.name}/#{model.subcategory.name}/#{model.product_code}"
+      "pdfs/#{model.category.name.despace}/#{model.subcategory.name.despace}/#{model.product_code}"
     end
   end
 

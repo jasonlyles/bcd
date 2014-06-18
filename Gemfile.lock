@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/thomasdavis/aws-s3.git
+  revision: 7e8fd7507098b64da9b3bf207d099011a7a9f051
+  specs:
+    aws-s3 (0.6.3)
+      builder
+      mime-types
+      xml-simple
+
 GEM
   remote: http://rubygems.org/
   remote: http://gems.github.com/
@@ -34,10 +43,6 @@ GEM
     arel (4.0.2)
     arrayfields (4.9.2)
     awesome_print (1.2.0)
-    aws-s3 (0.6.3)
-      builder
-      mime-types
-      xml-simple
     aws-ses (0.5.0)
       builder
       mail (> 2.2.5)
@@ -403,7 +408,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
-  aws-s3
+  aws-s3!
   aws-ses
   carrierwave
   coffee-rails

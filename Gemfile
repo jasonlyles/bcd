@@ -7,7 +7,7 @@ gem 'rails', '4.0.5'
 gem 'activerecord-session_store'
 gem 'protected_attributes'
 gem 'devise'
-gem 'aws-s3', :require => "aws/s3"
+gem 'aws-s3', :require => "aws/s3", github: 'thomasdavis/aws-s3'
 gem 'aws-ses', :require => "aws/ses"
 gem 'omniauth'
 gem 'omniauth-facebook'
