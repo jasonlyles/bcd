@@ -363,7 +363,9 @@ class StoreController < ApplicationController
     end
   end
 
-  #Making sure that the user hasn't previously purchased the same set of instructions. Physical items can be purchased again
+  #Making sure that the user hasn't previously purchased the same set of instructions.
+  # Physical items can be purchased again.
+  # Instructions with 0 downloads remaining can be purchased again.
   def check_users_previous_orders
     unless current_guest
       orders = current_user.orders
@@ -381,8 +383,17 @@ class StoreController < ApplicationController
       end
       dups = @products_from_previous_orders & @products_in_cart
       if !dups.empty?
-        nice_string = dups.collect{|dup| Product.find(dup).name}.join(",")
-        redirect_to :cart, :notice => "You've already purchased the following products before, (#{nice_string}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.", :only_path => true
+        final_dups = []
+        dups.each do |dup|
+          dl = Download.find_by_user_id_and_product_id(current_user.id, dup)
+          if (dl && dl.remaining > 0) || dl.nil?
+            final_dups << dup
+          end
+        end
+        unless final_dups.blank?
+          nice_string = final_dups.collect{|dup| Product.find(dup).name}.join(",")
+          redirect_to :cart, :notice => "You've already purchased the following products before, (#{nice_string}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.", :only_path => true
+        end
       end
     end
   end

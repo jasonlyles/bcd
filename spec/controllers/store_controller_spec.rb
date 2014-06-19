@@ -240,7 +240,7 @@ describe StoreController do
       response.should redirect_to("/users/sign_in")
     end
 
-    it "should redirect to cart if a user has already purchased a set of instructions" do
+    it "should redirect to cart if a user has already purchased a set of instructions and hasn't downloaded yet" do
       @user = FactoryGirl.create(:user)
       FactoryGirl.create(:category)
       FactoryGirl.create(:subcategory)
@@ -253,6 +253,37 @@ describe StoreController do
 
       response.should redirect_to('/cart')
       flash[:notice].should == "You've already purchased the following products before, (#{@product.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times."
+    end
+
+    it "should redirect to cart if a user has already purchased a set of instructions and has downloaded, but downloads remaining is > 0" do
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      @product = FactoryGirl.create(:product, :product_type_id => @product_type.id)
+      @download = FactoryGirl.create(:download, product_id: @product.id, user_id: @user.id, remaining: 1)
+      @order = FactoryGirl.create(:order_with_line_items)
+      @cart = FactoryGirl.create(:cart_with_cart_items, :user_id => @user.id)
+      request.env["HTTP_REFERER"] = '/'
+      sign_in @user
+      get :checkout
+
+      response.should redirect_to('/cart')
+      flash[:notice].should == "You've already purchased the following products before, (#{@product.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times."
+    end
+
+    it 'should not redirect to cart if a user has already purchased a set of instructions, but has 0 downloads remaining' do
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      @product = FactoryGirl.create(:product, :product_type_id => @product_type.id)
+      @download = FactoryGirl.create(:download, product_id: @product.id, user_id: @user.id, remaining: 0)
+      @order = FactoryGirl.create(:order_with_line_items)
+      @cart = FactoryGirl.create(:cart_with_cart_items, :user_id => @user.id)
+      request.env["HTTP_REFERER"] = '/'
+      sign_in @user
+      get :checkout
+
+      response.should render_template(:checkout)
     end
 
     it "should not redirect to cart if a user has added a physical product to their cart that they've purchased before" do
