@@ -5,6 +5,19 @@ HAVE TO GET DONE FOR V1:
 1. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
 help me clean up testing code also.
 
+2. Don't show Auth options in account edit page where I can X out the auth, unless the user has more than 1 authentication.
+
+3. Try and figure out how to force FB re-authentication when logging in. https://developers.facebook.com/docs/facebook-login/reauthentication/
+
+4. When trying to add physical quantities in unattainable quantities, I update the subtotal for the unattainable qty.
+
+5. I need a public page for 503s, like I have 404s, 422s and 500s
+
+6. See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
+is created, and the user can see it in "My Account", but should it be visible yet? Or should it just say something
+relating to not having heard back from paypal about the transaction yet? Maybe that's the way, if the order_status is nil,
+paypal hasn't talked to us yet, and we can say that we haven't heard back from paypal yet.
+
 
 GETTING READY FOR PROD #######################################################
 
