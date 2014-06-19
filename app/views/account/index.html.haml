@@ -30,8 +30,13 @@ If you don't see a set of instructions you've purchased, check out your #{link_t
         %th Parts Lists
         %th.pdf_bound_left PDF
         %th Downloads Remaining
+      - products = []
       - @orders.each do |order|
         -  order.line_items.each do |line_item|
+          - if products.include?(line_item.product_id)
+            - next
+          - else
+            - products << line_item.product_id
           - product = Product.find(line_item.product_id)
           %tr
             - image = product.images
