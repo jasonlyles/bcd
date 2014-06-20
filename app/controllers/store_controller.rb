@@ -18,13 +18,11 @@ class StoreController < ApplicationController
   end
 
   def products
-    begin
-      @product_type = ProductType.where("name=?",params[:product_type_name])[0]
+    @product_type = ProductType.where("name=?",params[:product_type_name])[0]
+    unless @product_type.blank?
       @products = Product.where("product_type_id=?",@product_type.id).in_stock.page(params[:page]).per(12)
-    rescue NoMethodError, ActiveRecord::RecordNotFound => error
-      logger.error("Failed to get store#products. ProductType Name: #{params[:product_type_name]}")
-      flash[:notice] = "Sorry. We don't have any of those."
-      redirect_to('/store')
+    else
+      return redirect_to('/store')
     end
   end
 

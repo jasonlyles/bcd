@@ -494,14 +494,6 @@ describe StoreController do
       assigns(:product_type).name.should eq 'Instructions'
       assigns(:products).length.should eq 1
     end
-
-    it 'should redirect to /store and flash a nice message if cant find a product type' do
-      ProductType.should_receive(:where).and_raise(ActiveRecord::RecordNotFound)
-      get :products, :product_type_name => 'fake'
-
-      response.should redirect_to('/store')
-      flash[:notice].should eq("Sorry. We don't have any of those.")
-    end
   end
 
   describe "restock_downloads" do
