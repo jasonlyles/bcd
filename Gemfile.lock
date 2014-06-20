@@ -336,6 +336,7 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
+    ruby-prof (0.15.1)
     ruby-progressbar (1.5.1)
     ruby2ruby (2.0.8)
       ruby_parser (~> 3.1)
@@ -442,6 +443,7 @@ DEPENDENCIES
   rake
   rb-fsevent
   rspec-rails
+  ruby-prof
   ruby_parser
   sass-rails
   simplecov

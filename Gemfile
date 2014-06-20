@@ -68,6 +68,10 @@ group :development, :test do
   gem 'mail_view', "~> 2.0.4"
 end
 
+group :profile do
+  gem 'ruby-prof'
+end
+
 group :production do
   gem 'rails_12factor'
   #best to keep this at the bottom:
