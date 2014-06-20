@@ -20,8 +20,7 @@ class StoreController < ApplicationController
   def products
     begin
       @product_type = ProductType.where("name=?",params[:product_type_name])[0]
-      @top_categories = @categories.dup
-      @products = @product_type.products.in_stock.page(params[:page]).per(12)
+      @products = Product.where("product_type_id=?",@product_type.id).in_stock.page(params[:page]).per(12)
     rescue NoMethodError, ActiveRecord::RecordNotFound => error
       logger.error("Failed to get store#products. ProductType Name: #{params[:product_type_name]}")
       flash[:notice] = "Sorry. We don't have any of those."
