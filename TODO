@@ -36,11 +36,9 @@ GETTING READY FOR PROD #######################################################
 
 4. Set up SSL on heroku. Buy SSL cert first https://addons.heroku.com/SSL
 
-5. Make sure all http traffic redirects to https
+5. Set up a database through heroku.
 
-6. Set up a database through heroku.
-
-7. Need to figure out what I did with GK so that the app doesnt keep getting unloaded in heroku.
+6. Need to figure out what I did with GK so that the app doesnt keep getting unloaded in heroku.
 
 
 ###########################

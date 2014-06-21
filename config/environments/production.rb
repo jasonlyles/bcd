@@ -69,6 +69,9 @@ BrickCity::Application.configure do
   config.assets.version = '1.0'
 
   config.eager_load = true
+
+  #Force SSL
+  config.force_ssl = true
 end
 
 BrickCity::Application.config.middleware.use ExceptionNotification::Rack,
