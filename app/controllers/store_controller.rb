@@ -20,7 +20,11 @@ class StoreController < ApplicationController
   def products
     @product_type = ProductType.where("name=?",params[:product_type_name])[0]
     unless @product_type.blank?
-      @products = Product.where("product_type_id=?",@product_type.id).in_stock.page(params[:page]).per(12)
+      if params[:product_type_name].downcase != 'instructions'
+        @products = Product.where("product_type_id=?",@product_type.id).in_stock.page(params[:page]).per(12)
+      else
+        @top_categories = @categories.dup
+      end
     else
       return redirect_to('/store')
     end

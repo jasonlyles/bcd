@@ -8,9 +8,9 @@
 .centered_products_table
   %table.products_table
     - until products.length == 0
-      - products = products.pop(4).reverse!
+      - products2 = products.pop(4).reverse!
       %tr
-        - products.each do |p|
+        - products2.each do |p|
           %td
             .products_detail_thumb.drop_shadow
               .centered_product_thumb

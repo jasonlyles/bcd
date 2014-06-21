@@ -486,12 +486,23 @@ describe StoreController do
   end
 
   describe "products" do
-    it 'should get @product_type, and @products' do
+    it 'should not get @products if product_type is Instructions' do
       category = FactoryGirl.create(:category)
       subcategory = FactoryGirl.create(:subcategory)
       product = FactoryGirl.create(:product)
       get :products, :product_type_name => @product_type.name
       assigns(:product_type).name.should eq 'Instructions'
+      assigns(:products).should be_nil
+    end
+
+    it 'should get @products if product_type is not Instructions' do
+      @product_type = FactoryGirl.create(:product_type, name: 'Models')
+      category = FactoryGirl.create(:category)
+      subcategory = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:product, product_code: 'CB001')
+      product2 = FactoryGirl.create(:product, product_type_id: @product_type.id, product_code: 'CB001M', name: 'The Model')
+      get :products, :product_type_name => 'Models'
+      assigns(:product_type).name.should eq 'Models'
       assigns(:products).length.should eq 1
     end
   end

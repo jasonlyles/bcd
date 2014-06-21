@@ -8,8 +8,8 @@
 .top_level_categories
   %table.categories_table
     - if @product_type.name == 'Instructions'
-      - until @categories.length == 0
-        - categories = @categories.pop(3).reverse!
+      - until @top_categories.length == 0
+        - categories = @top_categories.pop(3).reverse!
         %tr
           - categories.each do |category|
             %td
