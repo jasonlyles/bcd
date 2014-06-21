@@ -88,8 +88,20 @@ class StoreController < ApplicationController
   end
 
   def update_item_in_cart
-    @cart.update_product_quantity(params[:cart][:item_id],params[:cart][:quantity])
-    return redirect_to :cart, :notice => "Cart Updated"
+    #If product is available in qty requested, then add to cart, else redirect to cart and flash qty not available message.
+    #Other checks for errant items should stay in place because they protect against a user putting an item in his cart,
+    # someone else putting the item in their cart, and then one of them going to checkout later and finding out the item
+    # is no longer available after they've checked out. With those checks staying in place, hitting the cart and checkout
+    # views will always perform that check.
+    product = CartItem.find(params[:cart][:item_id]).product
+    if product.quantity_available?(params[:cart][:quantity].to_i)
+      @cart.update_product_quantity(params[:cart][:item_id],params[:cart][:quantity])
+      return redirect_to :cart, :notice => "Cart Updated"
+    else
+      var = product.quantity == 1 ? 'is' : 'are'
+      message = "Sorry. There #{var} only #{product.quantity} available for #{product.code_and_name}. Please reduce quantities or remove the item(s) from you cart."
+      return redirect_to :cart, notice: message
+    end
   end
 
   def validate_street_address

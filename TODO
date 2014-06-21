@@ -5,18 +5,16 @@ HAVE TO GET DONE FOR V1:
 1. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
 help me clean up testing code also.
 
-2. When trying to add physical quantities in unattainable quantities, I update the product count and subtotal for the unattainable qty.
+2. I need a public page for 503s, like I have 404s, 422s and 500s
 
-3. I need a public page for 503s, like I have 404s, 422s and 500s
-
-4. See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
+3. See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
 is created, and the user can see it in "My Account", but should it be visible yet? Or should it just say something
 relating to not having heard back from paypal about the transaction yet? Maybe that's the way, if the order_status is nil,
 paypal hasn't talked to us yet, and we can say that we haven't heard back from paypal yet.
 
-5. It seems I don't have NewRelic set up properly. Look into it.
+4. It seems I don't have NewRelic set up properly. Look into it.
 
-6. Try to move logic out of account/index and into the controller. It looks like I can maybe just pass an array of
+5. Try to move logic out of account/index and into the controller. It looks like I can maybe just pass an array of
 structs with product ID, download ID, parts list IDs and an image url. While cleaning up this page, try to remove the
 duplication that I have in there for the freebies. The freebie section is very similar to the paid products section. I
 might be able to do all that logic in the controller, and have a single loop in the view.

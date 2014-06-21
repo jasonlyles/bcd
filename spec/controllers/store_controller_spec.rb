@@ -175,12 +175,29 @@ describe StoreController do
       @base_product = FactoryGirl.create(:product, :category_id => @category.id, :subcategory_id => @subcategory.id, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
       @product = FactoryGirl.create(:product, :category_id => @category.id, :subcategory_id => @subcategory.id, :quantity => 30, :product_type_id => @product_type2.id, :product_code => 'XX111M', :name => 'fake product')
       @cart = FactoryGirl.create(:cart)
+      @cart_item = FactoryGirl.create(:cart_item, cart_id: @cart.id, product_id: @product.id)
+      @cart.cart_items << @cart_item
+      post :update_item_in_cart, :cart => {:item_id => @cart_item.id, :quantity => 20}
+      @cart_item.reload
+
+      expect(flash[:notice]).to eq('Cart Updated')
+      @cart_item.quantity.should == 20
+    end
+
+    it "should not update an item in the cart if the quantity is not available" do
+      @product_type2 = FactoryGirl.create(:product_type, :name => 'Models')
+      @category = FactoryGirl.create(:category)
+      @subcategory = FactoryGirl.create(:subcategory)
+      @base_product = FactoryGirl.create(:product, :category_id => @category.id, :subcategory_id => @subcategory.id, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
+      @product = FactoryGirl.create(:product, :category_id => @category.id, :subcategory_id => @subcategory.id, :quantity => 30, :product_type_id => @product_type2.id, :product_code => 'XX111M', :name => 'fake product')
+      @cart = FactoryGirl.create(:cart)
       @cart_item = FactoryGirl.create(:cart_item, :cart_id => @cart.id)
       @cart.cart_items << @cart_item
       post :update_item_in_cart, :cart => {:item_id => @cart_item.id, :quantity => 20}
       @cart_item.reload
 
-      @cart_item.quantity.should == 20
+      expect(flash[:notice]).to eq('Sorry. There is only 1 available for XX111 Colonial Revival House. Please reduce quantities or remove the item(s) from you cart.')
+      @cart_item.quantity.should == 1
     end
   end
 
