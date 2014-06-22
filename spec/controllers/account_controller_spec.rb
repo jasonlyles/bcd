@@ -51,12 +51,16 @@ describe AccountController do
     end
 
     it "should get only completed orders for display" do
-      order1 = FactoryGirl.create(:order)
+      product_type = FactoryGirl.create(:product_type)
+      category = FactoryGirl.create(:category)
+      subcat = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:product)
+      order1 = FactoryGirl.create(:order_with_line_items)
       order2 = FactoryGirl.create(:order, :status => 'INVALID')
       sign_in @user
       get :index
 
-      assigns(:orders).length.should == 1
+      assigns(:products).length.should == 1
     end
   end
 

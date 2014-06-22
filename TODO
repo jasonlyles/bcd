@@ -14,10 +14,7 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 4. It seems I don't have NewRelic set up properly. Look into it.
 
-5. Try to move logic out of account/index and into the controller. It looks like I can maybe just pass an array of
-structs with product ID, download ID, parts list IDs and an image url. While cleaning up this page, try to remove the
-duplication that I have in there for the freebies. The freebie section is very similar to the paid products section. I
-might be able to do all that logic in the controller, and have a single loop in the view.
+5. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
 
 

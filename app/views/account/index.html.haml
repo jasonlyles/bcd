@@ -20,7 +20,7 @@
 If you don't see a set of instructions you've purchased, check out your #{link_to "Order History", account_order_history_path} to see if there is a problem.
 %br
 %br
-- if @orders.length == 0
+- if @products.length == 0
   You are not yet the proud owner of any of Brick City Depot's fine Instructions. Please visit the #{link_to "Store", store_path} to rectify that.
 -else
   %p
@@ -30,65 +30,27 @@ If you don't see a set of instructions you've purchased, check out your #{link_t
         %th Parts Lists
         %th.pdf_bound_left PDF
         %th Downloads Remaining
-      - products = []
-      - @orders.each do |order|
-        -  order.line_items.each do |line_item|
-          - if products.include?(line_item.product_id)
-            - next
-          - else
-            - products << line_item.product_id
-          - product = Product.find(line_item.product_id)
-          %tr
-            - image = product.images
-            - image_url = image[0].url.thumb if !image.blank?
-            %td.left_most_cell= image_tag(image_url.url, :size => '100x100') if !image_url.nil?
-            %td= "#{product.product_code} #{product.name}"
-            - if product.includes_instructions?
-              %td
-                - html_list = PartsList.get_list(product.parts_lists, 'html')
-                - xml_list = PartsList.get_list(product.parts_lists, 'xml')
-                - if html_list
-                  = link_to 'HTML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => html_list.id
-                - if html_list && xml_list
-                  |
-                - if xml_list
-                  = link_to 'XML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => xml_list.id
-              %td.pdf_bound_left
-                %noscript.sad
-                  Won't work if javascript is disabled
-                = tag "input", {:type => "button", :value => "Download", :class => 'add_to_cart_button', :onclick => "setUpRedirect('#{product.product_code}',this)"}
-              %td.right_most_cell
-                - if downloads_remaining(product.id) < 2
-                  %b.sad #{downloads_remaining(product.id)}
-                - else
-                  = downloads_remaining(product.id)
-            - else
-              %td N/A
-              %td N/A
-      - @freebies.each do |freebie|
+      - @products.each do |product_info|
         %tr
-          - image = freebie.images
-          - image_url = image[0].url.thumb if !image.blank?
-          %td.left_most_cell= image_tag(image_url.url) if !image_url.nil?
-          %td
-            %img{:src => "/assets/freebie.png"}
-            %br
-            = "#{freebie.product_code} #{freebie.name}"
-          %td
-            - html_list = PartsList.get_list(freebie.parts_lists, 'html')
-            - xml_list = PartsList.get_list(freebie.parts_lists, 'xml')
-            - if html_list
-              = link_to 'HTML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => html_list.id
-            - if html_list && xml_list
-              |
-            - if xml_list
-              = link_to 'XML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => xml_list.id
-          %td.pdf_bound_left
-            %noscript.sad
-              Won't work if javascript is disabled
-            = tag "input", {:type => "button", :value => "Download", :class => 'add_to_cart_button', :onclick => "setUpRedirect('#{freebie.product_code}',this)"}
-          %td.right_most_cell
-            - if downloads_remaining(freebie.id) < 2
-              %b.sad #{downloads_remaining(freebie.id)}
-            - else
-              = downloads_remaining(freebie.id)
+          %td.left_most_cell= image_tag(product_info.image_url, :size => '100x100') if !product_info.image_url.nil?
+          %td= "#{product_info.product.product_code} #{product_info.product.name}"
+          - if product_info.product.includes_instructions?
+            %td
+              - if product_info.html_list_id
+                = link_to 'HTML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.html_list_id
+              - if product_info.html_list_id && product_info.xml_list_id
+                |
+              - if product_info.xml_list_id
+                = link_to 'XML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.xml_list_id
+            %td.pdf_bound_left
+              %noscript.sad
+                Won't work if javascript is disabled
+              = tag "input", {:type => "button", :value => "Download", :class => 'add_to_cart_button', :onclick => "setUpRedirect('#{product_info.product.product_code}',this)"}
+            %td.right_most_cell
+              - if downloads_remaining(product_info.product.id) < 2
+                %b.sad #{downloads_remaining(product_info.product.id)}
+              - else
+                = downloads_remaining(product_info.product.id)
+          - else
+            %td N/A
+            %td N/A

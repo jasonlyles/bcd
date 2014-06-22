@@ -86,4 +86,94 @@ describe User do
       @user.completed_orders.should have(2).items
     end
   end
+
+  describe "get_info_for_product" do
+    it "should return a Struct with the product and info about the product, including parts list IDs" do
+      @product_type = FactoryGirl.create(:product_type)
+      @category = FactoryGirl.create(:category)
+      @subcat = FactoryGirl.create(:subcategory)
+      @product = FactoryGirl.create(:product)
+      @image = FactoryGirl.create(:image)
+      @user = FactoryGirl.create(:user)
+      @download = FactoryGirl.create(:download)
+      @xml_list = FactoryGirl.create(:xml_parts_list)
+      @html_list = FactoryGirl.create(:html_parts_list)
+      product_info = @user.get_info_for_product(@product)
+
+      expect(product_info.product).to be_a(Product)
+      expect(product_info.download).to be_a(Download)
+      expect(product_info.html_list_id).to eq(2)
+      expect(product_info.xml_list_id).to eq(1)
+      expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
+    end
+
+    it "should return a Struct with the product and info about the product, but nil parts list IDs" do
+      @product_type1 = FactoryGirl.create(:product_type)
+      @product_type2 = FactoryGirl.create(:product_type, name: 'Models')
+      @category = FactoryGirl.create(:category)
+      @subcat = FactoryGirl.create(:subcategory)
+      @product = FactoryGirl.create(:product)
+      @product2 = FactoryGirl.create(:product, name: "Tower of Pisa Model", product_code: 'CB001M', product_type_id: @product_type2.id)
+      @image = FactoryGirl.create(:image, product_id: @product2.id)
+      @user = FactoryGirl.create(:user)
+      @xml_list = FactoryGirl.create(:xml_parts_list)
+      @html_list = FactoryGirl.create(:html_parts_list)
+      product_info = @user.get_info_for_product(@product2)
+
+      expect(product_info.product).to be_a(Product)
+      expect(product_info.download).to be_nil
+      expect(product_info.html_list_id).to be_nil
+      expect(product_info.xml_list_id).to be_nil
+      expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
+    end
+  end
+
+  describe "get_product_info_for_products_owned" do
+    it "should return an array of Structs with product info about the products the user has rights to" do
+      @product_type = FactoryGirl.create(:product_type)
+      @category = FactoryGirl.create(:category)
+      @subcat = FactoryGirl.create(:subcategory)
+      @product = FactoryGirl.create(:product)
+      @freebie = FactoryGirl.create(:free_product, product_code: 'FF001', name: 'Free stuff')
+      @order = FactoryGirl.create(:order_with_line_items)
+      @image = FactoryGirl.create(:image)
+      @user = FactoryGirl.create(:user)
+      @download = FactoryGirl.create(:download)
+      @xml_list = FactoryGirl.create(:xml_parts_list)
+      @html_list = FactoryGirl.create(:html_parts_list)
+      product_info = @user.get_product_info_for_products_owned
+
+      expect(product_info.length).to eq(2)
+      expect(product_info[0].product).to be_a(Product)
+      expect(product_info[0].download).to be_a(Download)
+      expect(product_info[0].html_list_id).to eq(2)
+      expect(product_info[0].xml_list_id).to eq(1)
+      expect(product_info[0].image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
+      expect(product_info[1].product).to be_a(Product)
+    end
+
+    it "should not return a product a second time if a user has bought it twice" do
+      @product_type = FactoryGirl.create(:product_type)
+      @category = FactoryGirl.create(:category)
+      @subcat = FactoryGirl.create(:subcategory)
+      @product = FactoryGirl.create(:product)
+      @freebie = FactoryGirl.create(:free_product, product_code: 'FF001', name: 'Free stuff')
+      @order = FactoryGirl.create(:order_with_line_items)
+      @order2 = FactoryGirl.create(:order_with_line_items)
+      @image = FactoryGirl.create(:image)
+      @user = FactoryGirl.create(:user)
+      @download = FactoryGirl.create(:download)
+      @xml_list = FactoryGirl.create(:xml_parts_list)
+      @html_list = FactoryGirl.create(:html_parts_list)
+      product_info = @user.get_product_info_for_products_owned
+
+      expect(product_info.length).to eq(2)
+    end
+
+    it "should return an empty array if a user does not have any completed orders" do
+      @user = FactoryGirl.create(:user)
+
+      expect(@user.get_product_info_for_products_owned).to eq([])
+    end
+  end
 end

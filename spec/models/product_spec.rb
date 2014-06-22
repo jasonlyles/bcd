@@ -363,4 +363,19 @@ describe Product do
       @product3.is_digital_product?.should == true
     end
   end
+
+  describe "main_image" do
+    it "should return nil if no image can be found for the product" do
+      @product = FactoryGirl.create(:product)
+
+      expect(@product.main_image).to be_nil
+    end
+
+    it "should return an image url if an image is found for the product" do
+      @product = FactoryGirl.create(:product)
+      @image = FactoryGirl.create(:image)
+
+      expect(@product.main_image).not_to be_nil
+    end
+  end
 end

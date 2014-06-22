@@ -2,11 +2,7 @@ class AccountController < ApplicationController
   before_filter :authenticate_user!, :except => [:unsubscribe_from_emails]
 
   def index
-    @orders = current_user.completed_orders
-    #Don't give out the freebies unless user has already purchased instructions
-    if @orders.length > 0
-      @freebies = Product.freebies
-    end
+    @products = current_user.get_product_info_for_products_owned
   end
 
   def order_history

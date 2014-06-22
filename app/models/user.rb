@@ -40,6 +40,48 @@ class User < ActiveRecord::Base
     self.orders.where("status='COMPLETED'")
   end
 
+  def get_product_info_for_products_owned
+    orders = completed_orders
+    if orders.length > 0
+      products = []
+      info_objects = []
+      orders.each do |order|
+        order.line_items.each do |line_item|
+          if products.include?(line_item.product_id)
+            next
+          else
+            #Move to another method, so I can call stuff for freebies on too?
+            product = Product.find(line_item.product_id)
+            products << product.id
+            info_objects << get_info_for_product(product)
+          end
+        end
+      end
+      Product.freebies.each do |product|
+        info_objects << get_info_for_product(product)
+      end
+    else
+      return []
+    end
+    info_objects
+  end
+
+  def get_info_for_product(product)
+    product_info = Struct.new(:product, :download, :xml_list_id, :html_list_id, :image_url)
+    image_url = product.main_image.thumb if product.main_image
+    download = Download.find_by_user_id_and_product_id(self.id,product.id)
+    if product.includes_instructions?
+      html_list = PartsList.get_list(product.parts_lists, 'html')
+      html_list_id = html_list.id if html_list
+      xml_list = PartsList.get_list(product.parts_lists, 'xml')
+      xml_list_id = xml_list.id if xml_list
+    else
+      html_list_id,xml_list_id = nil, nil
+    end
+
+    product_info.new(product, download, xml_list_id, html_list_id, image_url)
+  end
+
   def owns_product?(product_id)
     li = self.line_items
     ownership = false

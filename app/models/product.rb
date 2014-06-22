@@ -146,6 +146,11 @@ class Product < ActiveRecord::Base
     self.free
   end
 
+  def main_image
+    return self.images[0].url unless self.images.blank?
+    nil
+  end
+
   def code_and_name
     "#{self.product_code} #{self.name}"
   end
