@@ -18,7 +18,7 @@ class Order < ActiveRecord::Base
 
 
   def has_physical_item?
-    self.line_items.each do |item|
+    line_items.each do |item|
       if item.product.is_physical_product?
         return true
       end
@@ -33,7 +33,7 @@ class Order < ActiveRecord::Base
 
   def get_digital_items
     items = []
-    self.line_items.each do |item|
+    line_items.each do |item|
       if item.product.is_digital_product?
         items << item
       end
@@ -58,7 +58,7 @@ class Order < ActiveRecord::Base
 
   def total_price
     total = 0.0
-    self.line_items.each { |item| total += item.total_price }
+    line_items.each { |item| total += item.total_price }
     total
   end
 
@@ -96,23 +96,18 @@ class Order < ActiveRecord::Base
   # [["Colonial Revival PDF", link],["Colonial Revival HTML Parts List", link]]
   def get_download_links
     links = []
-    self.line_items.each do |line_item|
+    line_items.each do |line_item|
       product = Product.find(line_item.product_id)
       if product.includes_instructions?
         product_name = product.code_and_name
         html_list = PartsList.get_list(product.parts_lists, 'html')
         xml_list = PartsList.get_list(product.parts_lists, 'xml')
-        if html_list
-          links << ["#{product_name} HTML Parts List","/guest_download_parts_list/#{html_list.id}/#{self.id}"]
-        end
-        if xml_list
-          links << ["#{product_name} XML Parts List for Bricklink Wanted List Feature","/guest_download_parts_list/#{xml_list.id}/#{self.id}"]
-        end
-        download = Download.where(["user_id=? and product_id=?",self.user_id,product.id]).
-            first_or_create(:download_token => SecureRandom.hex(20),
-                            :product_id => product.id,
-                            :user_id => self.user_id)
-        guid = self.user.guid
+        links << ["#{product_name} HTML Parts List","/guest_download_parts_list/#{html_list.id}/#{id}"] if html_list
+        links << ["#{product_name} XML Parts List for Bricklink Wanted List Feature","/guest_download_parts_list/#{xml_list.id}/#{id}"] if xml_list
+
+        download = Download.where(["user_id=? and product_id=?",user_id,product.id]).
+            first_or_create(:download_token => SecureRandom.hex(20), :product_id => product.id, :user_id => user_id)
+        guid = user.guid
         links << ["#{product_name} PDF", "/guest_download?id=#{guid}&token=#{download.download_token}"]
       end
     end
@@ -120,9 +115,10 @@ class Order < ActiveRecord::Base
   end
 
   def get_link_to_downloads
-    link = "#{Rails.application.config.web_host}/download_link_error" #Default to this, and overwrite if there is a transaction ID and request ID
-    if !self.transaction_id.blank? && !self.request_id.blank?
-      link = "#{Rails.application.config.web_host}/guest_downloads?tx_id=#{self.transaction_id}&conf_id=#{self.request_id}"
+    web_host = Rails.application.config.web_host
+    link = "#{web_host}/download_link_error" #Default to this, and overwrite if there is a transaction ID and request ID
+    if !transaction_id.blank? && !request_id.blank?
+      link = "#{web_host}/guest_downloads?tx_id=#{transaction_id}&conf_id=#{request_id}"
     end
     link
   end

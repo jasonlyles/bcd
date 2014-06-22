@@ -11,8 +11,9 @@ class User < ActiveRecord::Base
   has_many :line_items, :through => :orders
   has_many :authentications, :dependent => :destroy
   has_many :downloads
+  has_one :cart
 
-  validates :tos_accepted, :acceptance => {:accept => true}# => {:message => "must be accepted."}
+  validates :tos_accepted, :acceptance => {:accept => true}
 
   before_create :set_up_guids
 
@@ -37,20 +38,18 @@ class User < ActiveRecord::Base
   end
 
   def completed_orders
-    self.orders.where("status='COMPLETED'")
+    orders.where("status='COMPLETED'")
   end
 
   def get_product_info_for_products_owned
     orders = completed_orders
     if orders.length > 0
-      products = []
-      info_objects = []
+      products,info_objects = [],[]
       orders.each do |order|
         order.line_items.each do |line_item|
           if products.include?(line_item.product_id)
             next
           else
-            #Move to another method, so I can call stuff for freebies on too?
             product = Product.find(line_item.product_id)
             products << product.id
             info_objects << get_info_for_product(product)

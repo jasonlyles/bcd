@@ -21,10 +21,7 @@ class RegistrationsController < Devise::RegistrationsController
 
     if @user.save
       if @user.active_for_authentication?
-        #set_flash_message :notice, :signed_up if is_navigational_format?
-        #flash[:notice] = t('devise.registrations.signed_up')
         sign_in(resource_name, @user)
-        #respond_with resource, :location => '/'#after_sign_up_path_for(resource)
         if session[:return_to_checkout]
           redirect_to '/checkout', :notice => t('devise.registrations.signed_up')
         else
@@ -40,7 +37,6 @@ class RegistrationsController < Devise::RegistrationsController
       flash[:alert] = 'Please make sure you have accepted the Terms of Service'
       return redirect_to :action => :new
     end
-
 
     #This is in place in case a user goes to sign up via one of the auth options and doesn't add an email or check
     #the TOS box after authing with the auth provider. If the user comes through here and they made a mistake in the form,

@@ -16,6 +16,9 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 5. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
+6. Need to work on find_cart logic some. I just found a user with 8 separate Cart records. I don't think there's a
+reason there should be more than 1 cart record for a given user.
+
 
 
 GETTING READY FOR PROD #######################################################

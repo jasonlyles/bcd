@@ -12,11 +12,8 @@ class PdfUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    if Rails.env.test?
-      "pdfs/test/#{model.category.name.despace}/#{model.subcategory.name.despace}/#{model.product_code}"
-    else
-      "pdfs/#{model.category.name.despace}/#{model.subcategory.name.despace}/#{model.product_code}"
-    end
+    extra_dir = Rails.env.test? ? 'test/' : ''
+    "pdfs/#{extra_dir}#{model.category.name.despace}/#{model.subcategory.name.despace}/#{model.product_code}"
   end
 
   def filename

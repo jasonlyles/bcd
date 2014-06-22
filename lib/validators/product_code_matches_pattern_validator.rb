@@ -5,20 +5,18 @@ class ProductCodeMatchesPatternValidator < ActiveModel::EachValidator
         object.errors[attribute] << (options[:message] || "Instruction product codes must follow the pattern CB002.")
       end
     elsif object.product_type.name == "Models"
-      if !value.match(/^[A-Z]{2}\d{3}M$/)
-        object.errors[attribute] << (options[:message] || "Model product codes must follow the pattern CB002M.")
-      else
-        unless Product.find_by_base_product_code(value)
-          object.errors[attribute] << (options[:message] || "Model product codes must have a base model with a product code of #{value.match(/^[A-Z]{2}\d{3}/)}")
-        end
-      end
+      check_model_code(object, attribute, value, 'Model', 'M')
     elsif object.product_type.name == "Kits"
-      if !value.match(/^[A-Z]{2}\d{3}K$/)
-        object.errors[attribute] << (options[:message] || "Kit product codes must follow the pattern CB002K.")
-      else
-        unless Product.find_by_base_product_code(value)
-          object.errors[attribute] << (options[:message] || "Kit product codes must have a base model with a product code of #{value.match(/^[A-Z]{2}\d{3}/)}")
-        end
+      check_model_code(object, attribute, value, 'Kit', 'K')
+    end
+  end
+
+  def check_model_code(object, attribute, value, product_type,code_suffix)
+    if !value.match(/^[A-Z]{2}\d{3}#{code_suffix}$/)
+      object.errors[attribute] << (options[:message] || "#{product_type} product codes must follow the pattern CB002#{code_suffix}.")
+    else
+      unless Product.find_by_base_product_code(value)
+        object.errors[attribute] << (options[:message] || "#{product_type} product codes must have a base model with a product code of #{value.match(/^[A-Z]{2}\d{3}/)}")
       end
     end
   end

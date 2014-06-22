@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :find_cart
   before_filter :get_categories
   before_filter :set_users_referrer_code
-  before_filter :set_locale
+  #before_filter :set_locale #Don't need this yet
 
   private
 
@@ -35,8 +35,9 @@ class ApplicationController < ActionController::Base
   end
 
   def current_guest
-    if session[:guest] && session[:guest].is_a?(Integer)#meaning it's not true or false, and is the ID of the guest
-      return User.find(session[:guest])
+    guest_id = session[:guest]
+    if guest_id && guest_id.is_a?(Integer)#meaning it's not true or false, and is the ID of the guest
+      return User.find(guest_id)
     end
     nil
   end

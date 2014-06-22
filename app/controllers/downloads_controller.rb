@@ -31,14 +31,7 @@ class DownloadsController < ApplicationController
         return redirect_cheater_to_product_page
       end
 
-      if Rails.env != "development"
-        download_from_amazon(@parts_list.name.path)
-      else
-        #:nocov:
-        #In case I need to test downloads locally
-        download_from_local(@parts_list.name.path)
-        #:nocov:
-      end
+      deliver_download(@parts_list.name.path)
     else
       logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
     end
@@ -72,14 +65,7 @@ class DownloadsController < ApplicationController
         return redirect_cheater_to_product_page
       end
 
-      if Rails.env != "development"
-        download_from_amazon(@parts_list.name.path)
-      else
-        #:nocov:
-        #In case I need to test downloads locally
-        download_from_local(@parts_list.name.path)
-        #:nocov:
-      end
+      deliver_download(@parts_list.name.path)
     else
       logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
     end
@@ -94,14 +80,7 @@ class DownloadsController < ApplicationController
       flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download them."
       redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
     else
-      if Rails.env != "development"
-        download_from_amazon(@product.pdf.path)
-      else
-        #:nocov:
-        #In case I need to test downloads locally
-        download_from_local(@product.pdf.path)
-        #:nocov:
-      end
+      deliver_download(@product.pdf.path)
     end
     increment_download_count
   end
@@ -138,20 +117,23 @@ class DownloadsController < ApplicationController
         return redirect_to '/', :notice => "You have already reached your maximum allowed number of downloads for these instructions."
       else
         @product = Product.find(@download.product_id)
-        if Rails.env != "development"
-          download_from_amazon(@product.pdf.path)
-        else
-          #:nocov:
-          #In case I need to test downloads locally
-          download_from_local(@product.pdf.path)
-          #:nocov:
-        end
+        deliver_download(@product.pdf.path)
       end
     end
     increment_download_count(user)
   end
 
   private
+
+  def deliver_download(file)
+    if Rails.env != "development"
+      download_from_amazon(file)
+    else
+      #:nocov:
+      download_from_local(file) #In case I need to test downloads locally
+      #:nocov:
+    end
+  end
 
   def redirect_cheater_to_product_page
     flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download the parts lists."
