@@ -6,14 +6,14 @@
   .field
     = f.label :name
     %br
-    = f.text_field :name
+    = f.text_field :name, placeholder: "Vehicles"
   .field
     = f.label :code
     %br
-    = f.text_field :code
+    = f.text_field :code, placeholder: "CV"
     .field
     = f.label :description
     %br
-    = f.text_area :description
+    = f.text_area :description, placeholder: "Some marketing mumbo-jumbo about this subcategory.."
   .actions
     = f.submit 'Save'

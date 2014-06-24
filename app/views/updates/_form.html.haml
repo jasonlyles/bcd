@@ -4,17 +4,17 @@
   .field
     = f.label :title
     %br
-    = f.text_field :title
+    = f.text_field :title, placeholder: "Amsterdam Sale!"
   .field
     = f.label :link, "Link (Where BCD will go to when user clicks on the image.) Example:. To go to FAQ, make the link look like this: /faq"
     %br
-    = f.text_field :link
+    = f.text_field :link, placeholder: "/faq"
   .field
-    = f.label :description, "Description, disabled for now"
+    = f.label :description, "Description, disabled for now, as I'm not presently using this."
     %br
     = f.text_field :description, :disabled => true
   .field
-    = f.label :body, "Body, disabled for now"
+    = f.label :body, "Body, disabled for now, as I'm not presently using this."
     %br
     = f.text_area :body, :disabled => true
   - if update.image?

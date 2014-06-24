@@ -2,11 +2,11 @@
   .field
     = f.label :name
     %br
-    = f.text_field :name
+    = f.text_field :name, placeholder: "City"
   .field
     = f.label :description
     %br
-    = f.text_area :description
+    = f.text_area :description, placeholder: "Some marketing mumbo jumbo about this category..."
   .field
     = f.label :ready_for_public
     = f.check_box :ready_for_public, {:checked => category.ready_for_public},1,0

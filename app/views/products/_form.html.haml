@@ -2,9 +2,9 @@
 %br
 = nested_form_for product, :html => {:multipart => true} do |f|
   .field
-    = f.label :name, "Name (i.e. Colonial Revival House)"
+    = f.label :name, "Name"
     %br
-    = f.text_field :name
+    = f.text_field :name, placeholder: "Colonial Revival House"
   .field
     = f.label :product_type_id, 'Product Type'
     %br
@@ -24,11 +24,11 @@
   .field
     = f.label :product_code, "Product Code *, **"
     %br
-    = f.text_field :product_code, :size => 6
+    = f.text_field :product_code, :size => 6, placeholder: "CV002"
   .field
     = f.label :description, "Description (min 100 characters)"
     %br
-    = f.text_area :description, :class => 'form_text_area'
+    = f.text_area :description, :class => 'form_text_area', placeholder: "This model is a great addition to your town..."
   .field
     = f.label :discount_percentage
     %br
@@ -36,14 +36,14 @@
   .field
     = f.label :price
     %br
-    = f.text_field :price, :size => 4
+    = f.text_field :price, :size => 4, placeholder: "10"
   .field
     = f.label :ready_for_public, "Ready for public? ***"
     = f.check_box :ready_for_public, {:checked => product.ready_for_public},1,0
   .field
     = f.label :youtube_url, "Youtube Video ID (If full url is http://www.youtube.com/watch?v=oavMtUWDBTM I just want oavMtUWDBTM)"
     %br
-    = f.text_field :youtube_url, :size => 12
+    = f.text_field :youtube_url, :size => 12, placeholder: "oavMtUWDBTM"
   %b Images:
   (If you're trying to delete an image, click "Remove this image" and then "Save")
   %br
