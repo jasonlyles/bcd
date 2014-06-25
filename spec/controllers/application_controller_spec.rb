@@ -1,13 +1,18 @@
 require 'spec_helper'
 
 describe ApplicationController do
-  describe "set_new_cart" do
-    it "sets the cart user_id to current_user.id if there is a current_user" do
+  describe "create_cart" do
+    it "calls use_older_cart_or_update_existing_cart if there is a current_user" do
       @user = FactoryGirl.create(:user)
       sign_in @user
-      controller.send(:set_new_cart)
+      controller.should_receive(:use_older_cart_or_update_existing_cart)
+      controller.send(:create_cart)
+    end
 
-      assigns(:cart).user_id.should eq(@user.id)
+    it "should create a new @cart with no user_id if there is no current customer" do
+      controller.send(:create_cart)
+
+      expect(assigns(:cart).user_id).to be_nil
     end
   end
 
@@ -15,60 +20,92 @@ describe ApplicationController do
     it "should find the cart by session ID" do
       cart = FactoryGirl.create(:cart)
       session[:cart_id] = cart.id
-      Cart.should_receive(:find).with(session[:cart_id]).and_return(cart)
+      Cart.should_receive(:where).and_return([cart])
       controller.send(:find_cart)
 
       cart.should == assigns(:cart)
     end
 
-    it "should set a new cart if the cart # in session can't be found in the database" do
-      @user = FactoryGirl.create(:user)
-      session[:cart_id] = 15000 #non-existent
-      Cart.should_receive(:find).with(session[:cart_id]).and_raise(ActiveRecord::RecordNotFound)
-      controller.send(:find_cart)
+    context 'and there is a user' do
+      it "should get a users existing cart if the cart # in session can't be found in the database" do
+        @user = FactoryGirl.create(:user)
+        @cart = FactoryGirl.create(:cart, user_id: @user.id)
+        sign_in @user
+        session[:cart_id] = 15000 #non-existent
+        Cart.should_receive(:where).and_return([nil])
+        Cart.should_receive(:users_most_recent_cart).and_return(@cart)
+        controller.send(:find_cart)
 
-      expect(assigns(:cart)).not_to be_nil
-      expect(session[:cart_id]).not_to eq 15000
+        expect(assigns(:cart)).not_to be_nil
+        expect(session[:cart_id]).to eq(@cart.id)
+      end
+
+      it "should get a users existing cart if there is no cart # in session" do
+        @user = FactoryGirl.create(:user)
+        @cart = FactoryGirl.create(:cart, user_id: @user.id)
+        sign_in @user
+        Cart.should_receive(:where).and_return([nil])
+        Cart.should_receive(:users_most_recent_cart).and_return(@cart)
+        controller.send(:find_cart)
+
+        expect(assigns(:cart)).not_to be_nil
+        expect(session[:cart_id]).to eq(@cart.id)
+      end
+
+      it "should assign a cart in session to a current user" do
+        @user = FactoryGirl.create(:user)
+        @cart = FactoryGirl.create(:cart)
+        sign_in @user
+        session[:cart_id] = @cart.id
+        Cart.should_receive(:where).and_return([@cart])
+        Cart.should_receive(:users_most_recent_cart).and_return(nil)
+        controller.send(:find_cart)
+
+        assigns(:cart).user_id.should == @user.id
+      end
+
+      it "should find cart for the current user if there is none in session and there is one in the database" do
+        @user = FactoryGirl.create(:user)
+        cart = FactoryGirl.create(:cart, :user_id => @user.id)
+        sign_in @user
+        controller.send(:find_cart)
+
+        assigns(:cart).id.should == cart.id
+        session[:cart_id].should == cart.id
+      end
+
+      it "should not find a cart for a current user if there is no cart in session or db" do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+        Cart.should_receive(:users_most_recent_cart).and_return(nil)
+        controller.send(:find_cart)
+
+        assigns(:cart).should be_nil
+      end
     end
 
-    it "should assign a cart in session to a current user if there is a current user" do
-      @user = FactoryGirl.create(:user)
-      cart = FactoryGirl.create(:cart)
-      sign_in @user
-      session[:cart_id] = cart.id
-      Cart.should_receive(:find).with(session[:cart_id]).and_return(cart)
-      controller.send(:find_cart)
+    context 'and there is no user logged in' do
+      it "should not set a new cart if the cart # in session can't be found in the database and there is no user" do
+        @user = FactoryGirl.create(:user)
+        session[:cart_id] = 15000 #non-existent
+        Cart.should_receive(:where).and_return([nil])
+        controller.send(:find_cart)
 
-      assigns(:cart).user_id.should == @user.id
+        expect(assigns(:cart)).to be_nil
+      end
     end
 
-    it "should find cart for the current user if there is none in session and there is one in the database" do
-      @user = FactoryGirl.create(:user)
-      cart = FactoryGirl.create(:cart, :user_id => @user.id)
-      sign_in @user
-      controller.send(:find_cart)
+    context 'a cart that starts with no user logged in and has items in it' do
+      it 'should not get an older cart belonging to the user when user logs in' do
+        @user = FactoryGirl.create(:user)
+        @cart = FactoryGirl.create(:cart, user_id: @user.id)
+        @cart_with_items = FactoryGirl.create(:cart_with_cart_items)
+        session[:cart_id] = @cart_with_items.id
+        sign_in @user
+        controller.send(:find_cart)
 
-      assigns(:cart).id.should == cart.id
-      session[:cart_id].should == cart.id
-    end
-
-    it "should create a cart in session and database for a current user if there is no cart in session or db" do
-      @user = FactoryGirl.create(:user)
-      sign_in @user
-      Cart.should_receive(:users_most_recent_cart).and_return(nil)
-      controller.send(:find_cart)
-
-      assigns(:cart).user_id.should == @user.id
-    end
-
-    it "should create a cart in session if there isn't one and there is no current user" do
-      assigns(:cart).should be_nil
-      session[:cart_id].should be_nil
-
-      controller.send(:find_cart)
-
-      assigns(:cart).should_not be_nil
-      session[:cart_id].should_not be_nil
+        expect(assigns(:cart).id).to eq(@cart_with_items.id)
+      end
     end
   end
 

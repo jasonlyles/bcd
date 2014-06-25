@@ -143,8 +143,8 @@ describe StoreController do
       @category = FactoryGirl.create(:category)
       @subcategory = FactoryGirl.create(:subcategory)
       @product = FactoryGirl.create(:product)
-      @cart = Cart.new
-      @cart.cart_items << FactoryGirl.create(:cart_item)
+      @cart = FactoryGirl.create(:cart_with_cart_items)
+      session[:cart_id] = @cart.id
       request.env["HTTP_REFERER"] = '/'
       get :remove_item_from_cart, :id => @product.id
 
@@ -175,6 +175,7 @@ describe StoreController do
       @base_product = FactoryGirl.create(:product, :category_id => @category.id, :subcategory_id => @subcategory.id, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
       @product = FactoryGirl.create(:product, :category_id => @category.id, :subcategory_id => @subcategory.id, :quantity => 30, :product_type_id => @product_type2.id, :product_code => 'XX111M', :name => 'fake product')
       @cart = FactoryGirl.create(:cart)
+      session[:cart_id] = @cart.id
       @cart_item = FactoryGirl.create(:cart_item, cart_id: @cart.id, product_id: @product.id)
       @cart.cart_items << @cart_item
       post :update_item_in_cart, :cart => {:item_id => @cart_item.id, :quantity => 20}
@@ -204,6 +205,8 @@ describe StoreController do
   describe "checkout" do
     it 'should redirect to guest_registration if there is no current_customer' do
       @user = FactoryGirl.create(:user)
+      @cart = FactoryGirl.create(:cart, user_id: nil)
+      session[:cart_id] = @cart.id
       controller.should_receive(:current_customer).at_least(1).times.and_return(nil)
       sign_in @user
       get :checkout
@@ -216,8 +219,8 @@ describe StoreController do
       @category = FactoryGirl.create(:category)
       @subcategory = FactoryGirl.create(:subcategory)
       @product = FactoryGirl.create(:product)
-      @cart = Cart.new
-      @cart.cart_items << FactoryGirl.create(:cart_item)
+      @cart = FactoryGirl.create(:cart_with_cart_items)
+      session[:cart_id] = @cart.id
       sign_in @user
       get :checkout
 
@@ -229,8 +232,8 @@ describe StoreController do
       @category = FactoryGirl.create(:category)
       @subcategory = FactoryGirl.create(:subcategory)
       @product = FactoryGirl.create(:product)
-      @cart = Cart.new
-      @cart.cart_items << FactoryGirl.create(:cart_item)
+      @cart = FactoryGirl.create(:cart_with_cart_items)
+      session[:cart_id] = @cart.id
       sign_in @user
       session[:address_submitted] = {}
       session[:address_submitted][:address_submission_method] = 'form'
@@ -241,7 +244,8 @@ describe StoreController do
 
     it "should redirect back if there is nothing in the cart" do
       @user = FactoryGirl.create(:user)
-      @cart = Cart.new
+      @cart = FactoryGirl.create(:cart)
+      session[:cart_id] = @cart.id
       request.env["HTTP_REFERER"] = '/'
       sign_in @user
       get :checkout
@@ -345,16 +349,12 @@ describe StoreController do
 
   describe "empty_cart" do
     it "should empty the cart" do
-      @user = FactoryGirl.create(:user)
-      @cart = Cart.new(:user_id => @user.id)
-      @cart.cart_items << FactoryGirl.create(:cart_item)
-      @cart.cart_items << FactoryGirl.create(:cart_item, :product_id => 2)
-      @cart.save
+      @cart = FactoryGirl.create(:cart_with_cart_items)
       session[:cart_id] = @cart.id
       post :empty_cart
 
-      Cart.all.should == []
-      session[:cart_id].should be_nil
+      expect(@cart.cart_items).to eq([])
+      expect(session[:cart_id]).not_to be_nil
       response.should redirect_to('/store')
       flash[:notice].should == "You have emptied your cart."
     end
@@ -413,6 +413,7 @@ describe StoreController do
     it "should redirect to cart with an 'uh-oh' message if the order couldn't be submitted" do
       @user = FactoryGirl.create(:user)
       @cart = FactoryGirl.create(:cart)
+      session[:cart_id] = @cart.id
       Order.any_instance.stub(:save).and_return(false)
       sign_in @user
       post :submit_order, :order => {:user_id => @user.id}

@@ -1,8 +1,13 @@
 .login.centered_text.float_right
   = image_tag('icons/cart.png')
-  = link_to "#{pluralize(cart.total_quantity,'Item')} in Cart", cart_path
-  &nbsp;
-  #{number_to_currency cart.total_price}
+  - if cart
+    = link_to "#{pluralize(cart.total_quantity,'Item')} in Cart", cart_path
+    &nbsp;
+    #{number_to_currency cart.total_price}
+  - else
+    0 Items in Cart
+    &nbsp;
+    $0.00
   %br
   %br
   - if (user_signed_in? && !current_user.guest?) || radmin_signed_in?

@@ -58,49 +58,57 @@ class ApplicationController < ActionController::Base
   end
 
   def find_cart
-    if session[:cart_id]
-      begin
-        @cart = Cart.find(session[:cart_id])
-      rescue ActiveRecord::RecordNotFound
-        @cart = nil
-      end
-      #if cart is in session, but doesn't belong to a user, this will assign a user to
-      # the cart if there is a current_user
-      if @cart && @cart.user_id.blank? && current_customer
-        @cart.user_id = current_customer.id
-        @cart.save
-      elsif !@cart
-        set_new_cart
-      end
-    #if no cart, look for a current_user
-    elsif current_customer
-      #Get the users most recent cart. This can come in handy in case sessions got cleared out,
-      # but there was still a saved cart for the user
-      @cart = Cart.users_most_recent_cart(current_customer.id)
-      if @cart
-        session[:cart_id] = @cart.id
+    @cart = Cart.where("id=?",session[:cart_id]).last
+    if @cart
+      if @cart.user_id?
+        return #This cart is good to go
       else
-        set_new_cart
+        if current_customer
+          use_older_cart_or_update_existing_cart
+        end
       end
-    #if neither cart in session nor current_user, then create a cart and add to session
-    else
-      set_new_cart
+    elsif current_customer
+      #When a user has logged in, try to pick up a previous cart. Maybe they didn't finish shopping
+      #before getting timed out
+      use_older_cart_if_available
     end
+  end
+
+  def use_older_cart_or_update_existing_cart
+    if @cart.empty? #Only look for an older cart if the current one is empty
+      use_older_cart_if_available
+    end
+    update_cart_with_user unless @cart.user_id? #The cart would only have a user ID now if an older cart was found
+  end
+
+  def update_cart_with_user
+    @cart.user_id = current_customer.id
+    @cart.save
+  end
+
+  def use_older_cart_if_available
+    cart = Cart.users_most_recent_cart(current_customer.id)
+    if cart
+      @cart.destroy if @cart #Delete the old cart so it doesn't end up abandoned by the code
+      @cart = cart
+      session[:cart_id] = @cart.id
+    end
+  end
+
+  def create_cart
+    @cart = Cart.new
+    if current_customer
+      use_older_cart_or_update_existing_cart
+    else
+      @cart.save
+    end
+    session[:cart_id] = @cart.id
   end
 
   def string_to_snake_case(string)
     new_string = string.downcase
     new_string = new_string.gsub(' ','_')
     new_string
-  end
-
-  def set_new_cart
-    @cart = Cart.new
-    if current_customer
-      @cart.user_id = current_customer.id
-    end
-    @cart.save
-    session[:cart_id] = @cart.id
   end
 
   def get_categories

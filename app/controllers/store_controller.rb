@@ -31,7 +31,7 @@ class StoreController < ApplicationController
   end
 
   def cart
-    item_list = check_for_errant_items
+    item_list = check_for_errant_items if @cart
     if item_list
       flash[:notice] = "The following item(s) are not available in the quantities you have in your cart: #{item_list.to_sentence}. Please reduce quantities or remove the item(s) from your cart."
       render :cart
@@ -64,6 +64,7 @@ class StoreController < ApplicationController
   end
 
   def add_to_cart
+    create_cart unless @cart
     product = Product.find_by_product_code(params[:product_code].upcase) #Doing this just to make sure a valid product is being used.
     if product.blank?
       logger.error("Attempt to access invalid product: #{params[:product_code]}")
@@ -150,12 +151,8 @@ class StoreController < ApplicationController
     end
     @order.request_id = SecureRandom.hex(20)
     if @order.save
-      #Find all carts for this user and destroy!
-      carts = Cart.where("user_id=?", @cart.user_id)
-      carts.each do |cart|
-        cart.destroy
-      end
-      session[:cart_id] = nil
+      @cart.destroy
+      session.delete(:cart_id)
       session.delete(:guest) if session[:guest]
       redirect_to URI.encode("https://www.#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
     else
@@ -168,11 +165,7 @@ class StoreController < ApplicationController
   end
 
   def empty_cart
-    carts = Cart.where("user_id=?",@cart.user_id)
-    carts.each do |cart|
-      cart.destroy
-    end
-    session[:cart_id] = nil
+    @cart.cart_items.destroy_all
     redirect_to :store, :notice => "You have emptied your cart."
   end
 

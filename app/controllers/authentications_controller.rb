@@ -1,5 +1,6 @@
 class AuthenticationsController < ApplicationController
   before_filter :authenticate_user!, :except => [:create, :clear_authentications]
+  skip_before_filter :find_cart, only: [:create]
 
   def create
     omniauth = request.env["omniauth.auth"]

@@ -2,26 +2,16 @@ TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
 
-1. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
-help me clean up testing code also.
-
-2. I need a public page for 503s, like I have 404s, 422s and 500s
-
-3. See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
+1. See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
 is created, and the user can see it in "My Account", but should it be visible yet? Or should it just say something
 relating to not having heard back from paypal about the transaction yet? Maybe that's the way, if the order_status is nil,
 paypal hasn't talked to us yet, and we can say that we haven't heard back from paypal yet.
 
-4. It seems I don't have NewRelic set up properly. Look into it.
+2. It seems I don't have NewRelic set up properly. Look into it.
 
-5. Try to move logic out of store/products and the product_list partial and into the controller/models.
+3. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-6. Need to work on find_cart logic some. I just found a user with 8 separate Cart records. I don't think there's a
-reason there should be more than 1 cart record for a given user.
-
-7. Update Users Download Counts admin tool could use a nice search feature instead of the huge dropdown.
-
-8. Add a tool to allow us to create marketing emails, such as for the release of a new model.
+4. Add a tool to allow us to create marketing emails, such as for the release of a new model.
 
 
 
@@ -139,6 +129,13 @@ display categories.
     I arranged deals with various BL sellers to try and keep in stock the pieces needed to make a model. Then I could
     create a BL Seller, and have a join table with a BL seller ID and product ID  to tie preferred BL sellers to a given
     model.
+
+20. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
+    help me clean up testing code also.
+
+21. I need a public page for 503s, like I have 404s, 422s and 500s
+
+22. Update Users Download Counts admin tool could use a nice search feature instead of the huge dropdown.
 
 ########################################################################################################################
 V1.2 AND BEYOND:
