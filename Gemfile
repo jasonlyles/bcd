@@ -72,7 +72,7 @@ group :profile do
   gem 'ruby-prof'
 end
 
-group :production do
+group :production, :staging do
   gem 'rails_12factor'
   #best to keep this at the bottom:
   gem 'newrelic_rpm'
