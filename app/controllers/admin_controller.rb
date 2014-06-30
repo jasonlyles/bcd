@@ -34,25 +34,19 @@ class AdminController < ApplicationController
 
   def update_admin_profile
     @radmin = Radmin.find(params[:id])
-
-    respond_to do |format|
-      if !params[:radmin][:email].blank? || @radmin.is_valid_password?(params[:radmin][:current_password])
-        #Deleting the current_password from the params because it's protected from mass assignment, and doesn't get saved.
-        params[:radmin].delete(:current_password)
-        if @radmin.update_attributes(params[:radmin])
-          sign_in :radmin, @radmin, :bypass => true
-          #respond_with resource, :location => after_update_path_for(resource)
-          format.html { redirect_to(admin_profile_admin_url, :notice => 'Profile was successfully updated.') }
-          format.xml { head :ok }
-        else
-          format.html { render "admin_profile" }
-          format.xml { render :xml => @radmin.errors, :status => :unprocessable_entity }
-        end
+    if !params[:radmin][:email].blank? || @radmin.is_valid_password?(params[:radmin][:current_password])
+      #Deleting the current_password from the params because it's protected from mass assignment, and doesn't get saved.
+      params[:radmin].delete(:current_password)
+      if @radmin.update_attributes(params[:radmin])
+        sign_in :radmin, @radmin, :bypass => true
+        #respond_with resource, :location => after_update_path_for(resource)
+        redirect_to(admin_profile_admin_url, :notice => 'Profile was successfully updated.')
       else
-        @radmin.errors.add(:current_password, "is invalid.")
-        format.html { render "admin_profile" }
-        format.xml { render :xml => @radmin.errors, :status => :unprocessable_entity }
+        render "admin_profile"
       end
+    else
+      @radmin.errors.add(:current_password, "is invalid.")
+      render "admin_profile"
     end
   end
 

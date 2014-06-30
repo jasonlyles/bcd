@@ -7,36 +7,18 @@ class PartnersController < ApplicationController
   layout proc { |controller| controller.request.xhr? ? false : "admin" }
 
   # GET /partners
-  # GET /partners.xml
   def index
     @partners = Partner.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @partners }
-    end
   end
 
   # GET /partners/1
-  # GET /partners/1.xml
   def show
     @partner = Partner.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @partner }
-    end
   end
 
   # GET /partners/new
-  # GET /partners/new.xml
   def new
     @partner = Partner.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @partner }
-    end
   end
 
   # GET /partners/1/edit
@@ -45,41 +27,28 @@ class PartnersController < ApplicationController
   end
 
   # POST /partners
-  # POST /partners.xml
   def create
     @partner = Partner.new(params[:partner])
-
-    respond_to do |format|
-      if @partner.save
-        format.html { redirect_to(@partner, :notice => 'Partner was successfully created.') }
-        format.xml  { render :xml => @partner, :status => :created, :location => @partner }
-      else
-        flash[:alert] = "Partner was NOT created"
-        format.html { render "new" }
-        format.xml  { render :xml => @partner.errors, :status => :unprocessable_entity }
-      end
+    if @partner.save
+      redirect_to(@partner, :notice => 'Partner was successfully created.')
+    else
+      flash[:alert] = "Partner was NOT created"
+      render "new"
     end
   end
 
   # PUT /partners/1
-  # PUT /partners/1.xml
   def update
     @partner = Partner.find(params[:id])
-
-    respond_to do |format|
-      if @partner.update_attributes(params[:partner])
-        format.html { redirect_to(@partner, :notice => 'Partner was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        flash[:alert] = "Partner was NOT updated"
-        format.html { render "edit" }
-        format.xml  { render :xml => @partner.errors, :status => :unprocessable_entity }
-      end
+    if @partner.update_attributes(params[:partner])
+      redirect_to(@partner, :notice => 'Partner was successfully updated.')
+    else
+      flash[:alert] = "Partner was NOT updated"
+      render "edit"
     end
   end
 
   # DELETE /partners/1
-  # DELETE /partners/1.xml
   def destroy
     @partner = Partner.find(params[:id])
     deleted = @partner.destroy
@@ -87,9 +56,6 @@ class PartnersController < ApplicationController
       flash[:alert] = "Sorry. You can't delete a partner that has advertising campaigns that have been used."
       return redirect_to(partners_url)
     end
-    respond_to do |format|
-      format.html { redirect_to(partners_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to(partners_url)
   end
 end

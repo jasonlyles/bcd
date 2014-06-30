@@ -4,10 +4,6 @@ class StaticController < ApplicationController
     #session.delete(:guest) #for testing
     #reset_session #for testing
     @updates = Update.live_updates
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @updates }
-    end
   end
 
   def contact

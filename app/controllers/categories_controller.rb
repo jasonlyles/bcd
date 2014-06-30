@@ -5,15 +5,10 @@ class CategoriesController < ApplicationController
   skip_before_filter :set_users_referrer_code
   skip_before_filter :set_locale
   layout proc{ |controller| controller.request.xhr? ? false : "admin" }
+
   # GET /categories
-  # GET /categories.xml
   def index
     @categories = Category.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @categories }
-    end
   end
 
   def subcategories
@@ -24,25 +19,13 @@ class CategoriesController < ApplicationController
   end
 
   # GET /categories/1
-  # GET /categories/1.xml
   def show
     @category = Category.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @category }
-    end
   end
 
   # GET /categories/new
-  # GET /categories/new.xml
   def new
     @category = Category.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @category }
-    end
   end
 
   # GET /categories/1/edit
@@ -51,41 +34,28 @@ class CategoriesController < ApplicationController
   end
 
   # POST /categories
-  # POST /categories.xml
   def create
     @category = Category.new(params[:category])
-
-    respond_to do |format|
-      if @category.save
-        format.html { redirect_to(@category, :notice => 'Category was successfully created.') }
-        format.xml  { render :xml => @category, :status => :created, :location => @category }
-      else
-        flash[:alert] = "Category was NOT created"
-        format.html { render "new" }
-        format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
-      end
+    if @category.save
+      redirect_to(@category, :notice => 'Category was successfully created.')
+    else
+      flash[:alert] = "Category was NOT created"
+      render "new"
     end
   end
 
   # PUT /categories/1
-  # PUT /categories/1.xml
   def update
     @category = Category.find(params[:id])
-
-    respond_to do |format|
-      if @category.update_attributes(params[:category])
-        format.html { redirect_to(@category, :notice => 'Category was successfully updated.') }
-        format.xml  { head :ok }
-      else
-        flash[:alert] = "Category was NOT updated"
-        format.html { render "edit" }
-        format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
-      end
+    if @category.update_attributes(params[:category])
+      redirect_to(@category, :notice => 'Category was successfully updated.')
+    else
+      flash[:alert] = "Category was NOT updated"
+      render "edit"
     end
   end
 
   # DELETE /categories/1
-  # DELETE /categories/1.xml
   def destroy
     @category = Category.find(params[:id])
     if @category.subcategories.empty?
@@ -93,9 +63,6 @@ class CategoriesController < ApplicationController
     else
       return redirect_to categories_url, :alert => "You can't delete this category while it has subcategories. Delete or reassign the subcategories and try again."
     end
-    respond_to do |format|
-      format.html { redirect_to(categories_url) }
-      format.xml  { head :ok }
-    end
+    redirect_to(categories_url)
   end
 end

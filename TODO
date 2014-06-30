@@ -7,11 +7,13 @@ is created, and the user can see it in "My Account", but should it be visible ye
 relating to not having heard back from paypal about the transaction yet? Maybe that's the way, if the order_status is nil,
 paypal hasn't talked to us yet, and we can say that we haven't heard back from paypal yet.
 
-2. It seems I don't have NewRelic set up properly. Look into it.
+2. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-3. Try to move logic out of store/products and the product_list partial and into the controller/models.
-
-4. Add a tool to allow us to create marketing emails, such as for the release of a new model.
+3. Add a tool to allow us to create marketing emails, such as for the release of a new model. I think this should just
+use existing info about a product, and should maybe just be a button available on the product page. Click to notify
+ users about this new product. Only notify those users who want to be notified. Once the email has been sent, set a
+ flag saying the model has been introduced and hide the button. Pull a picture for the product and insert it into the
+ email, and pull the description, price, etc. Use this info to craft the email.
 
 
 
