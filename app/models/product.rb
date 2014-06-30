@@ -154,5 +154,13 @@ class Product < ActiveRecord::Base
   def code_and_name
     "#{self.product_code} #{self.name}"
   end
+
+  def retire
+    self.category_id = Category.find_by_name("Retired").id
+    self.subcategory_id = Subcategory.find_by_name("Retired").id
+    self.ready_for_public = false
+    self.save
+  end
+
   #TODO: Make sure that removing a product not only deletes the image in the database, but also in Amazon S3
 end

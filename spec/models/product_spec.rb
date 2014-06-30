@@ -378,4 +378,17 @@ describe Product do
       expect(@product.main_image).not_to be_nil
     end
   end
+
+  describe "retire" do
+    it "should set category_id and subcategory_id to Retired IDs and ready_for_public to false" do
+      @retired_category = FactoryGirl.create(:category, name: "Retired")
+      @retired_subcategory = FactoryGirl.create(:subcategory, name: "Retired", code: 'BB')
+      @product = FactoryGirl.create(:product, ready_for_public: true)
+      @product.retire
+
+      expect(@product.category_id).to eq(@retired_category.id)
+      expect(@product.subcategory_id).to eq(@retired_subcategory.id)
+      expect(@product.ready_for_public).to eq(false)
+    end
+  end
 end

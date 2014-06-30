@@ -72,10 +72,7 @@ class ProductsController < ApplicationController
 
   def retire_product
     @product = Product.find(params[:product][:id])
-    @product.category_id = Category.find_by_name("Retired").id
-    @product.subcategory_id = Subcategory.find_by_name("Retired").id
-    @product.ready_for_public = false
-    @product.save
+    @product.retire
     redirect_to :back
   end
 
