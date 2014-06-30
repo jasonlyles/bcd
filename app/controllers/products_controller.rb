@@ -21,18 +21,13 @@ class ProductsController < ApplicationController
   # GET /products/new
   def new
     @product = Product.new
-    #This is for creating a derivative product, i.e., a model/kit based of the base product, the instructions
     if params[:product_code]
-      @derivative_product = true
+      #This is for creating a derivative product, i.e., a model/kit based of the base product, the instructions
       product = Product.find_by_product_code(params[:product_code])
-      @product.name = product.name
-      @product.product_type_id = product.product_type_id
-      @product.category_id = product.category_id
-      @product.subcategory_id = product.subcategory_id
-      @product.price = product.price
-      @product.description = product.description
-      @product.product_code = product.product_code
-      @product.ready_for_public = product.ready_for_public
+      if product
+        @derivative_product = true
+        @product = product.dup
+      end
     end
   end
 
