@@ -22,7 +22,7 @@
   %div#regular_signup_div
     = form_for(@user, :url => registration_path(resource_name)) do |f|
       - if resource.email.blank?
-        = f.text_field :email, :class => 'login_form_text_field', :title => 'Email'
+        = f.text_field :email, :class => 'login_form_text_field', :placeholder => 'Email', :type => 'email'
         %br
         %br
       - else
@@ -46,7 +46,6 @@
 
 :javascript
   $(document).ready(function(){
-      $.hint({ skipStyles: ['padding-top', 'padding-right', 'padding-bottom', 'padding-left'] });
       //window.onload = enableButtonsIfChecked();
   });
 

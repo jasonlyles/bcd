@@ -18,19 +18,14 @@ Random stuff to say? Idea for a model we should build? Let us hear it!
 %br
 %br
 = form_for @email, :url => send_contact_email_path do |f|
-  = f.text_field :name, :class => 'login_form_text_field', :title => 'Name'
+  = f.text_field :name, :class => 'login_form_text_field', :placeholder => 'Name'
   %br
   %br
-  = f.text_field :email_address, :class => 'login_form_text_field', :title => 'Email'
+  = f.text_field :email_address, :class => 'login_form_text_field', :placeholder => 'Email', :type => 'email'
   %br
   %br
-  = f.text_area :body, :class => 'form_text_area', :title => 'Stuff I want to say'
+  = f.text_area :body, :class => 'form_text_area', :placeholder => 'Stuff I want to say'
   %br
   %br
   .actions
     = f.submit 'Send Email', :class => 'nice_email_button', data: {disable_with: 'Sending...'}
-
-:javascript
-  $(document).ready(function(){
-      $.hint({ skipStyles: ['padding-top', 'padding-right', 'padding-bottom', 'padding-left'] });
-  });

@@ -1,6 +1,5 @@
 //= require jquery.min
 //= require jquery_ujs
-//= require jquery.hint
 //= require jquery.cycle.lite.1.6
 //= require jquery.msgBox.min
 //= require jquery.limit
@@ -28,16 +27,16 @@ $(function() {
         error: function(XMLHttpRequest, errorTextStatus, error){
           alert("Failed to submit : "+ errorTextStatus+" ;"+error);
         },
-        success: function(data){                    
+        success: function(data){
           // Clear all options from sub category select
           $("#product_subcategory_id option").remove();
           //put in a empty default line
           var row = "<option value=\"" + "" + "\">" + "Please Select" + "</option>";
-          $(row).appendTo("#product_subcategory_id");                        
+          $(row).appendTo("#product_subcategory_id");
           // Fill sub category select
           $.each(data, function(i, j){
             var row = $("<option/>").val(j.id).text(j.name);
-            $(row).appendTo("#product_subcategory_id");                    
+            $(row).appendTo("#product_subcategory_id");
           });
         }
       });
@@ -99,7 +98,7 @@ $(document).ready(function(){
         },
         success: function(data){
           alert("He-yi!");
-        } 
+        }
       });
     };
   });

@@ -18,7 +18,7 @@
   = form_for(@user, :url => '/register_guest', :html => {:method => :post}) do |f|
     = f.label :email
     %br
-    = f.text_field :email, :class => 'login_form_text_field', :title => 'Email'
+    = f.text_field :email, :class => 'login_form_text_field', :placeholder => 'Email', :type => 'email'
     %br
     %br
     - if !@user.email? || !@user.valid?
