@@ -176,4 +176,26 @@ describe User do
       expect(@user.get_product_info_for_products_owned).to eq([])
     end
   end
+
+  describe "self.who_get_all_emails" do
+    it 'should return email, guid and unsubscribe_token for users with email_preference of 2 and who are not cancelled' do
+      @user1 = FactoryGirl.create(:user, email_preference: 1, account_status: 'A')
+      @user2 = FactoryGirl.create(:user, email: 'user2@gmail.com', email_preference: 2, account_status: 'C')
+      @user3 = FactoryGirl.create(:user, email: 'user3@gmail.com', email_preference: 2, account_status: 'A')
+      @user4 = FactoryGirl.create(:user, email: 'user4@gmail.com', email_preference: 2, account_status: 'A')
+
+      expect(User.who_get_all_emails).to eq([[@user3.email, @user3.guid, @user3.unsubscribe_token],[@user4.email, @user4.guid, @user4.unsubscribe_token]])
+    end
+  end
+
+  describe "self.who_get_important_emails" do
+    it 'should return email, guid and unsubscribe_token for users with email_preference of 1 or 2 and who are not cancelled' do
+      @user1 = FactoryGirl.create(:user, email_preference: 1, account_status: 'A')
+      @user2 = FactoryGirl.create(:user, email: 'user2@gmail.com', email_preference: 2, account_status: 'C')
+      @user3 = FactoryGirl.create(:user, email: 'user3@gmail.com', email_preference: 0, account_status: 'A')
+      @user4 = FactoryGirl.create(:user, email: 'user4@gmail.com', email_preference: 2, account_status: 'A')
+
+      expect(User.who_get_important_emails).to eq([[@user1.email, @user1.guid, @user1.unsubscribe_token],[@user4.email, @user4.guid, @user4.unsubscribe_token]])
+    end
+  end
 end

@@ -100,4 +100,12 @@ class User < ActiveRecord::Base
     self.guid = SecureRandom.hex(20)
     self.unsubscribe_token = SecureRandom.hex(20)
   end
+
+  def self.who_get_all_emails
+    User.where("email_preference = '2' and account_status <> 'C'").pluck(:email, :guid, :unsubscribe_token)
+  end
+
+  def self.who_get_important_emails
+    User.where("email_preference in ('1','2') and account_status <> 'C'").pluck(:email, :guid, :unsubscribe_token)
+  end
 end
