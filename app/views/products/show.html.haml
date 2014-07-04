@@ -32,7 +32,7 @@
     %br
 %p
   %b Discount percentage:
-  = @product.discount_percentage
+  #{@product.discount_percentage.to_i}%
 %p
   %b Price:
   = number_to_currency(@product.price)

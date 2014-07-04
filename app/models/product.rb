@@ -25,6 +25,8 @@ class Product < ActiveRecord::Base
   validates :product_code, :product_code_matches_pattern => true
   validates :name, :presence => true, :uniqueness => true
   validates :tweet, :length => {:maximum => 97}
+  validates :discount_percentage, :numericality => true, :allow_blank => true
+  validates :discount_percentage, :inclusion => {:in => 0..90, :message => "Percentage must be between 0 and 90"}, :allow_blank => true
   #This line calls a custom validator that looks to make sure that there is a pdf attached to this object before
   #letting this product be made available to the public
   validates :ready_for_public, :pdf_exists => true
@@ -160,6 +162,11 @@ class Product < ActiveRecord::Base
     self.subcategory_id = Subcategory.find_by_name("Retired").id
     self.ready_for_public = false
     self.save
+  end
+
+  def discounted_price
+    #Assumes discount_percentage is stored as an integer. i.e. 25, which means 25%
+    discount_percentage? ? (price * (100-discount_percentage)/100.to_f) : price
   end
 
   #TODO: Make sure that removing a product not only deletes the image in the database, but also in Amazon S3

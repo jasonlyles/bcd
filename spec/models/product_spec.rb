@@ -391,4 +391,18 @@ describe Product do
       expect(@product.ready_for_public).to eq(false)
     end
   end
+
+  describe "discounted_price" do
+    it 'should return the price if there is no discount' do
+      @product = FactoryGirl.create(:product, discount_percentage: 0)
+
+      expect(@product.discounted_price.to_f).to eq(@product.price.to_f)
+    end
+
+    it 'should return a discounted price if discount_percentage is set' do
+      @product = FactoryGirl.create(:product, discount_percentage: 25)
+
+      expect(@product.discounted_price.to_f).to eq(7.5)
+    end
+  end
 end

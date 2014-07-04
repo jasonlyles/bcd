@@ -30,9 +30,9 @@
     %br
     = f.text_area :description, :class => 'form_text_area', placeholder: "This model is a great addition to your town..."
   .field
-    = f.label :discount_percentage
+    = f.label :discount_percentage, "Percentage off, expressed as an integer. i.e. 25 would mean 25% off (This is not fully functional yet)"
     %br
-    = f.text_field :discount_percentage, :size => 4
+    = f.text_field :discount_percentage, :size => 4, placeholder: "0.25"
   .field
     = f.label :price
     %br
@@ -52,7 +52,7 @@
     = f.fields_for :images do |image_form|
       - field_count += 1
       %p
-        = image_form.label :url, "Image"
+        = image_form.label :url, "Image (Images should be 700x700)"
         %br
         - if product.images && product.images.length >= field_count
           = image_form.text_field :url, :disabled => true
@@ -60,6 +60,7 @@
           = image_form.file_field :url
           = image_form.hidden_field :url_cache
         = image_form.link_to_remove "Remove this image"
+  %br
   = f.link_to_add "Add Image", :images
   %br
   - if product.is_digital_product?
@@ -82,6 +83,7 @@
             = pl_form.select :parts_list_type, ['HTML','XML']
             = pl_form.hidden_field :name_cache
           = pl_form.link_to_remove "Remove this parts list"
+      %br
       = f.link_to_add "Add Parts List", :parts_lists
     %br
     .field
