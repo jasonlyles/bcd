@@ -15,7 +15,7 @@ class StaticController < ApplicationController
 
     if @email.valid?
       #begin
-        ContactMailer.new_contact_email(@email).deliver
+        ContactMailer.new_contact_email(@email.name, @email.email_address, @email.body).deliver
         #@email = nil
         flash[:notice] = "Thanks for your email. We'll get back with you shortly."
         redirect_to :contact
@@ -137,7 +137,7 @@ class StaticController < ApplicationController
   def legacy_product_redirect(product_code)
     begin
       product = Product.find_by_product_code(product_code)
-     return redirect_to :controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => string_to_snake_case(product.name)
+     return redirect_to :controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case
     rescue NoMethodError, ActiveRecord::RecordNotFound
       logger.error("Failed trying to get a legacy product page using product code: #{product_code}")
       flash[:notice] = "Could not find that product. Please try navigating to the product through the store"

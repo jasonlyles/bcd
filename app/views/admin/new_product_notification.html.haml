@@ -1,0 +1,13 @@
+%h1 New Product Notification
+%br
+= form_for(:email, :url => {:action => :send_new_product_notification}) do |f|
+  .field
+    = f.label :product_id, 'Product'
+    %br
+    = f.select :product_id, @products, prompt: true
+  .field
+    = f.label :optional_message
+    %br
+    = f.text_area :optional_message, cols: 40, rows: 10, placeholder: 'Optional message to send to users about the product'
+  .actions
+    = f.submit 'Send Notifications'

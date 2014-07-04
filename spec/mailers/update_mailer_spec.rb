@@ -10,7 +10,7 @@ describe UpdateMailer do
       @subcategory = FactoryGirl.create(:subcategory, :category_id => @category.id)
       @user = FactoryGirl.create(:user)
       @model = FactoryGirl.create(:product, :subcategory_id => @subcategory.id, :category_id => @category.id)
-      @mail = UpdateMailer.updated_instructions(@user, @model, message='BLAH BLAH BLAH')
+      @mail = UpdateMailer.updated_instructions(@user.id, @model.id, message='BLAH BLAH BLAH')
 
       @mail.subject.should == "Instructions for CB001 Colonial Revival House have been updated"
       @mail.to.should == [@user.email]

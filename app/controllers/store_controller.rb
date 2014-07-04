@@ -64,20 +64,24 @@ class StoreController < ApplicationController
   end
 
   def add_to_cart
+    #This method can be called via a link in a new product notification email, in which case, there won't be a
+    # :back that I want to use, so set the redirect to take the user to the cart. Otherwise, return to :back, as
+    # 'add to cart' buttons that POST are scattered throughout the app.
+    back_or_cart = request.method == 'GET' ? :cart : :back
     create_cart unless @cart
     product = Product.find_by_product_code(params[:product_code].upcase) #Doing this just to make sure a valid product is being used.
     if product.blank?
       logger.error("Attempt to access invalid product: #{params[:product_code]}")
-      return redirect_to :back, :notice => "Invalid Product"
+      return redirect_to back_or_cart, :notice => "Invalid Product"
     end
     if product.is_free?
-      return redirect_to :back, :notice => "You don't need to add free instructions to your cart. Just go to your account page to download them."
+      return redirect_to back_or_cart, :notice => "You don't need to add free instructions to your cart. Just go to your account page to download them."
     end
     @current_item = @cart.add_product(product)
     if @current_item
-      return redirect_to :back, :notice => "Item added to cart."
+      return redirect_to back_or_cart, :notice => "Item added to cart."
     else
-      return redirect_to :back, :notice => "You already have #{product.name} in your cart. You don't need to purchase more than 1 set of the same instructions.", :only_path => true
+      return redirect_to back_or_cart, :notice => "You already have #{product.name} in your cart. You don't need to purchase more than 1 set of the same instructions.", :only_path => true
     end
   end
 
@@ -227,10 +231,10 @@ class StoreController < ApplicationController
         if @order.user.guest?
           logger.debug('Sending email for Guest')
           link_to_downloads = @order.get_link_to_downloads
-          OrderMailer.guest_order_confirmation(@order.user,@order,link_to_downloads).deliver
+          OrderMailer.guest_order_confirmation(@order.user_id,@order.id,link_to_downloads).deliver
         else
           logger.debug('Sending email for User')
-          OrderMailer.order_confirmation(@order.user,@order).deliver
+          OrderMailer.order_confirmation(@order.user_id,@order.id).deliver
         end
       rescue => error
         ExceptionNotifier.notify_exception(error, :env => request.env, :data => {:message => "Failed trying to send order confirmation email for #{@order.to_yaml}."})
@@ -250,16 +254,16 @@ class StoreController < ApplicationController
 
   #:nocov:
   def order_confirmation_email_test
-    @order = Order.find_by_user_id 1  #Jason
+    @order = Order.find_by_user_id 5  #Jason
     download_links = @order.get_link_to_downloads
-    OrderMailer.guest_order_confirmation(@order.user, @order, download_links).deliver
+    OrderMailer.guest_order_confirmation(@order.user_id, @order.id, download_links).deliver
   end
   #:nocov:
 
   #:nocov:
   def physical_order_email_test
     @order = Order.find 9
-    OrderMailer.physical_item_purchased(@order.user, @order).deliver
+    OrderMailer.physical_item_purchased(@order.user_id, @order.id).deliver
   end
   #:nocov:
 
@@ -339,9 +343,9 @@ class StoreController < ApplicationController
     end
     if @order.user.guest?
       link_to_downloads = @order.get_link_to_downloads
-      OrderMailer.guest_order_confirmation(@order.user,@order,link_to_downloads).deliver
+      OrderMailer.guest_order_confirmation(@order.user_id,@order.id,link_to_downloads).deliver
     else
-      OrderMailer.order_confirmation(@order.user,@order).deliver
+      OrderMailer.order_confirmation(@order.user_id,@order.id).deliver
     end
   end
   #:nocov:
@@ -360,7 +364,7 @@ class StoreController < ApplicationController
          #add to string that gets sent in email
       end
       begin
-        OrderMailer.physical_item_purchased(@order.user, @order).deliver
+        OrderMailer.physical_item_purchased(@order.user_id, @order.id).deliver
       rescue
         ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), :env => request.env, :data => {:message => "Failed trying to send physical product order email for #{@order.to_yaml}."})
       end

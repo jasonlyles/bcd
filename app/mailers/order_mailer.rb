@@ -1,30 +1,30 @@
-class OrderMailer < ActionMailer::Base
-  default :from => "no-reply@brickcitydepot.com"
+class OrderMailer < AsyncMailer
+  default :from => "Brick City Depot <no-reply@brickcitydepot.com>"
   layout 'base_email', except: [:physical_item_purchased]
 
-  def order_confirmation(user, order)
+  def order_confirmation(user_id, order_id)
     @host = Rails.application.config.web_host
-    @order = order
-    @user = user
+    @order = Order.find(order_id)
+    @user = User.find(user_id)
     @hide_unsubscribe = true
 
-    mail(to: user.email, subject: 'Order Confirmation')
+    mail(to: @user.email, subject: 'Order Confirmation')
   end
 
-  def guest_order_confirmation(user, order, link_to_downloads)
+  def guest_order_confirmation(user_id, order_id, link_to_downloads)
     @host = Rails.application.config.web_host
-    @order = order
-    @user = user
+    @order = Order.find(order_id)
+    @user = User.find(user_id)
     @link_to_downloads = link_to_downloads
     @hide_unsubscribe = true
 
     mail(to: @user.email, subject: 'Order Confirmation')
   end
 
-  def physical_item_purchased(user, order)
+  def physical_item_purchased(user_id, order_id)
     @host = Rails.application.config.web_host
-    @order = order
-    @user = user
+    @order = Order.find(order_id)
+    @user = User.find(user_id)
 
     mail(to: EmailConfig.config.physical_order, subject: 'Physical Item Purchased')
   end
@@ -37,7 +37,7 @@ if Rails.env.development?
       @user = User.first
       @order = Order.first
 
-      OrderMailer.order_confirmation(@user, @order)
+      OrderMailer.order_confirmation(@user.id, @order.id)
     end
 
     def guest_order_confirmation
@@ -45,14 +45,14 @@ if Rails.env.development?
       @order = Order.first
       link = "#{Rails.application.config.web_host}/guest_downloads?tx_id=#{@order.transaction_id}&conf_id=#{@order.request_id}"
 
-      OrderMailer.guest_order_confirmation(@user, @order, link)
+      OrderMailer.guest_order_confirmation(@user.id, @order.id, link)
     end
 
     def physical_item_purchased
       @user = User.first
       @order = Order.first
 
-      OrderMailer.physical_item_purchased(@user, @order)
+      OrderMailer.physical_item_purchased(@user.id, @order.id)
     end
   end
 end

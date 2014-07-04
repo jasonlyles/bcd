@@ -26,6 +26,9 @@ gem "haml-rails"
 gem 'jquery-rails'
 gem 'rake'
 gem 'sprockets_better_errors'
+gem 'resque'
+gem 'resque_mailer'
+#gem 'hirefire' #This should come after resque gem
 
 #assets
 gem 'sass-rails'
@@ -66,6 +69,7 @@ group :development, :test do
   #gem 'brakeman'
   gem 'metric_fu'
   gem 'mail_view', "~> 2.0.4"
+  gem 'foreman'
 end
 
 group :profile do

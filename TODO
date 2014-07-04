@@ -14,6 +14,21 @@ use existing info about a product, and should maybe just be a button available o
  users about this new product. Only notify those users who want to be notified. Once the email has been sent, set a
  flag saying the model has been introduced and hide the button. Pull a picture for the product and insert it into the
  email, and pull the description, price, etc. Use this info to craft the email.
+    a. Use hirefire: https://github.com/meskyanichi/hirefire to manage the worker dynos
+    b. Add hirefire back in Gemfile
+
+4. Set up Update Mailer to send emails from a background task like I did with the Marketing Mailer. Update Mailer
+should include link to the home page to hopefully get people to come back and see what's new.
+
+5. Set up logging with one of the add-ons (favoring papertrail right now:
+ https://devcenter.heroku.com/articles/papertrail) and make sure I log everything for IPNs
+
+6. See about getting our domain added to some non-junk whitelists:
+http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
+Also check out some of these tips:
+http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
+
+7. Add BCD_REDISCLOUD_URL ENV var to Heroku for Redis after I setup the Redis Cloud add-on
 
 
 
@@ -138,6 +153,14 @@ display categories.
 21. I need a public page for 503s, like I have 404s, 422s and 500s
 
 22. Update Users Download Counts admin tool could use a nice search feature instead of the huge dropdown.
+
+23. Figure out how to add a feature to allow a user to get an email about a product when it's back in stock.
+
+24. Add a main flag for image model. Going forward, I can grab the image flagged main for a given product instead of
+just the first image uploaded.
+
+25. Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
+black aren't distinct enough from each other.
 
 ########################################################################################################################
 V1.2 AND BEYOND:

@@ -11,8 +11,8 @@ describe OrderMailer do
     @user = FactoryGirl.create(:user)
     @order = FactoryGirl.create(:order)
     @line_item = FactoryGirl.create(:line_item, :product_id => @product.id, :order_id => @order.id)
-    @mail = OrderMailer.order_confirmation(@user, @order)
-    @physical_mail = OrderMailer.physical_item_purchased(@user,@order)
+    @mail = OrderMailer.order_confirmation(@user.id, @order.id)
+    @physical_mail = OrderMailer.physical_item_purchased(@user.id,@order.id)
   end
 
   describe "sending an order confirmation email to a user" do
@@ -29,7 +29,7 @@ describe OrderMailer do
   describe "sending an order confirmation email to a guest" do
     it "should send guest an email for the order they placed" do
       link = '/guest_download?id=blar'
-      @guest_mail = OrderMailer.guest_order_confirmation(@user,@order,link)
+      @guest_mail = OrderMailer.guest_order_confirmation(@user.id,@order.id,link)
       @guest_mail.subject.should == "Order Confirmation"
       @guest_mail.to.should == [@user.email]
       @guest_mail.from.should == ["no-reply@brickcitydepot.com"]

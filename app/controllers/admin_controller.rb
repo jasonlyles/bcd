@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
   before_filter :authenticate_radmin!
-  before_filter :arrange_products_in_a_nice_way, :only => [:update_users_download_counts]
+  before_filter :arrange_products_in_a_nice_way, :only => [:update_users_download_counts, :new_product_notification]
   skip_before_filter :find_cart
   include Devise::Models::DatabaseAuthenticatable
   layout 'admin'
@@ -160,6 +160,17 @@ class AdminController < ApplicationController
     end
   end
 
+  def send_new_product_notification
+    email = params[:email]
+    queued = Resque.enqueue(ResqueJobs::NewProductNotification, email['product_id'], email['optional_message'])
+    if queued.nil?
+      flash[:notice] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"
+    else
+      flash[:notice] = "Sent new product emails"
+    end
+    redirect_to :new_product_notification
+  end
+
   private
 
   #TODO: Might be nice to figure out a way to return how many emails were actually sent, so it
@@ -168,7 +179,7 @@ class AdminController < ApplicationController
     users.each do |user|
       #Don't send this email to users who don't want emails from us
       unless user.email_preference == 0
-        UpdateMailer.updated_instructions(user, model, message).deliver
+        UpdateMailer.updated_instructions(user.id, model.id, message).deliver
       end
     end
   end

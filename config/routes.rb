@@ -1,3 +1,5 @@
+require 'resque/server'
+
 BrickCity::Application.routes.draw do
 
   #Legacy routes
@@ -42,9 +44,14 @@ BrickCity::Application.routes.draw do
     mount ContactMailer::Preview => 'contact_preview'
     mount UpdateMailer::Preview => 'update_preview'
     mount OrderMailer::Preview => 'order_preview'
+    mount MarketingMailer::Preview => 'marketing_preview'
   end
 
   devise_for :radmins
+  authenticate :radmin do
+    mount Resque::Server.new, :at => '/jobs'
+  end
+
   devise_for :users, :controllers => {:registrations => 'registrations', :sessions => 'sessions', :passwords => 'passwords'}
   devise_scope :user do
     get "account/edit" => "registrations#edit"#, :as => :edit_user_registration
@@ -93,6 +100,8 @@ BrickCity::Application.routes.draw do
   post '/woofay/complete_order', :to => 'admin#complete_order'
   get '/maintenance_mode', :to => 'admin#maintenance_mode', :as => :maintenance_mode
   get '/account_info' => 'admin#account_info', :as => :account_info
+  get '/new_product_notification' => 'admin#new_product_notification', :as => :new_product_notification
+  post '/send_new_product_notification' => 'admin#send_new_product_notification', :as => :send_new_product_notification
   get 'update_users_download_counts' => 'admin#update_users_download_counts', :as => :update_users_download_counts
   get 'order_fulfillment' => 'admin#order_fulfillment', :as => :order_fulfillment
   patch 'update_order_shipping_status' => 'admin#update_order_shipping_status', :as => :update_order_shipping_status
@@ -139,6 +148,7 @@ BrickCity::Application.routes.draw do
   get "physical_order_test", :to => "store#physical_order_email_test"
   get "store", :to => "store#index"
   post "add_to_cart/:product_code", :to => "store#add_to_cart"
+  get "add_to_cart/:product_code", :to => "store#add_to_cart"
   get "cart", :to => "store#cart"
   post "empty_cart", :to => "store#empty_cart"
   post "remove_item_from_cart/:id", :to => "store#remove_item_from_cart"

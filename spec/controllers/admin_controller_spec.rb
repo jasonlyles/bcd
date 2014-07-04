@@ -250,4 +250,22 @@ describe AdminController do
       @user2.downloads[1].remaining.should == 4
     end
   end
+
+  describe "send_new_product_notification" do
+    it "should flash a happy message if Resque.enqueue returns true" do
+      sign_in @radmin
+      Resque.should_receive(:enqueue).and_return(true)
+      post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
+
+      expect(flash[:notice]).to eq('Sent new product emails')
+    end
+
+    it "should flash a concerned message if Resque.enqueue returns nil" do
+      sign_in @radmin
+      Resque.should_receive(:enqueue).and_return(nil)
+      post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
+
+      expect(flash[:notice]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")
+    end
+  end
 end

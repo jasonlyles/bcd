@@ -18,3 +18,4 @@ public/uploads/tmp
 public/parts_lists
 app/assets/stylesheets/.gitkeep
 app/assets/images/category_images/*
+dump.rdb

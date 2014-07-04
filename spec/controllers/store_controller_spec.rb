@@ -93,7 +93,7 @@ describe StoreController do
       @product = FactoryGirl.create(:free_product)
       @cart = Cart.new
       request.env["HTTP_REFERER"] = '/'
-      get :add_to_cart, :product_code => @product.product_code
+      post :add_to_cart, :product_code => @product.product_code
 
       assigns(:cart).cart_items.length.should == 0
       response.should redirect_to('/')
@@ -106,7 +106,7 @@ describe StoreController do
       @product = FactoryGirl.create(:product)
       @cart = Cart.new
       request.env["HTTP_REFERER"] = '/'
-      get :add_to_cart, :product_code => @product.product_code
+      post :add_to_cart, :product_code => @product.product_code
 
       assigns(:cart).cart_items.length.should == 1
       response.should redirect_to('/')
@@ -119,8 +119,8 @@ describe StoreController do
       @product = FactoryGirl.create(:product, :product_type_id => @product_type.id)
       @cart = Cart.new
       request.env["HTTP_REFERER"] = '/'
-      get :add_to_cart, :product_code => @product.product_code
-      get :add_to_cart, :product_code => @product.product_code
+      post :add_to_cart, :product_code => @product.product_code
+      post :add_to_cart, :product_code => @product.product_code
 
       assigns(:cart).cart_items.length.should == 1
       response.should redirect_to('/')
@@ -130,7 +130,7 @@ describe StoreController do
     it "should redirect back with a nasty notice if an invalid product code is passed in" do
       @cart = Cart.new
       request.env["HTTP_REFERER"] = '/'
-      get :add_to_cart, :product_code => "Shawshank"
+      post :add_to_cart, :product_code => "Shawshank"
 
       assigns(:cart).cart_items.length.should == 0
       response.should redirect_to('/')

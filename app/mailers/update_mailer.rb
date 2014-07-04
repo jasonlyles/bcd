@@ -1,11 +1,11 @@
-class UpdateMailer < ActionMailer::Base
-  default :from => "no-reply@brickcitydepot.com"
+class UpdateMailer < AsyncMailer
+  default :from => "Brick City Depot <no-reply@brickcitydepot.com>"
   layout 'base_email'
 
-  def updated_instructions(user, model, message)
+  def updated_instructions(user_id, model_id, message)
     @host = Rails.application.config.web_host
-    @user = user
-    @model = model
+    @user = User.find(user_id)
+    @model = Product.find(model_id)
     @message = message
     @hide_unsubscribe = true
 
@@ -20,7 +20,7 @@ if Rails.env.development?
       @model = Product.first
       message = "It was broken, so we fixed it."
 
-      UpdateMailer.updated_instructions(@user, @model, message)
+      UpdateMailer.updated_instructions(@user.id, @model.id, message)
     end
   end
 end
