@@ -9,12 +9,6 @@ describe ApplicationHelper do
     end
   end
 
-  describe "string_to_snake_case" do
-    it "should replace the spaces in a string with underscores" do
-      helper.string_to_snake_case("BLAR blar BLAR").should == "blar_blar_blar"
-    end
-  end
-
   describe "featured_item" do
     it "should get a random product for featuring" do
       @product_type = FactoryGirl.create(:product_type)

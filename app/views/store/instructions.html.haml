@@ -8,6 +8,6 @@
       %tr
         - categories.each do |category|
           %td
-            = link_to image_tag("/assets/category_images/#{string_to_snake_case(category.name)}_logo.png"), {:controller => :store, :action => :categories, :name => category.name}
+            = link_to image_tag("/assets/category_images/#{category.name.to_snake_case}_logo.png"), {:controller => :store, :action => :categories, :name => category.name}
             %br
             %p #{category.description}

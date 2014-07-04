@@ -17,11 +17,11 @@
                 .thumb_image_div
                   - image = p.images
                   - image_url = image[0].url.thumb.url unless image.blank?
-                  = link_to(image_tag(image_url), {:action => :product_details, :product_code => p.product_code, :product_name => string_to_snake_case(p.name)}, :class => 'image_link') if !image_url.blank?
+                  = link_to(image_tag(image_url), {:action => :product_details, :product_code => p.product_code, :product_name => p.name.to_snake_case}, :class => 'image_link') if !image_url.blank?
                 %br
                 .thumb_details
                   .model_name
-                    = link_to p.name, {:action => :product_details, :product_code => p.product_code, :product_name => string_to_snake_case(p.name)}
+                    = link_to p.name, {:action => :product_details, :product_code => p.product_code, :product_name => p.name.to_snake_case}
                   %b Model #:
                   = p.product_code
                   %br

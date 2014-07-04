@@ -46,10 +46,4 @@ module ApplicationHelper
      :site_name => 'Brick City Depot',
      :url => request.original_url}
   end
-
-  def string_to_snake_case(string)
-    new_string = string.downcase
-    new_string = new_string.gsub(' ','_')
-    new_string
-  end
 end

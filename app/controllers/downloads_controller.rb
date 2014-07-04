@@ -25,7 +25,7 @@ class DownloadsController < ApplicationController
         end
       elsif products.length == 0 && @product.is_free? #User has no products, and is trying to download parts list for free instructions
         flash[:alert] = "You need to have ordered something first, before you can get these free instructions."
-        return redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
+        return redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => @product.name.to_snake_case
       end
       unless products.include?(@parts_list.product_id)
         return redirect_cheater_to_product_page
@@ -78,7 +78,7 @@ class DownloadsController < ApplicationController
       redirect_to :back, :notice => "You have already reached your maximum allowed number of downloads for #{@product.base_product_code} #{@product.name}.", :only_path => true
     elsif @downloads_remaining.blank? && !@product.is_free?
       flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download them."
-      redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
+      redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => @product.name.to_snake_case
     else
       deliver_download(@product.pdf.path)
     end
@@ -137,7 +137,7 @@ class DownloadsController < ApplicationController
 
   def redirect_cheater_to_product_page
     flash[:alert] = "Nice try. You can buy instructions for this model on this page, and then you can download the parts lists."
-    redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => string_to_snake_case(@product.name)
+    redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => @product.name.to_snake_case
   end
 
   def download_from_amazon(file)

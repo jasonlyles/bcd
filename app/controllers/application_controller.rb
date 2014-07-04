@@ -105,12 +105,6 @@ class ApplicationController < ActionController::Base
     session[:cart_id] = @cart.id
   end
 
-  def string_to_snake_case(string)
-    new_string = string.downcase
-    new_string = new_string.gsub(' ','_')
-    new_string
-  end
-
   def get_categories
     @categories = Category.find_live_categories
     @alternatives = Product.alternative_builds

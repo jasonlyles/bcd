@@ -33,13 +33,13 @@
             -if product.images[0]
               -if product.images[0].url
                 - image_url = product.images[0].url
-                = link_to(image_tag(image_url.thumb.url), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => string_to_snake_case(product.name)}, :class => 'image_link') unless image_url.blank?
+                = link_to(image_tag(image_url.thumb.url), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless image_url.blank?
           %td.table_cell_spacer
           %td
             %b= "#{product.product_code} #{product.name}"
             %br
             = snippet(product.description)
-            = link_to "More", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => string_to_snake_case(product.name)}
+            = link_to "More", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}
 .under_construction.float_left
   .news_item_header.drop_shadow
     %h3 New site still under construction!

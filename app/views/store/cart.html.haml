@@ -17,7 +17,7 @@
           - image = item.product.images[0]
           - image_url = image.url.thumb if !image.blank?
           %td.left_most_cell= image_tag(image_url.url) if !image_url.blank?
-          %td= link_to "#{item.product.product_code} #{item.product.name}", {:action => :product_details, :product_code => item.product.product_code, :product_name => string_to_snake_case(item.product.name)}
+          %td= link_to "#{item.product.product_code} #{item.product.name}", {:action => :product_details, :product_code => item.product.product_code, :product_name => item.product.name.to_snake_case}
           %td #{item.product.product_type.name}
           %td #{number_to_currency(item.price)}
           %td.right_most_cell
