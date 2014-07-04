@@ -168,7 +168,7 @@ Switch.create!(:switch=>"maintenance_mode")
 if Rails.env.development?
   #Add Users
   user1 = User.create!(:email=>"lylesjt@yahoo.com",:password=>"password",:password_confirmation=>"password", :tos_accepted => true)
-  user2 = User.create!(:email=>"jason_lyles@symantec.com",:password=>"password",:password_confirmation=>"password", :tos_accepted => true)
+  user2 = User.create!(:email=>"crazyjulio@juno.com",:password=>"password",:password_confirmation=>"password", :tos_accepted => true)
   user3 = User.create!(:email=>"lylesbk@yahoo.com",:password=>"password",:password_confirmation=>"password", :tos_accepted => true)
 
   #Add Orders
