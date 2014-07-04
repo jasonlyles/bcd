@@ -1,1 +1,8 @@
-= yield
+<%= yield %>
+
+Privacy Policy: <%= "#{@host}/privacy_policy" %>
+Brick City Depot: <%= @host %>
+Account Preferences: <%= "#{@host}/account/edit" %>
+<% unless defined?(@hide_unsubscribe) %>
+Unsubscribe: <%= "#{@host}/unsubscribe?id=#{@user.guid}&token=#{@user.unsubscribe_token}" %>
+<% end %>
