@@ -28,15 +28,13 @@ http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-
 Also check out some of these tips:
 http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
 
-7. Add BCD_REDISCLOUD_URL ENV var to Heroku for Redis after I setup the Redis Cloud add-on
+7. Favicon
 
-8. Favicon
+8. robots.txt
 
-9. robots.txt
+9. sitemap https://github.com/kjvarga/sitemap_generator
 
-10. sitemap https://github.com/kjvarga/sitemap_generator
-
-11. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
+10. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
 
 
 
