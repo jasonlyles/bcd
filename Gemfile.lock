@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/jasonlyles/hirefire.git
+  revision: 77b5bf4bc955345089d19af5116a3428a4658eea
+  specs:
+    hirefire (0.1.4)
+      heroku (>= 1.4)
+      rush (~> 0.6.7)
+
+GIT
   remote: git://github.com/thomasdavis/aws-s3.git
   revision: 7e8fd7507098b64da9b3bf207d099011a7a9f051
   specs:
@@ -49,6 +57,11 @@ GEM
       mime-types
       xml-simple
     bcrypt (3.1.7)
+    better_errors (1.1.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     buftok (0.2.0)
     builder (3.1.4)
     cane (2.6.2)
@@ -90,6 +103,7 @@ GEM
       compass (>= 0.12.2)
       sprockets (<= 2.11.0)
     daemons (1.1.9)
+    debug_inspector (0.0.2)
     devise (3.2.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -174,6 +188,15 @@ GEM
       haml (>= 3.1, < 5.0)
       railties (>= 4.0.1)
     hashie (2.1.1)
+    heroku (3.9.1)
+      heroku-api (~> 0.3.17)
+      launchy (>= 0.3.2)
+      netrc (~> 0.7.7)
+      rest-client (~> 1.6.1)
+      rubyzip
+    heroku-api (0.3.18)
+      excon (~> 0.27)
+      multi_json (~> 1.8)
     hike (1.2.3)
     hirb (0.7.2)
     hpricot (0.8.6)
@@ -241,6 +264,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
+    netrc (0.7.7)
     newrelic_rpm (3.8.1.221)
     nifty-generators (0.4.6)
     nokogiri (1.6.2.1)
@@ -363,12 +387,16 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.6.1)
       sexp_processor (~> 4.1)
+    rubyzip (1.1.6)
+    rush (0.6.8)
+      session
     sass (3.2.19)
     sass-rails (4.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.2.0)
       sprockets (~> 2.8, <= 2.11.0)
       sprockets-rails (~> 2.0)
+    session (3.2.0)
     sexp_processor (4.4.3)
     simple_oauth (0.2.0)
     simplecov (0.8.2)
@@ -395,8 +423,6 @@ GEM
       activesupport (< 4.1)
       sprockets-rails (>= 1.0.0)
     sqlite3 (1.3.9)
-    sqlite3-ruby (1.3.3)
-      sqlite3 (>= 1.3.3)
     subexec (0.2.3)
     thin (1.6.2)
       daemons (>= 1.0.9)
@@ -437,6 +463,8 @@ DEPENDENCIES
   activerecord-session_store
   aws-s3!
   aws-ses
+  better_errors
+  binding_of_caller
   carrierwave
   coffee-rails
   compass-rails
@@ -450,6 +478,7 @@ DEPENDENCIES
   guard-livereload
   guard-rspec
   haml-rails
+  hirefire!
   hpricot
   jquery-rails
   kaminari
@@ -478,7 +507,7 @@ DEPENDENCIES
   simplecov
   sprockets (= 2.11.0)
   sprockets_better_errors
-  sqlite3-ruby
+  sqlite3
   thin
   twitter
   uglifier

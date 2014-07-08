@@ -13,10 +13,6 @@ When putting app in maint mode, use `heroku maintenance:on`
 Do your work
 Take it back out of maint. mode with `heroku maintenance:off`
 
-GEMS USED
-
-Exception Notification https://github.com/smartinez87/exception_notification
-
 JAVASCRIPT USED:
 
 PrettyPhoto:
@@ -26,6 +22,8 @@ NOTES
 
 For multiple file uploads in a model with a carrierwave mount and a nested form, I used the instructions in this:
 http://lucapette.com/rails/multiple-files-upload-with-carrierwave-and-nested_form/
+
+If I change my heroku login info, I need to update the Hirefire config settings also
 
 HTML EMAILS
 

@@ -30,6 +30,14 @@ http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.
 
 7. Add BCD_REDISCLOUD_URL ENV var to Heroku for Redis after I setup the Redis Cloud add-on
 
+8. Favicon
+
+9. robots.txt
+
+10. sitemap https://github.com/kjvarga/sitemap_generator
+
+11. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
+
 
 
 GETTING READY FOR PROD #######################################################
@@ -84,82 +92,80 @@ IMMEDIATELY AFTER LAUNCH:
 
 V1.1: (Revisit this after 1.0 gets launched.)
 
-1. Set up a sitemap. Check out https://github.com/kjvarga/sitemap_generator
-
-2. Make it so that the product_details action renders a page that says "We can't find that item, check out these other great items."
+1. Make it so that the product_details action renders a page that says "We can't find that item, check out these other great items."
 instead of rendering a 404 if we can't find the item.
 
-3. Some way of creating discounts for a product, or multiple products, or for an entire category/subcategory
+2. Some way of creating discounts for a product, or multiple products, or for an entire category/subcategory
 
-4. Have a way for customers to rate a product and leave comments about it.
+3. Have a way for customers to rate a product and leave comments about it.
 
-5. Add expires_in shtuff to pages that don't have user-specific info, or things that don't change much. Examples would be /,
+4. Add expires_in shtuff to pages that don't have user-specific info, or things that don't change much. Examples would be /,
    the product details pages, FAQ, contact, etc. This can avoid trips to the database for stuff that doesn't change often.
    Can check this out here: https://devcenter.heroku.com/articles/http-caching-ruby-rails
 
-6. I might want a way to sweep addresses out of the database after an order has been completed for 60 days. That minimizes
+5. I might want a way to sweep addresses out of the database after an order has been completed for 60 days. That minimizes
    a users info in our database.
 
-7. Set up something for the instructions products model that keeps track of the version of the instructions, or at least
+6. Set up something for the instructions products model that keeps track of the version of the instructions, or at least
    the parts lists. That way, I can add something to the html parts list that does a check of BCD.com when loading, looking for the latest
    version of the parts list. Send the version number to BCD, and if there's a newer version of the parts list, return the new
    version number, and the updates. (Replaced so and so brick with so and so) so that the user can decide if they want to
    upgrade or not. This will require setting up a new model for Updates related to instructions/parts lists
 
-8. Look into adding other countries for shipping, and see what that entails, what fields I might have to add/change.
+7. Look into adding other countries for shipping, and see what that entails, what fields I might have to add/change.
    Make sure I'm in synch with what paypal returns.
 
-9. Work on an auto-logout for timed out sessions. Through devise, I have a mechanism to expire sessions, but the site doesn't
+8. Work on an auto-logout for timed out sessions. Through devise, I have a mechanism to expire sessions, but the site doesn't
 actually redirect users to the home page, so it's not obvious they've timed out until their next request. Is this necessary,
 or just nice to have?
 
-10. For the sake of smoothness, it might make sense to have TOS be its own page. That way, a guest can enter their email,
+9. For the sake of smoothness, it might make sense to have TOS be its own page. That way, a guest can enter their email,
     and I don't have to give the impression that they need to check the TOS box again. Just a thought.
 
-11. Maybe make a fun maintenance page, or image for maintenance mode.
+10. Maybe make a fun maintenance page, or image for maintenance mode.
 
-12. I just added the protected_attributes gem for trying to get on rails 4 quickly. Work on removing that by removing
+11. I just added the protected_attributes gem for trying to get on rails 4 quickly. Work on removing that by removing
 attr_accessible and setting up strong params. After I've done this, try to remove this line from
 config/initializers/session_store.rb: ActiveRecord::SessionStore::Session.attr_accessible :data, :session_id
 
-13. Had to comment out brakeman in Gemfile. Try adding it back periodically to see if it will play nice with the version
+12. Had to comment out brakeman in Gemfile. Try adding it back periodically to see if it will play nice with the version
 of tilt I have installed
 
-14. Fill out details for the Lego neighborhood extras page.
+13. Fill out details for the Lego neighborhood extras page.
 
-15. store/products page, work on the condition that checks if product_type name is Instructions. Eventually work on
+14. store/products page, work on the condition that checks if product_type name is Instructions. Eventually work on
 making that check if the category has subcategories, and if so, display subcategories. If there are categories,
 display categories.
 
-16. I really need to spend some time cleaning and DRYing up my tests.
+15. I really need to spend some time cleaning and DRYing up my tests.
 
-17. Look into pros/cons of moving from thin to unicorn on heroku
+16. Look into pros/cons of moving from thin to unicorn on heroku
 
-18. Work on adding titles to most of the customer facing pages. Also, I might want to do a little more customization
+17. Work on adding titles to most of the customer facing pages. Also, I might want to do a little more customization
    on the facebook meta tags to reflect the current page. Maybe the product pages could have the image be the medium image.
    The description could be the product description, etc. If I'm going to do that, I'm going to need to feed that data in
    on a per page basis via some helper. I think I may have to do one or more content_for-style helpers, feed them args
    and if those args are populated, use the values, else use a default. Similar to the way I set up the title in the
    application layout.
 
-19. Think about adding a Bricklink Seller model. This could be the basis of a preferred BL seller for a given model. Say
+18. Think about adding a Bricklink Seller model. This could be the basis of a preferred BL seller for a given model. Say
     I arranged deals with various BL sellers to try and keep in stock the pieces needed to make a model. Then I could
     create a BL Seller, and have a join table with a BL seller ID and product ID  to tie preferred BL sellers to a given
     model.
 
-20. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
+19. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
     help me clean up testing code also.
 
-21. I need a public page for 503s, like I have 404s, 422s and 500s
+20. I need a public page for 503s, like I have 404s, 422s and 500s
 
-22. Update Users Download Counts admin tool could use a nice search feature instead of the huge dropdown.
+21. Update Users Download Counts admin tool could use a nice search feature instead of the huge dropdown.
 
-23. Figure out how to add a feature to allow a user to get an email about a product when it's back in stock.
+22. Figure out how to add a feature to allow a user to get an email about a product when it's back in stock.
 
-24. Add a main flag for image model. Going forward, I can grab the image flagged main for a given product instead of
+23. Add a main flag for image model. Going forward, I can grab the image flagged main for a given product instead of
 just the first image uploaded.
 
-25. Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
+24. Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
 black aren't distinct enough from each other.
 
 ########################################################################################################################

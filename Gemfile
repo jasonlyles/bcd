@@ -28,7 +28,7 @@ gem 'rake'
 gem 'sprockets_better_errors'
 gem 'resque'
 gem 'resque_mailer'
-#gem 'hirefire' #This should come after resque gem
+gem 'hirefire', github: 'jasonlyles/hirefire' #This should come after resque gem
 
 #assets
 gem 'sass-rails'
@@ -55,12 +55,14 @@ gem 'thin'
 # end
 
 group :development, :test do
-  gem 'sqlite3-ruby', :require => 'sqlite3'
-  gem "nifty-generators"
+  gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'rb-fsevent', :require => false #if RUBY_PLATFORM =~ /darwin/i
   gem 'guard-livereload'
   gem 'guard-compass', :require => false
   gem 'rack-mini-profiler'
+  gem 'sqlite3'
+  gem "nifty-generators"
   gem 'guard-rspec'
   gem "factory_girl_rails"
   gem "factory_girl_generator"
