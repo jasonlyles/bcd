@@ -1,6 +1,6 @@
 module ResqueJobs
   class NewProductNotification
-    @queue = :new_product_notifications
+    @queue = :batchmailer
 
     def self.perform(product_id, message=nil)
       users = User.who_get_all_emails
