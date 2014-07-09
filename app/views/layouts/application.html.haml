@@ -10,6 +10,7 @@
     %meta{:property => "fb:app_id", :content => "#{opengraph_metadata[:app_id]}" }/
     %meta{:property => "og:site_name", :content => "#{opengraph_metadata[:site_name]}" }/
     %meta{:property => "og:url", :content => "#{opengraph_metadata[:url]}" }/
+    = favicon_link_tag 'favicon.ico'
     %title
       = content_for?(:title) ? yield(:title) : "Brick City Depot"
     <!--[if lt IE 9]>
