@@ -2,6 +2,7 @@ require 'resque/server'
 
 BrickCity::Application.routes.draw do
 
+  mount_roboto
   #Legacy routes
   get "for-sale", :to => "static#legacy_instructions", :constraints => {:format => 'html'}
   get "instructions", :to => "static#legacy_instructions", :constraints => {:format => 'html'}

@@ -29,6 +29,7 @@ gem 'sprockets_better_errors'
 gem 'resque'
 gem 'resque_mailer'
 gem 'heroku-api'
+gem 'roboto'
 
 #assets
 gem 'sass-rails'
