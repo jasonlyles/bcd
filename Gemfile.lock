@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/jasonlyles/hirefire.git
-  revision: 77b5bf4bc955345089d19af5116a3428a4658eea
-  specs:
-    hirefire (0.1.4)
-      heroku (>= 1.4)
-      rush (~> 0.6.7)
-
-GIT
   remote: git://github.com/thomasdavis/aws-s3.git
   revision: 7e8fd7507098b64da9b3bf207d099011a7a9f051
   specs:
@@ -115,6 +107,8 @@ GEM
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
+    dotenv-rails (0.11.1)
+      dotenv (= 0.11.1)
     em-websocket (0.5.1)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
@@ -188,12 +182,6 @@ GEM
       haml (>= 3.1, < 5.0)
       railties (>= 4.0.1)
     hashie (2.1.1)
-    heroku (3.9.1)
-      heroku-api (~> 0.3.17)
-      launchy (>= 0.3.2)
-      netrc (~> 0.7.7)
-      rest-client (~> 1.6.1)
-      rubyzip
     heroku-api (0.3.18)
       excon (~> 0.27)
       multi_json (~> 1.8)
@@ -264,7 +252,6 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
-    netrc (0.7.7)
     newrelic_rpm (3.8.1.221)
     nifty-generators (0.4.6)
     nokogiri (1.6.2.1)
@@ -387,16 +374,12 @@ GEM
       sexp_processor (~> 4.0)
     ruby_parser (3.6.1)
       sexp_processor (~> 4.1)
-    rubyzip (1.1.6)
-    rush (0.6.8)
-      session
     sass (3.2.19)
     sass-rails (4.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.2.0)
       sprockets (~> 2.8, <= 2.11.0)
       sprockets-rails (~> 2.0)
-    session (3.2.0)
     sexp_processor (4.4.3)
     simple_oauth (0.2.0)
     simplecov (0.8.2)
@@ -469,6 +452,7 @@ DEPENDENCIES
   coffee-rails
   compass-rails
   devise
+  dotenv-rails
   exception_notification
   factory_girl_generator
   factory_girl_rails
@@ -478,7 +462,7 @@ DEPENDENCIES
   guard-livereload
   guard-rspec
   haml-rails
-  hirefire!
+  heroku-api
   hpricot
   jquery-rails
   kaminari

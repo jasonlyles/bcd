@@ -28,7 +28,7 @@ gem 'rake'
 gem 'sprockets_better_errors'
 gem 'resque'
 gem 'resque_mailer'
-gem 'hirefire', github: 'jasonlyles/hirefire' #This should come after resque gem
+gem 'heroku-api'
 
 #assets
 gem 'sass-rails'
@@ -55,6 +55,7 @@ gem 'thin'
 # end
 
 group :development, :test do
+  gem 'dotenv-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'rb-fsevent', :require => false #if RUBY_PLATFORM =~ /darwin/i

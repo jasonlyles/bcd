@@ -9,32 +9,29 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 2. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-3. Add a tool to allow us to create marketing emails, such as for the release of a new model. I think this should just
-use existing info about a product, and should maybe just be a button available on the product page. Click to notify
- users about this new product. Only notify those users who want to be notified. Once the email has been sent, set a
- flag saying the model has been introduced and hide the button. Pull a picture for the product and insert it into the
- email, and pull the description, price, etc. Use this info to craft the email.
-    a. Use hirefire: https://github.com/meskyanichi/hirefire to manage the worker dynos
-    b. Add hirefire back in Gemfile
-
-4. Set up Update Mailer to send emails from a background task like I did with the Marketing Mailer. Update Mailer
+3. Set up Update Mailer to send emails from a background task like I did with the Marketing Mailer. Update Mailer
 should include link to the home page to hopefully get people to come back and see what's new.
 
-5. Set up logging with one of the add-ons (favoring papertrail right now:
+4. Set up logging with one of the add-ons (favoring papertrail right now:
  https://devcenter.heroku.com/articles/papertrail) and make sure I log everything for IPNs
 
-6. See about getting our domain added to some non-junk whitelists:
+5. See about getting our domain added to some non-junk whitelists:
 http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
 Also check out some of these tips:
 http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
 
-7. Favicon
+6. Favicon
 
-8. robots.txt
+7. robots.txt
 
-9. sitemap https://github.com/kjvarga/sitemap_generator
+8. sitemap https://github.com/kjvarga/sitemap_generator
 
-10. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
+9. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
+or maybe use this: https://github.com/dwilkie/carrierwave_direct
+
+10. Move assets to S3 and serve using asset_sync gem
+
+11. Look into adding some caching using memcached
 
 
 

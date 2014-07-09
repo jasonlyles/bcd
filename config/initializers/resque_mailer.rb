@@ -1,4 +1,5 @@
 class AsyncMailer < ActionMailer::Base
+  extend TempAgency
   include Resque::Mailer
 end
 
