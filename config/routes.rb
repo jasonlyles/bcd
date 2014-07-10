@@ -50,7 +50,8 @@ BrickCity::Application.routes.draw do
 
   devise_for :radmins
   authenticate :radmin do
-    mount Resque::Server.new, :at => '/jobs'
+    mount Resque::Server.new, :at => '/jobs', as: 'jobs'
+    get '/jobs/bcd admin' => 'admin#index' #Trick to add a link back to BCD admin from Resque dashboard
   end
 
   devise_for :users, :controllers => {:registrations => 'registrations', :sessions => 'sessions', :passwords => 'passwords'}
