@@ -232,22 +232,20 @@ describe AdminController do
   end
 
   describe "update_downloads_for_user" do
-    it "should update all user's download counts" do
-      FactoryGirl.create(:category)
-      FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:product)
-      @product2 = FactoryGirl.create(:product, :name => "Awesomeness", :product_code => "XX001")
-      @user = FactoryGirl.create(:user)
-      @user2 = FactoryGirl.create(:user, :email => "chuckles@mccrackin.com")
-      @download = FactoryGirl.create(:download)
-      @download2 = FactoryGirl.create(:download, :user_id => @user2.id)
-      @download3 = FactoryGirl.create(:download, :user_id => @user2.id, :product_id => @product2.id)
+    it "should flash a happy message if Resque.enqueue returns true" do
       sign_in @radmin
-      get :update_downloads_for_user, :user => {:model => @product.id}, :format => :js
+      Resque.should_receive(:enqueue).and_return(true)
+      get :update_downloads_for_user, :user => {:model => 1}
 
-      @user.downloads[0].remaining.should == 5
-      @user2.downloads[0].remaining.should == 5
-      @user2.downloads[1].remaining.should == 4
+      expect(flash[:notice]).to eq("Sending product update emails")
+    end
+
+    it "should flash a concerned message if Resque.enqueue returns nil" do
+      sign_in @radmin
+      Resque.should_receive(:enqueue).and_return(nil)
+      get :update_downloads_for_user, :user => {:model => 1}
+
+      expect(flash[:notice]).to eq("Couldn't queue mail jobs. Check out /jobs and see what's wrong")
     end
   end
 
@@ -257,7 +255,7 @@ describe AdminController do
       Resque.should_receive(:enqueue).and_return(true)
       post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
 
-      expect(flash[:notice]).to eq('Sent new product emails')
+      expect(flash[:notice]).to eq('Sending new product emails')
     end
 
     it "should flash a concerned message if Resque.enqueue returns nil" do

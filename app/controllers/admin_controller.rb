@@ -74,21 +74,6 @@ class AdminController < ApplicationController
     redirect_to :back
   end
 
-  #TODO: I think I want to eventually split this into 2 separate actions, where I let the admin first update download
-  #counts and then once that action is completed, take them to a new page where they will have a button that lets them
-  #email the affected users
-  def update_downloads_for_user
-    @model = Product.find(params[:user][:model])
-    @message = params[:user][:message]
-    @users = Download.update_all_users_who_have_downloaded_at_least_once(@model.id)
-    if @users.length > 0
-      email_users_about_updated_instructions(@users, @model, @message)
-    end
-    respond_to do |format|
-      format.js
-    end
-  end
-
   # Shipping status = 0 then completed
   # Shipping status = 1 then shipped
   # Shipping status = 2 then ready
@@ -166,23 +151,22 @@ class AdminController < ApplicationController
     if queued.nil?
       flash[:notice] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"
     else
-      flash[:notice] = "Sent new product emails"
+      flash[:notice] = "Sending new product emails"
     end
     redirect_to :new_product_notification
   end
 
-  private
-
-  #TODO: Might be nice to figure out a way to return how many emails were actually sent, so it
-  # can be displayed on the admin page
-  def email_users_about_updated_instructions(users, model, message)
-    users.each do |user|
-      #Don't send this email to users who don't want emails from us
-      unless user.email_preference == 0
-        UpdateMailer.updated_instructions(user.id, model.id, message).deliver
-      end
+  def update_downloads_for_user
+    queued = Resque.enqueue(ResqueJobs::ProductUpdateNotification, params[:user][:model], params[:user][:message])
+    if queued.nil?
+      flash[:notice] = "Couldn't queue mail jobs. Check out /jobs and see what's wrong"
+    else
+      flash[:notice] = "Sending product update emails"
     end
+    redirect_to :update_users_download_counts
   end
+
+  private
 
   def arrange_products_in_a_nice_way
     products = Product.find_products_for_sale

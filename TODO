@@ -9,25 +9,22 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 2. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-3. Set up Update Mailer to send emails from a background task like I did with the Marketing Mailer. Update Mailer
-should include link to the home page to hopefully get people to come back and see what's new.
-
-4. Set up logging with one of the add-ons (favoring papertrail right now:
+3. Set up logging with one of the add-ons (favoring papertrail right now:
  https://devcenter.heroku.com/articles/papertrail) and make sure I log everything for IPNs
 
-5. See about getting our domain added to some non-junk whitelists:
+4. See about getting our domain added to some non-junk whitelists:
 http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
 Also check out some of these tips:
 http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
 
-6. sitemap https://github.com/kjvarga/sitemap_generator
+5. sitemap https://github.com/kjvarga/sitemap_generator
 
-7. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
+6. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
 or maybe use this: https://github.com/dwilkie/carrierwave_direct
 
-8. Move assets to S3 and serve using asset_sync gem
+7. Move assets to S3 and serve using asset_sync gem
 
-9. Look into adding some caching using memcached
+8. Look into adding some caching using memcached
 
 
 

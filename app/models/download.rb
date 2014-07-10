@@ -32,9 +32,9 @@ class Download < ActiveRecord::Base
     downloads.each do |download|
       download.remaining += 1
       download.save
-      users << download.user
+      #Don't return the user if the user doesn't want emails. The users being returned will be sent emails
+      users << download.user unless download.user.email_preference == 0
     end
-    #return an array of affected users, and their email preference
     users
   end
 

@@ -10,7 +10,7 @@
   around the message you write letting users know what has changed.
 %br
 %br
-= form_for(:user, :url => {:action => :update_downloads_for_user},:remote => true) do |f|
+= form_for(:user, :url => {:action => :update_downloads_for_user}) do |f|
   .field
     = f.label :model
     %br
@@ -18,8 +18,6 @@
   .field
     = f.label :message
     %br
-    = f.text_area :message, placeholder: "This model was updated because..."
+    = f.text_area :message, rows: 15, cols:35 ,placeholder: "This model was updated because..."
   .actions
     = f.submit 'Update Count', :id => 'update_users_download_count_user_search_submit'
-%br
-#update_info
