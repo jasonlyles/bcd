@@ -1,5 +1,6 @@
 class Update < ActiveRecord::Base
   mount_uploader :image, ImageUploader
+  process_in_background :image
   attr_accessible :title, :description, :body, :image, :image_cache, :remove_image, :image_align, :created_at, :live, :link
 
   validates :title, :presence => true

@@ -23,7 +23,10 @@
   %b Images:
   %br
   - @product.images.each do |image|
-    =image_tag(image.url.thumb.url)
+    - if image.url_processing?
+      Image available soon...
+    - else
+      =image_tag(image.url.thumb.url)
 %p
   %b Parts Lists:
   %br

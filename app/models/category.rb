@@ -3,6 +3,7 @@ class Category < ActiveRecord::Base
   has_many :products
   has_one :image
   mount_uploader :image, ImageUploader
+  process_in_background :image
 
   attr_accessible :name, :description, :ready_for_public, :image, :image_cache, :remove_image
 

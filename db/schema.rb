@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140524163039) do
+ActiveRecord::Schema.define(version: 20140710140713) do
 
   create_table "advertising_campaigns", force: true do |t|
     t.integer  "partner_id"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.string   "image"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "image_processing", default: false
   end
 
   create_table "downloads", force: true do |t|
@@ -89,6 +90,7 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.string   "location"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "url_processing", default: false
   end
 
   add_index "images", ["category_id"], name: "index_images_on_category_id"
@@ -141,6 +143,7 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.integer  "product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "name_processing", default: false
   end
 
   add_index "parts_lists", ["product_id"], name: "index_parts_lists_on_product_id"
@@ -155,6 +158,7 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.boolean  "digital_product",        default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "image_processing",       default: false
   end
 
   create_table "products", force: true do |t|
@@ -175,6 +179,7 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.string   "youtube_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "pdf_processing",      default: false
   end
 
   add_index "products", ["category_id"], name: "index_products_on_category_id"
@@ -255,10 +260,11 @@ ActiveRecord::Schema.define(version: 20140524163039) do
     t.text     "body"
     t.string   "image_align"
     t.string   "image"
-    t.boolean  "live",        default: false
+    t.boolean  "live",             default: false
     t.string   "link"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "image_processing", default: false
   end
 
   create_table "users", force: true do |t|

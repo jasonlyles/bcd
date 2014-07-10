@@ -18,7 +18,15 @@
   %b Image: (This is basically a preview. If it doesn't look good here. It won't look good on the front page.)
 %div.main_item_div#homepage_slideshow
   .main_item
-    = link_to(image_tag(@update.image), @update.link) if @update.image?
+    - if @update.image?
+      - if @update.image_processing?
+        %br
+        %br
+        %br
+        %b
+          Image is currently being processed. Check back in a few seconds.
+      - else
+        = link_to(image_tag(@update.image), @update.link)
 %br
 = form_for @update do |f|
   - if @update.live?

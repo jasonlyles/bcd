@@ -1,6 +1,7 @@
 class PartsList < ActiveRecord::Base
   belongs_to :product
   mount_uploader :name, PartsListUploader
+  process_in_background :name
 
   attr_accessible :name, :product_id, :parts_list_type, :name_cache, :remove_name
 

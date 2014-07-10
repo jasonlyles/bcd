@@ -19,12 +19,15 @@ http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.
 
 5. sitemap https://github.com/kjvarga/sitemap_generator
 
-6. Add this to push image processing/storage to background jobs: https://github.com/lardawge/carrierwave_backgrounder
-or maybe use this: https://github.com/dwilkie/carrierwave_direct
+6. Move assets to S3 and serve using asset_sync gem
 
-7. Move assets to S3 and serve using asset_sync gem
+7. Look into adding some caching using memcached
 
-8. Look into adding some caching using memcached
+8. Look into using this as a way of figuring out how many emails were sent for batch email jobs:
+https://github.com/quirkey/resque-status
+
+9. Fix uploading multiple images issue. If a product already has an image, and I go to the edit form to add more
+images, I can't. If the product has no images, I can add as many as I want to the form.
 
 
 

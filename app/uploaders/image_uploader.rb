@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class ImageUploader < CarrierWave::Uploader::Base
-
+  include ::CarrierWave::Backgrounder::Delay
   # Include RMagick or ImageScience support:
   include CarrierWave::MiniMagick
   # include CarrierWave::ImageScience

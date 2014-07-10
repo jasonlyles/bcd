@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 class PdfUploader < CarrierWave::Uploader::Base
-
+  include ::CarrierWave::Backgrounder::Delay
   # Include RMagick or ImageScience support:
   # include CarrierWave::RMagick
   # include CarrierWave::ImageScience
