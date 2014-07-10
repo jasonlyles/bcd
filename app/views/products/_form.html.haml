@@ -69,13 +69,13 @@
     %br
     %br
     .field
-      - field_count = 0
+      - pl_field_count = 0
       = f.fields_for :parts_lists do |pl_form|
-        - field_count += 1
+        - pl_field_count += 1
         %p
           = pl_form.label :name, "Parts List"
           %br
-          - if product.parts_lists && product.parts_lists.length >= field_count
+          - if product.parts_lists && product.parts_lists.length >= pl_field_count
             = pl_form.text_field :name, :disabled => true
           - else
             = pl_form.file_field :name

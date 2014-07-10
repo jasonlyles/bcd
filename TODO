@@ -26,9 +26,6 @@ http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.
 8. Look into using this as a way of figuring out how many emails were sent for batch email jobs:
 https://github.com/quirkey/resque-status
 
-9. Fix uploading multiple images issue. If a product already has an image, and I go to the edit form to add more
-images, I can't. If the product has no images, I can add as many as I want to the form.
-
 
 
 GETTING READY FOR PROD #######################################################
