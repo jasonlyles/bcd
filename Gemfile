@@ -29,6 +29,7 @@ gem 'rake'
 gem 'sprockets_better_errors'
 gem 'resque'
 gem 'resque_mailer'
+gem 'resque-status'
 gem 'heroku-api'
 gem 'roboto'
 
@@ -75,6 +76,10 @@ group :development, :test do
   gem 'metric_fu'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
+end
+
+group :test do
+  gem 'mock_redis'
 end
 
 group :profile do

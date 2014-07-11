@@ -1,5 +1,6 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
+require 'mock_redis'
 SimpleCov.start 'rails' do
   add_filter 'app/uploaders/'
   add_filter 'vendor/gems/'
@@ -10,6 +11,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 
+Resque.redis = MockRedis.new
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

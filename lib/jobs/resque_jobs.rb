@@ -9,15 +9,20 @@ module ResqueJobs
   class NewProductNotification
     extend TempAgency
     extend ResqueJobs
+    include Resque::Plugins::Status
     @queue = :batchmailer
 
-    def self.perform(product_id, message=nil)
+    def perform
+      product_id = options['product_id']
+      message = options['message']
       users = User.who_get_all_emails
       product = Product.find(product_id)
       product_type = product.product_type.name
       image_url = product.main_image.medium
       recipient = Struct.new(:email, :guid, :unsubscribe_token)
-      users.each do |user|
+      total = users.count
+      users.each_with_index do |user,index|
+        at(index+1,total,"At #{index+1} of #{total}")
         MarketingMailer.new_product_notification(product, product_type, image_url, recipient.new(user[0],user[1],user[2]), message).deliver
         #Trying a simple throttle to make sure I'm not sending more than 5 emails/second so I don't run afoul
         # of my Amazon SES limits
@@ -29,17 +34,22 @@ module ResqueJobs
   class ProductUpdateNotification
     extend TempAgency
     extend ResqueJobs
+    include Resque::Plugins::Status
     @queue = :batchmailer
 
-    def self.perform(product_id, message)
+    def perform
+      product_id = options['product_id']
+      message = options['message']
       users = Download.update_all_users_who_have_downloaded_at_least_once(product_id)
       if users.length > 0
         self.email_users_about_updated_instructions(users, product_id, message)
       end
     end
 
-    def self.email_users_about_updated_instructions(users, product_id, message)
-      users.each do |user|
+    def email_users_about_updated_instructions(users, product_id, message)
+      total = users.count
+      users.each_with_index do |user,index|
+        at(index+1,total,"At #{index+1} of #{total}")
         UpdateMailer.updated_instructions(user.id, product_id, message).deliver
         #Trying a simple throttle to make sure I'm not sending more than 5 emails/second so I don't run afoul
         # of my Amazon SES limits

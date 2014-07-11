@@ -147,7 +147,7 @@ class AdminController < ApplicationController
 
   def send_new_product_notification
     email = params[:email]
-    queued = Resque.enqueue(ResqueJobs::NewProductNotification, email['product_id'], email['optional_message'])
+    queued = ResqueJobs::NewProductNotification.create({product_id: email['product_id'], message: email['optional_message']})
     if queued.nil?
       flash[:notice] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"
     else
@@ -157,7 +157,7 @@ class AdminController < ApplicationController
   end
 
   def update_downloads_for_user
-    queued = Resque.enqueue(ResqueJobs::ProductUpdateNotification, params[:user][:model], params[:user][:message])
+    queued = ResqueJobs::ProductUpdateNotification.create({product_id: params[:user][:model], message: params[:user][:message]})
     if queued.nil?
       flash[:notice] = "Couldn't queue mail jobs. Check out /jobs and see what's wrong"
     else

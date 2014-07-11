@@ -23,9 +23,6 @@ http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.
 
 7. Look into adding some caching using memcached
 
-8. Look into using this as a way of figuring out how many emails were sent for batch email jobs:
-https://github.com/quirkey/resque-status
-
 
 
 GETTING READY FOR PROD #######################################################
