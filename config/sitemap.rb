@@ -1,4 +1,7 @@
-NEWRELIC_AGENT_ENABLED=false
+CarrierWave.configure do |config|
+  config.fog_directory = "brickcitydepot-assets"
+end
+
 # Set the host name for URL creation
 SitemapGenerator::Sitemap.default_host = "https://www.brickcitydepot.com"
 

@@ -18,7 +18,7 @@ CarrierWave.configure do |config|
       :aws_access_key_id => AmazonConfig.config.access_key,
       :aws_secret_access_key => AmazonConfig.config.secret
     }
-    config.fog_directory = AmazonConfig.config.instruction_bucket
+    #config.fog_directory = AmazonConfig.config.instruction_bucket
     #config.asset_host = 'http://images.brickcitydepot.com'
     config.fog_public = false
     config.cache_dir = "#{Rails.root}/tmp/carrierwave"
