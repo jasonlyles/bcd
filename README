@@ -1,11 +1,13 @@
 DEPLOYING
 
-When checking in code to gitography, just `git push` or `git push origin`
+When checking in code to gitography, just `git push`
 When deploying to heroku, `git push staging master`
 For prod: 'git push production master --app bcd-prod'
 For deploying the db: 'heroku run rake db:migrate --remote staging --app bcd-stg'
 For restarting: `heroku restart --app bcd-stg`
 For tailing: `heroku logs --tail --app bcd-stg`
+For updating sitemap manually: `heroku run rake sitemap:refresh --app bcd-stg` (Change to sitemap:refresh:no_ping
+    if I don't want to update search engines)
 
 MAINTENANCE
 

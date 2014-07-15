@@ -17,21 +17,7 @@ http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-
 Also check out some of these tips:
 http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
 
-5. sitemap https://github.com/kjvarga/sitemap_generator
- a. Set up a cron job on heroku via temporize to once a week update the sitemap. Example cron using whenever:
-    # config/schedule.rb
-    every 1.day, :at => '5:00 am' do
-      rake "-s sitemap:refresh"
-    end
- b. Figure out heroku command to use. Something like: heroku run rake sitemap:refresh and heroku run rake sitemap:refresh:no_ping
- c. Figure out how to get the sitemap uploaded to my assets bucket in S3 or cloudfront
- d. Will need to update robots.txt to point to the remote sitemap.
- e. Verify to google that I own the s3 url where the sitemap is being hosted. https://www.google.com/webmasters/tools/home?hl=en
-
-6. Move assets to S3 and serve using asset_sync gem (Make sure that sitemap is a part of this, and robots.txt)
-
-7. Look into adding some caching using memcached
-
+5. Move assets to S3 and serve using asset_sync gem (Make sure that sitemap is a part of this, and robots.txt)
 
 
 
@@ -41,10 +27,11 @@ GETTING READY FOR PROD #######################################################
 
 2. Paypal!
     a. Set up paypal account for BCD. (temporarily using one just for dev.)
-    b. Set it to redirect to the thank you page.
+    b. Set it to redirect to the correct thank you page.
     c. Be sure I'm parsing paypal IPNs correctly.
 
-3. Set up a cname for my S3 instruction bucket.
+3. Set up a cname for my S3 instruction bucket. Already have one set up for prod for images in cloudfront. See that
+    for an example.
 
 4. Set up SSL on heroku. Buy SSL cert first https://addons.heroku.com/SSL
 
@@ -52,6 +39,18 @@ GETTING READY FOR PROD #######################################################
 
 6. Need to figure out what I did with GK so that the app doesnt keep getting unloaded in heroku.
 
+7. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
+    not work properly to submit the sitemap from the s3 url until the https prod version is set up, because all the urls
+    in the sitemap are for https://www.brickcitydepot.com  Heroku's scheduler doesn't have options for weekly or monthly,
+    but I can fake it by wrapping the call to the rake task in a bash if statement:
+    if [ "$(date +%u)" = 1 ]; then MY_COMMAND; fi       where 1 is mondays
+    if [ "$(date +%d)" = 01 ]; then MY_COMMAND; fi      where 01 is the first day of the month
+    Resources:
+        https://www.google.com/webmasters/tools
+        https://support.google.com/webmasters/answer/75712
+        http://stanicblog.blogspot.com/2012/02/how-to-add-your-sitemap-file-located-in.html
+        http://googlewebmastercentral.blogspot.com/2007/10/dealing-with-sitemap-cross-submissions.html
+        http://stackoverflow.com/questions/9342805/manually-add-sitemap-located-in-s3-into-google-webmaster-tools
 
 ###########################
 THINGS I NEED TO DO FOR LAUNCH:
@@ -166,7 +165,7 @@ black aren't distinct enough from each other.
 ########################################################################################################################
 V1.2 AND BEYOND:
 
-1. Work on caching, starting with the most visited pages.
+1. Work on caching, starting with the most visited pages. Look into adding some caching using memcached
 
 2. Limit access to admin urls by IP
 
@@ -259,6 +258,11 @@ end. Probably the easiest way to do this would just be a static page.
 options specifically for that product. After the user has filled out the form, they can then submit the form, and it
 will come to us in the form of email. In order to have the dropdowns with the options in the option families, I'll need to
 implement something similar to what I was thinking of in the previous item. Probably ought to just do a static page.
+
+27. Add a task that looks for users who haven't logged in for 3 months or so and send them a "come on back" email. The
+email would include products that had launched since the last time the user had logged in. This shouldn't run but once a
+month or so, and when the email is sent, it should update a timestamp for the user so I know not to send the user the same
+email a month later. Think about this some more...
 
 ########################################################################################################################
 NICE TO HAVE EVENTUALLY:
