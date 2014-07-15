@@ -32,6 +32,7 @@ gem 'resque_mailer'
 gem 'resque-status'
 gem 'heroku-api'
 gem 'roboto'
+gem 'sitemap_generator'
 
 #assets
 gem 'sass-rails'
@@ -76,7 +77,6 @@ group :development, :test do
   gem 'metric_fu'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
-  gem 'sitemap_generator'
 end
 
 group :test do
