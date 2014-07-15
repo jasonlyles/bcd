@@ -3,3 +3,4 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-Agent: *
 # Disallow: /
+Sitemap: https://s3.amazonaws.com/brickcitydepot-assets/sitemaps/sitemap.xml.gz

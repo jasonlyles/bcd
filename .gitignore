@@ -11,6 +11,7 @@ public/images/category_images
 public/images/category
 public/images/product_type
 public/carrierwave
+public/sitemaps
 coverage
 public/pdfs
 brakeman.html

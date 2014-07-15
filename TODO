@@ -18,10 +18,20 @@ Also check out some of these tips:
 http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
 
 5. sitemap https://github.com/kjvarga/sitemap_generator
+ a. Set up a cron job on heroku via temporize to once a week update the sitemap. Example cron using whenever:
+    # config/schedule.rb
+    every 1.day, :at => '5:00 am' do
+      rake "-s sitemap:refresh"
+    end
+ b. Figure out heroku command to use. Something like: heroku run rake sitemap:refresh and heroku run rake sitemap:refresh:no_ping
+ c. Figure out how to get the sitemap uploaded to my assets bucket in S3 or cloudfront
+ d. Will need to update robots.txt to point to the remote sitemap.
+ e. Verify to google that I own the s3 url where the sitemap is being hosted. https://www.google.com/webmasters/tools/home?hl=en
 
-6. Move assets to S3 and serve using asset_sync gem
+6. Move assets to S3 and serve using asset_sync gem (Make sure that sitemap is a part of this, and robots.txt)
 
 7. Look into adding some caching using memcached
+
 
 
 
