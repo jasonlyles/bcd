@@ -1,3 +1,4 @@
+NEWRELIC_AGENT_ENABLED=false
 # Set the host name for URL creation
 SitemapGenerator::Sitemap.default_host = "https://www.brickcitydepot.com"
 
@@ -8,7 +9,7 @@ SitemapGenerator::Sitemap.public_path = 'tmp/'
 SitemapGenerator::Sitemap.adapter = SitemapGenerator::WaveAdapter.new
 
 # The remote host where your sitemaps will be hosted
-SitemapGenerator::Sitemap.sitemaps_host = "https://s3.amazonaws.com/brickcitydepot-assets/"
+SitemapGenerator::Sitemap.sitemaps_host = "https://brickcitydepot-assets.s3.amazonaws.com"
 
 SitemapGenerator::Sitemap.sitemaps_path = 'sitemaps/'
 
