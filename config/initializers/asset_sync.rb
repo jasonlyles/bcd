@@ -1,7 +1,7 @@
 AssetSync.configure do |config|
   config.fog_provider = 'AWS'
-  config.aws_access_key_id = ENV['S3_KEY']
-  config.aws_secret_access_key = ENV['S3_SECRET']
+  config.aws_access_key_id = ENV['BCD_S3_KEY']
+  config.aws_secret_access_key = ENV['BCD_S3_SECRET']
   # To use AWS reduced redundancy storage.
   # config.aws_reduced_redundancy = true
   config.fog_directory = ENV['BCD_S3_ASSET_BUCKET']
