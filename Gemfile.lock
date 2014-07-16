@@ -42,6 +42,9 @@ GEM
     addressable (2.3.6)
     arel (4.0.2)
     arrayfields (4.9.2)
+    asset_sync (1.0.0)
+      activemodel
+      fog (>= 1.8.0)
     awesome_print (1.2.0)
     aws-ses (0.5.0)
       builder
@@ -454,6 +457,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
+  asset_sync
   aws-s3!
   aws-ses
   better_errors

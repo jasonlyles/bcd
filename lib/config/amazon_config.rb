@@ -17,6 +17,7 @@ module AmazonConfig
     include ActiveSupport::Configurable
     config_accessor :instruction_bucket
     config_accessor :image_bucket
+    config_accessor :asset_bucket
     config_accessor :access_key
     config_accessor :secret
   end

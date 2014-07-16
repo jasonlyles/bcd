@@ -40,6 +40,7 @@ gem 'compass-rails'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'sprockets', '2.11.0'
+gem 'asset_sync'
 
 # Use unicorn as the web server
 #gem 'unicorn'

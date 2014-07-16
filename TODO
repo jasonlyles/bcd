@@ -9,12 +9,7 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 2. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-3. See about getting our domain added to some non-junk whitelists:
-http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
-Also check out some of these tips:
-http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
-
-4. Move assets to S3 and serve using asset_sync gem (Make sure that sitemap is a part of this, and robots.txt)
+3. Move assets to S3 and serve using asset_sync gem.
 
 
 
@@ -260,6 +255,11 @@ implement something similar to what I was thinking of in the previous item. Prob
 email would include products that had launched since the last time the user had logged in. This shouldn't run but once a
 month or so, and when the email is sent, it should update a timestamp for the user so I know not to send the user the same
 email a month later. Think about this some more...
+
+28. See about getting our domain added to some non-junk whitelists if our emails showing up in spam folders becomes a problem:
+    http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
+    Also check out some of these tips:
+    http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
 
 ########################################################################################################################
 NICE TO HAVE EVENTUALLY:

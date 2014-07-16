@@ -34,7 +34,7 @@ BrickCity::Application.configure do
   config.serve_static_assets = true
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
-  #config.action_controller.asset_host = "http://images.brickcitydepot.com"
+  config.action_controller.asset_host = "//#{AmazonConfig.config.asset_bucket}.s3.amazonaws.com"
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
@@ -64,8 +64,12 @@ BrickCity::Application.configure do
 
   config.cache_classes = true
 
+  config.assets.initialize_on_precompile = true
+
   #Generate digests for assets URLs
   config.assets.digest = true
+
+  config.assets.enabled = true
 
   #Version of the assets. Change this to expire all assets
   config.assets.version = '1.0'
