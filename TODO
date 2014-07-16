@@ -22,8 +22,8 @@ GETTING READY FOR PROD #######################################################
     b. Set it to redirect to the correct thank you page.
     c. Be sure I'm parsing paypal IPNs correctly.
 
-3. Set up a cname for my S3 instruction bucket. Already have one set up for prod for images in cloudfront. See that
-    for an example.
+3. Set up a cname for my S3 instruction and assets buckets. Already have one set up for prod for images in cloudfront.
+    See that for an example.
 
 4. Set up SSL on heroku. Buy SSL cert first https://addons.heroku.com/SSL
 
