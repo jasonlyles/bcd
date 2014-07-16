@@ -54,7 +54,7 @@ $header_font: 'georgia';
 }
 
 @mixin lego_head{
-  background-image: url('happy_head.png');
+  background-image: url('/assets/happy_head.png');
   background-repeat: no-repeat;
   background-position: left center;
 }
@@ -887,9 +887,9 @@ h2{
    height: 50px;
    width: 250px;
    display:block;
-   background:transparent url('twitter_login_button.jpeg') center top no-repeat;
+   background:transparent url('/assets/twitter_login_button.jpeg') center top no-repeat;
    &:hover{
-     background-image: url('twitter_login_button_hover.jpeg');
+     background-image: url('/assets/twitter_login_button_hover.jpeg');
    }
  }
 
@@ -899,7 +899,7 @@ h2{
   width: 250px;
   display:block;
   cursor: default;
-  background-image: url('twitter_login_button_hover.jpeg');
+  background-image: url('/assets/twitter_login_button_hover.jpeg');
 }
 
 .facebook_login{
@@ -907,9 +907,9 @@ h2{
   height: 50px;
   width: 250px;
   display:block;
-  background:transparent url('facebook_login_button.jpeg') center top no-repeat;
+  background:transparent url('/assets/facebook_login_button.jpeg') center top no-repeat;
   &:hover{
-    background-image: url('facebook_login_button_hover.jpeg');
+    background-image: url('/assets/facebook_login_button_hover.jpeg');
   }
 }
 
@@ -919,7 +919,7 @@ h2{
   width: 250px;
   display:block;
   cursor: default;
-  background-image: url('facebook_login_button_hover.jpeg');
+  background-image: url('/assets/facebook_login_button_hover.jpeg');
 }
 
 .account_preferences_text_field{
