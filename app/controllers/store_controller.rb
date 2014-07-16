@@ -186,12 +186,12 @@ class StoreController < ApplicationController
     #order had a problem with it. They can then contact us with their transaction ID and confirmation code (Request ID).
   def listener
     logger.debug('XXXXXXXXXXXXXXXXXXXXXXXXXX')
-    logger.debug("PAYPAL PARAMS: #{params.inspect}")
+    logger.info("PAYPAL PARAMS: #{params.inspect}")
     @ipn = InstantPaymentNotification.new(params)
-    logger.debug("PAYPAL IPN: #{@ipn.inspect}")
+    logger.info("PAYPAL IPN: #{@ipn.inspect}")
     logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXX")
     @order = Order.find_by_request_id(@ipn.custom)
-    logger.debug("ORDER: #{@order.inspect}")
+    logger.info("ORDER: #{@order.inspect}")
     logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXX")
     #If we can't find the order, or the order has already been completed, just tell paypal to forget about it
     if @order.blank? || (!@order.status.blank? && @order.status.upcase == 'COMPLETED')

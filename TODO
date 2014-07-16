@@ -9,15 +9,12 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 2. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-3. Set up logging with one of the add-ons (favoring papertrail right now:
- https://devcenter.heroku.com/articles/papertrail) and make sure I log everything for IPNs
-
-4. See about getting our domain added to some non-junk whitelists:
+3. See about getting our domain added to some non-junk whitelists:
 http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
 Also check out some of these tips:
 http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
 
-5. Move assets to S3 and serve using asset_sync gem (Make sure that sitemap is a part of this, and robots.txt)
+4. Move assets to S3 and serve using asset_sync gem (Make sure that sitemap is a part of this, and robots.txt)
 
 
 
