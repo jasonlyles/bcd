@@ -69,8 +69,6 @@ BrickCity::Application.configure do
   #Generate digests for assets URLs
   config.assets.digest = true
 
-  config.assets.enabled = true
-
   #Version of the assets. Change this to expire all assets
   config.assets.version = '1.0'
 
