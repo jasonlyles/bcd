@@ -11,6 +11,8 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 3. Move assets to S3 and serve using asset_sync gem.
 
+4. Set up asset caching/expiry
+
 
 
 GETTING READY FOR PROD #######################################################
