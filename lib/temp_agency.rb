@@ -32,7 +32,7 @@ module TempAgency
   def after_perform_scale_down(*args)
     unless Rails.env == "development"
       #puts "SCALING DOWN"
-      @scaler = Scaler.new(queue_name: queue.to_s)
+      @scaler = Scaler.new(queue_name: queue_name.to_s)
       @scaler.workers = 0 if @scaler.job_count.zero?
     end
   end
@@ -40,7 +40,7 @@ module TempAgency
   def after_enqueue_scale_up(*args)
     unless Rails.env == "development"
       #puts "SCALING UP"
-      @scaler = Scaler.new(queue_name: queue.to_s)
+      @scaler = Scaler.new(queue_name: queue_name.to_s)
       @scaler.workers = 1 if @scaler.job_count > 0 && @scaler.workers == 0
     end
   end
