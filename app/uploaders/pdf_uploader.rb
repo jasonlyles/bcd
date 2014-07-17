@@ -1,8 +1,7 @@
 # encoding: utf-8
 
 class PdfUploader < CarrierWave::Uploader::Base
-  #include ::CarrierWave::Backgrounder::Delay This doesn't actually do anything for me. I need to figure out a
-  # way to upload files in the background
+  include ::CarrierWave::Backgrounder::Delay
   # Include RMagick or ImageScience support:
   # include CarrierWave::RMagick
   # include CarrierWave::ImageScience
