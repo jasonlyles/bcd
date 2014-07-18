@@ -1,6 +1,9 @@
 BrickCity::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
   config.web_host = 'http://bcd-stg.herokuapp.com'
+
+  #sharethis url needs to be different from the production url
+  config.sharethis_url = "http://w.sharethis.com/button/buttons.js"
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true

@@ -1,6 +1,10 @@
 BrickCity::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
   config.web_host = 'http://localhost:3000'
+
+  #sharethis url needs to be different from the production url
+  config.sharethis_url = "http://w.sharethis.com/button/buttons.js"
+
   # The test environment is used exclusively to run your application's
   # test suite.  You never need to work with it otherwise.  Remember that
   # your test database is "scratch space" for the test suite and is wiped

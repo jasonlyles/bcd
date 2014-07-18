@@ -9,31 +9,31 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 2. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-3. Move assets to S3 and serve using asset_sync gem.
+3. Set up asset caching/expiry
 
-4. Set up asset caching/expiry
+4. Prod env vars.
+    a. Set BCD_PAYPAL_EMAIL to sales-facilitator@ and switch back to sales@ after testing
+    b. After testing prod env, switch BCD_PAYPAL_HOST from sandbox to prod
+    c. Before going live, switch BCD_PAYPAL_NOTIFY_URL and BCD_PAYPAL_RETURN_URL to point to brickcitydepot.com
+    d. After making sure everything is hooked up in prod and transactions are going through, set LOG_LEVEL to info
 
+5. Make sure Twitter and FB production are pointing to the right place. They should be pointing to bcd-prod while in
+transition mode and move to bcd.com before the DNS switch.
 
 
 GETTING READY FOR PROD #######################################################
 
-1. Make sure all prod env vars are set up on Heroku. Currently a few behind staging.
+1. Paypal!
+    a. Be sure I'm parsing paypal IPNs correctly.
+    b. Do some test transactions against sandbox and prod to make sure all is working.
 
-2. Paypal!
-    a. Set up paypal account for BCD. (temporarily using one just for dev.)
-    b. Set it to redirect to the correct thank you page.
-    c. Be sure I'm parsing paypal IPNs correctly.
+2. Set up SSL on heroku. Buy SSL cert first https://addons.heroku.com/SSL
 
-3. Set up a cname for my S3 instruction and assets buckets. Already have one set up for prod for images in cloudfront.
-    See that for an example.
+3. Set up a database through heroku.
 
-4. Set up SSL on heroku. Buy SSL cert first https://addons.heroku.com/SSL
+4. Need to figure out what I did with GK so that the app doesnt keep getting unloaded in heroku.
 
-5. Set up a database through heroku.
-
-6. Need to figure out what I did with GK so that the app doesnt keep getting unloaded in heroku.
-
-7. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
+5. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
     not work properly to submit the sitemap from the s3 url until the https prod version is set up, because all the urls
     in the sitemap are for https://www.brickcitydepot.com  Heroku's scheduler doesn't have options for weekly or monthly,
     but I can fake it by wrapping the call to the rake task in a bash if statement:
