@@ -56,7 +56,7 @@
   - if @product.youtube_url && !@product.youtube_url.blank?
     = @product.youtube_url
     %br
-    %iframe{:allowfullscreen => "", :frameborder => "0", :height => "315", :src => "http://www.youtube.com/embed/#{@product.youtube_url}?rel=0", :width => "420"}
+    %iframe{:allowfullscreen => "", :frameborder => "0", :height => "315", :src => "https://www.youtube.com/embed/#{@product.youtube_url}?rel=0", :width => "420"}
 %br
 = link_to "Add Image", new_image_path(:product_id => @product.id)
 \|
