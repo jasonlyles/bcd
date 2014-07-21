@@ -14,7 +14,7 @@
       %br
       = f.text_field :url, :disabled => true
       %br
-    %img{:src => image.url.thumb}/
+    =image_tag(image.url.thumb)
     .field
       = f.label :delete_url, "Destroy image"
       = f.check_box :remove_url

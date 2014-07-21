@@ -33,13 +33,13 @@
   %body
     .content
       .logo
-        %img{:src => "/assets/logo180x115.png", :alt => "BCD logo", :title => "Brick City Depot"}
+        = image_tag('logo180x115.png', alt: "BCD logo", title: "Brick City Depot")
       .header
       .navigation
         = render :partial => 'shared/navigation'
       .header_spacer
       .rounded_corner_cart_tie-in
-        %img{:src => "/assets/bottom_right_rounded_corner.png", :alt => "bottom_right_rounded_corner", :title => "Corner"}
+        = image_tag('bottom_right_rounded_corner.png', alt: "bottom_right_rounded_corner", title: "Corner")
       .cart_stuff
         = render :partial => 'shared/cart_info', locals: {cart: @cart}
 
@@ -54,9 +54,9 @@
         - if notice
           #alert_wrapper
             #speech_bubble_thing
-              %img{:src => "/assets/speech_bubble_thing.png"}
+              = image_tag('speech_bubble_thing.png')
             #lego_head
-              %img{:src => "/assets/happy_head.png"}
+              = image_tag('happy_head.png')
             #notice
               #alert_message
                 = notice
@@ -65,9 +65,9 @@
         - if alert
           #alert_wrapper
             #speech_bubble_thing
-              %img{:src => "/assets/speech_bubble_thing.png"}
+              = image_tag('speech_bubble_thing.png')
             #lego_head
-              %img{:src => "/assets/happy_head.png", :height => '50px'}
+              = image_tag('happy_head.png', height: '50px')
             #alert
               #alert_message
                 = alert

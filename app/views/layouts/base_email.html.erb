@@ -71,8 +71,7 @@
       <table border="0" width="600" cellpadding="0" cellspacing="0" class="container" bgcolor="#ffffff">
         <tr>
           <td>
-            <img src="<%= "#{@host}/assets/city_picture.png" %>" alt="Brick City Depot" border="0"
-                 hspace="0" vspace="0" style="vertical-align:top; padding-bottom: 25px;">
+            <%= image_tag('city_picture.png', alt: 'Brick City Depot', border: '0', hspace: '0', vspace: '0', style: "vertical-align:top; padding-bottom: 25px;") %>
           </td>
         </tr>
         <tr>
@@ -94,9 +93,7 @@
                       <tr>
                         <td align="center" valign="top" style="font-size:13px; line-height: 20px; font-family:
                                 Arial, sans-serif;">
-                          <img src="<%= "#{@host}/assets/logo180x115.png" %>" alt="Brick City Depot" border="0"
-                               hspace="0" vspace="0"
-                               style="vertical-align:top; padding-right:12px; max-width: 150px;" class="col-2-img">
+                          <%= image_tag('logo180x115.png', alt: 'Brick City Depot', border: '0', hspace: '0', vspace: '0', style: "vertical-align:top;padding-right:12px;max-width:150px;", class: 'col-2-img') %>
                           <br>
                         </td>
                         <td align="left" valign="top" style="font-size:13px; line-height: 20px; font-family: Arial, sans-serif;">
@@ -105,18 +102,19 @@
                           <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
                               <td valign="middle">Follow us!</td>
-                              <td style="text-align: right;"><a href="https://twitter.com/brickcitydepot">
-                                <img src="<%= "#{@host}/assets/twit.png" %>" alt="Twitter" border="0" hspace="0" vspace="0"
-                                     style="vertical-align:middle; padding-bottom: 3px; padding-top: 3px; max-height: 40px;"
-                                     class="col-2-img"></a>
+                              <td style="text-align: right;">
+                                <a href="https://twitter.com/brickcitydepot">
+                                    <%= image_tag('twit.png', alt: 'Twitter', border: '0', hspace: '0', vspace: '0', style:"vertical-align:middle; padding-bottom: 3px; padding-top: 3px; max-height: 40px;", class: 'col-2-img') %>
+                                </a>
                               </td>
                             </tr>
                             <tr>
                               <td valign="middle">Like us!</td>
-                              <td style="text-align: right;"><a href="https://www.facebook.com/pages/Brick-City-Depot/137179266449728">
-                                <img src="<%= "#{@host}/assets/face.png" %>" alt="Facebook" border="0" hspace="0" vspace="0"
-                                     style="vertical-align: middle; padding-bottom:3px; padding-top: 3px; max-height: 40px;"
-                                     class="col-2-img"></a></td>
+                              <td style="text-align: right;">
+                                <a href="https://www.facebook.com/pages/Brick-City-Depot/137179266449728">
+                                    <%= image_tag('face.png', alt: 'Facebook', border: '0', hspace: '0', vspace: '0', style: "vertical-align: middle; padding-bottom:3px; padding-top: 3px; max-height: 40px;", class: 'col-2-img') %>
+                                </a>
+                              </td>
                             </tr>
                             <tr>
                               <td colspan="2" style="text-align: right;"><a href="mailto:service@brickcitydepot.com"
@@ -133,9 +131,7 @@
                       <tr>
                         <td align="center" valign="top" style="font-size:13px; line-height: 20px; font-family:
                                 Arial, sans-serif;">
-                          <img src="<%= "#{@host}/assets/sigfigs.png" %>" alt="Brick City Depot" border="0"
-                               hspace="0" vspace="0"
-                               style="vertical-align:top; padding-bottom:12px; min-height: 150px; min-width: 150px;" class="col-2-img">
+                          <%= image_tag('sigfigs.png', alt: 'Brick City Depot', border: '0', hspace: '0', vspace: '0', style: "vertical-align:top; padding-bottom:12px; min-height: 150px; min-width: 150px;", class: "col-2-img") %>
                           <br>
                         </td>
                       </tr>

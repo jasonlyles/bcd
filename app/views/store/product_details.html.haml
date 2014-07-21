@@ -15,11 +15,11 @@
         %div#slider
           - if @product.youtube_url?
             %a{href: "https://www.youtube.com/watch?v=#{@product.youtube_url}", rel: "prettyPhoto[mixed]", :class => 'image_link'}
-              %img{src: "/assets/youtube_logo.png", width: 100}
+              = image_tag('youtube_logo.png')
           - unless @product.images.empty?
             - @product.images.each do |image|
               %a{href: image.url, rel: 'prettyPhoto[mixed]', :class => 'image_link'}
-                %img{src: image.url.thumb}
+                =image_tag(image.url.thumb)
 
       %td#product_details_description
         %p= @product.description
