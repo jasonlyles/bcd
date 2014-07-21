@@ -33,6 +33,7 @@ BrickCity::Application.routes.draw do
   get "lego_prints", :to => "static#legacy_lego_prints", :constraints => {:format => 'html'}
   get "custom-letters", :to => "static#legacy_custom_letters", :constraints => {:format => 'html'}
   get "name-signs", :to => "static#legacy_name_signs", :constraints => {:format => 'html'}
+  get 'uploads/*path', to: proc { [404, {}, ['']] }
 
   resources :advertising_campaigns
   resources :product_types
