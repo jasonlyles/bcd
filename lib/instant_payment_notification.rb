@@ -12,18 +12,22 @@ class InstantPaymentNotification
   end
 
   def valid_business_value?
+    Rails.logger.debug("BUSINESS: #{@business} and EMAIL: #{PaypalConfig.config.business_email} and #{@business == PaypalConfig.config.business_email}")
     @business == PaypalConfig.config.business_email
   end
 
   def valid_currency?
+    Rails.logger.debug("CURRENCY: #{@mc_currency}")
     @mc_currency == 'USD'
   end
 
   def valid_amount?
+    Rails.logger.debug("AMOUNT: #{@mc_gross.to_f} and #{@order.total_price} and #{@mc_gross.to_f == @order.total_price}")
     @mc_gross.to_f == @order.total_price
   end
 
   def valid_payment_status?
+    Rails.logger.error("PAYMENT STATUS: #{@payment_status.upcase}")
     @payment_status.upcase == "COMPLETED"
   end
 
@@ -53,8 +57,10 @@ class InstantPaymentNotification
     end
     response = http.post(path,query)
     if response && response.code == '200' && response.body == 'VERIFIED'
+      Rails.logger.debug('VALID IPN')
       return true
     else
+      Rails.logger.debug("INVALID IPN: BODY: #{response.body} AND CODE: #{response.code}")
       return false
     end
   end
