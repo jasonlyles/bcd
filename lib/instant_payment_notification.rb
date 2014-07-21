@@ -56,6 +56,7 @@ class InstantPaymentNotification
       query += "&#{key}=#{value}"
     end
     response = http.post(path,query)
+    Rails.logger.debug("PATH: #{path} AND QUERY: #{query}")
     if response && response.code == '200' && response.body == 'VERIFIED'
       Rails.logger.debug('VALID IPN')
       return true
