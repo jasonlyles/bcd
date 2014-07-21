@@ -39,7 +39,7 @@ BrickCity::Application.configure do
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   #Using the cloudfront name until I can get prod deployed, switch DNS providers, and get my cname set up again
-  config.action_controller.asset_host = "assets.brickcitydepot.com"
+  config.action_controller.asset_host = "d1f3s1yrq7p474.cloudfront.net"#"assets.brickcitydepot.com"
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
