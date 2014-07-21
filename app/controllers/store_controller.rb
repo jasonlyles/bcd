@@ -158,7 +158,7 @@ class StoreController < ApplicationController
       @cart.destroy
       session.delete(:cart_id)
       session.delete(:guest) if session[:guest]
-      redirect_to URI.encode("https://www.#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
+      redirect_to URI.encode("https://#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
     else
       begin
         ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), :env => request.env, :data => {:message => "Failed trying to submit order."})
