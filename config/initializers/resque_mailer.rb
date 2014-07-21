@@ -1,6 +1,9 @@
 class AsyncMailer < ActionMailer::Base
   extend TempAgency
   include Resque::Mailer
+  def queue_name
+    'mailer'
+  end
 end
 
 Resque::Mailer.excluded_environments = [:test]
