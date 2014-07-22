@@ -42,9 +42,10 @@ module TempAgency
       Rails.logger.debug("SCALING UP")
       #Hack, while I get something sorted:
       if queue_name.is_a?(ActionMailer::Base::NullMail)
-        queue_name = "mailer"
+        @scaler = Scaler.new(queue_name: "mailer")
+      else
+        @scaler = Scaler.new(queue_name: queue_name.to_s)
       end
-      @scaler = Scaler.new(queue_name: queue_name.to_s)
       @scaler.workers = 1 if @scaler.job_count > 0 && @scaler.workers == 0
     end
   end
