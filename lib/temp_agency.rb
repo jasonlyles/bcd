@@ -32,7 +32,11 @@ module TempAgency
   def after_perform_scale_down(*args)
     unless Rails.env == "development"
       Rails.logger.debug("SCALING DOWN")
-      @scaler = Scaler.new(queue_name: queue_name.to_s)
+      if queue_name.is_a?(Symbol)
+        @scaler = Scaler.new(queue_name: queue_name.to_s)
+      else
+        @scaler = Scaler.new(queue_name: "mailer")
+      end
       @scaler.workers = 0 if @scaler.job_count.zero?
     end
   end
@@ -41,10 +45,10 @@ module TempAgency
     unless Rails.env == "development"
       Rails.logger.debug("SCALING UP, QUEUE NAME CLASS: #{queue_name.class}")
       #Hack, while I get something sorted:
-      if !queue_name.is_a?(String)
-        @scaler = Scaler.new(queue_name: "mailer")
-      else
+      if queue_name.is_a?(Symbol)
         @scaler = Scaler.new(queue_name: queue_name.to_s)
+      else
+        @scaler = Scaler.new(queue_name: "mailer")
       end
       @scaler.workers = 1 if @scaler.job_count > 0 && @scaler.workers == 0
     end
