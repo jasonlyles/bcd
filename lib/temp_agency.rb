@@ -39,9 +39,9 @@ module TempAgency
 
   def after_enqueue_scale_up(*args)
     unless Rails.env == "development"
-      Rails.logger.debug("SCALING UP")
+      Rails.logger.debug("SCALING UP, QUEUE NAME CLASS: #{queue_name.class}")
       #Hack, while I get something sorted:
-      if queue_name.is_a?(ActionMailer::Base::NullMail)
+      if !queue_name.is_a?(String)
         @scaler = Scaler.new(queue_name: "mailer")
       else
         @scaler = Scaler.new(queue_name: queue_name.to_s)
