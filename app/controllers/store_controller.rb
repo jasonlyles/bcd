@@ -30,6 +30,10 @@ class StoreController < ApplicationController
     end
   end
 
+  def instructions
+    redirect_to action: :products, product_type_name: 'Instructions'
+  end
+
   def cart
     item_list = check_for_errant_items if @cart
     if item_list
