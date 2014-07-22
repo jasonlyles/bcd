@@ -4,7 +4,7 @@
 %br
 - if @image
   %div{align: 'center', style: "padding: 5px;"}
-    =image_tag(@image, alt: @product.code_and_name)
+    %img{src: @image, alt: @product.code_and_name}
 %p
   = @product.description
 - if @message
