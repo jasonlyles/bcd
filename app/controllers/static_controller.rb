@@ -104,6 +104,7 @@ class StaticController < ApplicationController
   end
 
   def legacy_contact
+    @email = Email.new
     render 'contact'
   end
 
