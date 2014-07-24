@@ -43,8 +43,9 @@ class User < ActiveRecord::Base
 
   def get_product_info_for_products_owned
     orders = completed_orders
+    info_objects = []
     if orders.length > 0
-      products,info_objects = [],[]
+      products = []
       orders.each do |order|
         order.line_items.each do |line_item|
           if products.include?(line_item.product_id)
@@ -56,11 +57,9 @@ class User < ActiveRecord::Base
           end
         end
       end
-      Product.freebies.each do |product|
-        info_objects << get_info_for_product(product)
-      end
-    else
-      return []
+    end
+    Product.freebies.each do |product|
+      info_objects << get_info_for_product(product)
     end
     info_objects
   end
