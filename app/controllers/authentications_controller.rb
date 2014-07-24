@@ -14,7 +14,7 @@ class AuthenticationsController < ApplicationController
     #If the authentication exists in db, and the user cancelled their account
     if authentication && authentication.user.account_status == 'C'
       flash[:notice] = t('devise.sessions.user_cancelled')
-      return redirect_to :back
+      return redirect_to '/'
     end
     #If the authentication exists in db, then login the user
     if authentication
