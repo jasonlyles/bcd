@@ -37,11 +37,12 @@ If you don't see a set of instructions you've purchased, check out your #{link_t
           - if product_info.product.includes_instructions?
             %td
               - if product_info.html_list_id
-                = link_to 'HTML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.html_list_id
+                = link_to 'Parts Checklist', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.html_list_id
               - if product_info.html_list_id && product_info.xml_list_id
-                |
+                %br
+                %br
               - if product_info.xml_list_id
-                = link_to 'XML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.xml_list_id
+                = link_to 'Bricklink XML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.xml_list_id
             %td.pdf_bound_left
               %noscript.sad
                 Won't work if javascript is disabled
