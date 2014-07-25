@@ -1,7 +1,7 @@
 = h1("My Cart")
 %br
 %br
-- if !@cart.empty?
+- if @cart && !@cart.empty?
   = render :partial => 'shared/cart_nav_buttons'
   .clear
   %br
