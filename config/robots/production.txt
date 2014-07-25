@@ -4,3 +4,6 @@
 # User-Agent: *
 # Disallow: /
 Sitemap: https://brickcitydepot-assets.s3.amazonaws.com/sitemaps/sitemap.xml.gz
+
+# Disallow the following routes:
+Disallow /files/
