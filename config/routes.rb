@@ -35,6 +35,9 @@ BrickCity::Application.routes.draw do
   get "name-signs", :to => "static#legacy_name_signs", :constraints => {:format => 'html'}
   get 'uploads/*path', to: proc { [404, {}, ['']] }
   get 'files/*path', to: redirect {'assets/application.css'}
+  get 'data/*path', to: proc { [404, {}, ['']] }
+  get 'blog/*path', to: proc { [404, {}, ['']] }
+
   resources :advertising_campaigns
   resources :product_types
   resources :partners
