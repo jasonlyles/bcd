@@ -34,7 +34,7 @@ BrickCity::Application.routes.draw do
   get "custom-letters", :to => "static#legacy_custom_letters", :constraints => {:format => 'html'}
   get "name-signs", :to => "static#legacy_name_signs", :constraints => {:format => 'html'}
   get 'uploads/*path', to: proc { [404, {}, ['']] }
-
+  get 'files/*path', to: redirect {'assets/application.css'}
   resources :advertising_campaigns
   resources :product_types
   resources :partners
