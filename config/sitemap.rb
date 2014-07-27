@@ -65,7 +65,7 @@ SitemapGenerator::Sitemap.create do
     end
   end
 
-  Product.find_each do |product|
+  Product.ready.find_each do |product|
     if product.main_image.nil?
       add("/#{product.product_code}/#{product.name.to_snake_case}", :priority => 0.6, :changefreq => 'weekly')
     else
