@@ -66,6 +66,7 @@ BrickCity::Application.routes.draw do
   end
 
   get '/auth/:provider/callback' => 'authentications#create'
+  get '/auth/failure' => 'authentications#failure'
 
   resources :subcategories do
     member do

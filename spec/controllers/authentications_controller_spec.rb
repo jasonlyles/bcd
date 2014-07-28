@@ -4,6 +4,23 @@ describe AuthenticationsController do
   fixtures :all
   render_views
 
+  describe "failure" do
+    it "should return a helpful message about the failure" do
+      get :failure, strategy: 'twitter', message: 'invalid_credentials'
+      flash[:notice].should eq("Sorry, the credentials you provided were rejected by Twitter. Please try again.")
+
+      get :failure, strategy: '', message: 'invalid_credentials'
+      flash[:notice].should eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
+
+      get :failure, strategy: 'facebook', message: 'facebook_hates_me'
+      flash[:notice].should eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
+    end
+
+    it "should clear authentications and redirect to the signup page" do
+
+    end
+  end
+
   describe "create" do
     it "should not create new user and render new template when model is invalid" do
       request.env["omniauth.auth"] = {}

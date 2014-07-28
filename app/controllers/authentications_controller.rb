@@ -1,6 +1,16 @@
 class AuthenticationsController < ApplicationController
-  before_filter :authenticate_user!, :except => [:create, :clear_authentications]
-  skip_before_filter :find_cart, only: [:create]
+  before_filter :authenticate_user!, :except => [:create, :clear_authentications, :failure]
+  skip_before_filter :find_cart, only: [:create, :failure]
+
+  def failure
+    if params["message"] == 'invalid_credentials' && params["strategy"] && !params["strategy"].blank?
+      message = "Sorry, the credentials you provided were rejected by #{params["strategy"].capitalize}. Please try again."
+    else
+      message = "Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest."
+    end
+    flash[:notice] = message
+    clear_authentications
+  end
 
   def create
     omniauth = request.env["omniauth.auth"]
