@@ -37,6 +37,7 @@ BrickCity::Application.routes.draw do
   get 'files/*path', to: redirect {'assets/application.css'}
   get 'data/*path', to: proc { [404, {}, ['']] }
   get 'blog/*path', to: proc { [404, {}, ['']] }
+  get 'mobile/*path', to: proc { [404, {}, ['']] }
 
   resources :advertising_campaigns
   resources :product_types
