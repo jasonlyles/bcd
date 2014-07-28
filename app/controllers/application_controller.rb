@@ -28,10 +28,14 @@ class ApplicationController < ActionController::Base
 
   def clean_up_guest
     @cart = Cart.find_by_user_id(session[:guest])
-    @cart.user_id = nil
-    @cart.save
-    User.destroy(session[:guest])
-    session.delete(:guest)
+    if @cart
+      @cart.user_id = nil
+      @cart.save
+    end
+    unless session[:guest].blank?
+      User.destroy(session[:guest])
+      session.delete(:guest)
+    end
   end
 
   def current_guest
