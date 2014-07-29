@@ -106,6 +106,8 @@ BrickCity::Application.routes.draw do
 
   post '/woofay/switch_maintenance_mode' => 'admin#switch_maintenance_mode'
   match '/woofay/:email/find_user' => 'admin#find_user', :constraints => {:email => /.*/}, via: :post
+  post '/woofay/find_order' => 'admin#find_order'
+  get '/order_info' => 'admin#order_info', as: :order_info
   post '/woofay/:email/change_user_status' => 'admin#change_user_status', :constraints => {:email => /.*/}
   post '/woofay/update_downloads_for_user', :to => 'admin#update_downloads_for_user'
   post '/woofay/complete_order', :to => 'admin#complete_order'

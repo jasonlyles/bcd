@@ -28,6 +28,13 @@ class AdminController < ApplicationController
     end
   end
 
+  def find_order
+    @order = Order.send("find_by_#{params[:order][:lookup_field]}",params[:order][:lookup_id])# find_by_(params[:order][:lookup_id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def admin_profile
     @radmin = Radmin.find(params[:id])
   end
@@ -71,6 +78,7 @@ class AdminController < ApplicationController
     @order = Order.find(params[:order][:id])
     @order.status = 'COMPLETED'
     @order.save
+    flash[:notice] = "Order was marked COMPLETED"
     redirect_to :back
   end
 

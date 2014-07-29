@@ -1,0 +1,57 @@
+%h3 Order Info
+%br
+%p Order ID: #{order.id}
+- if order.status == 'COMPLETED'
+  %p.happy Order Status: #{order.status}
+- else
+  %p.sad Order Status: #{order.status}
+%p Request ID: #{order.request_id}
+%p Paypal Transaction ID: #{order.transaction_id}
+%p Transaction Date: #{order.created_at.to_s(:date_time12)}
+%p Updated Date: #{order.updated_at.to_s(:date_time12)}
+%p User: #{order.user.email}
+%br
+- if order.has_physical_item?
+  %p Street Address:
+  %br
+  %p
+    = order.address_name
+    %br
+    #{order.first_name} #{order.last_name}
+    %br
+    = order.address_street_1
+    %br
+    #{order.address_city}, #{order.address_state} #{order.address_zip}
+    %br
+    = order.address_country
+%br
+%table.admin_table
+  %tr
+    %td.bold Product ID
+    %td.bold Model Code
+    %td.bold Name
+    %td.bold Qty.
+    %td.bold Paid
+    %td.bold Created
+    %td.bold Updated
+  - order.line_items.each do |line_item|
+    - product = Product.find(line_item.product_id)
+    %tr
+      %td= line_item.product_id
+      %td= product.product_code
+      %td= product.name
+      %td= line_item.quantity
+      %td= number_to_currency(line_item.total_price)
+      %td= line_item.created_at.to_s(:date_time12)
+      %td= line_item.updated_at.to_s(:date_time12)
+- if order.status != 'COMPLETED'
+  %br
+  %br
+  %p
+    If this order is ok in Paypal, and just didn't complete on our side for whatever reason, if you click the
+    "Complete Order" button, the user will be able to access their downloads.
+  %br
+  = form_for(:order, :url => {:action => :complete_order}) do |f|
+    = f.hidden_field :id, :value => order.id
+    .actions
+      = f.submit 'Complete Order', data: {disable_with: 'Completing...'}
