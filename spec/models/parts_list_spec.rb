@@ -11,8 +11,8 @@ describe PartsList do
       parts_lists << FactoryGirl.create(:html_parts_list)
       parts_lists << FactoryGirl.create(:xml_parts_list)
 
-      PartsList.get_list(parts_lists, 'xml').id.should eq(2)
-      PartsList.get_list(parts_lists, 'html').id.should eq(1)
+      PartsList.get_list(parts_lists, 'xml')[0].id.should eq(2)
+      PartsList.get_list(parts_lists, 'html')[0].id.should eq(1)
     end
   end
 

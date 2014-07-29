@@ -36,13 +36,16 @@ If you don't see a set of instructions you've purchased, check out your #{link_t
           %td= "#{product_info.product.product_code} #{product_info.product.name}"
           - if product_info.product.includes_instructions?
             %td
-              - if product_info.html_list_id
-                = link_to 'Parts Checklist', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.html_list_id
-              - if product_info.html_list_id && product_info.xml_list_id
+              - if !product_info.html_list_ids.blank?
+                - product_info.html_list_ids.each_with_index do |hlid,index|
+                  = link_to "Checklist #{index+1}", :controller => :downloads, :action => :download_parts_list, :parts_list_id => hlid
+                  %br
+              - if !product_info.html_list_ids.blank? && !product_info.xml_list_ids.blank?
                 %br
-                %br
-              - if product_info.xml_list_id
-                = link_to 'Bricklink XML', :controller => :downloads, :action => :download_parts_list, :parts_list_id => product_info.xml_list_id
+              - if !product_info.xml_list_ids.blank?
+                - product_info.xml_list_ids.each_with_index do |xlid,index|
+                  = link_to "Bricklink XML #{index+1}", :controller => :downloads, :action => :download_parts_list, :parts_list_id => xlid
+                  %br
             %td.pdf_bound_left
               %noscript.sad
                 Won't work if javascript is disabled

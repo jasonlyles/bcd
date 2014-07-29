@@ -65,19 +65,24 @@ class User < ActiveRecord::Base
   end
 
   def get_info_for_product(product)
-    product_info = Struct.new(:product, :download, :xml_list_id, :html_list_id, :image_url)
+    product_info = Struct.new(:product, :download, :xml_list_ids, :html_list_ids, :image_url)
     image_url = product.main_image.thumb if product.main_image
     download = Download.find_by_user_id_and_product_id(self.id,product.id)
     if product.includes_instructions?
-      html_list = PartsList.get_list(product.parts_lists, 'html')
-      html_list_id = html_list.id if html_list
-      xml_list = PartsList.get_list(product.parts_lists, 'xml')
-      xml_list_id = xml_list.id if xml_list
+      html_list_ids,xml_list_ids = [],[]
+
+      html_lists = PartsList.get_list(product.parts_lists, 'html')
+      html_lists.each{|hl| html_list_ids << hl.id} if html_lists
+      html_list_ids = nil if html_list_ids.blank?
+
+      xml_lists = PartsList.get_list(product.parts_lists, 'xml')
+      xml_lists.each{|xl| xml_list_ids << xl.id} if xml_lists
+      xml_list_ids = nil if xml_list_ids.blank?
     else
-      html_list_id,xml_list_id = nil, nil
+      html_list_ids,xml_list_ids = nil, nil
     end
 
-    product_info.new(product, download, xml_list_id, html_list_id, image_url)
+    product_info.new(product, download, xml_list_ids, html_list_ids, image_url)
   end
 
   def owns_product?(product_id)

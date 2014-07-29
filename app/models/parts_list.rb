@@ -14,11 +14,10 @@ class PartsList < ActiveRecord::Base
   end
 
   def self.get_list(parts_lists, list_type)
-    list = nil
+    list = []
     parts_lists.each do |pl|
       if pl.parts_list_type && (pl.parts_list_type.upcase == list_type.upcase)
-        list = pl
-        break
+        list << pl
       end
     end
     list
