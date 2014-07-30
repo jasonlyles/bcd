@@ -21,7 +21,7 @@ class PasswordsController < Devise::PasswordsController
       flash[:notice] = 'Profile was successfully updated.'
       redirect_to(:controller => :registrations, :action => :edit)
     else
-      flash[:alert] = "Password not updated."
+      flash[:alert] = "Password not updated. Password may have been too short, or password confirmation may not have matched. Try again."
       redirect_to :controller => :registrations, :action => :edit
     end
   end
