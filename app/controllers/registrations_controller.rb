@@ -4,7 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def create
     signup_params = {}
-    user_params = ['email', 'tos_accepted']
+    user_params = ['email', 'tos_accepted', 'email_preference']
     params['user'].each do |key,value|
       if user_params.include?(key)
         signup_params[key] = value

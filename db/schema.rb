@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710140713) do
+ActiveRecord::Schema.define(version: 20140730005631) do
 
   create_table "advertising_campaigns", force: true do |t|
     t.integer  "partner_id"
@@ -278,7 +278,7 @@ ActiveRecord::Schema.define(version: 20140710140713) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "email_preference",                  default: 1
+    t.integer  "email_preference",                  default: 2
     t.string   "account_status",         limit: 1,  default: "A"
     t.string   "referrer_code",          limit: 10
     t.integer  "failed_attempts",                   default: 0
