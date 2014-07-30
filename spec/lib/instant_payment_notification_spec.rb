@@ -111,6 +111,8 @@ describe InstantPaymentNotification do
 
     it "should return false for an invalid ipn" do
       Net::HTTP.any_instance.should_receive(:post).with("/cgi-bin/webscr", "cmd=_notify-validate&x=y").and_return(Net::HTTPResponse.new('1.0','500','fake'))
+      Net::HTTPResponse.any_instance.should_receive(:body).and_return('fake')
+      Net::HTTPResponse.any_instance.should_receive(:code).at_least(1).times.and_return('500')
       ipn = InstantPaymentNotification.new({'x' => 'y'})
 
       ipn.valid_ipn?.should eq(false)
