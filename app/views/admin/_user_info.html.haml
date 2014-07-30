@@ -1,5 +1,6 @@
 - if user
-  Account Status:
+  %b
+    Account Status:
   - if user.account_status == "A"
     %b.happy Active
     = form_for(:user, :url => {:action => :change_user_status, :email => /.*/},:remote => true) do |f|
@@ -17,7 +18,8 @@
   = link_to "I shall become #{user.email}!", become_admin_path(user.id)
   %br
   %br
-  %h3 Login Info
+  %b
+    Login Info
   %table.admin_table
     %tr
       %th Login Count
@@ -32,7 +34,8 @@
       %td= user.current_sign_in_ip
       %td= user.last_sign_in_ip
   %br
-  %h3 Alternative Logins
+  %b
+    Alternative Logins
   %table.admin_table
     %tr
       %th Provider
@@ -47,11 +50,13 @@
         %td= auth.updated_at.to_s(:date_time12) if auth.updated_at
 
   %br
-  %h3 User Location
+  %b
+    User Location
   %p Working on this. Until I can automate something based on our stored IPs, if you really need to know where a user is from, go to iplocationtools.com  Was thinking I would use this to determine 1. Users country, 2. Users timezone.  This may not be super important, but it might end up helping me troubleshoot users issues.
 
   %br
-  %h3 Password Info
+  %b
+    Password Info
   %table.admin_table
     %tr
       %th Reset Pswd Token
@@ -61,7 +66,8 @@
       %td= user.remember_created_at.to_s(:date_time12) if user.remember_created_at
 
   %br
-  %h3 Account Info
+  %b
+    Account Info
   %table.admin_table
     %tr
       %th Created
@@ -71,7 +77,8 @@
       %td= user.updated_at.to_s(:date_time12)
 
   %br
-  %h3 Order Info
+  %b
+    Order Info
   %table.admin_table
     %tr
       %th Order ID

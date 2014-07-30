@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
       @cart.save
     end
     unless session[:guest].blank?
-      User.destroy(session[:guest])
+      User.destroy(session[:guest]) if session[:guest].is_a?(Integer)
       session.delete(:guest)
     end
   end

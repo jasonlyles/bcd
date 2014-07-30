@@ -40,7 +40,7 @@
     %p
       = f.label :email
       %br/
-      = f.text_field :email, :class => 'account_preferences_text_field', :type => 'email'
+      = f.text_field :email, :class => 'login_form_text_field', :type => 'email'
     %br
     %p
       Email Preferences
@@ -56,6 +56,23 @@
     %br
     %br
     %p= f.submit "Update", :class => 'update_preferences_button', data: {disable_with: 'Updating...'}
+  %br
+  - if @user.encrypted_password?
+    = form_for(@user, url: passwords_update_password_path, html: { method: :patch }) do |f|
+      %p.centered_text.preference_header
+        UPDATE PASSWORD
+      %br
+      %p
+        = f.label :password, "New password"
+        %br
+        = f.password_field :password, autofocus: true, autocomplete: "off", :class => 'login_form_text_field'
+      %p
+        = f.label :password_confirmation, "Confirm new password"
+        %br
+        = f.password_field :password_confirmation, autocomplete: "off", :class => 'login_form_text_field'
+      %br
+      %p
+        = f.submit "Update", :class => 'update_preferences_button', data: {disable_with: 'Updating...'}
 %br
 %br
 %p.centered_text

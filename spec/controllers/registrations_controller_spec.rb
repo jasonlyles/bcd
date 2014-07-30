@@ -59,7 +59,7 @@ describe RegistrationsController do
     end
 
     context 'user is not saved' do
-      it 'should flash an alert about TOS and redirect to signup' do
+      it 'should redirect to signup' do
         session[:omniauth] = {}
         session[:omniauth]['info'] = {}
         session[:omniauth]['info']['email'] = "snoopy@peanuts.com"
@@ -69,7 +69,6 @@ describe RegistrationsController do
         request.env['devise.mapping'] = Devise.mappings[:user]
         post :create, :user => {:email => 'email@email.com', :tos_accepted => true}
 
-        flash[:alert].should eq("Please make sure you have accepted the Terms of Service")
         response.should redirect_to('/users/sign_up')
       end
     end

@@ -8,7 +8,7 @@ class OrderMailer < AsyncMailer
     @user = User.find(user_id)
     @hide_unsubscribe = true
 
-    mail(to: @user.email, subject: 'Order Confirmation')
+    mail(to: @user.email, subject: 'Brick City Depot Order Confirmation')
   end
 
   def guest_order_confirmation(user_id, order_id, link_to_downloads)
@@ -18,7 +18,7 @@ class OrderMailer < AsyncMailer
     @link_to_downloads = link_to_downloads
     @hide_unsubscribe = true
 
-    mail(to: @user.email, subject: 'Order Confirmation')
+    mail(to: @user.email, subject: 'Your Brick City Depot Order')
   end
 
   def physical_item_purchased(user_id, order_id)

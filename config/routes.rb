@@ -67,6 +67,7 @@ BrickCity::Application.routes.draw do
     get "account/edit" => "registrations#edit"#, :as => :edit_user_registration
     get "/guest_registration" => "sessions#guest_registration", :as => :guest_registration
     post '/register_guest' => "sessions#register_guest", :as => :register_guest
+    patch 'passwords/update_password', :to => "passwords#update_password"
   end
 
   get '/auth/:provider/callback' => 'authentications#create'

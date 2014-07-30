@@ -4,7 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
 
   def create
     signup_params = {}
-    user_params = ['email', 'tos_accepted', 'email_preference']
+    user_params = ['email', 'tos_accepted', 'email_preference', 'password', 'password_confirmation']
     params['user'].each do |key,value|
       if user_params.include?(key)
         signup_params[key] = value
@@ -34,8 +34,8 @@ class RegistrationsController < Devise::RegistrationsController
       end
     else
       clean_up_passwords @user
-      flash[:alert] = 'Please make sure you have accepted the Terms of Service'
-      return redirect_to :action => :new
+      flash[:alert] = "User not created. Please see signup form to see what you need to fix."
+      respond_with @user, :location => {action: :new}
     end
 
     #This is in place in case a user goes to sign up via one of the auth options and doesn't add an email or check

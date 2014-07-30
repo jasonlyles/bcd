@@ -21,14 +21,6 @@
     = f.text_field :email, :class => 'login_form_text_field', :placeholder => 'Email', :type => 'email'
     %br
     %br
-    - if !@user.email? || !@user.valid?
-      = f.check_box :tos_accepted
-      = f.label :tos_accepted, "I have read and agree to the "
-      = link_to 'Terms of Service', terms_of_service_path
-      and
-      = link_to 'Privacy Policy', privacy_policy_path, :style => "color:red;"
-      %br
-      %br
     Email Preferences
     %br
     = f.radio_button :email_preference, 2
@@ -41,5 +33,13 @@
     = f.label :email_preference, "No emails please. (You'll only get order confirmation emails.)", :value => 0
     %br
     %br
+    - if !@user.email? || !@user.valid?
+      = f.check_box :tos_accepted
+      = f.label :tos_accepted, "I have read and agree to the "
+      = link_to 'Terms of Service', terms_of_service_path
+      and
+      = link_to 'Privacy Policy', privacy_policy_path, :style => "color:red;"
+      %br
+      %br
     = f.submit "Submit", :class => 'nice_signup_button', data: {disable_with: 'Submit'}
     %br

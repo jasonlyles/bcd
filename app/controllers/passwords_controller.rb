@@ -1,21 +1,5 @@
 class PasswordsController < Devise::PasswordsController
-=begin
-  def create
-    self.resource = resource_class.send_reset_password_instructions(params[resource_name])
-
-    if resource.errors.empty?
-      set_flash_message :notice, :send_instructions
-      redirect_to new_session_path(resource_name)
-    elsif resource.errors[:email].include?("not found")
-      resource.errors.delete(:email)
-      flash[:alert] = "Was not able to find that email. Please make sure you entered the correct email address."
-      render_with_scope :new
-    else
-      render_with_scope :new
-    end
-  end
-=end
-
+  prepend_before_filter :require_no_authentication, except: [:update_password]
   # POST /resource/password
   def create
     self.resource = resource_class.send_reset_password_instructions(resource_params)
@@ -28,6 +12,17 @@ class PasswordsController < Devise::PasswordsController
       redirect_to '/users/password/new'
     else
       respond_with(resource)
+    end
+  end
+
+  def update_password
+    if current_user.update_attributes(params[:user])
+      sign_in current_user, :bypass => true
+      flash[:notice] = 'Profile was successfully updated.'
+      redirect_to(:controller => :registrations, :action => :edit)
+    else
+      flash[:alert] = "Password not updated."
+      redirect_to :controller => :registrations, :action => :edit
     end
   end
 end
