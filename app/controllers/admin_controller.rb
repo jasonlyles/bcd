@@ -2,6 +2,7 @@ class AdminController < ApplicationController
   before_filter :authenticate_radmin!
   before_filter :arrange_products_in_a_nice_way, :only => [:update_users_download_counts, :new_product_notification]
   skip_before_filter :find_cart
+  skip_before_filter :check_admin_mode
   include Devise::Models::DatabaseAuthenticatable
   layout 'admin'
 
