@@ -4,12 +4,7 @@ log/*.log
 tmp/**/*
 public/stylesheets/compiled
 .idea
-public/images/image
-public/images/update
-public/images/product_images
-public/images/category_images
-public/images/category
-public/images/product_type
+public/images/*
 public/carrierwave
 public/sitemaps
 coverage

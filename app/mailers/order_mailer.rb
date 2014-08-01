@@ -28,10 +28,11 @@ class OrderMailer < AsyncMailer
 
     mail(to: EmailConfig.config.physical_order, subject: 'Physical Item Purchased')
   end
-
+#:nocov
   def queue_name
     "mailer"
   end
+#:nocov
 end
 
 #:nocov:

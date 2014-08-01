@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140730005631) do
+ActiveRecord::Schema.define(version: 20140730191522) do
 
   create_table "advertising_campaigns", force: true do |t|
     t.integer  "partner_id"
@@ -78,9 +78,16 @@ ActiveRecord::Schema.define(version: 20140730005631) do
 
   create_table "email_campaigns", force: true do |t|
     t.text     "description"
-    t.integer  "click_throughs"
+    t.integer  "click_throughs",   default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "image_processing", default: false
+    t.text     "message"
+    t.string   "subject"
+    t.integer  "emails_sent",      default: 0
+    t.string   "guid"
+    t.string   "image"
+    t.string   "redirect_link"
   end
 
   create_table "images", force: true do |t|

@@ -3,8 +3,33 @@
   = @email_campaign.description
 %br
 %p
+  %b Subject:
+  = @email_campaign.subject
+%br
+%p
+  %b Redirect Link:
+  = @email_campaign.redirect_link
+%br
+%p
+  %b Reference ID:
+  = @email_campaign.guid
+%br
+%p
+  %b Image:
+  %br
+  = image_tag(@email_campaign.image.medium)
+%br
+%p
   %b Click throughs:
   = @email_campaign.click_throughs
+%br
+%p
+  %b Total sent:
+  = @email_campaign.emails_sent
+%br
+%p
+  %b Effectiveness:
+  #{@email_campaign.effectiveness_ratio}%
 %br
 %p
   %b Created At:
@@ -14,6 +39,12 @@
   %b Updated At:
   = @email_campaign.updated_at.strftime("%D %r")
 %br
+- if @email_campaign.emails_sent == 0
+  = form_for @email_campaign, url: {action: :send_marketing_emails} do |f|
+    = f.hidden_field :id
+    = f.submit 'Send Emails', data: {disable_with: 'Sending...'}
+    (Please only click this once if you get a message about emails being sent.)
+  %br
 = link_to 'Edit', edit_email_campaign_path(@email_campaign)
 \|
 = link_to 'Back', email_campaigns_path

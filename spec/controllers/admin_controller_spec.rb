@@ -263,7 +263,7 @@ describe AdminController do
       ResqueJobs::NewProductNotification.should_receive(:create).and_return(nil)
       post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
 
-      expect(flash[:notice]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")
+      expect(flash[:alert]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")
     end
   end
 end

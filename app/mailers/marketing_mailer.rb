@@ -12,6 +12,13 @@ class MarketingMailer < ActionMailer::Base
     mail(to: @user.email, subject: "New Product!")
   end
 
+  def new_marketing_notification(email_campaign, user)
+    @host = Rails.application.config.web_host
+    @email_campaign = email_campaign
+    @user = user
+    mail(to: @user.email, subject: @email_campaign.subject)
+  end
+
   #:nocov:
   if Rails.env.development?
     class MarketingMailer::Preview < MailView
@@ -21,6 +28,12 @@ class MarketingMailer < ActionMailer::Base
 
         MarketingMailer.new_product_notification(@product, @product.product_type.name, @product.main_image.medium,
                                                  @user, "Marketing mumbo-jumbo...")
+      end
+
+      def new_marketing_notification
+        @user = User.first
+        @email_campaign = EmailCampaign.first
+        MarketingMailer.new_marketing_notification(@email_campaign, @user)
       end
     end
   end

@@ -1,0 +1,16 @@
+%p
+  Hi #{@user.email}!
+%br
+%p
+  = @email_campaign.message
+%br
+%div{align: 'center'}
+  = link_to 'LEARN MORE', "#{@host}/campaign/#{@email_campaign.guid}"
+%br
+- if @email_campaign.image
+  %div{align: 'center', style: "padding: 5px"}
+    %img{src: @email_campaign.image.large, alt: 'Brick City Depot', style: 'max-width:500px'}
+%br
+%div{align: 'center'}
+  = link_to 'LEARN MORE', "#{@host}/campaign/#{@email_campaign.guid}"
+%br

@@ -158,7 +158,7 @@ class AdminController < ApplicationController
     email = params[:email]
     queued = ResqueJobs::NewProductNotification.create({product_id: email['product_id'], message: email['optional_message']})
     if queued.nil?
-      flash[:notice] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"
+      flash[:alert] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"
     else
       flash[:notice] = "Sending new product emails"
     end

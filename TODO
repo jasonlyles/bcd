@@ -12,28 +12,42 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 3. Set up asset caching/expiry
 
 4. Prod env vars.
-    a. Set BCD_PAYPAL_EMAIL to sales-facilitator@ and switch back to sales@ after testing
-    b. After testing prod env, switch BCD_PAYPAL_HOST from sandbox to prod
-    c. Before going live, switch BCD_PAYPAL_NOTIFY_URL and BCD_PAYPAL_RETURN_URL to point to brickcitydepot.com
     d. After making sure everything is hooked up in prod and transactions are going through, set LOG_LEVEL to info
 
-5. Make sure Twitter and FB production are pointing to the right place. They should be pointing to bcd-prod while in
-transition mode and move to bcd.com before the DNS switch.
+5. Set up a dev branch in github after I roll out to production. Then all changes should be to the dev branch, and
+merged into the master branch after confirmed that everything is working properly. Then deploy from master.
 
+6.  Issues:
+    a. Make sure batch emails go out
+    b. I'm serving Images through my image bucket name, and not the cname or cloudfront.
+    c. Move the image at /uploads/4/8/0/4/4804115/9169743_orig.jpg to S3 and serve it through cloudfront
+    d. Still a issue with http vs https for twitter and facebook on prettyPhoto when popping open that window.
+    e. Backup current database, throw into maintenance, then promote new database. Follow instructions here: https://devcenter.heroku.com/articles/upgrade-heroku-postgres-with-pgbackups
+    f. Bigger images in store, maybe use medium instead of thumb.
+    g. Make it more obvious how to get to the cart.
+    h. Work on the ordering of products in the store... I want the popular modulars showing up first.
+    i. Move sales report to a background task.
+    j. Make sure the database is being backed up. Do this after setting up the new database.
+    k. Add download links on the thank_you page, for guests.
+    l. Graphic/links to point to /books. Replace the construction dude with this. At the same time, make that div bigger,
+    along with the featured product div. Featured product div should have a medium image in it.
+
+
+7. Try to initiate DNS transfer again.
+
+8. FOR THE BUSINESS, NOT THE WEBSITE: Get the script working that creates images for parts, and get it to upload to
+    the S3 image bucket. Then update all parts lists to use the cloudfront url to get images. Also, update the parts
+    lists to use a logo I upload to S3 via cloudfront. That will ease the load of requests coming in for the logo to
+    be served by Heroku.
 
 GETTING READY FOR PROD #######################################################
 
 1. Paypal!
-    a. Be sure I'm parsing paypal IPNs correctly.
-    b. Do some test transactions against sandbox and prod to make sure all is working.
+    a. Do a test for a physical product against prod.
 
-2. Set up SSL on heroku. Buy SSL cert first https://addons.heroku.com/SSL
+2. Set up a database through heroku.
 
-3. Set up a database through heroku.
-
-4. Need to figure out what I did with GK so that the app doesnt keep getting unloaded in heroku.
-
-5. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
+3. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
     not work properly to submit the sitemap from the s3 url until the https prod version is set up, because all the urls
     in the sitemap are for https://www.brickcitydepot.com  Heroku's scheduler doesn't have options for weekly or monthly,
     but I can fake it by wrapping the call to the rake task in a bash if statement:
@@ -49,17 +63,8 @@ GETTING READY FOR PROD #######################################################
 ###########################
 THINGS I NEED TO DO FOR LAUNCH:
 
-1. Migrate db and reseed with latest data, making sure to remove image, fake user and fake order data
-2. Set up maintenance rake tasks(reap stale carts, etc.)
-3. Test paypal in sandbox mode in beta environment, and then test paypal in production mode, before switching to using
-sales@brickcitydepot.com.
-4. Test that emails can be sent out. In order to get this to work, I'll probably have to add mx records to dnsimple. See
-how I did it for GK.
-5. Make sure I can upload images to S3
-6. Make sure I can upload/download pdfs to/from S3
-7. Set up some sort of database backup task.
-8. Need to make sure I have a working logger.
-9. There must always be at least 1 free set of instructions.
+1. Set up maintenance rake tasks(reap stale carts, etc.)
+2. Set up some sort of database backup task.
 
 ##########################
 
@@ -69,8 +74,6 @@ IMMEDIATELY AFTER LAUNCH:
 1. Make sure emails to sales@ and service@brickcitydepot.com are going through. Re-test this every couple of days for
    a couple of weeks.
 2. Do a test transaction with just instructions, and one with just a physical item, and one with both.
-3. Make sure I can create an account and login with FB and Twitter.
-4. Make sure I can upload/download pdfs
 
 ##########################
 
@@ -156,6 +159,10 @@ just the first image uploaded.
 24. Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
 black aren't distinct enough from each other.
 
+25. I need some tagging to be able to group products, such as the buildings in the Amsterdam series, SanFran series,
+Richmond series, City Res, ComPaks, Alternatives etc. https://github.com/mbleigh/acts-as-taggable-on
+
+
 ########################################################################################################################
 V1.2 AND BEYOND:
 
@@ -169,8 +176,6 @@ V1.2 AND BEYOND:
 
 5. More Email Stuff!
     a. Set up a promotion email style
-    b. Set up a new model email style. Maybe this can be roughly the same as the promotion email, which can also be used
-    for discounts, etc.
 
 6. Add some functionality for cancelling admins accounts
 
@@ -200,15 +205,10 @@ at public/maintenance_mode.html
 15. Make cart remove/update functionality ajax-y
 
 16. Have an order fulfillment screen for physical orders in admin area where we can change status of orders. If an item
-stays in a non-shipped status for a couple of days, send a reminder email to let us know to deal with it. (Update May 2014. The order fulfillment
-screen is done, but I don't yet have the reminder email set up.)
+stays in a non-shipped status for a couple of days, send a reminder email to let us know to deal with it. (Update May 2014.
+The order fulfillment screen is done, but I don't yet have the reminder email set up.)
 
-17. Think more about how I handle order confirmation emails, and decrementing inventories. It might make sense
-    to handle both with background tasks that run after getting notification back from paypal. Right now I'm sending out the order
-    confirmation email and decrementing inventory when I get a IPN back from Paypal. I think this can be something I do a little later.
-    Sales are not heavy enough to warrant doing this right now.
-
-18. Be able to 'gift' instructions. This tool will allow us to give a user free instructions, for whatever reason. There should be 2
+17. Be able to 'gift' instructions. This tool will allow us to give a user free instructions, for whatever reason. There should be 2
 forms on the page. The first will allow us to look up a user by email, and then display the items they've already purchased from us.
 The 2nd form should only be displayed after the first one has been used, and will include a hidden field with the users email address
 in it. It will also list out every model we have instructions for and have a checkbox next to each for easily selecting multiple
@@ -218,7 +218,7 @@ that doesn't make sense. For those users, it might make more sense if there was 
 all instructions, always. We would want a tool like that for Brian and I and anybody else that helps us out greatly anyways. So then,
 the gifting tool really just needs a combobox to allow us to gift a user 1 set of instructions.
 
-19. Set up a way to create codes that we can send to buyers from Ebay. Then, as part of the checkout process on ebay, we can send them a
+18. Set up a way to create codes that we can send to buyers from Ebay. Then, as part of the checkout process on ebay, we can send them a
 link to BCD, along with a code that allows them to download from us. This will give us more control over the process, end
 our relationship with yousendit, force the user to learn about our website (which will hopefully lead to future purchases on our website instead of ebay).
 This will entail either an API that can be called via an ebay checkout process, or for Brian to use a tool I set up that generates a
@@ -226,39 +226,39 @@ link with a guid that can be sent to the user. The guid will essentially be a un
 to the downloads they purchased. (Update - May 2014. I have this set up, but in order to use it via ebay, I'll have to work on setting up a
 custom ebay checkout.)
 
-20. Enhance the basic order reporting. I don't really like the way I did it.
+19. Enhance the basic order reporting. I don't really like the way I did it.
 
-21. Add a friends page, where we link to Crowkillers, Dustin Crops, our Authorized Resellers, etc.
+20. Add a friends page, where we link to Crowkillers, Dustin Crops, our Authorized Resellers, etc.
 
-22. See if it's possible to integrate with Rebrickable. They have an API at rebrickable.com/api that I could maybe use to get a users sets,
+21. See if it's possible to integrate with Rebrickable. They have an API at rebrickable.com/api that I could maybe use to get a users sets,
 and then with those sets inventories, I could perhaps figure out how many of the pieces necessary to build one of our models a
 user already had. Then I could present them with that information: "You already have 85% of the parts necessary to build this model", or
 something like that. That would have to be on-demand sort of feature, that would shuffle a task into the background, and then
 present the information after some processing. This would probably be a really expensive operation, and it might not be worth it,
 but may be fun to try. This could possibly work using the get_set_match API, if we could pay him to upload our models as sets.
 
-23. Figure out some way to have codes that can be redeemed for x numbers of dollars.
+22. Figure out some way to have codes that can be redeemed for x numbers of dollars.
 
-24. Admin products page could benefit from a live search feature.
+23. Admin products page could benefit from a live search feature.
 
-25. Figure out how to accommodate Lisa's letters. This would be the first product with options. Options for this particular
+24. Figure out how to accommodate Lisa's letters. This would be the first product with options. Options for this particular
 product would include the letter of the alphabet and a style. On the admin side, I could have a product_options table, with
 fields for product_id, name, description. When a user buys a product with an option, create a item_options record. This table
 would have item_id, and a number of optionx fields. Maybe 3-4 fields, so: option1, option2, etc. Make sure to include option
 information in the emails, what I send to paypal (just for display purposes), and to the order fulfillment junk on the back
 end. Probably the easiest way to do this would just be a static page.
 
-26. Craft (built-to-order) products should have an interest form on their product pages. The interest form could have dropdowns for
+25. Craft (built-to-order) products should have an interest form on their product pages. The interest form could have dropdowns for
 options specifically for that product. After the user has filled out the form, they can then submit the form, and it
 will come to us in the form of email. In order to have the dropdowns with the options in the option families, I'll need to
 implement something similar to what I was thinking of in the previous item. Probably ought to just do a static page.
 
-27. Add a task that looks for users who haven't logged in for 3 months or so and send them a "come on back" email. The
+26. Add a task that looks for users who haven't logged in for 3 months or so and send them a "come on back" email. The
 email would include products that had launched since the last time the user had logged in. This shouldn't run but once a
 month or so, and when the email is sent, it should update a timestamp for the user so I know not to send the user the same
 email a month later. Think about this some more...
 
-28. See about getting our domain added to some non-junk whitelists if our emails showing up in spam folders becomes a problem:
+27. See about getting our domain added to some non-junk whitelists if our emails showing up in spam folders becomes a problem:
     http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
     Also check out some of these tips:
     http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
