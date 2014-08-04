@@ -372,7 +372,7 @@ describe StoreController do
   end
 
   describe "submit_order" do
-    it "should delete session[:guest]" do
+    it "should not delete session[:guest]" do
       @user = FactoryGirl.create(:user)
       FactoryGirl.create(:category)
       FactoryGirl.create(:subcategory)
@@ -381,7 +381,7 @@ describe StoreController do
       session[:guest] = @user.id
       post :submit_order, :order => {:user_id => @user.id}
 
-      expect(session[:guest]).to be_nil
+      expect(session[:guest]).to eq 1
     end
 
     it "should submit the order to paypal" do
@@ -548,6 +548,32 @@ describe StoreController do
       controller.send(:restock_downloads, @order)
 
       expect(Download.count).to eq 0
+    end
+  end
+
+  describe 'thank_you_for_your_order' do
+    it "should delete session[:guest]" do
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      FactoryGirl.create(:product)
+      FactoryGirl.create(:order_with_line_items)
+      session[:guest] = @user.id
+      get :thank_you_for_your_order
+
+      expect(session[:guest]).to eq nil
+    end
+
+    it "should set up @download_link" do
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      FactoryGirl.create(:product)
+      FactoryGirl.create(:order_with_line_items)
+      session[:guest] = @user.id
+      get :thank_you_for_your_order
+
+      expect(assigns(:download_link)).to eq 'http://localhost:3000/guest_downloads?tx_id=blarney&conf_id=blar'
     end
   end
 

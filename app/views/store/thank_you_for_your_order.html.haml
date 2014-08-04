@@ -10,9 +10,22 @@
 %p
   You will see in your confirmation email a link back to Brick City Depot. That link is especially for your order. When
   you click the link, you will be taken to a page on Brick City Depot that will have links that you can use to download
-  your PDFs and parts lists.
+  your PDFs and parts lists. If you don't see an email from us, check your junk or spam folders. If you still don't
+  see an email, contact us and we'll get you your download link.
+  - if @download_link
+    %br
+    %br
+    %br
+    Alternatively, you can just use this link to get to your downloads: #{link_to 'DOWNLOADS', @download_link}
+    %br
+    %br
+    .sad
+      %p
+        * Note that this link will not be here the next time you load this page, so in the future you'll have to link
+        to your downloads from the email we send you.
+    %br
 %br
-%b If you checked out using your Twitter or Facebook account
+%b If you checked out using your Twitter, Facebook or Brick City Depot account
 %p
   Check out your Brick City Depot account by clicking the "My Account" link above. You'll be taken to a page where you
   can download the files you paid for.

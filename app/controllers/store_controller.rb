@@ -161,7 +161,6 @@ class StoreController < ApplicationController
     if @order.save
       @cart.destroy
       session.delete(:cart_id)
-      session.delete(:guest) if session[:guest]
       redirect_to URI.encode("https://#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
     else
       begin
@@ -272,6 +271,12 @@ class StoreController < ApplicationController
   #:nocov:
 
   def thank_you_for_your_order
+    if session[:guest]
+      @user = User.find session[:guest]
+      @order = @user.orders.last
+      @download_link = @order.get_link_to_downloads
+      session.delete(:guest)
+    end
   end
 
   def enter_address
