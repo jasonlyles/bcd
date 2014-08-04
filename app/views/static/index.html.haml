@@ -27,30 +27,25 @@
     %h3 Featured Product
   .news_item.drop_shadow
     - unless product.nil?
-      %table
-        %tr
-          %td
-            -if product.images[0]
-              -if product.images[0].url
-                - image_url = product.images[0].url
-                = link_to(image_tag(image_url.thumb.url), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless image_url.blank?
-          %td.table_cell_spacer
-          %td
-            %b= "#{product.product_code} #{product.name}"
-            %br
-            = snippet(product.description)
-            = link_to "More", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}
+      = link_to(image_tag(product.main_image.medium), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless product.main_image.blank?
+      %br
+      %b= "#{product.product_code} #{product.name}"
+      %br
+      = snippet(product.description)
+      = link_to "More", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}
 .under_construction.float_left
   .news_item_header.drop_shadow
-    %h3 New site still under construction!
+    %h3 Hitting the shelves in September!
   .news_item.drop_shadow
-    %table
-      %tr
-        %td
-          =image_tag('construction_dude.png')
-        %td.table_cell_spacer
-        %td
-          We're still under construction so this site will be changing as we tweak things and add new functionality. If things don't look right in your favorite browser, let us know so we can fix it. Thanks!
+    .centered_text
+      = link_to(image_tag('lego_neighborhood_book.png'), "/books")
+    %br
+    Check it out, our first book! Published by No Starch Press, and hitting the shelves on September 25th, it will be
+    available all over the internet, and also in Barnes & Noble stores. We'll teach you our process for creating our
+    modulars, and give you the instructions on how to make the corner building on the front to boot. Preorder now on
+    <a href="http://amzn.to/1qlDH26" target='_blank'>Amazon</a>, <a href="http://www.nostarch.com/legoneighborhood/" target='_blank'>No Starch</a> or
+    <a href="http://www.barnesandnoble.com/w/the-lego-neighborhood-book-brian-lyles/1119972426" target='_blank'>Barnes & Noble</a>.
+    %a{href: '/books'} Learn More
 .clear
 %br
 
