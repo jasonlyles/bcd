@@ -1,0 +1,18 @@
+.products_detail_medium.drop_shadow
+  .centered_product_medium
+    .medium_image_div
+      = link_to(image_tag(product.main_image.medium), {:action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless product.main_image.blank?
+    .thumb_details
+      %br
+      = link_to product.code_and_name, {:action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, class: 'medium_model_name'
+      %br
+      .clear
+  - if product.is_free?
+    %h2 FREE
+  - else
+    .medium_add_to_cart_div
+      .medium_price
+        = number_to_currency(product.price)
+      .medium_detail_button_div
+        = button_to "Add to Cart", {:action => "add_to_cart", :product_code => product.product_code}, {:class => 'add_to_cart_button', data: {disable_with: 'Adding...'}}
+%br
