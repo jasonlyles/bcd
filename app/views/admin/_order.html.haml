@@ -32,6 +32,7 @@
     %td.bold Qty.
     %td.bold Paid
     %td.bold Downloaded/Remaining
+    %td.bold DL Link
     %td.bold Created
     %td.bold Updated
   - order.line_items.each do |line_item|
@@ -44,6 +45,10 @@
       %td= number_to_currency(line_item.total_price)
       - if download
         %td= "#{download.count} / #{download.remaining}"
+      - else
+        %td N/A
+      - if order.user.guest?
+        %td= link_to 'DL link', order.get_link_to_downloads
       - else
         %td N/A
       %td= line_item.created_at.to_s(:date_time12)
