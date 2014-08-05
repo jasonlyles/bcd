@@ -28,20 +28,24 @@
 %table.admin_table
   %tr
     %td.bold Product ID
-    %td.bold Model Code
-    %td.bold Name
+    %td.bold Model
     %td.bold Qty.
     %td.bold Paid
+    %td.bold Downloaded/Remaining
     %td.bold Created
     %td.bold Updated
   - order.line_items.each do |line_item|
     - product = Product.find(line_item.product_id)
+    - download = Download.where("product_id = ? and user_id = ?", line_item.product_id, order.user_id).first
     %tr
       %td= line_item.product_id
-      %td= product.product_code
-      %td= product.name
+      %td= product.code_and_name
       %td= line_item.quantity
       %td= number_to_currency(line_item.total_price)
+      - if download
+        %td= "#{download.count} / #{download.remaining}"
+      - else
+        %td N/A
       %td= line_item.created_at.to_s(:date_time12)
       %td= line_item.updated_at.to_s(:date_time12)
 - if order.status != 'COMPLETED'
