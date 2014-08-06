@@ -15,10 +15,9 @@
 = paginate @products
 .centered_products_table
   %table.products_table
-    - until @products.length == 0
-      - products = @products.pop(2).reverse!
-      %tr
-        - products.each do |product|
-          %td
-            = render 'product_teaser_medium', :product => product
+    - @products.each_with_index do |product,index|
+      - if index.even?
+        %tr
+      %td
+        = render 'product_teaser_medium', :product => product
 = paginate @products
