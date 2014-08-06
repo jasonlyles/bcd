@@ -6,6 +6,10 @@ class AdminController < ApplicationController
   include Devise::Models::DatabaseAuthenticatable
   layout 'admin'
 
+  def featured_products
+    @products = Product.ready.order('category_id').order('product_code')
+  end
+
   def maintenance_mode
     @mm_switch = Switch.maintenance_mode
   end

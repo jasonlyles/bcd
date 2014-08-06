@@ -13,7 +13,7 @@ class Product < ActiveRecord::Base
   attr_accessible :category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache,
                   :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf,
                   :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes,
-                  :parts_lists_attributes
+                  :parts_lists_attributes, :featured
 
   validates :product_code, :uniqueness => true, :presence => true
   validates :product_type_id, :presence => true
@@ -33,6 +33,7 @@ class Product < ActiveRecord::Base
   validates :ready_for_public, :pdf_exists => true
 
   scope :ready, -> {where(ready_for_public: true)}
+  scope :featured, -> {where(featured: true)}
   scope :in_stock, -> {where("quantity > 0")} #Maybe set up to use only physical products, and not digital products
   scope :instructions, -> {Product.joins(:product_type).where("product_types.name='Instructions'")}
   scope :ready_instructions, -> {ready.instructions}

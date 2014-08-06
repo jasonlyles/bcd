@@ -50,11 +50,14 @@ class ProductsController < ApplicationController
   # PUT /products/1
   def update
     @product = Product.find(params[:id])
-    if @product.update_attributes(params[:product])
-      redirect_to(@product, :notice => 'Product was successfully updated.')
-    else
-      flash[:alert] = "Product was NOT updated"
-      render "edit"
+    respond_to do |format|
+      if @product.update_attributes(params[:product])
+        format.html {redirect_to(@product, :notice => 'Product was successfully updated.')}
+        format.json {render json: true}
+      else
+        format.html {render 'edit', alert: "Product was NOT updated"}
+        format.json {render json: false}
+      end
     end
   end
 

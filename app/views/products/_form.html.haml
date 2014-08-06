@@ -110,6 +110,9 @@
     .field
       = f.label :alternative_build
       = f.check_box :alternative_build, {:checked => product.alternative_build},1,0
+    .field
+      = f.label :featured
+      = f.check_box :featured, {:checked => product.featured},1,0
   %br
   .actions
     = f.submit 'Save'

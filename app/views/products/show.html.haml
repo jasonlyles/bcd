@@ -52,6 +52,9 @@
   %b Alternative build?
   = @product.alternative_build?
 %p
+  %b Featured?
+  = @product.featured?
+%p
   %b Youtube Url:
   - if @product.youtube_url && !@product.youtube_url.blank?
     = @product.youtube_url
