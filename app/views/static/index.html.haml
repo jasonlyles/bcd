@@ -27,7 +27,8 @@
     %h3 Featured Product
   .news_item.drop_shadow
     - unless product.nil?
-      = link_to(image_tag(product.main_image.medium), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless product.main_image.blank?
+      .news_item_image
+        = link_to(image_tag(product.main_image.medium), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless product.main_image.blank?
       %br
       %b= "#{product.product_code} #{product.name}"
       %br
