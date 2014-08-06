@@ -14,14 +14,15 @@ describe ApplicationHelper do
       @product_type = FactoryGirl.create(:product_type)
       @category = FactoryGirl.create(:category)
       @subcategory = FactoryGirl.create(:subcategory)
-      @products = [FactoryGirl.create(:product),
+      @products = [FactoryGirl.create(:product, featured: 't'),
                     FactoryGirl.create(:product,
                                   :name => "Grader",
                                   :product_type_id => @product_type.id,
                                   :product_code => "WC002",
                                   :description => "Winter Village Grader... are you kidding? w00t! Plow your winter village to the ground and then flatten it out with this sweet grader.",
                                   :price => "5.00",
-                                  :ready_for_public => "t"
+                                  :ready_for_public => "t",
+                                  featured: 't'
                     )
       ]
 

@@ -6,7 +6,7 @@ module ApplicationHelper
 
   def featured_item
     #This might not be a pretty way to get a random product, but it would take us having a lot of products to make this slow, I would guess
-    @products = Product.find_products_for_sale
+    @products = Product.find_products_for_sale.featured
     ids = @products.collect{|product| product.id}
     random_array_index = rand(ids.length)
     product_id = ids[random_array_index]
