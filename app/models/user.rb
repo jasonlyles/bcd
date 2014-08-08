@@ -16,6 +16,9 @@ class User < ActiveRecord::Base
   validates :tos_accepted, :acceptance => {:accept => true}
 
   before_create :set_up_guids
+  before_save do
+    self.email.downcase!
+  end
 
   def apply_omniauth(omniauth)
     if omniauth['info'] && omniauth['info']['email']
@@ -38,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def completed_orders
-    orders.where("status='COMPLETED'")
+    orders.where("status='COMPLETED' or status='GIFT'")
   end
 
   def get_product_info_for_products_owned

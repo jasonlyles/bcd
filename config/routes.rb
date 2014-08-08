@@ -109,6 +109,7 @@ BrickCity::Application.routes.draw do
   end
 
   get '/featured_products' => 'admin#featured_products'
+  post '/gift_instructions' => 'admin#gift_instructions'
   post '/woofay/switch_maintenance_mode' => 'admin#switch_maintenance_mode'
   match '/woofay/:email/find_user' => 'admin#find_user', :constraints => {:email => /.*/}, via: :post
   post '/woofay/find_order' => 'admin#find_order'

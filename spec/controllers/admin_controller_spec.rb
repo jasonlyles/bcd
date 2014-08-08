@@ -6,6 +6,42 @@ describe AdminController do
     @product_type = FactoryGirl.create(:product_type)
   end
 
+  describe 'gift_instructions' do
+    it 'should create a new order with status = GIFT if could not find an order with status = GIFT' do
+      user = FactoryGirl.create(:user)
+      category = FactoryGirl.create(:category)
+      subcategory = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:product)
+      sign_in @radmin
+
+      lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }.should change(Order, :count).by(1)
+      expect(assigns(:order).status).to eq 'GIFT'
+    end
+
+    it 'should destroy the line_item for an order if the user owns the product via gifting' do
+      user = FactoryGirl.create(:user)
+      category = FactoryGirl.create(:category)
+      subcategory = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:product)
+      order = FactoryGirl.create(:order, status: 'GIFT')
+      line_item = FactoryGirl.create(:line_item, order_id: order.id, product_id: product.id)
+      sign_in @radmin
+
+      lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }.should change(LineItem, :count).by(-1)
+    end
+
+    it 'should add a line_item to the order if one does not already exist' do
+      user = FactoryGirl.create(:user)
+      category = FactoryGirl.create(:category)
+      subcategory = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:product)
+      order = FactoryGirl.create(:order, status: 'GIFT')
+      sign_in @radmin
+
+      lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }.should change(LineItem, :count).by(1)
+    end
+  end
+
   describe 'transactions_by_month' do
     it "should return all transactions for a given month" do
       user = FactoryGirl.create(:user)

@@ -1,12 +1,15 @@
 %h3 Order Info
 %br
 %p Order ID: #{order.id}
-- if order.status == 'COMPLETED'
+- if order.status == 'COMPLETED' || order.status == 'GIFT'
   %p.happy Order Status: #{order.status}
 - else
   %p.sad Order Status: #{order.status}
 %p Request ID: #{order.request_id}
-%p Paypal Transaction ID: #{order.transaction_id}
+- if order.status == 'GIFT'
+  %p Transaction ID: #{order.transaction_id}
+- else
+  %p Paypal Transaction ID: #{order.transaction_id}
 %p Transaction Date: #{order.created_at.to_s(:date_time12)}
 %p Updated Date: #{order.updated_at.to_s(:date_time12)}
 %p User: #{order.user.email}
@@ -53,7 +56,7 @@
         %td N/A
       %td= line_item.created_at.to_s(:date_time12)
       %td= line_item.updated_at.to_s(:date_time12)
-- if order.status != 'COMPLETED'
+- if !['COMPLETED','GIFT'].include?(order.status)
   %br
   %br
   %p

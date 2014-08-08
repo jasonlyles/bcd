@@ -6,6 +6,27 @@ class AdminController < ApplicationController
   include Devise::Models::DatabaseAuthenticatable
   layout 'admin'
 
+  def gift_instructions
+    user_id = params['gift']['user_id']
+    product_id = params['gift']['product_id']
+    @user = User.find(user_id)
+
+    @order = Order.where("user_id = ? and status = 'GIFT'", user_id).first
+    @order = Order.new(user_id: user_id, status: 'GIFT', transaction_id: SecureRandom.hex(20), request_id: SecureRandom.hex(20)) if @order.blank?
+
+    @line_item = LineItem.where("order_id = ? and product_id = ?",@order.id, product_id).first
+    @line_item.destroy if @user.owns_product?(product_id)
+
+    @order.line_items << LineItem.new(product_id: product_id, quantity: 1, total_price: 0) if @line_item.blank?
+    respond_to do |format|
+      if @order.save
+        format.json {render json: true}
+      else
+        format.json {render json: false}
+      end
+    end
+  end
+
   def featured_products
     @products = Product.ready.order('category_id').order('product_code')
   end
@@ -27,7 +48,8 @@ class AdminController < ApplicationController
   end
 
   def find_user
-    @user = User.find_by_email(params[:user][:email])
+    @user = User.find_by_email(params[:user][:email].downcase)
+    @products = Product.ready_instructions.order('category_id').order('product_code')
     respond_to do |format|
       format.js
     end
@@ -65,7 +87,7 @@ class AdminController < ApplicationController
   #TODO: Change this action to accept users ID. Will make for a cleaner action and test.
   def change_user_status
     user = params[:user]
-    @user = User.find_by_email(user[:email])
+    @user = User.find_by_email(user[:email].downcase)
     @user.update_attributes(:account_status => user[:account_status])
     respond_to do |format|
       format.js

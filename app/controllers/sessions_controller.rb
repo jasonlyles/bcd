@@ -18,7 +18,7 @@ class SessionsController < Devise::SessionsController
     else
       #See if I can convert these next few lines to find_or_create_by, making sure to still
       # set account_status to 'G'. Pay attention to the block below looking to see if @user is valid
-      @user = Guest.find_by_email(params[:guest][:email])
+      @user = Guest.find_by_email(params[:guest][:email].downcase)
       @user = Guest.new(params[:guest]) unless @user
       @user.account_status = 'G'
 

@@ -44,6 +44,22 @@ $(function() {
   });
 });
 
+function giftInstructions(user_id, product_id) {
+    $.ajax({
+        dataType: "json",
+        data: { gift: {'user_id':user_id, 'product_id':product_id}},
+        cache: false,
+        type: 'POST',
+        url: '/gift_instructions.json',
+        error: function(XMLHttpRequest, errorTextStatus, error){
+            alert("Failed to Update : " + errorTextStatus+" ; " + error);
+        },
+        success: function(data){
+            alert("Success!")
+        }
+    });
+};
+
 /*
 //This function is used in the products/new and edit pages to ajax-ily create a model code for the product
 $(function() {
