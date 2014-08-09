@@ -164,15 +164,6 @@ describe ApplicationController do
       @cart.user_id.should eq(nil)
     end
 
-    it "should destroy the user record associated with the guest" do
-      @user = FactoryGirl.create(:user)
-      @cart = FactoryGirl.create(:cart, :user_id => @user.id)
-      session[:guest] = @user.id
-      controller.send(:clean_up_guest)
-
-      expect{User.find(@user.id)}.to raise_error(ActiveRecord::RecordNotFound)
-    end
-
     it "should delete guest from session" do
       @user = FactoryGirl.create(:user)
       @cart = FactoryGirl.create(:cart, :user_id => @user.id)
