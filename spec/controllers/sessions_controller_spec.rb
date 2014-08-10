@@ -46,6 +46,7 @@ describe SessionsController do
     context 'with a current_guest' do
       it 'should assign current_guest to @user' do
         current_guest = FactoryGirl.create(:user, :email => 'blahblah@blah.blah')
+        @cart = FactoryGirl.create(:cart, user_id: current_guest.id)
         controller.should_receive(:set_guest_status).and_return(true)
         controller.should_receive(:current_guest).at_least(1).times.and_return(current_guest)
         request.env['devise.mapping'] = Devise.mappings[:user]
@@ -57,6 +58,8 @@ describe SessionsController do
 
     context 'without a current guest' do
       it 'should assign a new Guest object to @user' do
+        @cart = FactoryGirl.create(:cart)
+        session[:cart_id] = @cart.id
         controller.should_receive(:set_guest_status).and_return(true)
         request.env['devise.mapping'] = Devise.mappings[:user]
         get :guest_registration

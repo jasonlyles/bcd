@@ -2,6 +2,10 @@ class SessionsController < Devise::SessionsController
   after_filter :kill_guest_checkout_flag, :only => [:register_guest]
 
   def guest_registration
+    if @cart.nil?
+      flash[:notice] = 'Sorry. Your cart is empty. Please add something to your cart before trying to checkout.'
+      return redirect_to '/'
+    end
     set_guest_status
     @user = current_guest ? current_guest : Guest.new
   end

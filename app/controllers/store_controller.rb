@@ -141,7 +141,7 @@ class StoreController < ApplicationController
       end
     end
     if @cart.cart_items.empty?
-      redirect_to :back, :notice => "Your cart is empty."
+      redirect_to '/', :notice => "Your cart is empty."
     else
       item_list = check_for_errant_items
       if item_list
@@ -422,7 +422,7 @@ class StoreController < ApplicationController
   end
 
   def get_users_physical_address
-    if @cart.has_physical_item? && session[:address_submitted].blank?
+    if @cart && @cart.has_physical_item? && session[:address_submitted].blank?
       redirect_to :enter_address
     end
   end
