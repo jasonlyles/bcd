@@ -72,7 +72,7 @@ class SalesReport < ActiveRecord::Base
   private
 
   def get_orders_for_report_month
-    Order.where("status = 'COMPLETED' and created_at >= ? AND created_at < ?","#{self.report_date}","#{Date.parse("#{self.report_date}").next_month.strftime("%Y-%m-01")}")
+    Order.where("upper(status) = 'COMPLETED' and created_at >= ? AND created_at < ?","#{self.report_date}","#{Date.parse("#{self.report_date}").next_month.strftime("%Y-%m-01")}")
   end
 
   def arrange_sales_summaries(orders)

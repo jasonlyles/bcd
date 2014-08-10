@@ -284,7 +284,7 @@ class StoreController < ApplicationController
 
   def enter_address
     if current_user && !current_user.orders.blank? && !session[:address_submitted]
-      @order = current_user.orders.where("status='COMPLETED' and address_street_1 not null").order("updated_at DESC").first
+      @order = current_user.orders.where("upper(status)='COMPLETED' and address_street_1 not null").order("updated_at DESC").first
       @order ||= Order.new
     elsif session[:address_submitted]
       @submission_method = session[:address_submitted][:address_submission_method]

@@ -28,11 +28,11 @@
         %b Status:
       %td
       %td
-        - if @order.status == "COMPLETED"
+        - if @order.status.upcase == "COMPLETED"
           %b.happy= @order.status
         - else
           %b.sad= @order.status
-  - if @order.status != "COMPLETED"
+  - if @order.status.upcase != "COMPLETED"
     %br
     %p We're not sure why this order is messed up, but we want to fix it. Please email us at service@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.
   %br

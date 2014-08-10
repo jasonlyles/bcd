@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def completed_orders
-    orders.where("status='COMPLETED' or status='GIFT'")
+    orders.where("upper(status)='COMPLETED' or status='GIFT'")
   end
 
   def get_product_info_for_products_owned

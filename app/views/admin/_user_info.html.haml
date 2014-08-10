@@ -95,7 +95,7 @@
         %td= link_to order.id, {:controller => :admin, :action => :order, :id => order.id}
         %td= order.request_id
         %td= order.transaction_id
-        - if order.status == "COMPLETED" || order.status == 'GIFT'
+        - if order.status.upcase == "COMPLETED" || order.status == 'GIFT'
           %td.happy= order.status
         - else
           %td.sad= order.status

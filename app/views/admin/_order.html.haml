@@ -1,7 +1,7 @@
 %h3 Order Info
 %br
 %p Order ID: #{order.id}
-- if order.status == 'COMPLETED' || order.status == 'GIFT'
+- if order.status.upcase == 'COMPLETED' || order.status == 'GIFT'
   %p.happy Order Status: #{order.status}
 - else
   %p.sad Order Status: #{order.status}
@@ -56,7 +56,7 @@
         %td N/A
       %td= line_item.created_at.to_s(:date_time12)
       %td= line_item.updated_at.to_s(:date_time12)
-- if !['COMPLETED','GIFT'].include?(order.status)
+- if !['COMPLETED','GIFT'].include?(order.status.upcase)
   %br
   %br
   %p
