@@ -151,6 +151,9 @@ class StoreController < ApplicationController
   end
 
   def submit_order
+    if @cart.nil?
+      return redirect_to '/cart'
+    end
     @order = Order.new(params[:order])
     @order.add_line_items_from_cart(@cart)
     item_amount_string = ""
@@ -158,7 +161,7 @@ class StoreController < ApplicationController
       item_amount_string += "&item_name_#{index+1}=#{item.product.product_code} #{item.product.name}&amount_#{index+1}=#{item.product.price.to_f}&quantity_#{index+1}=#{item.quantity}"
     end
     @order.request_id = SecureRandom.hex(20)
-    if @order.save
+    if @order.save!
       @cart.destroy
       session.delete(:cart_id)
       redirect_to URI.encode("https://#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
@@ -385,6 +388,9 @@ class StoreController < ApplicationController
   # Instructions with 0 downloads remaining can be purchased again.
   def check_users_previous_orders
     unless current_guest
+      if @cart.nil?
+        return redirect_to '/cart'
+      end
       orders = current_user.orders
       @products_from_previous_orders = []
       orders.each do |order|

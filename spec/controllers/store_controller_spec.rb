@@ -372,6 +372,14 @@ describe StoreController do
   end
 
   describe "submit_order" do
+    it "should immediately dump a user back to /cart if there is no @cart" do
+      @user = FactoryGirl.create(:user)
+      session[:guest] = @user.id
+      post :submit_order, order: {user_id: @user.id}
+
+      expect(response).to redirect_to '/cart'
+    end
+
     it "should not delete session[:guest]" do
       @user = FactoryGirl.create(:user)
       FactoryGirl.create(:category)
@@ -414,7 +422,7 @@ describe StoreController do
       @user = FactoryGirl.create(:user)
       @cart = FactoryGirl.create(:cart)
       session[:cart_id] = @cart.id
-      Order.any_instance.stub(:save).and_return(false)
+      Order.any_instance.stub(:save!).and_return(false)
       sign_in @user
       post :submit_order, :order => {:user_id => @user.id}
 
