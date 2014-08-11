@@ -18,24 +18,30 @@ class MarketingMailer < ActionMailer::Base
     @user = user
     mail(to: @user.email, subject: @email_campaign.subject)
   end
+#:nocov
+  def queue_name
+    "batchmailer"
+  end
+#:nocov
+end
 
-  #:nocov:
-  if Rails.env.development?
-    class MarketingMailer::Preview < MailView
-      def new_product_notification
-        @user = User.first
-        @product = Product.first
+#:nocov:
+if Rails.env.development?
+  class MarketingMailer::Preview < MailView
+    def new_product_notification
+      @user = User.first
+      @product = Product.first
 
-        MarketingMailer.new_product_notification(@product, @product.product_type.name, @product.main_image.medium,
-                                                 @user, "Marketing mumbo-jumbo...")
-      end
+      MarketingMailer.new_product_notification(@product, @product.product_type.name, @product.main_image.medium,
+                                               @user, "Marketing mumbo-jumbo...")
+    end
 
-      def new_marketing_notification
-        @user = User.first
-        @email_campaign = EmailCampaign.first
-        MarketingMailer.new_marketing_notification(@email_campaign, @user)
-      end
+    def new_marketing_notification
+      @user = User.first
+      @email_campaign = EmailCampaign.first
+      MarketingMailer.new_marketing_notification(@email_campaign, @user)
     end
   end
-  #:nocov:
 end
+#:nocov:
+
