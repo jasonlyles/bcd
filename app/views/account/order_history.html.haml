@@ -29,7 +29,7 @@
           %b Status:
         %td
         %td
-          - if order.status.upcase == "COMPLETED"
+          - if order.status && order.status.upcase == "COMPLETED"
             %b.happy= order.status
           - else
             %b.sad= order.status
