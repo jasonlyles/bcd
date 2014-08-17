@@ -1,5 +1,5 @@
 class MarketingMailer < ActionMailer::Base
-  default :from => "Brick City Depot <no-reply@brickcitydepot.com>"
+  default :from => "Brick City Depot <sales@brickcitydepot.com>"
   layout 'base_email'
 
   def new_product_notification(product, product_type, image_url, user, message=nil)

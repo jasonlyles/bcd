@@ -1,5 +1,5 @@
 class OrderMailer < AsyncMailer
-  default :from => "Brick City Depot <no-reply@brickcitydepot.com>"
+  default :from => "Brick City Depot <sales@brickcitydepot.com>"
   layout 'base_email', except: [:physical_item_purchased]
 
   def order_confirmation(user_id, order_id)

@@ -1,5 +1,5 @@
 class UpdateMailer < AsyncMailer
-  default :from => "Brick City Depot <no-reply@brickcitydepot.com>"
+  default :from => "Brick City Depot <sales@brickcitydepot.com>"
   layout 'base_email'
 
   def updated_instructions(user_id, model_id, message)

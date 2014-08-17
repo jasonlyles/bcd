@@ -1,5 +1,5 @@
 class ContactMailer < AsyncMailer
-  default from: "Brick City Depot <no-reply@brickcitydepot.com>"
+  default from: "Brick City Depot <sales@brickcitydepot.com>"
   default to: EmailConfig.config.contact
   layout 'admin_email'
 

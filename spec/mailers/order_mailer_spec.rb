@@ -19,7 +19,7 @@ describe OrderMailer do
     it "should send user an email for the order they placed" do
       @mail.subject.should == "Brick City Depot Order Confirmation"
       @mail.to.should == [@user.email]
-      @mail.from.should == ["no-reply@brickcitydepot.com"]
+      @mail.from.should == ["sales@brickcitydepot.com"]
       #This doesn't work. It seems like it should, but it doesnt.
       #@mail.body.parts.find {|p| p.content_type.match /html/}.body.to_s.should match("Hello charlie_brown@peanuts.com")
       #@mail.body.parts.find {|p| p.content_type.match /plain/}.body.to_s.should match("Hello charlie_brown@peanuts.com")
@@ -32,7 +32,7 @@ describe OrderMailer do
       @guest_mail = OrderMailer.guest_order_confirmation(@user.id,@order.id,link)
       @guest_mail.subject.should == "Your Brick City Depot Order"
       @guest_mail.to.should == [@user.email]
-      @guest_mail.from.should == ["no-reply@brickcitydepot.com"]
+      @guest_mail.from.should == ["sales@brickcitydepot.com"]
       #Also not working... but why?!?!?
       #@guest_mail.body.parts.each do |part|
       #  part.body.should match("Thank you for placing an order with Brick City Depot")
@@ -47,7 +47,7 @@ describe OrderMailer do
     it "should send admin an email if a physical item is purchased" do
       @physical_mail.subject.should == "Physical Item Purchased"
       @physical_mail.to.should == ['lylesjt@yahoo.com']
-      @physical_mail.from.should == ['no-reply@brickcitydepot.com']
+      @physical_mail.from.should == ['sales@brickcitydepot.com']
       @physical_mail.body.parts.each do |part|
         part.body.should match("charlie_brown@peanuts.com")
         part.body.should match(@product.name)

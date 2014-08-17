@@ -15,7 +15,7 @@ describe MarketingMailer do
       @mail = MarketingMailer.new_product_notification(@product, @product.product_type.name, @product.main_image, @user, 'Test')
       @mail.subject.should == "New Product!"
       @mail.to.should == [@user.email]
-      @mail.from.should == ["no-reply@brickcitydepot.com"]
+      @mail.from.should == ["sales@brickcitydepot.com"]
     end
   end
 
@@ -24,7 +24,7 @@ describe MarketingMailer do
       @mail = MarketingMailer.new_marketing_notification(@email_campaign, @user)
       expect(@mail.subject).to eq('Sweet Email')
       expect(@mail.to).to eq([@user.email])
-      expect(@mail.from).to eq(["no-reply@brickcitydepot.com"])
+      expect(@mail.from).to eq(["sales@brickcitydepot.com"])
     end
   end
 end
