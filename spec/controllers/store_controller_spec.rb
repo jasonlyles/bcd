@@ -372,6 +372,18 @@ describe StoreController do
   end
 
   describe "submit_order" do
+    it 'should set a cookie for redirecting to the thank_you page' do
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      FactoryGirl.create(:product)
+      @cart = FactoryGirl.create(:cart_with_cart_items, :user_id => @user.id)
+      sign_in @user
+      post :submit_order, :order => {:user_id => @user.id}
+
+      expect(response.cookies['show_thank_you']).to eq('true')
+    end
+
     it "should immediately dump a user back to /cart if there is no @cart" do
       @user = FactoryGirl.create(:user)
       session[:guest] = @user.id
@@ -560,6 +572,18 @@ describe StoreController do
   end
 
   describe 'thank_you_for_your_order' do
+    it "should delete the show_thank_you cookie" do
+      @user = FactoryGirl.create(:user)
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      FactoryGirl.create(:product)
+      FactoryGirl.create(:order_with_line_items)
+      cookies[:show_thank_you] = true
+      get :thank_you_for_your_order
+
+      expect(response.cookies['show_thank_you']).to be_nil
+    end
+
     it "should delete session[:guest]" do
       @user = FactoryGirl.create(:user)
       FactoryGirl.create(:category)

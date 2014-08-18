@@ -129,6 +129,9 @@ class StoreController < ApplicationController
   end
 
   def checkout
+    if @cart.nil?
+      return redirect_to '/cart'
+    end
     session.delete(:return_to_checkout)
     @user = current_customer
     unless @user
@@ -164,6 +167,7 @@ class StoreController < ApplicationController
     if @order.save!
       @cart.destroy
       session.delete(:cart_id)
+      cookies[:show_thank_you] = true
       redirect_to URI.encode("https://#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
     else
       begin
@@ -274,6 +278,7 @@ class StoreController < ApplicationController
   #:nocov:
 
   def thank_you_for_your_order
+    cookies.delete :show_thank_you
     if session[:guest]
       @user = User.find session[:guest]
       @order = @user.orders.last
