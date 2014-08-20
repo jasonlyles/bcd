@@ -14,14 +14,14 @@
     %title
       = content_for?(:title) ? yield(:title) : "Brick City Depot"
     <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <script async src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
     <![endif]-->
     = stylesheet_link_tag 'application.css'
     <!--[if IE]>
     = stylesheet_link_tag 'ie', :media => "all"
     <![endif]-->
 
-    = javascript_include_tag 'application'
+    = javascript_include_tag 'application', async: true
 
     = csrf_meta_tag
     <!--[if !IE7]>
