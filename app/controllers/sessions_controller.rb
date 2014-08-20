@@ -24,7 +24,8 @@ class SessionsController < Devise::SessionsController
       # set account_status to 'G'. Pay attention to the block below looking to see if @user is valid
       @user = Guest.find_by_email(params[:guest][:email].downcase)
       @user = Guest.new(params[:guest]) unless @user
-      @user.account_status = 'G'
+      #Doing the 'unless' condition so a user can't then make himself a guest and break his account
+      @user.account_status = 'G' unless @user.account_status == 'A'
 
       unless @user.valid?
         flash[:alert] = "You must enter a valid email and accept the terms of service before you can proceed."

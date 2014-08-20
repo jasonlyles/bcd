@@ -123,7 +123,7 @@ describe SessionsController do
 
       context 'and user record is valid' do
         it 'should save the user' do
-          user = FactoryGirl.create(:user, :email => 'blar4@blar.blar')
+          user = FactoryGirl.create(:user, :email => 'blar4@blar.blar', :account_status => '')
           controller.should_receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           User.any_instance.should_receive(:valid?).at_least(1).times.and_return(true)
