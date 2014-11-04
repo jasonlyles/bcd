@@ -56,7 +56,7 @@
         %td N/A
       %td= line_item.created_at.to_s(:date_time12)
       %td= line_item.updated_at.to_s(:date_time12)
-- if !['COMPLETED','GIFT'].include?(order.status.upcase)
+- if order.status && !['COMPLETED','GIFT'].include?(order.status.upcase)
   %br
   %br
   %p
