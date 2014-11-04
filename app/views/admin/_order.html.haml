@@ -1,7 +1,7 @@
 %h3 Order Info
 %br
 %p Order ID: #{order.id}
-- if order.status.upcase == 'COMPLETED' || order.status == 'GIFT'
+- if order.status && (order.status.upcase == 'COMPLETED' || order.status == 'GIFT')
   %p.happy Order Status: #{order.status}
 - else
   %p.sad Order Status: #{order.status}
