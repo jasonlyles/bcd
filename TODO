@@ -11,43 +11,72 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 
 3. Set up asset caching/expiry
 
-4. Prod env vars.
-    d. After making sure everything is hooked up in prod and transactions are going through, set LOG_LEVEL to info
-
-5. Set up a dev branch in github after I roll out to production. Then all changes should be to the dev branch, and
+4. Set up a dev branch in github after I roll out to production. Then all changes should be to the dev branch, and
 merged into the master branch after confirmed that everything is working properly. Then deploy from master.
 
-6.  Issues:
+5.  Issues:
     a. Make sure batch emails go out
     b. I'm serving Images through my image bucket name, and not the cname or cloudfront.
-    c. Move the image at /uploads/4/8/0/4/4804115/9169743_orig.jpg to S3 and serve it through cloudfront
+    c. Add some stuff to protect me from some of these hack requests. Check out: https://github.com/kickstarter/rack-attack/wiki/Example-Configuration
+      Also, look into seeing if I can block a specific user agent, since a lot of bad requests seem to be coming from the same user agent.
     d. Still a issue with http vs https for twitter and facebook on prettyPhoto when popping open that window.
-    e. Backup current database, throw into maintenance, then promote new database. Follow instructions here: https://devcenter.heroku.com/articles/upgrade-heroku-postgres-with-pgbackups
-    f. Bigger images in store, maybe use medium instead of thumb.
-    g. Make it more obvious how to get to the cart.
-    h. Work on the ordering of products in the store... I want the popular modulars showing up first.
-    i. Move sales report to a background task.
-    j. Make sure the database is being backed up. Do this after setting up the new database.
-    k. Add download links on the thank_you page, for guests.
-    l. Graphic/links to point to /books. Replace the construction dude with this. At the same time, make that div bigger,
-    along with the featured product div. Featured product div should have a medium image in it.
+    e. Make it more obvious how to get to the cart.
+    f. Work on the ordering of products in the store... I want the popular modulars showing up first.
+    g. Move sales report to a background task.
+    h. Tweak my papertrail settings to filter out more unnecessary logs. I ran into my 10MB limit early today.
+    i. Double check cancellation process and authentication removal process for BCD account holders.
+    j. Create task that checks redis to see if there are any jobs that need to be processed. If there are, try to fire up
+    a worker for that queue. Afterwards, ensure the worker is fired. The task should also fire workers if there are no
+    jobs that need to be processed. This should be set up as a rake task and run via the scheduler every 10 minutes. This
+    should serve as a backup to the regular hire/fire process, and should help keep a queue from getting loaded up with
+    unsent emails, etc.
+    k. See if I can set up anything to notify me/us on email bounces/rejects.
+    l. Order confirmation emails should go to both the users email they supplied and their paypal email, unless the 2
+    match. See if I can get the users paypal address back from them.
+    m. Protect logged out users from having account info harvested by people using the back button. Add something to the
+    layout that looks for if the back button was triggered. If it was, ajax call to the app to see if the user is logged
+    out. If so, redirect to login screen.
+    n. Fix image height/width on /account page. They're getting stretched.
+    o. Go through recommendations in google analytics for speeding up pages and fixing user experience issues, at least
+    for mobile
+    p. Can maybe trim down on the size of images by having a transparent background for the large white areas.
+    q. Also, can trim down on the size of images by having them processed by tinypng during the upload process. Will
+    have to figure out some way to hook into carrierwave to accomplish it. Maybe a carrierwave-tinypng gem is called
+    for. https://tinypng.com/developers
+    r. For adding search features in the admin console, or in the front end, check out the ransack gem.
+    s. Add a check to get user agent string from browser, if there is a logged in user. Store in it's own table with a
+    foreign key to User. That way I can see what browser people were using when they had trouble downloading. It might
+    make sense to only set this up to get stored when people go to the 'My Account' page, or for guests when they go to
+    the guest download page. On the guest download page, I can grab their download token as a way of identifying them
+    and look up their user_id by that download token, then store the user_id in the browser table.
+    t. Convert html parts lists to be just another page in the app. There can be a parts_list page that takes an
+    argument for the parts_list id and assigns to @parts_list. That can then be used to determine which partial is
+    rendered out of a parts_list subdir in  app/views. The partials will just be the table with all the parts. The parts_list
+     page will be everything else in the page, the js, the form, the buttons, etc. I think the better thing to do would
+     be to just upload the html lists to S3, make them public, and then serve them through cloudfront. Clicking on the
+     link would just pop a new tab via target=_blank and display the html file. But I don't want to do this until I've
+     converted the old html lists to use the images hosted on S3.
+    u. Emails not going out for parts list update. Looks like heroku wasn't notified to update number of workers for email queue.
 
-
-7. Try to initiate DNS transfer again.
-
-8. FOR THE BUSINESS, NOT THE WEBSITE: Get the script working that creates images for parts, and get it to upload to
+6. FOR THE BUSINESS, NOT THE WEBSITE: Get the script working that creates images for parts, and get it to upload to
     the S3 image bucket. Then update all parts lists to use the cloudfront url to get images. Also, update the parts
     lists to use a logo I upload to S3 via cloudfront. That will ease the load of requests coming in for the logo to
     be served by Heroku.
+
+7. Set up Modernizr and https://github.com/ai/autoprefixer-rails
+
+8. See if there's any sweet animations I can put together using this: http://greensock.com/gsap
+
+9. Move javascript loading to just below closing body tag. Create something like the content_for :title for javascript
+that I can put at the bottom of the layout, below the js loading, so I can have js load from a individual page, but still
+load after jquery, etc. Also, set up CDN/hosted file trick like on page 355 of the javascript/jquery book I've been reading.
 
 GETTING READY FOR PROD #######################################################
 
 1. Paypal!
     a. Do a test for a physical product against prod.
 
-2. Set up a database through heroku.
-
-3. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
+2. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
     not work properly to submit the sitemap from the s3 url until the https prod version is set up, because all the urls
     in the sitemap are for https://www.brickcitydepot.com  Heroku's scheduler doesn't have options for weekly or monthly,
     but I can fake it by wrapping the call to the rake task in a bash if statement:
@@ -71,9 +100,7 @@ THINGS I NEED TO DO FOR LAUNCH:
 ##########################
 IMMEDIATELY AFTER LAUNCH:
 
-1. Make sure emails to sales@ and service@brickcitydepot.com are going through. Re-test this every couple of days for
-   a couple of weeks.
-2. Do a test transaction with just instructions, and one with just a physical item, and one with both.
+1. Do a test transaction with just instructions, and one with just a physical item, and one with both.
 
 ##########################
 

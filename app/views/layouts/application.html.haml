@@ -2,6 +2,7 @@
 %html{:xmlns => "http://www.w3.org/1999/xhtml"}
   %head
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    %meta{:name => "viewport", :content => "width=device-width", :media => "all"}
     %meta{:name => "keywords", :content => meta_keywords}/
     %meta{:name => "description", :content => meta_description}/
     %meta{:property => "og:image", :content => "#{opengraph_metadata[:image]}" }/
@@ -23,7 +24,7 @@
 
     = javascript_include_tag 'application'
 
-    = csrf_meta_tag
+    = csrf_meta_tags
     <!--[if !IE7]>
     <style type="text/css">
     .content{style: 'display:table;height:100%;'}
