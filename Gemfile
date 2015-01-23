@@ -26,7 +26,7 @@ gem 'exception_notification'
 gem "haml-rails"
 gem 'jquery-rails'
 gem 'rake'
-gem 'sprockets_better_errors'
+
 gem 'resque'
 gem 'resque_mailer'
 gem 'resque-status'
@@ -78,6 +78,7 @@ group :development, :test do
   gem 'metric_fu'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
+  gem 'sprockets_better_errors'
 end
 
 group :test do
