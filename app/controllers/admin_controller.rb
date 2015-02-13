@@ -89,6 +89,7 @@ class AdminController < ApplicationController
     user = params[:user]
     @user = User.find_by_email(user[:email].downcase)
     @user.update_attributes(:account_status => user[:account_status])
+    @products = Product.ready_instructions.order('category_id').order('product_code')
     respond_to do |format|
       format.js
     end
