@@ -61,6 +61,7 @@ merged into the master branch after confirmed that everything is working properl
     w. Users with no orders still can't download the free instructions.
     x. Set up utm params for advertising campaigns: http://www.koozai.com/blog/analytics/utm-parameters/  Add fields in the form,
         and then use them to generate params for urls used in emails, banner ads, etc.
+    y. Seems I don't have sitemaps sent to Google yet. Fix!
 
 6. FOR THE BUSINESS, NOT THE WEBSITE: Get the script working that creates images for parts, and get it to upload to
     the S3 image bucket. Then update all parts lists to use the cloudfront url to get images. Also, update the parts
