@@ -71,6 +71,7 @@ class StoreController < ApplicationController
     #This method can be called via a link in a new product notification email, in which case, there won't be a
     # :back that I want to use, so set the redirect to take the user to the cart. Otherwise, return to :back, as
     # 'add to cart' buttons that POST are scattered throughout the app.
+    request.env["HTTP_REFERER"] = Rails.application.config.web_host if request.env["HTTP_REFERER"].blank?
     back_or_cart = request.method == 'GET' ? :cart : :back
     create_cart unless @cart
     product = Product.find_by_product_code(params[:product_code].upcase) #Doing this just to make sure a valid product is being used.
