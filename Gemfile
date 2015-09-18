@@ -1,5 +1,4 @@
 source 'http://rubygems.org'
-source 'http://gems.github.com'
 
 ruby '1.9.3'
 
@@ -79,6 +78,10 @@ group :development, :test do
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
   gem 'sprockets_better_errors'
+  gem 'awesome_print', require: 'ap'
+  #gem 'pry-byebug' Can only use this once I move Ruby to 2.0+
+  gem 'bullet'
+  gem 'gemsurance'
 end
 
 group :test do

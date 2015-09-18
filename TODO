@@ -76,6 +76,8 @@ merged into the master branch after confirmed that everything is working properl
 that I can put at the bottom of the layout, below the js loading, so I can have js load from a individual page, but still
 load after jquery, etc. Also, set up CDN/hosted file trick like on page 355 of the javascript/jquery book I've been reading.
 
+10. Upgrade gems/ruby. Gotta get off 1.9.3.
+
 GETTING READY FOR PROD #######################################################
 
 1. Paypal!
