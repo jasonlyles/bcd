@@ -8,7 +8,6 @@ class DownloadsController < ApplicationController
     if @parts_list
       @product = Product.find(@parts_list.product_id)
       #Check users completed orders and see if they're entitled to the parts lists
-      #Make sure I test this via unit tests  and actually clicking around in the browser
       @orders = current_user.completed_orders
       products = []
       @orders.each do |order|
@@ -17,16 +16,10 @@ class DownloadsController < ApplicationController
         end
       end
 
-      #Now, get all freebies product IDs, if user has ordered before
-      if products.length > 0
-        @freebies = Product.find_all_by_price('free')
-        @freebies.each do |product|
-          products << product.id
-        end
-      elsif products.length == 0 && @product.is_free? #User has no products, and is trying to download parts list for free instructions
-        flash[:alert] = "You need to have ordered something first, before you can get these free instructions."
-        return redirect_to :controller => :store, :action => :product_details, :product_code => @product.product_code, :product_name => @product.name.to_snake_case
-      end
+      #Now, get all freebie product IDs
+      products << Product.find_all_by_price('free').pluck(:id)
+      products.flatten!
+
       unless products.include?(@parts_list.product_id)
         return redirect_cheater_to_product_page
       end

@@ -180,7 +180,7 @@ class StoreController < ApplicationController
   end
 
   def empty_cart
-    @cart.cart_items.destroy_all
+    @cart.cart_items.destroy_all if @cart && @cart.cart_items
     redirect_to :store, :notice => "You have emptied your cart."
   end
 

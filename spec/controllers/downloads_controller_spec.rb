@@ -28,19 +28,6 @@ describe DownloadsController do
       response.should redirect_to '/GG001/green_giant'
     end
 
-    it "should not allow a user to download a freebie parts list, if they have not previously ordered something" do
-      @user ||= FactoryGirl.create(:user)
-      sign_in(@user)
-      @category = FactoryGirl.create(:category)
-      @subcategory = FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:free_product)
-      @parts_list = FactoryGirl.create(:html_parts_list)
-      get "download_parts_list", :parts_list_id => @parts_list.id
-
-      flash[:alert].should == "You need to have ordered something first, before you can get these free instructions."
-      response.should redirect_to "/CB001/colonial_revival_house"
-    end
-
     it "should allow a user to download a freebie parts list, if they have ordered something" do
       @user ||= FactoryGirl.create(:user)
       sign_in(@user)
