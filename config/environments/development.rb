@@ -40,6 +40,16 @@ BrickCity::Application.configure do
   config.assets.raise_production_errors = true
 
   #config.action_controller.asset_host = "http://images.brickcitydepot.com" #Just set this up to test whether I had it working or not. It works
+=begin
+  config.after_initialize do
+    Bullet.enable
+    Bullet.alert
+    Bullet.bullet_logger
+    Bullet.console
+    Bullet.rails_logger
+    Bullet.raise
+  end
+=end
 end
 
 #For troubleshooting exception notifications:
