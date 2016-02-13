@@ -526,6 +526,3 @@ DEPENDENCIES
   thin
   twitter
   uglifier
-
-BUNDLED WITH
-   1.10.6
