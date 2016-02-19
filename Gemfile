@@ -2,10 +2,10 @@ source 'http://rubygems.org'
 
 ruby '2.1.8'
 
-gem 'rails', '4.0.5'
+gem 'rails', '4.0.6'
 gem 'activerecord-session_store'
 gem 'protected_attributes'
-gem 'devise'
+gem 'devise', '3.2.4'
 gem 'aws-s3', :require => "aws/s3", github: 'thomasdavis/aws-s3'
 gem 'aws-ses', :require => "aws/ses"
 gem 'omniauth'
@@ -36,6 +36,7 @@ gem 'sitemap_generator'
 #assets
 gem 'sass-rails'
 gem 'compass-rails'
+gem 'compass-blueprint'
 gem 'coffee-rails'
 gem 'uglifier'
 gem 'sprockets', '2.11.0'
@@ -57,7 +58,7 @@ gem 'thin'
 # group :development, :test do
 #   gem 'webrat'
 # end
-
+# TODO: Need to spend time upgrading devise and rspec separately
 group :development, :test do
   gem 'dotenv-rails'
   gem 'better_errors'
@@ -71,17 +72,19 @@ group :development, :test do
   gem 'guard-rspec'
   gem "factory_girl_rails"
   gem "factory_girl_generator"
-  gem "rspec-rails"
+  gem "rspec-rails", '2.14.2'
+  #gem 'rspec-activemodel-mocks'  # Uncomment this after upgrading rspec
   gem 'simplecov', :require => false
   #gem 'brakeman'
   gem 'metric_fu'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
-  gem 'sprockets_better_errors'
+  #gem 'sprockets_better_errors' # This seems to have stopped working. I won't need it once I get to 4.1 anyways
   gem 'awesome_print', require: 'ap'
-  #gem 'pry-byebug' Can only use this once I move Ruby to 2.0+
+  gem 'pry-byebug'
   gem 'bullet'
   gem 'gemsurance'
+  gem 'pry'
 end
 
 group :test do
