@@ -57,7 +57,7 @@ BrickCity::Application.configure do
   config.action_mailer.default_url_options = { :host => 'bcd-stg.herokuapp.com' }
 
   #Set to use Amazon ses via aws-ses gem
-  config.action_mailer.delivery_method = :ses
+  config.action_mailer.delivery_method = :aws_sdk
 
   #Compress JS and CSS
   config.assets.js_compressor = :uglifier

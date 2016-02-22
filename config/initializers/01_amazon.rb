@@ -7,3 +7,8 @@ AmazonConfig.configure do |config|
   config.access_key = ENV['BCD_S3_KEY']
   config.secret = ENV['BCD_S3_SECRET']
 end
+
+Aws.config.update({
+    region: 'us-east-1',
+    credentials: Aws::Credentials.new(ENV['BCD_S3_KEY'], ENV['BCD_S3_SECRET'])
+})

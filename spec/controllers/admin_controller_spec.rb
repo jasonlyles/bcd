@@ -194,7 +194,7 @@ describe AdminController do
     it "should find the user given the user's email address" do
       sign_in @radmin
       user = FactoryGirl.create(:user)
-      get :find_user, :email => user.email, :user => {:email => user.email}, :format => :js
+      xhr :get, :find_user, email: user.email, user: {email: user.email}, format: :js
 
       assigns(:user).id.should == user.id
     end
@@ -238,7 +238,7 @@ describe AdminController do
     it "should change user's status" do
       @user = FactoryGirl.create(:user, :account_status => 'A')
       sign_in @radmin
-      get :change_user_status, :email => @user.email, :user => {:email => @user.email, :account_status => 'C'}, :format => :js
+      xhr :get, :change_user_status, :email => @user.email, :user => {:email => @user.email, :account_status => 'C'}, :format => :js
       @user = User.find(@user.id)
 
       @user.account_status.should == 'C'

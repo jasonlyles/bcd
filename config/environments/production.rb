@@ -57,8 +57,8 @@ BrickCity::Application.configure do
   # Devise needs a default url
   config.action_mailer.default_url_options = { :host => 'brickcitydepot.com' }
 
-  #Set to use Amazon ses via aws-ses gem
-  config.action_mailer.delivery_method = :ses
+  #Set to use Amazon ses via aws-sdk gem
+  config.action_mailer.delivery_method = :aws_sdk
 
   #Compress JS and CSS
   config.assets.js_compressor = :uglifier

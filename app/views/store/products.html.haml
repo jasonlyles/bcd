@@ -9,7 +9,7 @@
   %table.categories_table
     - if @product_type.name == 'Instructions'
       - until @top_categories.length == 0
-        - categories = @top_categories.pop(3).reverse!
+        - categories = @top_categories.to_a.pop(3).reverse!
         %tr
           - categories.each do |category|
             %td

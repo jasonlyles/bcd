@@ -1,12 +1,6 @@
-include AWS::S3
+include Aws::S3
 module Amazon
   class Storage
-
-    def self.download(file_name)
-      data = S3Object.find(file_name,AmazonConfig.config.instruction_bucket)
-      data.value
-    end
-
     def self.authenticated_url(file_name)
       pretty_filename = file_name.match(/\w+\.\w+$/).to_s
       extension = pretty_filename.match(/\w+$/).to_s
@@ -18,20 +12,15 @@ module Amazon
         when 'xml'
           'application/xml'
       end
-      S3Object.url_for(file_name,AmazonConfig.config.instruction_bucket,
-                       :query => {'response-content-disposition' => "attachment;filename=#{pretty_filename}",
-                                  'response-content-type' => response_content_type})
-    end
 
-    def self.connect
-      AWS::S3::Base.establish_connection!(
-        :access_key_id => AmazonConfig.config.access_key,
-        :secret_access_key => AmazonConfig.config.secret
+      s3_obj = Aws::S3::Object.new(bucket_name: AmazonConfig.config.instruction_bucket, key: file_name)
+
+      s3_obj.presigned_url(
+                            :get,
+                            expires_in: 3600,
+                            response_content_disposition: "attachment;filename=#{pretty_filename}",
+                            response_content_type: response_content_type
       )
-    end
-
-    def self.disconnect
-      AWS::S3::Base.disconnect!
     end
   end
 end

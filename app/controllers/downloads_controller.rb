@@ -134,13 +134,8 @@ class DownloadsController < ApplicationController
   end
 
   def download_from_amazon(file)
-    begin
-      Amazon::Storage.connect
-      link = Amazon::Storage.authenticated_url(file)
-      redirect_to link
-    ensure
-      Amazon::Storage.disconnect
-    end
+    link = Amazon::Storage.authenticated_url(file)
+    redirect_to link
   end
 
   #:nocov:
