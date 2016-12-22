@@ -16,3 +16,5 @@ app/assets/stylesheets/.gitkeep
 app/assets/images/category_images/*
 dump.rdb
 .env
+gemsurance_report.html
+pem/
