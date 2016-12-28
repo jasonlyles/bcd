@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 ruby '2.2.2'
 
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.7'
 gem 'activerecord-session_store'
 gem 'protected_attributes'
 gem 'devise', '3.4.0'
