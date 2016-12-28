@@ -1,7 +1,7 @@
 DEPLOYING
 
-When deploying to heroku, `git push staging master`
-For prod: 'git push production master'
+When deploying to heroku staging from development branch, `git push --force staging develop:master`
+For prod, from master branch: 'git push production master'
 For deploying the db: 'heroku run rake db:migrate --remote staging --app bcd-stg'
 For restarting: `heroku restart --app bcd-stg`
 For tailing: `heroku logs --tail --app bcd-stg`
