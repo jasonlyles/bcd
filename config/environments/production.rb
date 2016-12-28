@@ -84,7 +84,8 @@ BrickCity::Application.configure do
 end
 
 BrickCity::Application.config.middleware.use ExceptionNotification::Rack,
-                                             :email => {
-                                              :sender_address => %{"BrickCityDepot Exception" <service@brickcitydepot.com>},
-                                              :exception_recipients => ["lylesjt@gmail.com"]
-                                             }
+     email: {
+        deliver_with: :deliver,
+        sender_address: %{"BrickCityDepot Exception" <service@brickcitydepot.com>},
+        exception_recipients: ["lylesjt@gmail.com"]
+     }

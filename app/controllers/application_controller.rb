@@ -6,9 +6,18 @@ class ApplicationController < ActionController::Base
   before_filter :find_cart
   before_filter :get_categories
   before_filter :set_users_referrer_code
+  before_filter :prepare_exception_notifier
   #before_filter :set_locale #Don't need this yet
 
   private
+
+  def prepare_exception_notifier
+    if current_user && current_user.guid
+      request.env["exception_notifier.exception_data"] = {
+          current_user: current_user.guid
+      }
+    end
+  end
 
   #This is used on the admin side to get all categories for product and subcategory forms
   def get_categories_for_admin

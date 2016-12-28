@@ -10,6 +10,13 @@ class StaticController < ApplicationController
     @email = Email.new
   end
 
+  # This exists only to confirm that my exception notification delivery is working. Would be nicer to perhaps hook
+  # into heroku deploy to send an email through the exception notification gem to just email me during/after a deploy.
+  # This will do for now.
+  def test_exception_notification_delivery
+    1/0
+  end
+
   def send_contact_email
     @email = Email.new(params[:email])
 
