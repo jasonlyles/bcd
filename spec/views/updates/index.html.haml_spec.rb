@@ -6,10 +6,10 @@ describe "updates/index.html.haml" do
       FactoryGirl.create(:update, :title => 'Title1', :description => 'Description'),
       FactoryGirl.create(:update, :title => 'Title2', :description => 'Description')
     ]
-    @updates.stub(:current_page).and_return(1)
-    @updates.stub(:num_pages).and_return(1)
-    @updates.stub(:limit_value).and_return(1)
-    @updates.stub(:total_pages).and_return(1)
+    allow(@updates).to receive(:current_page).and_return(1)
+    allow(@updates).to receive(:num_pages).and_return(1)
+    allow(@updates).to receive(:limit_value).and_return(1)
+    allow(@updates).to receive(:total_pages).and_return(1)
   end
 
   it "renders a list of updates" do

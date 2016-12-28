@@ -10,7 +10,7 @@ describe LineItem do
       @cart_item = FactoryGirl.create(:cart_item, :product => @product)
       @line_item = LineItem.from_cart_item(@cart_item)
 
-      @line_item.product_id.should == @product.id
+      expect(@line_item.product_id).to eq(@product.id)
     end
   end
 end

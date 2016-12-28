@@ -14,7 +14,7 @@ describe AccountController do
       sign_in @user
       get :order_history
 
-      assigns(:orders).length.should == 3
+      expect(assigns(:orders).length).to eq(3)
     end
   end
 
@@ -24,7 +24,7 @@ describe AccountController do
       sign_in @user
       get :order, :request_id => '1234566778'
 
-      assigns(:order).transaction_id.should == '555'
+      expect(assigns(:order).transaction_id).to eq('555')
     end
 
     it "should set order to nil if order could not be found by request_id and user_id" do
@@ -32,7 +32,7 @@ describe AccountController do
       sign_in @user
       get :order, :request_id => '12344321'
 
-      assigns(:order).should be_nil
+      expect(assigns(:order)).to be_nil
     end
   end
 
@@ -40,14 +40,14 @@ describe AccountController do
     it "should redirect to login page if there is no user" do
       get :index
 
-      response.should redirect_to('/users/sign_in')
+      expect(response).to redirect_to('/users/sign_in')
     end
 
     it "should take user to index page if there is a user" do
       sign_in @user
       get :index
 
-      response.should be_success
+      expect(response).to be_success
     end
 
     it "should get only completed orders for display" do
@@ -60,7 +60,7 @@ describe AccountController do
       sign_in @user
       get :index
 
-      assigns(:products).length.should == 1
+      expect(assigns(:products).size).to eq(1)
     end
   end
 
@@ -69,7 +69,7 @@ describe AccountController do
       it 'should render still_subscribed' do
         get :unsubscribe_from_emails, :id => 'fake', :unsubscribe_token => 'also_fake'
 
-        response.should render_template(:still_subscribed)
+        expect(response).to render_template(:still_subscribed)
       end
     end
 
@@ -77,12 +77,12 @@ describe AccountController do
       context 'and user cannot be saved' do
         it 'should render still_subscribed' do
           @user = FactoryGirl.create(:user, :unsubscribe_token => 'chimichangas', :email_preference => 2, :email => 'ralph@mil.mil', :guid => 'guid')
-          User.any_instance.should_receive(:save).and_return(false)
+          allow_any_instance_of(User).to receive(:save).and_return(false)
           get :unsubscribe_from_emails, :id => @user.guid, :token => @user.unsubscribe_token
 
           @user.reload
-          @user.email_preference.should eq(2)
-          response.should render_template(:still_subscribed)
+          expect(@user.email_preference).to eq(2)
+          expect(response).to render_template(:still_subscribed)
         end
       end
 
@@ -92,8 +92,8 @@ describe AccountController do
           get :unsubscribe_from_emails, :id => @user.guid, :token => @user.unsubscribe_token
 
           @user.reload
-          @user.email_preference.should eq(0)
-          response.should render_template(:unsubscribed)
+          expect(@user.email_preference).to eq(0)
+          expect(response).to render_template(:unsubscribed)
         end
       end
     end

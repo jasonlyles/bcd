@@ -15,9 +15,9 @@ describe "product_types/show" do
   it "renders attributes in <p>" do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    rendered.should match(/Instructions/)
-    rendered.should match(/Awesome/)
-    rendered.should match(/true/)
-    rendered.should match(/Candy!/)
+    expect(rendered).to match(/Instructions/)
+    expect(rendered).to match(/Awesome/)
+    expect(rendered).to match(/true/)
+    expect(rendered).to match(/Candy!/)
   end
 end

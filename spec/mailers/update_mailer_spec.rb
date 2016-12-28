@@ -12,9 +12,9 @@ describe UpdateMailer do
       @model = FactoryGirl.create(:product, :subcategory_id => @subcategory.id, :category_id => @category.id)
       @mail = UpdateMailer.updated_instructions(@user.id, @model.id, message='BLAH BLAH BLAH')
 
-      @mail.subject.should == "Instructions for CB001 Colonial Revival House have been updated"
-      @mail.to.should == [@user.email]
-      @mail.from.should == ["sales@brickcitydepot.com"]
+      expect(@mail.subject).to eq("Instructions for CB001 Colonial Revival House have been updated")
+      expect(@mail.to).to eq([@user.email])
+      expect(@mail.from).to eq(["sales@brickcitydepot.com"])
       #This isn't working any more, see notes in order_mailer_spec
       #@mail.body.should match("BLAH BLAH BLAH")
     end

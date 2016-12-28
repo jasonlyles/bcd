@@ -11,7 +11,8 @@ describe Subcategory do
                      FactoryGirl.create(:subcategory, :name => "Star Wars", :category_id => 1, :code => "SW", :ready_for_public => "f")
       ]
       @subcategories = Subcategory.find_live_subcategories
-      @subcategories.should have(1).item
+
+      expect(@subcategories.size).to eq(1)
     end
   end
 
@@ -20,28 +21,33 @@ describe Subcategory do
     @subcategory = FactoryGirl.create(:subcategory)
     @product = FactoryGirl.create(:product)
 
-    lambda { @subcategory.destroy }.should_not change(Product, :count)
+    expect(lambda { @subcategory.destroy }).to_not change(Product, :count)
   end
 
   it "should be valid with valid attributes" do
     subcat = FactoryGirl.create(:subcategory)
-    subcat.should be_valid
+    subcat.valid?
+
+    expect(subcat).to be_valid
   end
 
   it "should not be valid without a name" do
-    subcat = Subcategory.new(:code => "WX")
-    subcat.errors_on(:name).should == ["can't be blank"]
+    subcat = Subcategory.create(:code => "WX")
+
+    expect(subcat.errors[:name]).to eq(["can't be blank"])
   end
 
   it "should not be valid without a code" do
-    subcat = Subcategory.new(:name => "Awesome")
-    subcat.errors_on(:code).should == ["can't be blank"]
+    subcat = Subcategory.create(:name => "Awesome")
+
+    expect(subcat.errors[:code]).to eq(["can't be blank"])
   end
 
   it "should not be valid if code is not unique" do
     subcat1 = FactoryGirl.create(:subcategory)
-    subcat2 = Subcategory.new(:code => "CV")
-    subcat2.errors_on(:code).should == ["has already been taken"]
+    subcat2 = Subcategory.create(:code => "CV")
+
+    expect(subcat2.errors[:code]).to eq(["has already been taken"])
   end
 
   describe "self.model_code" do
@@ -49,7 +55,7 @@ describe Subcategory do
       @subcategory = FactoryGirl.create(:subcategory)
       model_code = Subcategory.model_code(@subcategory.id)
 
-      model_code.should == "#{@subcategory.code}001"
+      expect(model_code).to eq("#{@subcategory.code}001")
     end
 
     it "should suggest a model code of XX010 for the 10th product in a subcategory" do
@@ -60,7 +66,7 @@ describe Subcategory do
       end
       model_code = Subcategory.model_code(@subcategory.id)
 
-      model_code.should == "#{@subcategory.code}010"
+      expect(model_code).to eq("#{@subcategory.code}010")
     end
 
     it "should suggest a model code of XX100 for the 100th product in a subcategory" do
@@ -75,7 +81,7 @@ describe Subcategory do
       end
       model_code = Subcategory.model_code(@subcategory.id)
 
-      model_code.should == "#{@subcategory.code}100"
+      expect(model_code).to eq("#{@subcategory.code}100")
     end
   end
 end

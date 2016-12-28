@@ -13,7 +13,7 @@ describe "email_campaigns/show.html.haml" do
   it "renders attributes in <p>" do
     render
 
-    rendered.should match(/MyText/)
-    rendered.should match(/1/)
+    expect(rendered).to match(/MyText/)
+    expect(rendered).to match(/1/)
   end
 end

@@ -24,8 +24,9 @@ BrickCity::Application.configure do
   # Devise needs a default url
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  #Set to use Amazon ses via aws-ses gem
-  config.action_mailer.delivery_method = :aws_sdk
+  # Set to catch mail via mailcatcher
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {address: 'localhost', port: 1025}
 
   #Do not compress assets
   config.assets.js_compressor = :uglifier

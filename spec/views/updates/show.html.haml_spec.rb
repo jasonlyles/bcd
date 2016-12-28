@@ -12,9 +12,9 @@ describe "updates/show.html.haml" do
 
   it "renders attributes in <p>" do
     render
-    rendered.should match(/Title/)
-    rendered.should match(/Description/)
-    rendered.should match(/MyText/)
-    rendered.should match(/Image/)
+    expect(rendered).to match(/Title/)
+    expect(rendered).to match(/Description/)
+    expect(rendered).to match(/MyText/)
+    expect(rendered).to match(/Image/)
   end
 end

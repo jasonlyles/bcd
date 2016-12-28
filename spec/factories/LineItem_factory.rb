@@ -5,6 +5,6 @@ FactoryGirl.define do
     order_id 1
     product_id 1
     quantity 1
-    total_price "9.99"
+    total_price "10"
   end
 end
