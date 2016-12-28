@@ -3,7 +3,9 @@ class AdminController < ApplicationController
   before_filter :arrange_products_in_a_nice_way, :only => [:update_users_download_counts, :new_product_notification]
   skip_before_filter :find_cart
   skip_before_filter :check_admin_mode
-  include Devise::Models::DatabaseAuthenticatable
+  #include Devise::Models::DatabaseAuthenticatable # Not sure why I was including this in here, but it seems to be
+  # breaking when upgrading to Devise 3.5/10, and doesn't appear to break anything by commenting it out. Will leave as
+  # comment until I'm certain commenting it out is ok.
   layout 'admin'
 
   def gift_instructions

@@ -5,7 +5,7 @@ ruby '2.2.2'
 gem 'rails', '4.2.7'
 gem 'activerecord-session_store'
 gem 'protected_attributes'
-gem 'devise', '3.4.0'
+gem 'devise', '3.5.10'
 gem 'aws-sdk'
 gem 'aws-sdk-rails'
 gem 'omniauth'
@@ -59,7 +59,7 @@ gem 'thin'
 # group :development, :test do
 #   gem 'webrat'
 # end
-# TODO: Need to spend time upgrading devise and rspec separately
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'better_errors'

@@ -130,7 +130,7 @@ GEM
       equalizer (~> 0.0.9)
     daemons (1.2.3)
     debug_inspector (0.0.2)
-    devise (3.4.0)
+    devise (3.5.10)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -653,7 +653,7 @@ DEPENDENCIES
   coffee-rails
   compass-blueprint
   compass-rails
-  devise (= 3.4.0)
+  devise (= 3.5.10)
   dotenv-rails
   exception_notification
   factory_girl_generator
