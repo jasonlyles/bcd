@@ -1,5 +1,5 @@
 require 'spec_helper'
 
 describe Image do
-  pending "write some tests!"
+  skip "write some tests!"
 end

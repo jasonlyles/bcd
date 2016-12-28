@@ -5,7 +5,7 @@ describe ApplicationController do
     it "calls use_older_cart_or_update_existing_cart if there is a current_user" do
       @user = FactoryGirl.create(:user)
       sign_in @user
-      controller.should_receive(:use_older_cart_or_update_existing_cart)
+      expect(controller).to receive(:use_older_cart_or_update_existing_cart)
       controller.send(:create_cart)
     end
 
@@ -20,10 +20,10 @@ describe ApplicationController do
     it "should find the cart by session ID" do
       cart = FactoryGirl.create(:cart)
       session[:cart_id] = cart.id
-      Cart.should_receive(:where).and_return([cart])
+      expect(Cart).to receive(:where).and_return([cart])
       controller.send(:find_cart)
 
-      cart.should == assigns(:cart)
+      expect(cart).to eq(assigns(:cart))
     end
 
     context 'and there is a user' do
@@ -32,8 +32,8 @@ describe ApplicationController do
         @cart = FactoryGirl.create(:cart, user_id: @user.id)
         sign_in @user
         session[:cart_id] = 15000 #non-existent
-        Cart.should_receive(:where).and_return([nil])
-        Cart.should_receive(:users_most_recent_cart).and_return(@cart)
+        expect(Cart).to receive(:where).and_return([nil])
+        expect(Cart).to receive(:users_most_recent_cart).and_return(@cart)
         controller.send(:find_cart)
 
         expect(assigns(:cart)).not_to be_nil
@@ -44,8 +44,8 @@ describe ApplicationController do
         @user = FactoryGirl.create(:user)
         @cart = FactoryGirl.create(:cart, user_id: @user.id)
         sign_in @user
-        Cart.should_receive(:where).and_return([nil])
-        Cart.should_receive(:users_most_recent_cart).and_return(@cart)
+        expect(Cart).to receive(:where).and_return([nil])
+        expect(Cart).to receive(:users_most_recent_cart).and_return(@cart)
         controller.send(:find_cart)
 
         expect(assigns(:cart)).not_to be_nil
@@ -57,11 +57,11 @@ describe ApplicationController do
         @cart = FactoryGirl.create(:cart)
         sign_in @user
         session[:cart_id] = @cart.id
-        Cart.should_receive(:where).and_return([@cart])
-        Cart.should_receive(:users_most_recent_cart).and_return(nil)
+        expect(Cart).to receive(:where).and_return([@cart])
+        expect(Cart).to receive(:users_most_recent_cart).and_return(nil)
         controller.send(:find_cart)
 
-        assigns(:cart).user_id.should == @user.id
+        expect(assigns(:cart).user_id).to eq(@user.id)
       end
 
       it "should find cart for the current user if there is none in session and there is one in the database" do
@@ -70,17 +70,17 @@ describe ApplicationController do
         sign_in @user
         controller.send(:find_cart)
 
-        assigns(:cart).id.should == cart.id
-        session[:cart_id].should == cart.id
+        expect(assigns(:cart).id).to eq(cart.id)
+        expect(session[:cart_id]).to eq(cart.id)
       end
 
       it "should not find a cart for a current user if there is no cart in session or db" do
         @user = FactoryGirl.create(:user)
         sign_in @user
-        Cart.should_receive(:users_most_recent_cart).and_return(nil)
+        expect(Cart).to receive(:users_most_recent_cart).and_return(nil)
         controller.send(:find_cart)
 
-        assigns(:cart).should be_nil
+        expect(assigns(:cart)).to be_nil
       end
     end
 
@@ -88,7 +88,7 @@ describe ApplicationController do
       it "should not set a new cart if the cart # in session can't be found in the database and there is no user" do
         @user = FactoryGirl.create(:user)
         session[:cart_id] = 15000 #non-existent
-        Cart.should_receive(:where).and_return([nil])
+        expect(Cart).to receive(:where).and_return([nil])
         controller.send(:find_cart)
 
         expect(assigns(:cart)).to be_nil
@@ -114,7 +114,7 @@ describe ApplicationController do
       FactoryGirl.create(:category)
       controller.send(:get_categories)
 
-      assigns(:categories).should_not be_nil
+      expect(assigns(:categories)).to_not be_nil
     end
   end
 
@@ -123,7 +123,7 @@ describe ApplicationController do
       FactoryGirl.create(:category)
       controller.send(:get_categories_for_admin)
 
-      assigns(:categories).should == [["City", 1]]
+      expect(assigns(:categories)).to eq([["City", 1]])
     end
   end
 
@@ -132,13 +132,13 @@ describe ApplicationController do
       controller.params[:referrer_code] = 'blar'
       controller.send(:set_users_referrer_code)
 
-      session[:referrer_code].should == 'blar'
+      expect(session[:referrer_code]).to eq('blar')
     end
   end
 
   describe "not_found" do
     it "should return a 404 page" do
-      controller.should_receive(:render).with(:file => "#{Rails.root}/public/404.html", :status => :not_found, :layout => false)
+      expect(controller).to receive(:render).with(:file => "#{Rails.root}/public/404.html", :status => :not_found, :layout => false)
 
       controller.send(:not_found)
     end
@@ -146,10 +146,10 @@ describe ApplicationController do
 
   describe "set_guest_status" do
     it 'should set session[:guest] to true' do
-      session[:guest].should be_nil
+      expect(session[:guest]).to be_nil
       controller.send(:set_guest_status)
 
-      session[:guest].should eq(true)
+      expect(session[:guest]).to eq(true)
     end
   end
 
@@ -161,7 +161,7 @@ describe ApplicationController do
       controller.send(:clean_up_guest)
 
       @cart.reload
-      @cart.user_id.should eq(nil)
+      expect(@cart.user_id).to eq(nil)
     end
 
     it "should delete guest from session" do
@@ -170,7 +170,7 @@ describe ApplicationController do
       session[:guest] = @user.id
       controller.send(:clean_up_guest)
 
-      session[:guest].should be_nil
+      expect(session[:guest]).to be_nil
     end
   end
 end

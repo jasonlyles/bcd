@@ -8,7 +8,8 @@ describe ProductType do
                      FactoryGirl.create(:product_type, :name => "Crafts", :ready_for_public => "f")
       ]
       @product_types = ProductType.find_live_product_types
-      @product_types.should have(1).item
+
+      expect(@product_types.size).to eq(1)
     end
   end
 end

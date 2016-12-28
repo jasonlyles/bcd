@@ -12,7 +12,7 @@ describe Order do
       li1 = LineItem.new :product_id => product1.id, :quantity => 1, :total_price => 5
       order = Order.new
       order.line_items << li1
-      order.has_physical_item?.should == false
+      expect(order.has_physical_item?).to eq(false)
     end
 
     it "should return true if the order includes a physical product" do
@@ -25,7 +25,7 @@ describe Order do
       order = Order.new
       order.line_items << li1
 
-      order.has_physical_item?.should == true
+      expect(order.has_physical_item?).to eq(true)
     end
   end
 
@@ -37,7 +37,7 @@ describe Order do
       li1 = LineItem.new :product_id => product1.id, :quantity => 1, :total_price => 5
       order = Order.new
       order.line_items << li1
-      order.has_digital_item?.should == true
+      expect(order.has_digital_item?).to eq(true)
     end
 
     it "should return false if the order doesn't have at least one digital product" do
@@ -50,7 +50,7 @@ describe Order do
       order = Order.new
       order.line_items << li1
 
-      order.has_digital_item?.should == false
+      expect(order.has_digital_item?).to eq(false)
     end
   end
 
@@ -87,23 +87,6 @@ describe Order do
     end
   end
 
-=begin
-  def has_digital_item?
-    items = get_digital_items
-    items.blank? ? false : true
-  end
-
-  def get_digital_items
-    items = []
-    self.line_items.each do |item|
-      if item.product.is_digital_product?
-        items << item
-      end
-    end
-    items
-  end
-=end
-
   describe "self.shipping_status_not_complete" do
     it "should get records where shipping status is not complete" do
       order1 = FactoryGirl.create(:order, {:shipping_status => '1'})
@@ -111,7 +94,7 @@ describe Order do
       order3 = FactoryGirl.create(:order, {:shipping_status => '1'})
 
       orders = Order.shipping_status_not_complete
-      orders.length.should == 2
+      expect(orders.length).to eq(2)
     end
   end
 
@@ -122,7 +105,7 @@ describe Order do
       order3 = FactoryGirl.create(:order, {:shipping_status => '0'})
 
       orders = Order.shipping_status_complete
-      orders.length.should == 2
+      expect(orders.length).to eq(2)
     end
   end
 
@@ -144,7 +127,7 @@ describe Order do
       order = Order.new
       order.add_line_items_from_cart(cart)
 
-      order.line_items.should have(2).items
+      expect(order.line_items.size).to eq(2)
     end
   end
 
@@ -155,14 +138,14 @@ describe Order do
       order = Order.new
       order.line_items << li1
       order.line_items << li2
-      order.total_price.should == 15.0
+      expect(order.total_price).to eq(15.0)
     end
   end
 
   it "should delete related line_items when it gets deleted" do
     @order = FactoryGirl.create(:order_with_line_items)
 
-    lambda { @order.destroy }.should change(LineItem, :count).from(1).to(0)
+    expect(lambda { @order.destroy }).to change(LineItem, :count).from(1).to(0)
   end
 
   describe "Order.all_transactions_for_month" do
@@ -173,7 +156,7 @@ describe Order do
       @product = FactoryGirl.create(:product)
       @order = FactoryGirl.create(:order_with_line_items, :created_at => Date.today, :user_id => @user.id)
       transactions = Order.all_transactions_for_month(Date.today.month,Date.today.year)
-      transactions.should == [["charlie_brown@peanuts.com", "blarney", "blar", "COMPLETED", Date.today.strftime("%m/%d/%Y"), "CB001 Colonial Revival House", 1, "9.99"]]
+      expect(transactions).to eq([["charlie_brown@peanuts.com", "blarney", "blar", "COMPLETED", Date.today.strftime("%m/%d/%Y"), "CB001 Colonial Revival House", 1, "10.0"]])
     end
   end
 
@@ -186,7 +169,7 @@ describe Order do
       @order = FactoryGirl.create(:order_with_line_items, :created_at => Date.today, :user_id => @user.id)
       transactions = Order.all_transactions_for_month(Date.today.month,Date.today.year)
       transaction_csv = Order.transaction_csv(transactions)
-      transaction_csv.should == "Email,Transaction ID,Request ID,Status,Date,Product,Qty,Total Price\ncharlie_brown@peanuts.com,blarney,blar,COMPLETED,#{Date.today.strftime("%m/%d/%Y")},CB001 Colonial Revival House,1,9.99\n"
+      expect(transaction_csv).to  eq("Email,Transaction ID,Request ID,Status,Date,Product,Qty,Total Price\ncharlie_brown@peanuts.com,blarney,blar,COMPLETED,#{Date.today.strftime("%m/%d/%Y")},CB001 Colonial Revival House,1,10.0\n")
     end
   end
 
@@ -200,10 +183,10 @@ describe Order do
         html_list = FactoryGirl.create(:html_parts_list, :product_id => @product.id)
         xml_list = FactoryGirl.create(:xml_parts_list, :product_id => @product.id)
         @order = FactoryGirl.create(:order_with_line_items, :created_at => Date.today, :user_id => @user.id)
-        SecureRandom.should_receive(:hex).and_return('fake_hex')
+        expect(SecureRandom).to receive(:hex).and_return('fake_hex')
 
         links = @order.get_download_links
-        links.should eq([["CB001 Colonial Revival House HTML Parts List", "/guest_download_parts_list/1/1"], ["CB001 Colonial Revival House XML Parts List for Bricklink Wanted List Feature", "/guest_download_parts_list/2/1"], ["CB001 Colonial Revival House PDF", "/guest_download?id=#{@user.guid}&token=fake_hex"]])
+        expect(links).to eq([["CB001 Colonial Revival House HTML Parts List", "/guest_download_parts_list/1/1"], ["CB001 Colonial Revival House XML Parts List for Bricklink Wanted List Feature", "/guest_download_parts_list/2/1"], ["CB001 Colonial Revival House PDF", "/guest_download?id=#{@user.guid}&token=fake_hex"]])
       end
     end
 
@@ -217,7 +200,7 @@ describe Order do
         @order = FactoryGirl.create(:order_with_line_items, :created_at => Date.today, :user_id => @user.id)
 
         links = @order.get_download_links
-        links.should eq([])
+        expect(links).to eq([])
       end
     end
   end
@@ -233,7 +216,7 @@ describe Order do
         @order.transaction_id = nil
         link = @order.get_link_to_downloads
 
-        link.should eq('http://localhost:3000/download_link_error')
+        expect(link).to eq('http://localhost:3000/download_link_error')
       end
     end
 
@@ -247,7 +230,7 @@ describe Order do
         @order.request_id = nil
         link = @order.get_link_to_downloads
 
-        link.should eq('http://localhost:3000/download_link_error')
+        expect(link).to eq('http://localhost:3000/download_link_error')
       end
     end
 
@@ -260,7 +243,7 @@ describe Order do
         @order = FactoryGirl.create(:order_with_line_items, :created_at => Date.today, :user_id => @user.id)
         link = @order.get_link_to_downloads
 
-        link.should eq('http://localhost:3000/guest_downloads?tx_id=blarney&conf_id=blar')
+        expect(link).to eq('http://localhost:3000/guest_downloads?tx_id=blarney&conf_id=blar')
       end
     end
   end

@@ -33,7 +33,7 @@ describe Product do
     ]
     @product = products[1]
     products = @product.find_live_products_from_same_category
-    products.length.should == 2
+    expect(products.size).to eq(2)
   end
 
   it "should only find models that are ready for the public" do
@@ -48,19 +48,19 @@ describe Product do
                  )
     ]
     @products = Product.find_products_for_sale
-    @products.should have(1).item
+    expect(@products.size).to eq(1)
   end
 
   it "should delete related images" do
     @product = FactoryGirl.create(:product)
     @image = FactoryGirl.create(:image)
 
-    lambda { @product.destroy }.should change(Image, :count)
+    expect(lambda { @product.destroy }).to change(Image, :count)
   end
 
   it "is valid with valid attributes" do
     @product = FactoryGirl.create(:product)
-    @product.should be_valid
+    expect(@product).to be_valid
   end
 
   it "is invalid if product_code is not unique" do
@@ -74,7 +74,7 @@ describe Product do
                          :ready_for_public => "t"
                  )
     ]
-    product = Product.new(:price => 5,
+    product = Product.create(:price => 5,
                           :product_code => 'WC002',
                           :product_type_id => @product_type.id,
                           :subcategory_id => 1,
@@ -84,7 +84,7 @@ describe Product do
                           :ready_for_public => true,
                           :description => "asdf asd asd fsdf asdfas asfjh alsdjf lasfj lasjd flkasjdflajs flasjdflasdlk jlksadj flasj flkasjd flaskdjf las djflkas fjlksa jlksadjf."
     )
-    product.errors_on(:product_code).should == ["has already been taken"]
+    expect(product.errors[:product_code]).to eq(["has already been taken"])
   end
 
   it "is invalid if name is not unique" do
@@ -98,7 +98,7 @@ describe Product do
                          :ready_for_public => "t"
                  )
     ]
-    product = Product.new(:price => 5,
+    product = Product.create(:price => 5,
                           :product_code => 'XX001',
                           :product_type_id => @product_type.id,
                           :subcategory_id => 1,
@@ -108,11 +108,11 @@ describe Product do
                           :ready_for_public => true,
                           :description => "asdf asd asd fsdf asdfas asfjh alsdjf lasfj lasjd flkasjdflajs flasjdflasdlk jlksadj flasj flkasjd flaskdjf las djflkas fjlksa jlksadjf."
     )
-    product.errors_on(:name).should == ["has already been taken"]
+    expect(product.errors[:name]).to eq(["has already been taken"])
   end
 
   it "is invalid with a description that's too short" do
-    product = Product.new(:price => 5,
+    product = Product.create(:price => 5,
                           :product_code => 'XX001',
                           :product_type_id => @product_type.id,
                           :subcategory_id => 1,
@@ -122,11 +122,11 @@ describe Product do
                           :ready_for_public => true,
                           :description => "It's pretty awesome."
     )
-    product.errors_on(:description).should == ["is too short (minimum is 100 characters)"]
+    expect(product.errors[:description]).to eq(["is too short (minimum is 100 characters)"])
   end
 
   it "is invalid with a tweet that's too long" do
-    product = Product.new(:price => 5,
+    product = Product.create(:price => 5,
                           :product_code => 'XX001',
                           :product_type_id => @product_type.id,
                           :subcategory_id => 1,
@@ -136,11 +136,11 @@ describe Product do
                           :ready_for_public => true,
                           :description => "asdf asd asd fsdf asdfas asfjh alsdjf lasfj lasjd flkasjdflajs flasjdflasdlk jlksadj flasj flkasjd flaskdjf las djflkas fjlksa jlksadjf."
     )
-    product.errors_on(:tweet).should == ["is too long (maximum is 97 characters)"]
+    expect(product.errors[:tweet]).to eq(["is too long (maximum is 97 characters)"])
   end
 
   it "is invalid if price is not a number" do
-    product = Product.new(:price => "ralph",
+    product = Product.create(:price => "ralph",
                           :product_code => 'XX001',
                           :product_type_id => @product_type.id,
                           :subcategory_id => 1,
@@ -150,55 +150,61 @@ describe Product do
                           :ready_for_public => true,
                           :description => "asdf asd asd fsdf asdfas asfjh alsdjf lasfj lasjd flkasjdflajs flasjdflasdlk jlksadj flasj flkasjd flaskdjf las djflkas fjlksa jlksadjf."
               )
-    product.errors_on(:price).should include(" Hey... Don't you want to make some money on this?")
+    expect(product.errors[:price]).to include(" Hey... Don't you want to make some money on this?")
   end
 
   it "should be invalid if it is free and has a price > 0" do
     @product = FactoryGirl.build(:free_product, :price => 10)
+    @product.valid?
 
-    @product.errors_on(:price).should include(" Freebies should be $0")
+    expect(@product.errors[:price]).to include(" Freebies should be $0")
   end
 
   it "should be valid if it is free and has a price of 0" do
     @product = FactoryGirl.create(:free_product)
 
-    @product.should be_valid
+    expect(@product).to be_valid
   end
 
   it "should be invalid if it has a product_code that doesn't match the pattern for Instructions" do
     @product = FactoryGirl.build(:product, :product_code => 'doh')
+    @product.valid?
 
-    @product.errors_on(:product_code).should include("Instruction product codes must follow the pattern CB002.")
+    expect(@product.errors[:product_code]).to include("Instruction product codes must follow the pattern CB002.")
   end
 
   it "should be invalid if it has a product_code that doesn't match the pattern for Models" do
     @product1 = FactoryGirl.create(:product)
     @product = FactoryGirl.build(:product, :product_type_id => @product_type2.id, :name => 'fake model', :product_code => 'doh')
+    @product.valid?
 
-    @product.errors_on(:product_code).should include("Model product codes must follow the pattern CB002M.")
+    expect(@product.errors[:product_code]).to include("Model product codes must follow the pattern CB002M.")
   end
 
   it "should be invalid if it has a product_code that doesn't match the pattern for Kits" do
     @product_type3 = FactoryGirl.create(:product_type, :name => 'Kits', :digital_product => false)
     @product1 = FactoryGirl.create(:product)
     @product = FactoryGirl.build(:product, :product_type_id => @product_type3.id, :name => 'fake kit', :product_code => 'doh')
+    @product.valid?
 
-    @product.errors_on(:product_code).should include("Kit product codes must follow the pattern CB002K.")
+    expect(@product.errors[:product_code]).to include("Kit product codes must follow the pattern CB002K.")
   end
 
   it "should be invalid if there is no base model with the same base product_code for Models" do
     @product1 = FactoryGirl.create(:product)
     @product = FactoryGirl.build(:product, :product_type_id => @product_type2.id, :name => 'fake model', :product_code => 'HH001M')
+    @product.valid?
 
-    @product.errors_on(:product_code).should include("Model product codes must have a base model with a product code of HH001")
+    expect(@product.errors[:product_code]).to include("Model product codes must have a base model with a product code of HH001")
   end
 
   it "should be invalid if there is no base model with the same base product_code for Kits" do
     @product_type3 = FactoryGirl.create(:product_type, :name =>"Kits")
     @product1 = FactoryGirl.create(:product)
     @product = FactoryGirl.build(:product, :product_type_id => @product_type3.id, :name => 'fake kit', :product_code => 'HH001K')
+    @product.valid?
 
-    @product.errors_on(:product_code).should include("Kit product codes must have a base model with a product code of HH001")
+    expect(@product.errors[:product_code]).to include("Kit product codes must have a base model with a product code of HH001")
   end
 
   describe "destroy" do
@@ -207,7 +213,7 @@ describe Product do
       @order = FactoryGirl.create(:order)
       @line_item = FactoryGirl.create(:line_item, :product_id => @product.id, :order_id => @order.id)
 
-      lambda{@product.destroy}.should change(@product, :ready_for_public).from(true).to(false)
+      expect(lambda{@product.destroy}).to change(@product, :ready_for_public).from(true).to(false)
     end
 
     it "should not destroy the product if there are existing orders for the product" do
@@ -215,18 +221,18 @@ describe Product do
       @order = FactoryGirl.create(:order)
       @line_item = FactoryGirl.create(:line_item, :product_id => @product.id, :order_id => @order.id)
 
-      lambda { @product.destroy }.should_not change(Product, :count)
+      expect(lambda { @product.destroy }).to_not change(Product, :count)
     end
 
     it "should delete the product if there are no orders for the product" do
       @product = FactoryGirl.create(:product)
 
-      lambda { @product.destroy }.should change(Product, :count)
+      expect(lambda { @product.destroy }).to change(Product, :count)
     end
   end
 
   it "should not let the radmin make a product live if the pdf has not been uploaded" do
-    @product = Product.new(:price => 5,
+    @product = Product.create(:price => 5,
                           :product_code => 'XX001',
                           :product_type_id => @product_type.id,
                           :subcategory_id => 1,
@@ -238,7 +244,7 @@ describe Product do
                           :pdf => nil
     )
 
-    @product.errors_on(:ready_for_public).should == [": Can't allow you to make a product live before you upload the PDF."]
+    expect(@product.errors[:ready_for_public]).to eq([": Can't allow you to make a product live before you upload the PDF."])
   end
 
   describe "decrement_quantity" do
@@ -254,7 +260,7 @@ describe Product do
                             :quantity => '5',
                             :description => "asdf asd asd fsdf asdfas asfjh alsdjf lasfj lasjd flkasjdflajs flasjdflasdlk jlksadj flasj flkasjd flaskdjf las djflkas fjlksa jlksadjf."
       )
-      lambda { @product.decrement_quantity(2) }.should change(@product, :quantity).from(5).to(3)
+      expect(lambda { @product.decrement_quantity(2) }).to change(@product, :quantity).from(5).to(3)
     end
 
     it "should not decrement the quantity of a digital product" do
@@ -269,7 +275,7 @@ describe Product do
                              :quantity => '1',
                              :description => "asdf asd asd fsdf asdfas asfjh alsdjf lasfj lasjd flkasjdflajs flasjdflasdlk jlksadj flasj flkasjd flaskdjf las djflkas fjlksa jlksadjf."
       )
-      lambda { @product.decrement_quantity(2) }.should_not change(@product, :quantity)
+      expect(lambda { @product.decrement_quantity(2) }).to_not change(@product, :quantity)
     end
   end
 
@@ -277,14 +283,14 @@ describe Product do
     it "should return false if quantity > 0" do
       @base_product = FactoryGirl.create(:product, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
       @product = FactoryGirl.create(:product, :quantity => 2, :product_type_id => @product_type2.id, :product_code => 'XX111M', :name => 'fake product')
-      @product.out_of_stock?.should == false
+      expect(@product.out_of_stock?).to eq(false)
     end
 
     it "should return true if quantity is 0" do
       @product_type3 = FactoryGirl.create(:product_type, :name => 'Kits', :digital_product => false)
       @base_product = FactoryGirl.create(:product, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
       @product = FactoryGirl.create(:product, :quantity => 0, :product_type_id => @product_type3.id, :product_code => 'XX111K', :name => 'fake product')
-      @product.out_of_stock?.should == true
+      expect(@product.out_of_stock?).to eq(true)
     end
   end
 
@@ -292,20 +298,20 @@ describe Product do
     it "should pick out the base product code when passed a product code" do
       @base_product = FactoryGirl.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
       @product = FactoryGirl.create(:product, :product_type_id => @product_type2.id, :product_code => 'XX001M', :name => 'fake product')
-      @product.base_product_code('XX045C').should == 'XX045'
+      expect(@product.base_product_code('XX045C')).to eq('XX045')
     end
 
     it "should pick out the base product code using the records product_code" do
       @base_product = FactoryGirl.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
       @product = FactoryGirl.create(:product, :product_type_id => @product_type2.id, :product_code => 'XX001M', :name => 'fake product')
-      @product.base_product_code.should == 'XX001'
+      expect(@product.base_product_code).to eq('XX001')
     end
   end
 
   describe "find_by_base_product_code" do
     it "should by a product by its base code" do
       @product = FactoryGirl.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
-      Product.find_by_base_product_code('XX001M').product_code.should == 'XX001'
+      expect(Product.find_by_base_product_code('XX001M').product_code).to eq('XX001')
     end
   end
 
@@ -316,9 +322,9 @@ describe Product do
       @product3 = FactoryGirl.create(:product, :product_type_id => @product_type.id, :name => 'free fakey', :product_code => 'HH002', :free => 't', :price => 0)
 
       prods = Product.find_all_by_price(10)
-      prods.length.should == 2
+      expect(prods.length).to eq(2)
       freebies = Product.find_all_by_price('free')
-      freebies.length.should == 1
+      expect(freebies.length).to eq(1)
     end
   end
 
@@ -327,18 +333,18 @@ describe Product do
       @product1 = FactoryGirl.create(:product)
       @product2 = FactoryGirl.create(:physical_product)
 
-      @product2.is_physical_product?.should == true
+      expect(@product2.is_physical_product?).to eq(true)
     end
 
     it "should return false if product type is Instructions or product type is blank" do
       @product1 = FactoryGirl.create(:product)
 
-      @product1.is_physical_product?.should == false
+      expect(@product1.is_physical_product?).to eq(false)
 
       #This represents the case where a product is brand new (via the new action) and doesn't have a type yet
       @product2 = FactoryGirl.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
 
-      @product2.is_physical_product?.should == false
+      expect(@product2.is_physical_product?).to eq(false)
     end
   end
 
@@ -347,20 +353,20 @@ describe Product do
       @product1 = FactoryGirl.create(:product)
       @product2 = FactoryGirl.create(:physical_product)
 
-      @product1.is_digital_product?.should == true
+      expect(@product1.is_digital_product?).to eq(true)
     end
 
     it "should return false if product type is not Instructions or product type is blank" do
       @product1 = FactoryGirl.create(:product)
       @product2 = FactoryGirl.create(:physical_product, :product_type_id => @product_type2.id)
 
-      @product2.is_digital_product?.should == false
+      expect(@product2.is_digital_product?).to eq(false)
 
       #This represents the case where a product is brand new (via the new action) and doesn't have a type yet.
       #It gets set to true so that all fields are displayed on the product form
       @product3 = FactoryGirl.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
 
-      @product3.is_digital_product?.should == true
+      expect(@product3.is_digital_product?).to eq(true)
     end
   end
 

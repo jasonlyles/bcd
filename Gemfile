@@ -2,10 +2,10 @@ source 'http://rubygems.org'
 
 ruby '2.1.8'
 
-gem 'rails', '4.1.8'
+gem 'rails', '4.2.0'
 gem 'activerecord-session_store'
 gem 'protected_attributes'
-gem 'devise', '3.2.4'
+gem 'devise', '3.4.0'
 gem 'aws-sdk'
 gem 'aws-sdk-rails'
 gem 'omniauth'
@@ -32,6 +32,7 @@ gem 'resque-status'
 gem 'heroku-api'
 gem 'roboto'
 gem 'sitemap_generator'
+gem 'responders', '~> 2.0'
 
 #assets
 gem 'sass-rails'
@@ -69,11 +70,11 @@ group :development, :test do
   gem 'rack-mini-profiler'
   gem 'sqlite3'
   gem "nifty-generators"
-  gem 'guard-rspec'
+  #gem 'guard-rspec'
   gem "factory_girl_rails"
   gem "factory_girl_generator"
-  gem "rspec-rails", '2.14.2'
-  #gem 'rspec-activemodel-mocks'  # Uncomment this after upgrading rspec
+  gem "rspec-rails", '~> 3.0'
+  gem 'rspec-activemodel-mocks'  # Uncomment this after upgrading rspec
   gem 'simplecov', :require => false
   #gem 'brakeman'
   gem 'metric_fu'
@@ -85,6 +86,10 @@ group :development, :test do
   gem 'bullet'
   gem 'gemsurance'
   gem 'pry'
+end
+
+group :development do
+  gem 'web-console', '~> 2.0'
 end
 
 group :test do

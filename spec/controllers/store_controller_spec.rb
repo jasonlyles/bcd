@@ -5,17 +5,11 @@ describe StoreController do
     @product_type = FactoryGirl.create(:product_type)
   end
 
-  def mock_order(stubs={})
-    (@mock_order ||= mock_model(Order).as_null_object).tap do |order|
-      order.stub(stubs) unless stubs.empty?
-    end
-  end
-
   describe "GET cart" do
     it "should render the cart page" do
       get :cart
 
-      response.should render_template('cart')
+      expect(response).to render_template('cart')
     end
 
     it "should add errant items to flash notice" do
@@ -31,8 +25,8 @@ describe StoreController do
       session[:cart_id] = @cart.id
       get :cart
 
-      flash[:notice].should match("Please reduce quantities or remove")
-      flash[:notice].should match("Winter Village Flak Cannon")
+      expect(flash[:notice]).to match("Please reduce quantities or remove")
+      expect(flash[:notice]).to match("Winter Village Flak Cannon")
     end
   end
 
@@ -41,48 +35,48 @@ describe StoreController do
       setup_products
       get :categories, :product_type_name => 'Instructions', :category_name => 'Junk'
 
-      flash[:notice].should eq "Sorry. That product category does not exist."
-      response.should redirect_to('/store')
+      expect(flash[:notice]).to eq("Sorry. That product category does not exist.")
+      expect(response).to redirect_to('/store')
     end
 
     it "given a category name it should find all products for sale in a category" do
       setup_products
       get :categories, :product_type_name => 'Instructions', :category_name => 'City'
 
-      assigns(:products).length.should eq(2)
+      expect(assigns(:products).size).to eq(2)
     end
 
     it "should get only alternatives when searching on alternatives" do
       setup_products
       get :categories, :product_type_name => 'Instructions', :category_name => 'Alternatives'
 
-      assigns(:products).length.should eq(1)
+      expect(assigns(:products).size).to eq(1)
     end
 
     it "should get all products for a given price group when searching for products at that price" do
       setup_products
       get :categories, :product_type_name => 'Instructions', :category_name => 'group_on_price', :price => '5'
 
-      assigns(:products).length.should eq(1)
-      assigns(:category).name.should eq('$5 instructions')
+      expect(assigns(:products).size).to eq(1)
+      expect(assigns(:category).name).to eq('$5 instructions')
 
       get :categories, :product_type_name => 'Instructions', :category_name => 'group_on_price', :price => '3'
 
-      assigns(:products).length.should eq(2)
-      assigns(:category).name.should eq('$3 instructions')
+      expect(assigns(:products).size).to eq(2)
+      expect(assigns(:category).name).to eq('$3 instructions')
 
       get :categories, :product_type_name => 'Instructions', :category_name => 'group_on_price', :price => '7.34'
 
-      assigns(:products).length.should eq(0)
-      assigns(:category).name.should eq('$7.34 instructions')
+      expect(assigns(:products).size).to eq(0)
+      expect(assigns(:category).name).to eq('$7.34 instructions')
     end
 
     it "should get all free products when searching for freebies" do
       setup_products
       get :categories, :product_type_name => 'Instructions', :category_name => 'group_on_price', :price => 'free'
 
-      assigns(:products).length.should eq(1)
-      assigns(:category).name.should eq('Completely FREE Instructions!')
+      expect(assigns(:products).size).to eq(1)
+      expect(assigns(:category).name).to eq('Completely FREE Instructions!')
     end
   end
 
@@ -95,9 +89,9 @@ describe StoreController do
       request.env["HTTP_REFERER"] = '/'
       post :add_to_cart, :product_code => @product.product_code
 
-      assigns(:cart).cart_items.length.should == 0
-      response.should redirect_to('/')
-      flash[:notice].should == "You don't need to add free instructions to your cart. Just go to your account page to download them."
+      expect(assigns(:cart).cart_items.size).to eq(0)
+      expect(response).to redirect_to('/')
+      expect(flash[:notice]).to eq("You don't need to add free instructions to your cart. Just go to your account page to download them.")
     end
 
     it "should add an item to the cart" do
@@ -108,9 +102,9 @@ describe StoreController do
       request.env["HTTP_REFERER"] = '/'
       post :add_to_cart, :product_code => @product.product_code
 
-      assigns(:cart).cart_items.length.should == 1
-      response.should redirect_to('/')
-      flash[:notice].should == "Item added to cart."
+      expect(assigns(:cart).cart_items.size).to eq(1)
+      expect(response).to redirect_to('/')
+      expect(flash[:notice]).to eq("Item added to cart.")
     end
 
     it "should not add to cart if the item is already in the cart" do
@@ -122,9 +116,9 @@ describe StoreController do
       post :add_to_cart, :product_code => @product.product_code
       post :add_to_cart, :product_code => @product.product_code
 
-      assigns(:cart).cart_items.length.should == 1
-      response.should redirect_to('/')
-      flash[:notice].should == "You already have #{@product.name} in your cart. You don't need to purchase more than 1 set of the same instructions."
+      expect(assigns(:cart).cart_items.size).to eq(1)
+      expect(response).to redirect_to('/')
+      expect(flash[:notice]).to eq("You already have #{@product.name} in your cart. You don't need to purchase more than 1 set of the same instructions.")
     end
 
     it "should redirect back with a nasty notice if an invalid product code is passed in" do
@@ -132,9 +126,9 @@ describe StoreController do
       request.env["HTTP_REFERER"] = '/'
       post :add_to_cart, :product_code => "Shawshank"
 
-      assigns(:cart).cart_items.length.should == 0
-      response.should redirect_to('/')
-      flash[:notice].should == "Invalid Product"
+      expect(assigns(:cart).cart_items.size).to eq(0)
+      expect(response).to redirect_to('/')
+      expect(flash[:notice]).to eq("Invalid Product")
     end
   end
 
@@ -148,9 +142,9 @@ describe StoreController do
       request.env["HTTP_REFERER"] = '/'
       get :remove_item_from_cart, :id => @product.id
 
-      assigns(:cart).cart_items.length.should == 0
-      response.should redirect_to('/')
-      flash[:notice].should == "Item removed from cart"
+      expect(assigns(:cart).cart_items.size).to eq(0)
+      expect(response).to redirect_to('/')
+      expect(flash[:notice]).to eq("Item removed from cart")
     end
 
     it "should redirect back with notice if item couldn't be removed from the cart" do
@@ -162,8 +156,8 @@ describe StoreController do
       request.env["HTTP_REFERER"] = '/'
       get :remove_item_from_cart, :id => "BLAR"
 
-      response.should redirect_to('/')
-      flash[:notice].should == "Item could not be removed from cart. We have been notified of this issue so it can be resolved. We apologize for the inconvenience. If you need to remove this item, you may try emptying your cart. I... am so embarrassed."
+      expect(response).to redirect_to('/')
+      expect(flash[:notice]).to eq("Item could not be removed from cart. We have been notified of this issue so it can be resolved. We apologize for the inconvenience. If you need to remove this item, you may try emptying your cart. I... am so embarrassed.")
     end
   end
 
@@ -182,7 +176,7 @@ describe StoreController do
       @cart_item.reload
 
       expect(flash[:notice]).to eq('Cart Updated')
-      @cart_item.quantity.should == 20
+      expect(@cart_item.quantity).to eq(20)
     end
 
     it "should not update an item in the cart if the quantity is not available" do
@@ -198,7 +192,7 @@ describe StoreController do
       @cart_item.reload
 
       expect(flash[:notice]).to eq('Sorry. There is only 1 available for XX111 Colonial Revival House. Please reduce quantities or remove the item(s) from you cart.')
-      @cart_item.quantity.should == 1
+      expect(@cart_item.quantity).to eq(1)
     end
   end
 
@@ -207,11 +201,11 @@ describe StoreController do
       @user = FactoryGirl.create(:user)
       @cart = FactoryGirl.create(:cart, user_id: nil)
       session[:cart_id] = @cart.id
-      controller.should_receive(:current_customer).at_least(1).times.and_return(nil)
+      expect(controller).to receive(:current_customer).at_least(1).times.and_return(nil)
       sign_in @user
       get :checkout
 
-      response.should redirect_to('/guest_registration')
+      expect(response).to redirect_to('/guest_registration')
     end
 
     it "should not set up a new order since the user chose paypal" do
@@ -224,7 +218,7 @@ describe StoreController do
       sign_in @user
       get :checkout
 
-      assigns(:order).should be_nil
+      expect(assigns(:order)).to be_nil
     end
 
     it "should set up a new order since the user submitted an address form" do
@@ -239,7 +233,7 @@ describe StoreController do
       session[:address_submitted][:address_submission_method] = 'form'
       get :checkout
 
-      assigns(:order).should_not be_nil
+      expect(assigns(:order)).to_not be_nil
     end
 
     it "should redirect back if there is nothing in the cart" do
@@ -250,15 +244,15 @@ describe StoreController do
       sign_in @user
       get :checkout
 
-      response.should redirect_to('/')
-      flash[:notice].should == 'Your cart is empty.'
+      expect(response).to redirect_to('/')
+      expect(flash[:notice]).to eq('Your cart is empty.')
     end
 
     it "should redirect to signin if there is not a user logged in" do
       @cart = Cart.new
       get :checkout
 
-      response.should redirect_to("/users/sign_in")
+      expect(response).to redirect_to("/users/sign_in")
     end
 
     it "should redirect to cart if a user has already purchased a set of instructions and hasn't downloaded yet" do
@@ -272,8 +266,8 @@ describe StoreController do
       sign_in @user
       get :checkout
 
-      response.should redirect_to('/cart')
-      flash[:notice].should == "You've already purchased the following products before, (#{@product.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times."
+      expect(response).to redirect_to('/cart')
+      expect(flash[:notice]).to eq("You've already purchased the following products before, (#{@product.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.")
     end
 
     it "should redirect to cart if a user has already purchased a set of instructions and has downloaded, but downloads remaining is > 0" do
@@ -288,8 +282,8 @@ describe StoreController do
       sign_in @user
       get :checkout
 
-      response.should redirect_to('/cart')
-      flash[:notice].should == "You've already purchased the following products before, (#{@product.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times."
+      expect(response).to redirect_to('/cart')
+      expect(flash[:notice]).to eq("You've already purchased the following products before, (#{@product.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.")
     end
 
     it 'should not redirect to cart if a user has already purchased a set of instructions, but has 0 downloads remaining' do
@@ -304,7 +298,7 @@ describe StoreController do
       sign_in @user
       get :checkout
 
-      response.should render_template(:checkout)
+      expect(response).to render_template(:checkout)
     end
 
     it "should not redirect to cart if a user has added a physical product to their cart that they've purchased before" do
@@ -322,8 +316,8 @@ describe StoreController do
       sign_in @user
       get :checkout
 
-      response.should_not redirect_to('/cart')
-      flash[:notice].should_not == "You've already purchased the following products before, (#{@product1.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times."
+      expect(response).to_not redirect_to('/cart')
+      expect(flash[:notice]).to_not eq("You've already purchased the following products before, (#{@product1.name}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.")
     end
 
     it "should show the flash notice notifying user of bad quantities for physical items" do
@@ -342,8 +336,8 @@ describe StoreController do
       session[:address_submitted] = {:address1 => '123 Fake St.'}
       get :checkout
 
-      flash[:notice].should match("Please reduce quantities or remove")
-      flash[:notice].should match("Winter Village Flak Cannon")
+      expect(flash[:notice]).to match("Please reduce quantities or remove")
+      expect(flash[:notice]).to match("Winter Village Flak Cannon")
     end
   end
 
@@ -355,8 +349,8 @@ describe StoreController do
 
       expect(@cart.cart_items).to eq([])
       expect(session[:cart_id]).not_to be_nil
-      response.should redirect_to('/store')
-      flash[:notice].should == "You have emptied your cart."
+      expect(response).to redirect_to('/store')
+      expect(flash[:notice]).to eq("You have emptied your cart.")
     end
   end
 
@@ -367,7 +361,7 @@ describe StoreController do
       product = FactoryGirl.create(:product)
       get :product_details, :product_code => product.product_code, :product_name => product.name
 
-      assigns(:product).name.should == product.name
+      expect(assigns(:product).name).to eq(product.name)
     end
   end
 
@@ -414,7 +408,7 @@ describe StoreController do
       post :submit_order, :order => {:user_id => @user.id}
 
       #I don't like this, but I'm not sure how else to do it.
-      response.should redirect_to("https://#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=1")
+      expect(response).to redirect_to("https://#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=1")
     end
 
     it "should send the right quantity and amount when sending the order to paypal" do
@@ -427,19 +421,19 @@ describe StoreController do
       post :submit_order, :order => {:user_id => @user.id}
 
       #I don't like this, but I'm not sure how else to do it.
-      response.should redirect_to("https://#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=2")
+      expect(response).to redirect_to("https://#{ENV['BCD_PAYPAL_HOST']}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{assigns(:order).request_id}&business=#{ENV['BCD_PAYPAL_EMAIL']}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{ENV['BCD_PAYPAL_RETURN_URL']}&notify_url=#{ENV['BCD_PAYPAL_NOTIFY_URL']}&currency_code=USD&item_name_1=CB001%20Colonial%20Revival%20House&amount_1=10.0&quantity_1=2")
     end
 
     it "should redirect to cart with an 'uh-oh' message if the order couldn't be submitted" do
       @user = FactoryGirl.create(:user)
       @cart = FactoryGirl.create(:cart)
       session[:cart_id] = @cart.id
-      Order.any_instance.stub(:save!).and_return(false)
+      expect_any_instance_of(Order).to receive(:save!).and_return(false)
       sign_in @user
       post :submit_order, :order => {:user_id => @user.id}
 
-      response.should redirect_to('/cart')
-      flash[:notice].should == "Uh-oh. Something bad happened. Please try again."
+      expect(response).to redirect_to('/cart')
+      expect(flash[:notice]).to eq("Uh-oh. Something bad happened. Please try again.")
     end
   end
 
@@ -451,10 +445,10 @@ describe StoreController do
         FactoryGirl.create(:subcategory)
         FactoryGirl.create(:product)
         FactoryGirl.create(:order, :address_street_1 => '123 Fake St.', :address_state => 'VA')
-        controller.should_receive(:current_user).at_least(1).times.and_return(@user)
+        expect(controller).to receive(:current_user).at_least(1).times.and_return(@user)
         get :enter_address
 
-        assigns(:order).address_state.should eq('VA')
+        expect(assigns(:order).address_state).to eq('VA')
       end
     end
 
@@ -464,7 +458,7 @@ describe StoreController do
           session[:address_submitted] = {:address_submission_method => 'form', :address_state => 'CO'}
           get :enter_address
 
-          assigns(:order).address_state.should eq('CO')
+          expect(assigns(:order).address_state).to eq('CO')
         end
       end
 
@@ -473,7 +467,7 @@ describe StoreController do
           session[:address_submitted] = {:address_submission_method => 'sasquatch', :address_state => 'CA'}
           get :enter_address
 
-          assigns(:order).should be_a_new(Order)
+          expect(assigns(:order)).to be_a_new(Order)
         end
       end
     end
@@ -482,7 +476,7 @@ describe StoreController do
       it 'should create an empty Order object' do
         get :enter_address
 
-        assigns(:order).should be_a_new(Order)
+        expect(assigns(:order)).to be_a_new(Order)
       end
     end
   end
@@ -492,24 +486,24 @@ describe StoreController do
       it 'should use the address to create an Order object' do
         post :validate_street_address, :order => {:address_submission_method => 'form', :address_state => 'HI'}
 
-        assigns(:order).address_state.should eq('HI')
+        expect(assigns(:order).address_state).to eq('HI')
       end
 
       context 'if order is not valid' do
         it 'should render enter_address' do
-          Order.any_instance.should_receive(:valid?).at_least(1).times.and_return(false)
+          expect_any_instance_of(Order).to receive(:valid?).at_least(1).times.and_return(false)
           post :validate_street_address, :order => {:address_submission_method => 'form', :address_state => 'NY'}
 
-          response.should render_template(:enter_address)
+          expect(response).to render_template(:enter_address)
         end
       end
 
       context 'if order is valid' do
         it 'should redirect to checkout' do
-          Order.any_instance.should_receive(:valid?).at_least(1).times.and_return(true)
+          expect_any_instance_of(Order).to receive(:valid?).at_least(1).times.and_return(true)
           post :validate_street_address, :order => {:address_submission_method => 'form', :address_state => 'ID'}
 
-          response.should redirect_to('/checkout')
+          expect(response).to redirect_to('/checkout')
         end
       end
     end
@@ -518,7 +512,7 @@ describe StoreController do
       it 'should redirect to checkout' do
         post :validate_street_address, :order => {:address_submission_method => 'paypal', :address_state => 'LA'}
 
-        response.should redirect_to('/checkout')
+        expect(response).to redirect_to('/checkout')
       end
     end
   end
@@ -529,8 +523,8 @@ describe StoreController do
       subcategory = FactoryGirl.create(:subcategory)
       product = FactoryGirl.create(:product)
       get :products, :product_type_name => @product_type.name
-      assigns(:product_type).name.should eq 'Instructions'
-      assigns(:products).should be_nil
+      expect(assigns(:product_type).name).to eq('Instructions')
+      expect(assigns(:products)).to be_nil
     end
 
     it 'should get @products if product_type is not Instructions' do
@@ -540,8 +534,8 @@ describe StoreController do
       product = FactoryGirl.create(:product, product_code: 'CB001')
       product2 = FactoryGirl.create(:product, product_type_id: @product_type.id, product_code: 'CB001M', name: 'The Model')
       get :products, :product_type_name => 'Models'
-      assigns(:product_type).name.should eq 'Models'
-      assigns(:products).length.should eq 1
+      expect(assigns(:product_type).name).to eq('Models')
+      expect(assigns(:products).size).to eq(1)
     end
   end
 
@@ -564,7 +558,7 @@ describe StoreController do
       @order = FactoryGirl.create(:order)
       li1 = LineItem.new product_id: @product1.id, quantity: 1, total_price: 5
       @order.line_items << li1
-      Download.any_instance.should_not_receive(:restock)
+      expect_any_instance_of(Download).to_not receive(:restock)
       controller.send(:restock_downloads, @order)
 
       expect(Download.count).to eq 0
@@ -619,86 +613,86 @@ describe StoreController do
       physical_product = FactoryGirl.create(:physical_product)
       order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
       line_item = FactoryGirl.create(:line_item, :product_id => physical_product.id, :order_id => order.id)
-      Order.should_receive(:find_by_request_id).at_least(:once).and_return(order)
-      InstantPaymentNotification.any_instance.stub(:valid?).and_return(true)
-      InstantPaymentNotification.any_instance.stub(:address_city).and_return("Richmond")
-      order.should_receive(:save).at_least(1).times
+      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
+      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
+      expect_any_instance_of(InstantPaymentNotification).to receive(:address_city).and_return("Richmond")
+      expect(order).to receive(:save).at_least(1).times
 
       post :listener, {:custom => 'blar'}
 
-      order.address_city.should eq("Richmond")
+      expect(order.address_city).to eq("Richmond")
     end
 
     it "should not save address details if order does not include physical item" do
       user = FactoryGirl.create(:user)
       order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
-      Order.should_receive(:find_by_request_id).at_least(:once).and_return(order)
-      InstantPaymentNotification.any_instance.stub(:valid?).and_return(true)
-      InstantPaymentNotification.any_instance.stub(:address_city).and_return("Richmond")
-      order.should_receive(:save).at_least(1).times
+      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
+      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
+      allow_any_instance_of(InstantPaymentNotification).to receive(:address_city).and_return("Richmond")
+      expect(order).to receive(:save).at_least(1).times
 
       post :listener, {:custom => 'blar'}
 
-      order.address_city.should be_nil
+      expect(order.address_city).to be_nil
     end
 
     it "should send an order confirmation email and save details to the order if the IPN is valid" do
       user = FactoryGirl.create(:user)
       order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
-      Order.should_receive(:find_by_request_id).at_least(:once).and_return(order)
-      InstantPaymentNotification.any_instance.stub(:valid?).and_return(true)
-      order.should_receive(:save).at_least(1).times
-      OrderMailer.should_receive(:order_confirmation)
+      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
+      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
+      expect(order).to receive(:save).at_least(1).times
+      expect(OrderMailer).to receive(:order_confirmation)
 
       post :listener, {:custom => 'blar'}
 
-      response.should be_success
-      response.body.strip.should be_empty
+      expect(response).to be_success
+      expect(response.body.strip).to be_empty
     end
 
     it "should send a guest order confirmation email and save details to the order if the IPN is valid" do
       user = FactoryGirl.create(:user,:account_status => 'G')
       order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
-      Order.should_receive(:find_by_request_id).at_least(:once).and_return(order)
-      InstantPaymentNotification.any_instance.stub(:valid?).and_return(true)
-      order.should_receive(:save).at_least(1).times
-      OrderMailer.should_receive(:guest_order_confirmation)
+      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
+      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
+      expect(order).to receive(:save).at_least(1).times
+      expect(OrderMailer).to receive(:guest_order_confirmation)
 
       post :listener, {:custom => 'blar'}
 
-      response.should be_success
-      response.body.strip.should be_empty
+      expect(response).to be_success
+      expect(response.body.strip).to be_empty
     end
 
     it "should not send an order confirmation email, but save details to the order if the IPN is invalid" do
       order = FactoryGirl.create(:order, :status => '')
-      Order.should_receive(:find_by_request_id).at_least(:once).and_return(order)
-      InstantPaymentNotification.any_instance.stub(:valid?).and_return(false)
-      order.should_receive(:save).at_least(1).times
-      OrderMailer.should_not_receive(:order_confirmation)
+      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
+      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(false)
+      expect(order).to receive(:save).at_least(1).times
+      expect(OrderMailer).to_not receive(:order_confirmation)
 
       post :listener, {:custom => 'blar'}
 
-      response.should be_success
-      response.body.strip.should be_empty
+      expect(response).to be_success
+      expect(response.body.strip).to be_empty
     end
 
     it "should drop the request if an order can not be found by request_id" do
       order = FactoryGirl.create(:order)
       post :listener, {:custom => 'fake'}
 
-      assigns(:order).should be_nil
-      response.should be_success
-      response.body.strip.should be_empty
+      expect(assigns(:order)).to be_nil
+      expect(response).to be_success
+      expect(response.body.strip).to be_empty
     end
 
     it "should drop the request if the orders status is already set as COMPLETED" do
       order = FactoryGirl.create(:order)
       post :listener, {:custom => 'blar'} #blar is the request_id for a COMPLETED order in the order factory
 
-      assigns(:order).should_not be_nil
-      response.should be_success
-      response.body.strip.should be_empty
+      expect(assigns(:order)).to_not be_nil
+      expect(response).to be_success
+      expect(response.body.strip).to be_empty
     end
   end
 

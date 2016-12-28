@@ -7,7 +7,7 @@ end
 describe RegistrationsHelper do
   describe "nice authentication list" do
     it "lists authentications in a nice format" do
-      helper.nice_authentications_list([FactoryGirl.create(:authentication)]).should == "Twitter authentication"
+      expect(helper.nice_authentications_list([FactoryGirl.create(:authentication)])).to eq("Twitter authentication")
     end
   end
 end

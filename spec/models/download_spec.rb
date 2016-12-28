@@ -16,7 +16,7 @@ describe Download do
       Download.add_download_to_user_and_model(@user, @product.id)
       @download2 = Download.last
 
-      @download2.remaining.should == MAX_DOWNLOADS
+      expect(@download2.remaining).to eq(MAX_DOWNLOADS)
     end
 
     it "should not add download to user/product if the user has not downloaded at least once" do
@@ -25,8 +25,8 @@ describe Download do
       @download = Download.new(:user_id => @user.id, :product_id => @product.id)
       @download.save!
 
-      x = Download.add_download_to_user_and_model(@user, @product.id)
-      x.should == nil
+      download = Download.add_download_to_user_and_model(@user, @product.id)
+      expect(download).to be_nil
     end
   end
 
@@ -40,7 +40,7 @@ describe Download do
       Download.update_all_users_who_have_downloaded_at_least_once(@product.id)
       @downloads = Download.all
       @downloads.each do |dl|
-        dl.remaining.should == 5
+        expect(dl.remaining).to eq(5)
       end
     end
 
@@ -51,8 +51,8 @@ describe Download do
       @download2 = FactoryGirl.create(:download, :user_id => @user2.id)
       @product = FactoryGirl.create(:product)
       @affected_downloads = Download.update_all_users_who_have_downloaded_at_least_once(@product.id)
-      @affected_downloads.length.should == 2
-      @affected_downloads[0].class.should == User
+      expect(@affected_downloads.size).to eq(2)
+      expect(@affected_downloads[0].class).to eq(User)
     end
   end
 
@@ -63,13 +63,13 @@ describe Download do
         @product = FactoryGirl.create(:product)
         @download = Download.new(:user_id => @user.id, :product_id => @product.id)
         @download.save!
-        Download.should_receive(:find_or_create_by).and_return(@download)
+        expect(Download).to receive(:find_or_create_by).and_return(@download)
         Download.update_download_counts(@user,@product.id)
 
         @decremented_download = Download.find(@download.id)
 
-        @decremented_download.remaining.should == MAX_DOWNLOADS-1
-        @decremented_download.count.should == 1
+        expect(@decremented_download.remaining).to eq(MAX_DOWNLOADS-1)
+        expect(@decremented_download.count).to eq(1)
       end
     end
 
@@ -79,13 +79,13 @@ describe Download do
         @product = FactoryGirl.create(:product)
         @download = Download.new(:user_id => @user.id, :product_id => @product.id, :download_token => 'token')
         @download.save!
-        Download.should_receive(:find_by_user_id_and_download_token).and_return(@download)
+        expect(Download).to receive(:find_by_user_id_and_download_token).and_return(@download)
         Download.update_download_counts(@user,@product.id, 'token')
 
         @decremented_download = Download.find(@download.id)
 
-        @decremented_download.remaining.should == MAX_DOWNLOADS-1
-        @decremented_download.count.should == 1
+        expect(@decremented_download.remaining).to eq(MAX_DOWNLOADS-1)
+        expect(@decremented_download.count).to eq(1)
       end
     end
   end

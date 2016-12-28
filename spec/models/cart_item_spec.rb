@@ -9,7 +9,7 @@ describe CartItem do
       product = FactoryGirl.create(:product, :price => 5.0)
       cart_item = FactoryGirl.create(:cart_item, :quantity => 5, :product_id => product.id)
 
-      cart_item.price.should == 5.0
+      expect(cart_item.price).to eq(5.0)
     end
   end
 
@@ -17,7 +17,7 @@ describe CartItem do
     it "should increment the quantity when told to" do
       cart_item = FactoryGirl.create(:cart_item, :quantity => 2)
 
-      lambda{cart_item.increment_quantity}.should change(cart_item, :quantity).from(2).to(3)
+      expect(lambda{cart_item.increment_quantity}).to change(cart_item, :quantity).from(2).to(3)
     end
   end
 end

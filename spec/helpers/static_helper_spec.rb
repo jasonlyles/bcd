@@ -19,7 +19,7 @@ describe StaticHelper do
     it "tells how many downloads a user has left" do
       @user = FactoryGirl.create(:user)
       sign_in @user
-      helper.downloads_remaining(1).should == 5
+      expect(helper.downloads_remaining(1)).to eq(5)
     end
   end
 end

@@ -10,11 +10,11 @@ describe "AdvertisingCampaigns" do
     it "works!" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
       get advertising_campaigns_path
-      response.status.should be(302)
+      expect(response.status).to eq(302)
       radmin = Radmin.create(:email => "lylesjt@gmail.com", :password => 'password', :password_confirmation => 'password')
       login radmin
       get advertising_campaigns_path
-      response.status.should be(200)
+      expect(response.status).to eq(200)
     end
   end
 end

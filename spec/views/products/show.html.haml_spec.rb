@@ -20,12 +20,12 @@ describe "products/show.html.haml" do
   it "renders attributes in <p>" do
     render
 
-    rendered.should match(/National Bank/)
-    rendered.should match(/Instructions/)
-    rendered.should match(/City/)
-    rendered.should match(/Buildings/)
-    rendered.should match(/CB002/)
-    rendered.should match(/basically a bank/)
-    rendered.should match(/10.00/)
+    expect(rendered).to match(/National Bank/)
+    expect(rendered).to match(/Instructions/)
+    expect(rendered).to match(/City/)
+    expect(rendered).to match(/Buildings/)
+    expect(rendered).to match(/CB002/)
+    expect(rendered).to match(/basically a bank/)
+    expect(rendered).to match(/10.00/)
   end
 end
