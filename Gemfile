@@ -38,7 +38,6 @@ gem 'responders', '~> 2.0'
 gem 'sass-rails'
 gem 'compass-rails'
 gem 'compass-blueprint'
-gem 'coffee-rails'
 gem 'uglifier'
 gem 'sprockets'
 gem 'asset_sync'
@@ -74,10 +73,10 @@ group :development, :test do
   gem "factory_girl_rails"
   gem "factory_girl_generator"
   gem "rspec-rails", '~> 3.0'
-  gem 'rspec-activemodel-mocks'  # Uncomment this after upgrading rspec
+  gem 'rspec-activemodel-mocks'
   gem 'simplecov', :require => false
   #gem 'brakeman'
-  gem 'metric_fu'
+  gem 'metric_fu', git: 'https://github.com/bergholdt/metric_fu.git'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
   gem 'awesome_print', require: 'ap'
