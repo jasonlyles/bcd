@@ -40,7 +40,7 @@ gem 'compass-rails'
 gem 'compass-blueprint'
 gem 'coffee-rails'
 gem 'uglifier'
-gem 'sprockets', '2.11.0'
+gem 'sprockets'
 gem 'asset_sync'
 
 # Use unicorn as the web server
@@ -80,7 +80,6 @@ group :development, :test do
   gem 'metric_fu'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
-  #gem 'sprockets_better_errors' # This seems to have stopped working. I won't need it once I get to 4.1 anyways
   gem 'awesome_print', require: 'ap'
   gem 'pry-byebug'
   gem 'bullet'

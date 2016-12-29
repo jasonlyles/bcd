@@ -36,9 +36,7 @@ BrickCity::Application.configure do
 
   config.eager_load = false
 
-  #For sprockets_better_errors gem, to show in dev mode sprocket errors that would normally only show up in prod.
-  # I believe the changes you get in this gem show up in Rails 4.1, so this is probably only temporary
-  config.assets.raise_production_errors = true
+  config.assets.quiet = true
 
   #config.action_controller.asset_host = "http://images.brickcitydepot.com" #Just set this up to test whether I had it working or not. It works
 =begin
