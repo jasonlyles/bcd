@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-ruby '2.2.2'
+ruby '2.2.6'
 
 gem 'rails', '4.2.7'
 gem 'activerecord-session_store'
