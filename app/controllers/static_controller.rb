@@ -10,6 +10,13 @@ class StaticController < ApplicationController
     @email = Email.new
   end
 
+  def maintenance
+    if Switch.maintenance_mode.off?
+      flash[:notice] = 'Done with maintenance!'
+      redirect_to '/'
+    end
+  end
+
   # This exists only to confirm that my exception notification delivery is working. Would be nicer to perhaps hook
   # into heroku deploy to send an email through the exception notification gem to just email me during/after a deploy.
   # This will do for now.

@@ -5,6 +5,10 @@ class Switch < ActiveRecord::Base
     switch_on
   end
 
+  def off?
+    !switch_on
+  end
+
   def on
     self.switch_on = true
     self.save!

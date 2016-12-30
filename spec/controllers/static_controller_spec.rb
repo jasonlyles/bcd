@@ -19,6 +19,27 @@ describe StaticController do
     end
   end
 
+  describe "GET maintenance" do
+    context "maintenance is completed" do
+      it 'should redirect to the home page' do
+        @switch = FactoryGirl.create(:switch, switch_on: false)
+        get 'maintenance'
+
+        expect(flash[:notice]).to eq('Done with maintenance!')
+        expect(response).to redirect_to('/')
+      end
+    end
+
+    context 'maintenance is not yet complete' do
+      it 'should render the maintenance page' do
+        @switch = FactoryGirl.create(:switch, switch_on: true)
+        get 'maintenance'
+
+        expect(response).to be_success
+      end
+    end
+  end
+
   describe "POST send_contact_email" do
     it "should send a contact email if email has valid params" do
       post 'send_contact_email', :email => {:name => "Charlie Brown", :email_address => "charlie_brown@peanuts.com", :body => 'I have too much money. Please help.'}
