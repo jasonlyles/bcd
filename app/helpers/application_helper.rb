@@ -46,4 +46,8 @@ module ApplicationHelper
      :site_name => 'Brick City Depot',
      :url => request.original_url}
   end
+
+  def host_url
+    "#{request.protocol}#{request.env['HTTP_HOST']}"
+  end
 end

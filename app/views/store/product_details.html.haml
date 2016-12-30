@@ -101,3 +101,20 @@
     });
   });
 
+%script{:type => "application/ld+json"}
+  { "@context" : "http://schema.org",
+  "@type" : "Product",
+  "name" : "#{ @product.name }",
+  "image" : "#{host_url}#{ @product.images.first.url }",
+  "description" : "#{ @product.description }",
+  "offers": {
+  "@type": "Offer",
+  "priceCurrency": "USD",
+  "price": "#{ @product.price }",
+  "availability": "http://schema.org/InStock",
+  "seller": {
+  "@type": "Organization",
+  "name": "Brick City Depot"
+  }
+  }
+  }
