@@ -12,6 +12,10 @@ class RegistrationsController < Devise::RegistrationsController
     end
     clean_up_guest if session[:guest] #If I have a guest that has a change of heart and wants to sign up, ditch the guest record
     @user = User.where("email=?", params[:user][:email]).first
+    # If user has password, they've already signed up, redirect them to the login page
+    if @user && @user.encrypted_password?
+      return redirect_to '/users/sign_in', notice: 'This user already has an account, please login.'
+    end
     if @user.blank?
       build_resource(signup_params)
     else

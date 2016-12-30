@@ -28,14 +28,30 @@ describe RegistrationsController do
     end
 
     context 'can find user based on email passed in' do
-      it 'should set user account status to A and make a call to save authentication' do
-        @user = FactoryGirl.create(:user, :account_status => 'G')
-        expect(controller).to receive(:save_authentication)
-        request.env['devise.mapping'] = Devise.mappings[:user]
-        post :create, :user => {:email => @user.email}
-        @user.reload
+      context 'user is saved as a guest' do
+        it 'should set user account status to A and make a call to save authentication' do
+          @user = FactoryGirl.create(:user, :account_status => 'G')
+          expect_any_instance_of(User).to receive(:encrypted_password?).and_return(nil)
+          expect(controller).to receive(:save_authentication)
+          request.env['devise.mapping'] = Devise.mappings[:user]
+          post :create, :user => {:email => @user.email}
+          @user.reload
 
-        expect(@user.account_status).to eq('A')
+          expect(@user.account_status).to eq('A')
+        end
+      end
+
+      context 'user has an existing password' do
+        it 'should redirect to the signin page with a notice to sign in' do
+          @user = FactoryGirl.create(:user)
+          expect(controller).to_not receive(:save_authentication)
+          request.env['devise.mapping'] = Devise.mappings[:user]
+          post :create, :user => {:email => @user.email}
+          @user.reload
+
+          expect(flash[:notice]).to eq('This user already has an account, please login.')
+          expect(response).to redirect_to('/users/sign_in')
+        end
       end
     end
 
