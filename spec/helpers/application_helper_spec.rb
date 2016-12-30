@@ -27,4 +27,10 @@ describe ApplicationHelper do
       expect(helper.featured_item.name).to match(/Colonial Revival House|Grader/)
     end
   end
+
+  describe "host_url" do
+    it "should return the host url" do
+      expect(helper.host_url).to eq('http://test.host')
+    end
+  end
 end
