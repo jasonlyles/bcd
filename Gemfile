@@ -1,11 +1,11 @@
 source 'http://rubygems.org'
 
-ruby '2.1.8'
+ruby '2.2.6'
 
-gem 'rails', '4.1.8'
+gem 'rails', '4.2.7'
 gem 'activerecord-session_store'
 gem 'protected_attributes'
-gem 'devise', '3.2.4'
+gem 'devise', '3.5.10'
 gem 'aws-sdk'
 gem 'aws-sdk-rails'
 gem 'omniauth'
@@ -32,14 +32,14 @@ gem 'resque-status'
 gem 'heroku-api'
 gem 'roboto'
 gem 'sitemap_generator'
+gem 'responders', '~> 2.0'
 
 #assets
 gem 'sass-rails'
 gem 'compass-rails'
 gem 'compass-blueprint'
-gem 'coffee-rails'
 gem 'uglifier'
-gem 'sprockets', '2.11.0'
+gem 'sprockets'
 gem 'asset_sync'
 
 # Use unicorn as the web server
@@ -58,7 +58,7 @@ gem 'thin'
 # group :development, :test do
 #   gem 'webrat'
 # end
-# TODO: Need to spend time upgrading devise and rspec separately
+
 group :development, :test do
   gem 'dotenv-rails'
   gem 'better_errors'
@@ -69,22 +69,25 @@ group :development, :test do
   gem 'rack-mini-profiler'
   gem 'sqlite3'
   gem "nifty-generators"
-  gem 'guard-rspec'
+  #gem 'guard-rspec'
   gem "factory_girl_rails"
   gem "factory_girl_generator"
-  gem "rspec-rails", '2.14.2'
-  #gem 'rspec-activemodel-mocks'  # Uncomment this after upgrading rspec
+  gem "rspec-rails", '~> 3.0'
+  gem 'rspec-activemodel-mocks'
   gem 'simplecov', :require => false
   #gem 'brakeman'
-  gem 'metric_fu'
+  gem 'metric_fu', git: 'https://github.com/bergholdt/metric_fu.git'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
-  #gem 'sprockets_better_errors' # This seems to have stopped working. I won't need it once I get to 4.1 anyways
   gem 'awesome_print', require: 'ap'
   gem 'pry-byebug'
   gem 'bullet'
   gem 'gemsurance'
   gem 'pry'
+end
+
+group :development do
+  gem 'web-console', '~> 2.0'
 end
 
 group :test do

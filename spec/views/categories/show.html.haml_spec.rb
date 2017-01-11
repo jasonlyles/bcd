@@ -12,8 +12,8 @@ describe "categories/show.html.haml" do
   it "renders attributes in <p>" do
     render
 
-    rendered.should match(/Name/)
-    rendered.should match(/blah blah blah/)
-    rendered.should match(/Ready for Public/)
+    expect(rendered).to match(/Name/)
+    expect(rendered).to match(/blah blah blah/)
+    expect(rendered).to match(/Ready for Public/)
   end
 end

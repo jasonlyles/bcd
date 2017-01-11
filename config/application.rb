@@ -57,5 +57,7 @@ module BrickCity
     config.assets.enabled = true
 
     config.assets.precompile += ['ie.css']
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end

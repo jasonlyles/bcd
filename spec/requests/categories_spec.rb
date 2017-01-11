@@ -10,11 +10,11 @@ describe "Categories" do
     it "works!" do
 
       get categories_path
-      response.status.should be(302)
+      expect(response.status).to eq(302)
       radmin = Radmin.create(:email=>"lylesjt@gmail.com", :password=>'password', :password_confirmation=>'password')
       login radmin
       get categories_path
-      response.status.should be(200)
+      expect(response.status).to eq(200)
     end
   end
 end

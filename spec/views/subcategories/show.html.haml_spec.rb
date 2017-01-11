@@ -15,9 +15,9 @@ describe "subcategories/show.html.haml" do
 
   it "renders attributes in <p>" do
     render
-    rendered.should match(/Vehicles/)
-    rendered.should match(/CV/)
-    rendered.should match(/Category/)
-    rendered.should match(/City vehicles are awesome/)
+    expect(rendered).to match(/Vehicles/)
+    expect(rendered).to match(/CV/)
+    expect(rendered).to match(/Category/)
+    expect(rendered).to match(/City vehicles are awesome/)
   end
 end

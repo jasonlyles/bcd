@@ -35,6 +35,10 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  config.infer_spec_type_from_file_location!
+
+  config.raise_errors_for_deprecations!
+
   config.after(:all) do
     #Clean up test artifacts
     if Rails.env.test? || Rails.env.cucumber?

@@ -23,7 +23,7 @@ BrickCity::Application.configure do
   # just comment this out and Rails will serve the files
 
   # See everything in the log (default is :info)
-  # config.log_level = :debug
+  config.log_level = :info
   config.logger = Logger.new(STDOUT)
   config.logger.level = Logger::INFO
 
@@ -84,7 +84,8 @@ BrickCity::Application.configure do
 end
 
 BrickCity::Application.config.middleware.use ExceptionNotification::Rack,
-                                             :email => {
-                                              :sender_address => %{"BrickCityDepot Exception" <service@brickcitydepot.com>},
-                                              :exception_recipients => ["lylesjt@gmail.com"]
-                                             }
+     email: {
+        deliver_with: :deliver,
+        sender_address: %{"BrickCityDepot Exception" <service@brickcitydepot.com>},
+        exception_recipients: ["lylesjt@gmail.com"]
+     }

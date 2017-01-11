@@ -24,8 +24,9 @@ BrickCity::Application.configure do
   # Devise needs a default url
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
-  #Set to use Amazon ses via aws-ses gem
-  config.action_mailer.delivery_method = :aws_sdk
+  # Set to catch mail via mailcatcher
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {address: 'localhost', port: 1025}
 
   #Do not compress assets
   config.assets.js_compressor = :uglifier
@@ -35,9 +36,7 @@ BrickCity::Application.configure do
 
   config.eager_load = false
 
-  #For sprockets_better_errors gem, to show in dev mode sprocket errors that would normally only show up in prod.
-  # I believe the changes you get in this gem show up in Rails 4.1, so this is probably only temporary
-  config.assets.raise_production_errors = true
+  config.assets.quiet = true
 
   #config.action_controller.asset_host = "http://images.brickcitydepot.com" #Just set this up to test whether I had it working or not. It works
 =begin
@@ -55,8 +54,9 @@ end
 #For troubleshooting exception notifications:
 =begin
 BrickCity::Application.config.middleware.use ExceptionNotification::Rack,
-                                              :email => {
-                                                :sender_address => %{"BrickCityDepot Exception" <service@brickcitydepot.com>},
-                                                :exception_recipients => ["lylesjt@gmail.com"]
-                                              }
+      email: {
+        deliver_with: :deliver,
+        sender_address: %{"BrickCityDepot Exception" <service@brickcitydepot.com>},
+        exception_recipients: ["lylesjt@gmail.com"]
+    }
 =end

@@ -8,8 +8,8 @@ describe PasswordsController do
       request.env['devise.mapping'] = Devise.mappings[:user]
       get :create, :user => {:email => 'blar'}
 
-      flash[:alert].should == "Was not able to find that email. Please make sure you entered the correct email address."
-      response.should redirect_to('/users/password/new')
+      expect(flash[:alert]).to eq("Was not able to find that email. Please make sure you entered the correct email address.")
+      expect(response).to redirect_to('/users/password/new')
     end
   end
 

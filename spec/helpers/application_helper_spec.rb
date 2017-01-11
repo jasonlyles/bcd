@@ -1,11 +1,9 @@
 require 'spec_helper'
 
-
-
 describe ApplicationHelper do
   describe "snippet" do
     it "should show only a snippet of a longer string" do
-      helper.snippet("Brick City Depot will soon take over the custom lego instruction world!", :word_count => 5).should == "Brick City Depot will soon..."
+      expect(helper.snippet("Brick City Depot will soon take over the custom lego instruction world!", :word_count => 5)).to eq("Brick City Depot will soon...")
     end
   end
 
@@ -26,7 +24,13 @@ describe ApplicationHelper do
                     )
       ]
 
-      helper.featured_item.name.should match(/Colonial Revival House|Grader/)
+      expect(helper.featured_item.name).to match(/Colonial Revival House|Grader/)
+    end
+  end
+
+  describe "host_url" do
+    it "should return the host url" do
+      expect(helper.host_url).to eq('http://test.host')
     end
   end
 end

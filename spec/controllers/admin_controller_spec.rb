@@ -14,7 +14,7 @@ describe AdminController do
       product = FactoryGirl.create(:product)
       sign_in @radmin
 
-      lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }.should change(Order, :count).by(1)
+      expect(lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }).to change{Order.count}.by(1)
       expect(assigns(:order).status).to eq 'GIFT'
     end
 
@@ -27,7 +27,7 @@ describe AdminController do
       line_item = FactoryGirl.create(:line_item, order_id: order.id, product_id: product.id)
       sign_in @radmin
 
-      lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }.should change(LineItem, :count).by(-1)
+      expect(lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }).to change{LineItem.count}.by(-1)
     end
 
     it 'should add a line_item to the order if one does not already exist' do
@@ -38,7 +38,7 @@ describe AdminController do
       order = FactoryGirl.create(:order, status: 'GIFT')
       sign_in @radmin
 
-      lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }.should change(LineItem, :count).by(1)
+      expect(lambda { post :gift_instructions, format: :json, gift: {'user_id' => user.id, 'product_id' => product.id} }).to change{LineItem.count}.by(1)
     end
   end
 
@@ -53,8 +53,7 @@ describe AdminController do
       sign_in @radmin
       get :transactions_by_month, :date => Time.now.utc.to_date.strftime("%Y-%m-%d"), :format => 'csv'
 
-      assigns(:transactions).length.should == 1
-      response.body.should == "Email,Transaction ID,Request ID,Status,Date,Product,Qty,Total Price\ncharlie_brown@peanuts.com,blarney,blar,COMPLETED,#{Time.now.utc.to_date.strftime("%m/%d/%Y")},CB001 Colonial Revival House,1,9.99\n"
+      expect(assigns(:transactions).size).to eq(1)
     end
   end
 
@@ -64,8 +63,8 @@ describe AdminController do
       sign_in @radmin
       put :update_order_shipping_status, {:order_id => order.id, :shipping_status => '1'}
 
-      assigns(:order).shipping_status.should == 1
-      response.should redirect_to('/order_fulfillment')
+      expect(assigns(:order).shipping_status).to eq(1)
+      expect(response).to redirect_to('/order_fulfillment')
     end
   end
 
@@ -78,8 +77,8 @@ describe AdminController do
 
       get :order_fulfillment
 
-      assigns(:completed_orders).length.should == 1
-      assigns(:incomplete_orders).length.should == 2
+      expect(assigns(:completed_orders).size).to eq(1)
+      expect(assigns(:incomplete_orders).size).to eq(2)
     end
   end
 
@@ -90,8 +89,8 @@ describe AdminController do
       sign_in @radmin
       post :complete_order, :order => {:id => order.id}
 
-      assigns(:order).status.should eq('COMPLETED')
-      response.should redirect_to('/')
+      expect(assigns(:order).status).to eq('COMPLETED')
+      expect(response).to redirect_to('/')
     end
   end
 
@@ -101,8 +100,8 @@ describe AdminController do
       sign_in @radmin
       get :maintenance_mode
 
-      response.should render_template('maintenance_mode')
-      assigns(:mm_switch).switch.should == 'maintenance_mode'
+      expect(response).to render_template('maintenance_mode')
+      expect(assigns(:mm_switch).switch).to eq('maintenance_mode')
     end
   end
 
@@ -112,11 +111,11 @@ describe AdminController do
       sign_in @radmin
       post :switch_maintenance_mode
 
-      assigns(:mm_switch).switch_on.should == true
+      expect(assigns(:mm_switch).switch_on).to eq(true)
 
       post :switch_maintenance_mode
 
-      assigns(:mm_switch).switch_on.should == false
+      expect(assigns(:mm_switch).switch_on).to eq(false)
     end
   end
 
@@ -125,7 +124,7 @@ describe AdminController do
       sign_in @radmin
       get :sales_report
 
-      response.should render_template('sales_report')
+      expect(response).to render_template('sales_report')
     end
   end
 
@@ -136,7 +135,7 @@ describe AdminController do
       sign_in @radmin
       post :sales_report_monthly_stats, :start_date => {'month' => Time.now.utc.to_date.month, 'year' => Time.now.utc.to_date.year}, :end_date => {'month' => Time.now.utc.to_date.next_month.month, 'year' => Time.now.utc.to_date.next_month.year}, format: :js
 
-      assigns(:summaries).should == {"1"=>{"qty"=>1, "revenue"=>BigDecimal.new('10')}}
+      expect(assigns(:summaries)).to eq({"1"=>{"qty"=>1, "revenue"=>BigDecimal.new('10')}})
     end
 
     it "should return a hash of stat summaries for a single month report when the report has been completed" do
@@ -145,7 +144,7 @@ describe AdminController do
       sign_in @radmin
       post :sales_report_monthly_stats, :start_date => {'month' => Time.now.utc.to_date.month, 'year' => Time.now.utc.to_date.year}, :end_date => {'month' => Time.now.utc.to_date.month, 'year' => Time.now.utc.to_date.year}, format: :js
 
-      assigns(:summaries).should == {"1"=>{"qty"=>1, "revenue"=>BigDecimal.new('10')}}
+      expect(assigns(:summaries)).to eq({"1"=>{"qty"=>1, "revenue"=>BigDecimal.new('10')}})
     end
 
     it "should regenerate a completed report if the user clicks the 'Force Regeneration' button" do
@@ -155,7 +154,8 @@ describe AdminController do
       sign_in @radmin
       post :sales_report_monthly_stats, :start_date => {'month' => Time.now.utc.to_date.month, 'year' => Time.now.utc.to_date.year}, :end_date => {'month' => Time.now.utc.to_date.month, 'year' => Time.now.utc.to_date.year}, :commit => 'Force Regeneration', format: :js
 
-      assigns(:summaries).should == {"1"=>{"qty"=>1, "revenue"=>BigDecimal.new('9.99')}}
+      expect(assigns(:summaries)['1']['qty']).to eq(1)
+      expect(assigns(:summaries)['1']['revenue'].to_f).to eq(10.0)
     end
 
     it "should automatically regenerate a report if the report is for the current month, which is of course not complete yet" do
@@ -165,7 +165,8 @@ describe AdminController do
       sign_in @radmin
       post :sales_report_monthly_stats, :start_date => {'month' => Time.now.utc.to_date.month, 'year' => Time.now.utc.to_date.year}, :end_date => {'month' => Time.now.utc.to_date.month, 'year' => Time.now.utc.to_date.year}, format: :js
 
-      assigns(:summaries).should == {"1"=>{"qty"=>1, "revenue"=>BigDecimal.new('9.99')}}
+      expect(assigns(:summaries)['1']['qty']).to eq(1)
+      expect(assigns(:summaries)['1']['revenue'].to_f).to eq(10.0)
     end
 
     it "should mark a sales report as completed if the month is in the past" do
@@ -175,7 +176,7 @@ describe AdminController do
       sign_in @radmin
       post :sales_report_monthly_stats, :start_date => {'month' => Time.now.utc.to_date.prev_month.month, 'year' => Time.now.utc.to_date.prev_month.year}, :end_date => {'month' => Time.now.utc.to_date.prev_month.month, 'year' => Time.now.utc.to_date.prev_month.year}, format: :js
 
-      assigns(:report).completed.should == true
+      expect(assigns(:report).completed).to eq(true)
     end
   end
 
@@ -186,7 +187,7 @@ describe AdminController do
       get :become, :id => @user.id
 
       @user = User.find(@user.id)
-      @user.sign_in_count.should == 1
+      expect(@user.sign_in_count).to eq(1)
     end
   end
 
@@ -196,7 +197,7 @@ describe AdminController do
       user = FactoryGirl.create(:user)
       xhr :get, :find_user, email: user.email, user: {email: user.email}, format: :js
 
-      assigns(:user).id.should == user.id
+      expect(assigns(:user).id).to eq(user.id)
     end
   end
 
@@ -204,7 +205,7 @@ describe AdminController do
     it "should return the admin's profile given the radmin's ID" do
       sign_in @radmin
       get "admin_profile", :id => @radmin.id
-      assigns(:radmin).id.should == @radmin.id
+      expect(assigns(:radmin).id).to eq(@radmin.id)
     end
   end
 
@@ -214,23 +215,23 @@ describe AdminController do
       put :update_admin_profile, :id => @radmin.id,:radmin => {:email => 'silly@billy.com'}
       @radmin = Radmin.find(@radmin.id)
 
-      assigns(:radmin).errors.messages.should == {}
-      flash[:notice].should == "Profile was successfully updated."
-      @radmin.email.should == 'silly@billy.com'
+      expect(assigns(:radmin).errors.messages).to eq({})
+      expect(flash[:notice]).to eq("Profile was successfully updated.")
+      expect(@radmin.email).to eq('silly@billy.com')
     end
 
     it "with an invalid password, should not update the admin's profile" do
       sign_in @radmin
       put :update_admin_profile, :id => @radmin.id, :radmin => {:current_password => "blar"}
 
-      assigns(:radmin).errors.messages.should == {:current_password=>["is invalid."]}
+      expect(assigns(:radmin).errors.messages).to eq({:current_password=>["is invalid."]})
     end
 
     it "with an invalid email address, should not update the admin's profile" do
       sign_in @radmin
       put :update_admin_profile, :id => @radmin.id, :radmin => {:email => "6"}
 
-      assigns(:radmin).errors.messages.should == {:email => ["is invalid"]}
+      expect(assigns(:radmin).errors.messages).to eq({:email => ["is invalid"]})
     end
   end
 
@@ -241,7 +242,7 @@ describe AdminController do
       xhr :get, :change_user_status, :email => @user.email, :user => {:email => @user.email, :account_status => 'C'}, :format => :js
       @user = User.find(@user.id)
 
-      @user.account_status.should == 'C'
+      expect(@user.account_status).to eq('C')
     end
   end
 
@@ -251,7 +252,7 @@ describe AdminController do
       sign_in @radmin
       get :order, :id => order.id
 
-      assigns(:order).id.should == order.id
+      expect(assigns(:order).id).to eq(order.id)
     end
   end
 
@@ -263,14 +264,14 @@ describe AdminController do
       sign_in @radmin
       get :update_users_download_counts
 
-      assigns(:products).should == [["#{@product.product_code} #{@product.name}", @product.id]]
+      expect(assigns(:products)).to eq([["#{@product.product_code} #{@product.name}", @product.id]])
     end
   end
 
   describe "update_downloads_for_user" do
     it "should flash a happy message if Resque.enqueue returns true" do
       sign_in @radmin
-      ResqueJobs::ProductUpdateNotification.should_receive(:create).and_return('1234')
+      allow(ResqueJobs::ProductUpdateNotification).to receive(:create).and_return('1234')
       get :update_downloads_for_user, :user => {:model => 1}
 
       expect(flash[:notice]).to eq("Sending product update emails")
@@ -278,7 +279,7 @@ describe AdminController do
 
     it "should flash a concerned message if Resque.enqueue returns nil" do
       sign_in @radmin
-      ResqueJobs::ProductUpdateNotification.should_receive(:create).and_return(nil)
+      allow(ResqueJobs::ProductUpdateNotification).to receive(:create).and_return(nil)
       get :update_downloads_for_user, :user => {:model => 1}
 
       expect(flash[:notice]).to eq("Couldn't queue mail jobs. Check out /jobs and see what's wrong")
@@ -288,7 +289,7 @@ describe AdminController do
   describe "send_new_product_notification" do
     it "should flash a happy message if Resque.enqueue returns true" do
       sign_in @radmin
-      ResqueJobs::NewProductNotification.should_receive(:create).and_return('1234')
+      allow(ResqueJobs::NewProductNotification).to receive(:create).and_return('1234')
       post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
 
       expect(flash[:notice]).to eq('Sending new product emails')
@@ -296,7 +297,7 @@ describe AdminController do
 
     it "should flash a concerned message if Resque.enqueue returns nil" do
       sign_in @radmin
-      ResqueJobs::NewProductNotification.should_receive(:create).and_return(nil)
+      allow(ResqueJobs::NewProductNotification).to receive(:create).and_return(nil)
       post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
 
       expect(flash[:alert]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")

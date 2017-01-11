@@ -4,23 +4,21 @@ describe User do
   it "should not save if tos is not accepted" do
     @user = User.new(:email => 'test@test.com')
 
-    @user.should_not be_valid
+    expect(@user).to_not be_valid
   end
 
   it "should not delete orders when user is deleted" do
     @user = FactoryGirl.create(:user)
     @order = FactoryGirl.create(:order)
-    @user.destroy
 
-    lambda { @user.destroy }.should_not change(Order, :count)
+    expect(lambda { @user.destroy }).to_not change(Order, :count)
   end
 
   it "should not delete downloads when user is deleted" do
     @user = FactoryGirl.create(:user)
     @download = FactoryGirl.create(:download)
-    @user.destroy
 
-    lambda{@user.destroy}. should_not change(Download, :count)
+    expect(lambda{@user.destroy}).to_not change(Download, :count)
   end
 
   it "should delete authentications when user is deleted" do
@@ -29,7 +27,7 @@ describe User do
     @user.apply_omniauth(authentication_hash)
     @user.save
 
-    lambda{@user.destroy}.should change(Authentication, :count).from(1).to(0)
+    expect(lambda{@user.destroy}).to change(Authentication, :count).from(1).to(0)
   end
 
   describe "apply_omniauth" do
@@ -38,7 +36,7 @@ describe User do
       authentication_hash = {'provider' => 'Twitter', 'uid' => '12345'}
       @user.apply_omniauth(authentication_hash)
 
-      lambda { @user.save }.should change(Authentication, :count).from(0).to(1)
+      expect(lambda { @user.save }).to change(Authentication, :count).from(0).to(1)
     end
   end
 
@@ -46,7 +44,7 @@ describe User do
     it "should require a password of a user who has no authentications" do
       @user = FactoryGirl.create(:user)
 
-      @user.password_required?.should == true
+      expect(@user.password_required?).to eq(true)
     end
 
     it "should not require a password of a user who has authentications" do
@@ -55,7 +53,7 @@ describe User do
       @user.apply_omniauth(authentication_hash)
       @user = User.last
 
-      @user.password_required?.should == false
+      expect(@user.password_required?).to eq(false)
     end
   end
 
@@ -63,7 +61,7 @@ describe User do
     it "should cancel account by changing account_status to 'C'" do
       @user = FactoryGirl.create(:user)
 
-      lambda {@user.cancel_account}.should change(@user, :account_status).from("A").to("C")
+      expect(lambda {@user.cancel_account}).to change(@user, :account_status).from("A").to("C")
     end
 
     it "should not delete a users authentications" do
@@ -72,7 +70,7 @@ describe User do
       FactoryGirl.create(:authentication, :provider => 'Facebook', :user_id => @user.id)
       @user = User.find(@user.id)
 
-      lambda { @user.cancel_account }.should_not change(Authentication, :count)
+      expect(lambda { @user.cancel_account }).to_not change(Authentication, :count)
     end
   end
 
@@ -83,7 +81,7 @@ describe User do
       @order2 = FactoryGirl.create(:order)
       @order3 = FactoryGirl.create(:order, :status => "INVALID")
 
-      @user.completed_orders.should have(2).items
+      expect(@user.completed_orders.size).to eq(2)
     end
   end
 

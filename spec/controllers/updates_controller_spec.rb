@@ -6,157 +6,167 @@ describe UpdatesController do
     @radmin ||= FactoryGirl.create(:radmin)
   end
 
-  def mock_update(stubs={})
-    (@mock_update ||= mock_model(Update).as_null_object).tap do |update|
-      update.stub(stubs) unless stubs.empty?
-    end
-  end
-
-  def factory_girl_mock
-    2.times do
-      FactoryGirl.create(:update)
-    end
-    Update.order('created_at desc')
-  end
-
-  describe "GET index" do
-    it "assigns all updates as @updates" do
-      FactoryGirl.create(:update)
-      FactoryGirl.create(:update)
+  before(:each) do |example|
+    unless example.metadata[:skip_before]
       sign_in @radmin
+    end
+  end
+
+  # This should return the minimal set of attributes required to create a valid
+  # Update. As you add validations to Update, be sure to
+  # adjust the attributes here as well.
+  let(:valid_attributes) {
+    {
+        title: 'Update 1'
+    }
+  }
+
+  let(:invalid_attributes) {
+    {
+        fake: nil
+    }
+  }
+
+  describe "GET #index" do
+    it "assigns all updates as @updates" do
+      update = Update.create! valid_attributes
       get :index
 
-      assigns(:updates).length.should eq(2)
+      expect(assigns(:updates)).to eq([update])
     end
   end
 
-  describe "GET show" do
+  describe "GET #show" do
     it "assigns the requested update as @update" do
-      Update.stub(:find).with("37") { mock_update }
-      sign_in @radmin
-      get :show, :id => "37"
-      assigns(:update).should be(mock_update)
+      update = Update.create! valid_attributes
+      get :show, id: update.to_param
+
+      expect(assigns(:update)).to eq(update)
     end
   end
 
-  describe "GET new" do
+  describe "GET #new" do
     it "assigns a new update as @update" do
-      Update.stub(:new) { mock_update }
-      sign_in @radmin
       get :new
-      assigns(:update).should be(mock_update)
+
+      expect(assigns(:update)).to be_a_new(Update)
     end
   end
 
-  describe "GET edit" do
+  describe "GET #edit" do
     it "assigns the requested update as @update" do
-      Update.stub(:find).with("37") { mock_update }
-      sign_in @radmin
-      get :edit, :id => "37"
-      assigns(:update).should be(mock_update)
+      update = Update.create! valid_attributes
+      get :edit, id: update.to_param
+
+      expect(assigns(:update)).to eq(update)
     end
   end
 
-  describe "POST create" do
+  describe "POST #create" do
+    context "with valid params" do
+      it "creates a new Update" do
+        expect {
+          post :create, update: valid_attributes
+        }.to change(Update, :count).by(1)
+      end
 
-    describe "with valid params" do
       it "assigns a newly created update as @update" do
-        Update.stub(:new).with({'these' => 'params'}) { mock_update(:save => true) }
-        sign_in @radmin
-        post :create, :update => {'these' => 'params'}
-        assigns(:update).should be(mock_update)
+        post :create, update: valid_attributes
+
+        expect(assigns(:update)).to be_a(Update)
+        expect(assigns(:update)).to be_persisted
       end
 
       it "redirects to the created update" do
-        Update.stub(:new) { mock_update(:save => true) }
-        sign_in @radmin
-        post :create, :update => {}
-        response.should redirect_to(update_url(mock_update))
+        post :create, update: valid_attributes
+
+        expect(response).to redirect_to(Update.last)
       end
     end
 
-    describe "with invalid params" do
+    context "with invalid params" do
       it "assigns a newly created but unsaved update as @update" do
-        Update.stub(:new).with({'these' => 'params'}) { mock_update(:save => false) }
-        sign_in @radmin
-        post :create, :update => {'these' => 'params'}
-        assigns(:update).should be(mock_update)
+        post :create, update: invalid_attributes
+
+        expect(assigns(:update)).to be_a_new(Update)
       end
 
       it "re-renders the 'new' template" do
-        Update.stub(:new) { mock_update(:save => false) }
-        sign_in @radmin
-        post :create, :update => {}
-        response.should render_template("new")
+        post :create, update: invalid_attributes
+
+        expect(response).to render_template("new")
       end
     end
-
   end
 
-  describe "PUT update" do
+  describe "PUT #update" do
+    context "with valid params" do
+      let(:new_attributes) {
+        {
+            title: 'Update 2'
+        }
+      }
 
-    describe "with valid params" do
       it "updates the requested update" do
-        Update.should_receive(:find).with("37") { mock_update }
-        mock_update.should_receive(:update_attributes).with({'these' => 'params'})
-        sign_in @radmin
-        put :update, :id => "37", :update => {'these' => 'params'}
+        update = Update.create! valid_attributes
+        put :update, id: update.to_param, update: new_attributes
+        update.reload
+
+        expect(assigns(:update)[:title]).to eq('Update 2')
       end
 
       it "assigns the requested update as @update" do
-        Update.stub(:find) { mock_update(:update_attributes => true) }
-        sign_in @radmin
-        put :update, :id => "1"
-        assigns(:update).should be(mock_update)
+        update = Update.create! valid_attributes
+        put :update, id: update.to_param, update: valid_attributes
+
+        expect(assigns(:update)).to eq(update)
       end
 
       it "redirects to the update" do
-        Update.stub(:find) { mock_update(:update_attributes => true) }
-        sign_in @radmin
-        put :update, :id => "1"
-        response.should redirect_to(update_url(mock_update))
+        update = Update.create! valid_attributes
+        put :update, id: update.to_param, update: valid_attributes
+
+        expect(response).to redirect_to(update)
       end
     end
 
-    describe "with invalid params" do
+    context "with invalid params" do
       it "assigns the update as @update" do
-        Update.stub(:find) { mock_update(:update_attributes => false) }
-        sign_in @radmin
-        put :update, :id => "1"
-        assigns(:update).should be(mock_update)
+        update = Update.create! valid_attributes
+        put :update, id: update.to_param, update: invalid_attributes
+
+        expect(assigns(:update)).to eq(update)
       end
 
       it "re-renders the 'edit' template" do
-        Update.stub(:find) { mock_update(:update_attributes => false) }
-        sign_in @radmin
-        put :update, :id => "1"
-        response.should render_template("edit")
+        update = Update.create! valid_attributes
+        put :update, id: update.to_param, update: {title: nil}
+
+        expect(response).to render_template("edit")
       end
     end
-
   end
 
-  describe "DELETE destroy" do
+  describe "DELETE #destroy" do
     it "destroys the requested update" do
-      Update.should_receive(:find).with("37") { mock_update }
-      mock_update.should_receive(:destroy)
-      sign_in @radmin
-      delete :destroy, :id => "37"
+      update = Update.create! valid_attributes
+      expect {
+        delete :destroy, id: update.to_param
+      }.to change(Update, :count).by(-1)
     end
 
     it "redirects to the updates list" do
-      Update.stub(:find) { mock_update }
-      sign_in @radmin
-      delete :destroy, :id => "1"
-      response.should redirect_to(updates_url)
+      update = Update.create! valid_attributes
+      delete :destroy, id: update.to_param
+
+      expect(response).to redirect_to(updates_url)
     end
   end
 
   describe "an invalid radmin login" do
-    it "should redirect to radmin login page" do
+    it "should redirect to radmin login page", :skip_before do
       get :index
-      response.should redirect_to('/radmins/sign_in')
+      expect(response).to redirect_to('/radmins/sign_in')
     end
   end
-
 end

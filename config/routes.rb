@@ -139,6 +139,7 @@ BrickCity::Application.routes.draw do
   get "coppa_policy", :to => "static#coppa_policy"
   get "faq", :to => "static#faq"
   get "new_user_tutorial", :to => "static#new_user_tutorial"
+  get "exception_notification_test", :to => "static#test_exception_notification_delivery"
 
   #download routes
   get "download/error", :to => "downloads#error"

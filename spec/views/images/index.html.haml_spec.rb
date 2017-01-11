@@ -34,7 +34,7 @@ describe "images/index.html.haml" do
 #=end
 
   it "renders a list of images" do
-    pending("Images aren't getting created, figure out why")
+    skip("Images aren't getting created, figure out why")
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     assert_select "tr>td", :text => "Filename".to_s, :count => 2

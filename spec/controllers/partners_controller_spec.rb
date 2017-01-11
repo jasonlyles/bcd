@@ -6,150 +6,178 @@ describe PartnersController do
     @radmin ||= FactoryGirl.create(:radmin)
   end
 
-  def mock_partner(stubs={})
-    (@mock_partner ||= mock_model(Partner).as_null_object).tap do |partner|
-      partner.stub(stubs) unless stubs.empty?
-    end
+  before(:each) do
+    sign_in @radmin
   end
 
-  describe "GET index" do
+  # This should return the minimal set of attributes required to create a valid
+  # Partner. As you add validations to Partner, be sure to
+  # adjust the attributes here as well.
+  let(:valid_attributes) {
+    {
+        name: 'Bob',
+        url: 'http://www.bob.com'
+    }
+  }
+
+  let(:invalid_attributes) {
+    {
+        name: nil,
+        url: nil
+    }
+  }
+
+  describe "GET #index" do
     it "assigns all partners as @partners" do
-      Partner.stub(:all) { [mock_partner] }
-      sign_in @radmin
+      partner = Partner.create! valid_attributes
       get :index
-      assigns(:partners).should eq([mock_partner])
+
+      expect(assigns(:partners)).to eq([partner])
     end
   end
 
-  describe "GET show" do
+  describe "GET #show" do
     it "assigns the requested partner as @partner" do
-      Partner.stub(:find).with("37") { mock_partner }
-      sign_in @radmin
-      get :show, :id => "37"
-      assigns(:partner).should be(mock_partner)
+      partner = Partner.create! valid_attributes
+      get :show, id: partner.to_param
+
+      expect(assigns(:partner)).to eq(partner)
     end
   end
 
-  describe "GET new" do
+  describe "GET #new" do
     it "assigns a new partner as @partner" do
-      Partner.stub(:new) { mock_partner }
-      sign_in @radmin
       get :new
-      assigns(:partner).should be(mock_partner)
+
+      expect(assigns(:partner)).to be_a_new(Partner)
     end
   end
 
-  describe "GET edit" do
+  describe "GET #edit" do
     it "assigns the requested partner as @partner" do
-      Partner.stub(:find).with("37") { mock_partner }
-      sign_in @radmin
-      get :edit, :id => "37"
-      assigns(:partner).should be(mock_partner)
+      partner = Partner.create! valid_attributes
+      get :edit, id: partner.to_param
+
+      expect(assigns(:partner)).to eq(partner)
     end
   end
 
-  describe "POST create" do
+  describe "POST #create" do
+    context "with valid params" do
+      it "creates a new Partner" do
+        expect {
+          post :create, partner: valid_attributes
+        }.to change(Partner, :count).by(1)
+      end
 
-    describe "with valid params" do
       it "assigns a newly created partner as @partner" do
-        Partner.stub(:new).with({'these' => 'params'}) { mock_partner(:save => true) }
-        sign_in @radmin
-        post :create, :partner => {'these' => 'params'}
-        assigns(:partner).should be(mock_partner)
+        post :create, partner: valid_attributes
+
+        expect(assigns(:partner)).to be_a(Partner)
+        expect(assigns(:partner)).to be_persisted
       end
 
       it "redirects to the created partner" do
-        Partner.stub(:new) { mock_partner(:save => true) }
-        sign_in @radmin
-        post :create, :partner => {}
-        response.should redirect_to(partner_url(mock_partner))
+        post :create, partner: valid_attributes
+
+        expect(response).to redirect_to(Partner.last)
       end
     end
 
-    describe "with invalid params" do
+    context "with invalid params" do
+# I don't presently have any validations on image, since everything I would set is optional
+=begin
       it "assigns a newly created but unsaved partner as @partner" do
-        Partner.stub(:new).with({'these' => 'params'}) { mock_partner(:save => false) }
-        sign_in @radmin
-        post :create, :partner => {'these' => 'params'}
-        assigns(:partner).should be(mock_partner)
-      end
+        post :create, partner: invalid_attributes
 
+        expect(assigns(:partner)).to be_a_new(Partner)
+      end
+=end
+# I don't presently have any validations on image, since everything I would set is optional
+=begin
       it "re-renders the 'new' template" do
-        Partner.stub(:new) { mock_partner(:save => false) }
-        sign_in @radmin
-        post :create, :partner => {}
-        response.should render_template("new")
-      end
-    end
+        post :create, partner: invalid_attributes
 
+        expect(response).to render_template("new")
+      end
+=end
+    end
   end
 
-  describe "PUT update" do
+  describe "PUT #update" do
+    context "with valid params" do
+      let(:new_attributes) {
+        {
+            name: 'Bob 2',
+            url: 'http://www.google.com'
+        }
+      }
 
-    describe "with valid params" do
       it "updates the requested partner" do
-        Partner.should_receive(:find).with("37") { mock_partner }
-        mock_partner.should_receive(:update_attributes).with({'these' => 'params'})
-        sign_in @radmin
-        put :update, :id => "37", :partner => {'these' => 'params'}
+        partner = Partner.create! valid_attributes
+        put :update, id: partner.to_param, partner: new_attributes
+        partner.reload
+
+        expect(assigns(:partner)[:name]).to eq('Bob 2')
+        expect(assigns(:partner)[:url]).to eq('http://www.google.com')
       end
 
       it "assigns the requested partner as @partner" do
-        Partner.stub(:find) { mock_partner(:update_attributes => true) }
-        sign_in @radmin
-        put :update, :id => "1"
-        assigns(:partner).should be(mock_partner)
+        partner = Partner.create! valid_attributes
+        put :update, id: partner.to_param, partner: valid_attributes
+
+        expect(assigns(:partner)).to eq(partner)
       end
 
       it "redirects to the partner" do
-        Partner.stub(:find) { mock_partner(:update_attributes => true) }
-        sign_in @radmin
-        put :update, :id => "1"
-        response.should redirect_to(partner_url(mock_partner))
+        partner = Partner.create! valid_attributes
+        put :update, id: partner.to_param, partner: valid_attributes
+
+        expect(response).to redirect_to(partner)
       end
     end
 
-    describe "with invalid params" do
+    context "with invalid params" do
       it "assigns the partner as @partner" do
-        Partner.stub(:find) { mock_partner(:update_attributes => false) }
-        sign_in @radmin
-        put :update, :id => "1"
-        assigns(:partner).should be(mock_partner)
-      end
+        partner = Partner.create! valid_attributes
+        put :update, id: partner.to_param, partner: invalid_attributes
 
+        expect(assigns(:partner)).to eq(partner)
+      end
+# I don't presently have any validations on image, since everything I would set is optional
+=begin
       it "re-renders the 'edit' template" do
-        Partner.stub(:find) { mock_partner(:update_attributes => false) }
-        sign_in @radmin
-        put :update, :id => "1"
-        response.should render_template("edit")
-      end
-    end
+        partner = Partner.create! valid_attributes
+        put :update, id: partner.to_param, partner: invalid_attributes
 
+        expect(response).to render_template("edit")
+      end
+=end
+    end
   end
 
   describe "DELETE destroy" do
     it "destroys the requested partner" do
-      Partner.should_receive(:find).with("37") { mock_partner }
-      mock_partner.should_receive(:destroy)
-      sign_in @radmin
-      delete :destroy, :id => "37"
+      partner = Partner.create! valid_attributes
+      expect {
+        delete :destroy, id: partner.to_param
+      }.to change(Partner, :count).by(-1)
     end
 
     it "redirects to the partners list" do
-      Partner.stub(:find) { mock_partner }
-      sign_in @radmin
-      delete :destroy, :id => "1"
-      response.should redirect_to(partners_url)
+      partner = Partner.create! valid_attributes
+      delete :destroy, id: partner.to_param
+
+      expect(response).to redirect_to(partners_url)
     end
 
-    it "should redirect to the partners list if partner cant be deleted due to an advertising campaign with that partner that went live" do
-      Partner.should_receive(:find).with("1") {mock_partner}
-      mock_partner.should_receive(:destroy).and_return(nil)
-      sign_in @radmin
+    it "should redirect to the partners list if partner can't be deleted due to an advertising campaign with that partner that went live" do
+      expect(Partner).to receive(:find).with("1") {Partner.new}
+      expect_any_instance_of(Partner).to receive(:destroy).and_return(nil)
       delete :destroy, :id => '1'
 
-      flash[:alert].should eq("Sorry. You can't delete a partner that has advertising campaigns that have been used.")
-      response.should redirect_to(partners_url)
+      expect(flash[:alert]).to eq("Sorry. You can't delete a partner that has advertising campaigns that have been used.")
+      expect(response).to redirect_to(partners_url)
     end
   end
 

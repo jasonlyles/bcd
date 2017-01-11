@@ -7,17 +7,17 @@ describe AuthenticationsController do
   describe "failure" do
     it "should return a helpful message about the failure" do
       get :failure, strategy: 'twitter', message: 'invalid_credentials'
-      flash[:notice].should eq("Sorry, the credentials you provided were rejected by Twitter. Please try again.")
+      expect(flash[:notice]).to eq("Sorry, the credentials you provided were rejected by Twitter. Please try again.")
 
       get :failure, strategy: '', message: 'invalid_credentials'
-      flash[:notice].should eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
+      expect(flash[:notice]).to eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
 
       get :failure, strategy: 'facebook', message: 'facebook_hates_me'
-      flash[:notice].should eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
+      expect(flash[:notice]).to eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
     end
 
     it "should clear authentications and redirect to the signup page" do
-
+      skip('Add this test')
     end
   end
 
@@ -28,11 +28,11 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["info"]["email"] = "snoopy@peanuts.com"
       request.env["omniauth.auth"]["provider"] = "Twitter"
       request.env["omniauth.auth"]["uid"] = nil
-      User.any_instance.should_receive(:tos_accepted?).and_return(true)
+      expect_any_instance_of(User).to receive(:tos_accepted?).and_return(true)
       post :create
 
-      flash[:notice].should == I18n.t('devise.failure.additional_authentication_failure')
-      response.should redirect_to "/users/sign_up"
+      expect(flash[:notice]).to eq(I18n.t('devise.failure.additional_authentication_failure'))
+      expect(response).to redirect_to "/users/sign_up"
     end
 
     it "should create new user and redirect when model is valid" do
@@ -41,11 +41,11 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["info"]["email"] = "snoopy@peanuts.com"
       request.env["omniauth.auth"]["provider"] = "Twitter"
       request.env["omniauth.auth"]["uid"] = "12345"
-      User.any_instance.should_receive(:save).at_least(1).times.and_return(true)
+      expect_any_instance_of(User).to receive(:save).at_least(1).times.and_return(true)
       post :create
 
-      flash[:notice].should == I18n.t('devise.sessions.signed_in')
-      response.should redirect_to('/')
+      expect(flash[:notice]).to eq(I18n.t('devise.sessions.signed_in'))
+      expect(response).to redirect_to('/')
     end
 
     it "should redirect to users/sign_up and and flash a message about TOS if TOS hasn't been accepted" do
@@ -54,12 +54,12 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["info"]["email"] = "snoopy@peanuts.com"
       request.env["omniauth.auth"]["provider"] = "Twitter"
       request.env["omniauth.auth"]["uid"] = "12345"
-      User.any_instance.should_receive(:save).at_least(1).times.and_return(false)
-      User.any_instance.should_receive(:tos_accepted?).at_least(1).times.and_return(false)
+      expect_any_instance_of(User).to receive(:save).at_least(1).times.and_return(false)
+      expect_any_instance_of(User).to receive(:tos_accepted?).at_least(1).times.and_return(false)
       post :create
 
-      flash[:notice].should == 'You need to accept the Terms of Service before proceeding'
-      response.should redirect_to('/users/sign_up')
+      expect(flash[:notice]).to eq('You need to accept the Terms of Service before proceeding')
+      expect(response).to redirect_to('/users/sign_up')
     end
 
     it "should redirect back and flash the user if they cancelled their account and they try to log in via auth provider" do
@@ -73,8 +73,8 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["uid"] = "12345"
       post :create
 
-      flash[:notice].should == I18n.t('devise.sessions.user_cancelled')
-      response.should redirect_to('/')
+      expect(flash[:notice]).to eq(I18n.t('devise.sessions.user_cancelled'))
+      expect(response).to redirect_to('/')
     end
 
     it "should redirect a user to signup page if email is blank" do
@@ -85,8 +85,8 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["uid"] = "12345"
       post :create
 
-      flash[:notice].should == "Was not able to retrieve your email address from Twitter. Please add an email address below."
-      response.should redirect_to "/users/sign_up"
+      expect(flash[:notice]).to eq("Was not able to retrieve your email address from Twitter. Please add an email address below.")
+      expect(response).to redirect_to "/users/sign_up"
     end
 
     it "should login with an existing authentication" do
@@ -99,8 +99,8 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["uid"] = "12345"
       post :create
 
-      flash[:notice].should == "Signed in successfully."
-      response.should redirect_to('/')
+      expect(flash[:notice]).to eq("Signed in successfully.")
+      expect(response).to redirect_to('/')
     end
 
     it "should create an authentication for a logged in user" do
@@ -113,8 +113,8 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["uid"] = "12345"
       post :create
 
-      flash[:notice].should == "Authentication Successful"
-      response.should redirect_to('/account/edit')
+      expect(flash[:notice]).to eq("Authentication Successful")
+      expect(response).to redirect_to('/account/edit')
     end
 
     it "should not create an authentication for a logged in user if another user owns that authentication" do
@@ -130,8 +130,8 @@ describe AuthenticationsController do
       request.env["omniauth.auth"]["uid"] = "12345"
       post :create
 
-      flash[:notice].should == "Sorry, we're not able to add Twitter authentication at this time."
-      response.should redirect_to('/account/edit')
+      expect(flash[:notice]).to eq("Sorry, we're not able to add Twitter authentication at this time.")
+      expect(response).to redirect_to('/account/edit')
     end
   end
 
@@ -142,20 +142,20 @@ describe AuthenticationsController do
       @authentication = FactoryGirl.create(:authentication)
       delete :destroy, :id => @authentication
 
-      response.should redirect_to("/account/edit")
-      Authentication.exists?(@authentication.id).should be_false
+      expect(response).to redirect_to("/account/edit")
+      expect(Authentication.exists?(@authentication.id)).to be_falsey
     end
 
     it "should try to talk them out of deleting an authentication if they have 1 authentication and are a omniauth-only user" do
       @user = User.new(:email => 'test@test.com', :tos_accepted => true)
-      @user.should_receive(:password_required?).at_least(1).times.and_return(false)
+      expect(@user).to receive(:password_required?).at_least(1).times.and_return(false)
       @user.save!
       @authentication = FactoryGirl.create(:authentication, :user_id => @user.id)
       sign_in @user
       delete :destroy, :id => @authentication
 
-      flash[:notice].should == "If you delete your #{@authentication.provider} authentication, you are effectively deleting your account. If you really want to delete your account, please choose the 'Cancel my account' link at the bottom of the page."
-      response.should redirect_to('/account/edit')
+      expect(flash[:notice]).to eq("If you delete your #{@authentication.provider} authentication, you are effectively deleting your account. If you really want to delete your account, please choose the 'Cancel my account' link at the bottom of the page.")
+      expect(response).to redirect_to('/account/edit')
     end
   end
 
@@ -166,8 +166,8 @@ describe AuthenticationsController do
       session[:omniauth] = {}
       post :clear_authentications
 
-      session[:omniauth].should be_nil
-      response.should redirect_to('/users/sign_up')
+      expect(session[:omniauth]).to be_nil
+      expect(response).to redirect_to('/users/sign_up')
     end
   end
 end

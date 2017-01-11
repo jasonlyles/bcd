@@ -13,9 +13,9 @@ describe MarketingMailer do
   describe "sending a new product notification email to a user" do
     it "should send user an email about the product" do
       @mail = MarketingMailer.new_product_notification(@product, @product.product_type.name, @product.main_image, @user, 'Test')
-      @mail.subject.should == "New Product!"
-      @mail.to.should == [@user.email]
-      @mail.from.should == ["sales@brickcitydepot.com"]
+      expect(@mail.subject).to eq("New Product!")
+      expect(@mail.to).to eq([@user.email])
+      expect(@mail.from).to eq(["sales@brickcitydepot.com"])
     end
   end
 
