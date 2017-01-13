@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
 require 'mock_redis'
+require 'database_cleaner'
 SimpleCov.start 'rails' do
   add_filter 'app/uploaders/'
   add_filter 'vendor/gems/'
@@ -18,6 +19,19 @@ Resque.redis = MockRedis.new
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
+
+  # TODO: Need to get rid of this by making my specs better.
+  config.before(:suite) do
+    DatabaseCleaner[:active_record].strategy = :truncation
+    DatabaseCleaner[:active_record].clean_with(:truncation, pre_count: true, reset_ids: true)
+  end
+
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+  end
+
   # == Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:

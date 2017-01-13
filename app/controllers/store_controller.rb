@@ -5,7 +5,7 @@ class StoreController < ApplicationController
   before_filter :check_users_previous_orders, :only => [:checkout], unless: :user_is_guest?
   before_filter :get_users_physical_address, :only => [:checkout]
   before_filter :get_address_form_data, :only => [:enter_address, :validate_street_address]
-  skip_before_filter :find_cart, only: [:listener, :thank_you_for_your_order]
+  skip_before_filter :find_cart, only: [:thank_you_for_your_order]
 
   #:nocov:
   if Rails.env.development?
@@ -189,80 +189,6 @@ class StoreController < ApplicationController
     @similar_products = @product.find_live_products_from_same_category
   end
 
-  #This action listens for Instant Payment Notifications from Paypal. It makes sure the IPN is valid, and performs
-  #several other checks to make sure everything is on the up and up.
-    #Need to make
-    #sure that a user's order doesn't show up in their account screen if the order hasn't been confirmed by paypal yet.
-    #if IPN didn't get handled correctly? User should be able to see their order in their order history, and see if the
-    #order had a problem with it. They can then contact us with their transaction ID and confirmation code (Request ID).
-  def listener
-    logger.debug('XXXXXXXXXXXXXXXXXXXXXXXXXX')
-    logger.info("PAYPAL PARAMS: #{params.inspect}")
-    @ipn = InstantPaymentNotification.new(params)
-    logger.info("PAYPAL IPN: #{@ipn.inspect}")
-    logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXX")
-    @order = Order.find_by_request_id(@ipn.custom)
-    logger.info("ORDER: #{@order.inspect}")
-    logger.debug("XXXXXXXXXXXXXXXXXXXXXXXXXX")
-    #If we can't find the order, or the order has already been completed, just tell paypal to forget about it
-    if @order.blank? || (!@order.status.blank? && @order.status.upcase == 'COMPLETED')
-      logger.debug("Order was blank or status was incorrect")
-      return render :nothing => true
-    end
-
-    if @ipn.valid?
-      logger.debug("PAYPAL IPN is valid")
-      @order.transaction_id = @ipn.txn_id
-      @order.status = @ipn.payment_status.upcase if @ipn.payment_status
-      if @order.has_physical_item?
-        logger.debug("Order has physical item")
-        #Assuming that because the street address is blank, there is no other address info, and we can save address info
-        #coming to us from paypal
-        unless @order.address_street_1?
-          logger.debug("No stored street address, using street address from Paypal")
-          @order.first_name = @ipn.first_name
-          @order.last_name = @ipn.last_name
-          @order.address_city = @ipn.address_city
-          @order.address_country = @ipn.address_country
-          @order.address_name = @ipn.address_name
-          @order.address_state = @ipn.address_state
-          @order.address_street_1 = @ipn.address_street
-          @order.address_zip = @ipn.address_zip
-        end
-        @order.shipping_status = 3 #3 = pending
-      end
-      @order.save
-
-      if @order.has_digital_item?
-        restock_downloads(@order)
-      end
-
-      #Now that the order is validated and everything is saved, I'll email the user to let them know about it.
-      begin
-        if @order.user.guest?
-          logger.debug('Sending email for Guest')
-          link_to_downloads = @order.get_link_to_downloads
-          OrderMailer.guest_order_confirmation(@order.user_id,@order.id,link_to_downloads).deliver
-        else
-          logger.debug('Sending email for User')
-          OrderMailer.order_confirmation(@order.user_id,@order.id).deliver
-        end
-      rescue => error
-        ExceptionNotifier.notify_exception(error, :env => request.env, :data => {:message => "Failed trying to send order confirmation email for #{@order.to_yaml}."})
-      end
-      if @order.has_physical_item?
-        handle_physical_items
-      end
-    else
-      logger.debug("PAYPAL IPN is invalid")
-      @order.transaction_id = @ipn.txn_id
-      @order.status = @ipn.payment_status
-      @order.save
-    end
-    logger.debug("IPN post was successful")
-    return render :nothing => true
-  end
-
   #:nocov:
   def order_confirmation_email_test
     @order = Order.find_by_user_id 5  #Jason
@@ -290,7 +216,7 @@ class StoreController < ApplicationController
 
   def enter_address
     if current_user && !current_user.orders.blank? && !session[:address_submitted]
-      @order = current_user.orders.where("upper(status)='COMPLETED' and address_street_1 not null").order("updated_at DESC").first
+      @order = current_user.orders.where("upper(status)='COMPLETED' and address_street_1 is not null").order("updated_at DESC").first
       @order ||= Order.new
     elsif session[:address_submitted]
       @submission_method = session[:address_submitted][:address_submission_method]
@@ -305,17 +231,6 @@ class StoreController < ApplicationController
   end
 
   private
-
-  def restock_downloads(order)
-    items = order.get_digital_items
-    items.each do |item|
-      download = Download.find_by_user_id_and_product_id(order.user, item.product.id)
-      #If the download record exists, user is trying to buy more downloads, so restock
-      unless download.blank?
-        download.restock
-      end
-    end
-  end
 
   def set_return_to_checkout
     session[:return_to_checkout] = true
@@ -357,7 +272,7 @@ class StoreController < ApplicationController
     @order.status = 'COMPLETED'
     @order.save
     if @order.has_digital_item?
-      restock_downloads(@order)
+      Download.restock_for_order(@order)
     end
     if @order.user.guest?
       link_to_downloads = @order.get_link_to_downloads
@@ -367,27 +282,6 @@ class StoreController < ApplicationController
     end
   end
   #:nocov:
-
-  def handle_physical_items
-    physical_items = []
-    @order.line_items.each do |item|
-      if item.product.is_physical_product?
-        physical_items << item
-        product = Product.find(item.product.id)
-        product.decrement_quantity(item.quantity)
-      end
-    end
-    if physical_items.length > 0
-      physical_items.each do |item|
-         #add to string that gets sent in email
-      end
-      begin
-        OrderMailer.physical_item_purchased(@order.user_id, @order.id).deliver
-      rescue
-        ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), :env => request.env, :data => {:message => "Failed trying to send physical product order email for #{@order.to_yaml}."})
-      end
-    end
-  end
 
   #Making sure that the user hasn't previously purchased the same set of instructions.
   # Physical items can be purchased again.

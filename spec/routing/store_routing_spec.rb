@@ -38,8 +38,5 @@ describe StoreController do
       expect({:get => "/CB001/Fascist%20Popsicle%20Stand"}).to route_to(:controller => "store", :action => "product_details", :product_code => 'CB001', :product_name => 'Fascist Popsicle Stand')
     end
 
-    it "recognizes and generates #listener" do
-      expect({:post => "/listener"}).to route_to(:controller => "store", :action => "listener")
-    end
   end
 end

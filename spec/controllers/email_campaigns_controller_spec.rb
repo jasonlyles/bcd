@@ -197,7 +197,7 @@ describe EmailCampaignsController do
   describe "send_marketing_emails" do
     it 'should queue up a resque job if all is well' do
       @email_campaign = FactoryGirl.create(:email_campaign)
-      expect(ResqueJobs::NewMarketingNotification).to receive(:create).and_return('1234')
+      expect(NewMarketingNotificationJob).to receive(:create).and_return('1234')
       patch :send_marketing_emails, :email_campaign => {'id' => 1}
 
       expect(flash[:notice]).to eq("Sending marketing emails")
@@ -206,7 +206,7 @@ describe EmailCampaignsController do
 
     it 'should redirect to show and flash a message if queue could not be created' do
       @email_campaign = FactoryGirl.create(:email_campaign)
-      expect(ResqueJobs::NewMarketingNotification).to receive(:create).and_return(nil)
+      expect(NewMarketingNotificationJob).to receive(:create).and_return(nil)
       patch :send_marketing_emails, :email_campaign => {'id' => 1}
 
       expect(flash[:alert]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")

@@ -43,4 +43,15 @@ class Download < ActiveRecord::Base
     self.save
     self
   end
+
+  def self.restock_for_order(order)
+    items = order.get_digital_items
+    items.each do |item|
+      download = Download.find_by_user_id_and_product_id(order.user, item.product.id)
+      #If the download record exists, user is trying to buy more downloads, so restock
+      unless download.blank?
+        download.restock
+      end
+    end
+  end
 end

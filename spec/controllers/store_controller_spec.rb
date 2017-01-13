@@ -539,32 +539,6 @@ describe StoreController do
     end
   end
 
-  describe "restock_downloads" do
-    it 'should restock downloads if downloads already existed' do
-      setup_products
-      @user = FactoryGirl.create(:user)
-      @order = FactoryGirl.create(:order)
-      @download = FactoryGirl.create(:download, remaining: 1, user_id: @user.id, product_id: @product1.id)
-      li1 = LineItem.new product_id: @product1.id, quantity: 1, total_price: 5
-      @order.line_items << li1
-      controller.send(:restock_downloads, @order)
-
-      expect(@download.reload.remaining).to eq MAX_DOWNLOADS+1
-    end
-
-    it 'should not restock downloads if the app cannot find an existing download record' do
-      setup_products
-      @user = FactoryGirl.create(:user)
-      @order = FactoryGirl.create(:order)
-      li1 = LineItem.new product_id: @product1.id, quantity: 1, total_price: 5
-      @order.line_items << li1
-      expect_any_instance_of(Download).to_not receive(:restock)
-      controller.send(:restock_downloads, @order)
-
-      expect(Download.count).to eq 0
-    end
-  end
-
   describe 'thank_you_for_your_order' do
     it "should delete the show_thank_you cookie" do
       @user = FactoryGirl.create(:user)
@@ -600,99 +574,6 @@ describe StoreController do
       get :thank_you_for_your_order
 
       expect(assigns(:download_link)).to eq 'http://localhost:3000/guest_downloads?tx_id=blarney&conf_id=blar'
-    end
-  end
-
-  describe "listener" do
-    it "should save address details if order includes physical item" do
-      @product_type2 = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
-      user = FactoryGirl.create(:user)
-      category = FactoryGirl.create(:category)
-      subcategory = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product)
-      physical_product = FactoryGirl.create(:physical_product)
-      order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
-      line_item = FactoryGirl.create(:line_item, :product_id => physical_product.id, :order_id => order.id)
-      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
-      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
-      expect_any_instance_of(InstantPaymentNotification).to receive(:address_city).and_return("Richmond")
-      expect(order).to receive(:save).at_least(1).times
-
-      post :listener, {:custom => 'blar'}
-
-      expect(order.address_city).to eq("Richmond")
-    end
-
-    it "should not save address details if order does not include physical item" do
-      user = FactoryGirl.create(:user)
-      order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
-      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
-      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
-      allow_any_instance_of(InstantPaymentNotification).to receive(:address_city).and_return("Richmond")
-      expect(order).to receive(:save).at_least(1).times
-
-      post :listener, {:custom => 'blar'}
-
-      expect(order.address_city).to be_nil
-    end
-
-    it "should send an order confirmation email and save details to the order if the IPN is valid" do
-      user = FactoryGirl.create(:user)
-      order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
-      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
-      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
-      expect(order).to receive(:save).at_least(1).times
-      expect(OrderMailer).to receive(:order_confirmation)
-
-      post :listener, {:custom => 'blar'}
-
-      expect(response).to be_success
-      expect(response.body.strip).to be_empty
-    end
-
-    it "should send a guest order confirmation email and save details to the order if the IPN is valid" do
-      user = FactoryGirl.create(:user,:account_status => 'G')
-      order = FactoryGirl.create(:order, :status => '', :user_id => user.id)
-      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
-      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(true)
-      expect(order).to receive(:save).at_least(1).times
-      expect(OrderMailer).to receive(:guest_order_confirmation)
-
-      post :listener, {:custom => 'blar'}
-
-      expect(response).to be_success
-      expect(response.body.strip).to be_empty
-    end
-
-    it "should not send an order confirmation email, but save details to the order if the IPN is invalid" do
-      order = FactoryGirl.create(:order, :status => '')
-      expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
-      expect_any_instance_of(InstantPaymentNotification).to receive(:valid?).and_return(false)
-      expect(order).to receive(:save).at_least(1).times
-      expect(OrderMailer).to_not receive(:order_confirmation)
-
-      post :listener, {:custom => 'blar'}
-
-      expect(response).to be_success
-      expect(response.body.strip).to be_empty
-    end
-
-    it "should drop the request if an order can not be found by request_id" do
-      order = FactoryGirl.create(:order)
-      post :listener, {:custom => 'fake'}
-
-      expect(assigns(:order)).to be_nil
-      expect(response).to be_success
-      expect(response.body.strip).to be_empty
-    end
-
-    it "should drop the request if the orders status is already set as COMPLETED" do
-      order = FactoryGirl.create(:order)
-      post :listener, {:custom => 'blar'} #blar is the request_id for a COMPLETED order in the order factory
-
-      expect(assigns(:order)).to_not be_nil
-      expect(response).to be_success
-      expect(response.body.strip).to be_empty
     end
   end
 
