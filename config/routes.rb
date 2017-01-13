@@ -47,6 +47,7 @@ BrickCity::Application.routes.draw do
   resources :partners
   resources :updates
   resources :images
+  resources :instant_payment_notifications, only: [:index, :show, :create]
 
   if Rails.env.development?
     #MailPreview routes
@@ -177,7 +178,6 @@ BrickCity::Application.routes.draw do
   get "enter_address", :to => "store#enter_address"
   post "save_order", :to => "store#save_order"
   post "submit_order", :to => "store#submit_order"
-  post "listener", :to => "store#listener"
   post "validate_street_address", :to => "store#validate_street_address"
 
   get "product_details/:product_code/:product_name", :to => "store#product_details", :path => ":product_code/:product_name"

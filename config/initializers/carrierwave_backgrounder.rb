@@ -1,8 +1,10 @@
 module CarrierWave
   module Workers
     class ProcessAsset
+      def queue_name
+        @queue
+      end
       extend TempAgency
-      extend ResqueJobs
       @queue = :carrierwave
     end
   end

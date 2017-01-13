@@ -67,7 +67,6 @@ group :development, :test do
   gem 'guard-livereload'
   gem 'guard-compass', :require => false
   gem 'rack-mini-profiler'
-  gem 'sqlite3'
   gem "nifty-generators"
   #gem 'guard-rspec'
   gem "factory_girl_rails"
@@ -92,6 +91,7 @@ end
 
 group :test do
   gem 'mock_redis'
+  gem 'database_cleaner'
 end
 
 group :profile do

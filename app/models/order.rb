@@ -1,6 +1,7 @@
 class Order < ActiveRecord::Base
   has_many :line_items, :dependent => :destroy
   belongs_to :user
+  has_many :instant_payment_notifications
 
   attr_accessible :request_id, :status, :transaction_id, :user_id, :first_name, :last_name,
                   :address_street_1, :address_street_2, :address_city, :address_state, :address_country,

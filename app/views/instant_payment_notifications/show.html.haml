@@ -1,0 +1,35 @@
+%p
+  %b ID:
+  = @instant_payment_notification.id
+%p
+  %b Payment Status:
+  = @instant_payment_notification.payment_status
+%p
+  %b Notify Version:
+  = @instant_payment_notification.notify_version
+%p
+  %b Request ID:
+  = @instant_payment_notification.request_id
+%p
+  %b Verify Sign:
+  = @instant_payment_notification.verify_sign
+%p
+  %b Payer Email:
+  = @instant_payment_notification.payer_email
+%p
+  %b Order ID:
+  = @instant_payment_notification.order_id
+%p
+  %b Processed:
+  = @instant_payment_notification.processed
+%p
+  %b Transaction Date:
+  = @instant_payment_notification.created_at
+%p
+  %b Last Updated:
+  = @instant_payment_notification.updated_at
+%p
+  %b Params:
+  = @instant_payment_notification.params
+
+= link_to 'Back', instant_payment_notifications_path

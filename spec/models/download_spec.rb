@@ -100,4 +100,30 @@ describe Download do
       expect(@download.remaining).to eq MAX_DOWNLOADS+1
     end
   end
+
+  describe "self.restock_for_order" do
+    it 'should restock downloads if downloads already existed' do
+      @product = FactoryGirl.create(:product)
+      @user = FactoryGirl.create(:user)
+      @order = FactoryGirl.create(:order)
+      @download = FactoryGirl.create(:download, remaining: 1, user_id: @user.id, product_id: @product.id)
+      li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
+      @order.line_items << li1
+      Download.restock_for_order(@order)
+
+      expect(@download.reload.remaining).to eq MAX_DOWNLOADS+1
+    end
+
+    it 'should not restock downloads if the app cannot find an existing download record' do
+      @product = FactoryGirl.create(:product)
+      @user = FactoryGirl.create(:user)
+      @order = FactoryGirl.create(:order)
+      li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
+      @order.line_items << li1
+      expect_any_instance_of(Download).to_not receive(:restock)
+      Download.restock_for_order(@order)
+
+      expect(Download.count).to eq 0
+    end
+  end
 end

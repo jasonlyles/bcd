@@ -62,7 +62,7 @@ class EmailCampaignsController < ApplicationController
 
   def send_marketing_emails
     @email_campaign = EmailCampaign.find(params[:email_campaign][:id])
-    queued = ResqueJobs::NewMarketingNotification.create({email_campaign: @email_campaign.id})
+    queued = NewMarketingNotificationJob.create({email_campaign: @email_campaign.id})
     if queued.nil?
       flash[:alert] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"
       redirect_to controller: :email_campaigns, action: :show, id: @email_campaign.id
