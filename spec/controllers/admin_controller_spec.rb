@@ -271,7 +271,7 @@ describe AdminController do
   describe "update_downloads_for_user" do
     it "should flash a happy message if Resque.enqueue returns true" do
       sign_in @radmin
-      allow(ResqueJobs::ProductUpdateNotification).to receive(:create).and_return('1234')
+      allow(ProductUpdateNotificationJob).to receive(:create).and_return('1234')
       get :update_downloads_for_user, :user => {:model => 1}
 
       expect(flash[:notice]).to eq("Sending product update emails")
@@ -279,7 +279,7 @@ describe AdminController do
 
     it "should flash a concerned message if Resque.enqueue returns nil" do
       sign_in @radmin
-      allow(ResqueJobs::ProductUpdateNotification).to receive(:create).and_return(nil)
+      allow(ProductUpdateNotificationJob).to receive(:create).and_return(nil)
       get :update_downloads_for_user, :user => {:model => 1}
 
       expect(flash[:notice]).to eq("Couldn't queue mail jobs. Check out /jobs and see what's wrong")
@@ -289,7 +289,7 @@ describe AdminController do
   describe "send_new_product_notification" do
     it "should flash a happy message if Resque.enqueue returns true" do
       sign_in @radmin
-      allow(ResqueJobs::NewProductNotification).to receive(:create).and_return('1234')
+      allow(NewProductNotificationJob).to receive(:create).and_return('1234')
       post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
 
       expect(flash[:notice]).to eq('Sending new product emails')
@@ -297,7 +297,7 @@ describe AdminController do
 
     it "should flash a concerned message if Resque.enqueue returns nil" do
       sign_in @radmin
-      allow(ResqueJobs::NewProductNotification).to receive(:create).and_return(nil)
+      allow(NewProductNotificationJob).to receive(:create).and_return(nil)
       post :send_new_product_notification, :email => {'product_id' => 1, 'optional_message' => 'Hi!'}
 
       expect(flash[:alert]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")
