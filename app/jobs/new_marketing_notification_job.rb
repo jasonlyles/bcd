@@ -3,7 +3,7 @@ class NewMarketingNotificationJob < BaseJob
 
   def perform
     email_campaign = EmailCampaign.find(options['email_campaign'])
-    users = User.who_get_all_emails
+    users = options['preview_only'] ? Radmin.pluck(:email, :sign_in_count, :failed_attempts) : User.who_get_all_emails
     recipient = Struct.new(:email, :guid, :unsubscribe_token)
     total = users.count
     actual_sent = 0
@@ -16,9 +16,11 @@ class NewMarketingNotificationJob < BaseJob
       sleep 0.2
     end
   ensure
-    if actual_sent > 0
-      email_campaign.emails_sent = actual_sent
-      email_campaign.save
+    unless options['preview_only']
+      if actual_sent > 0
+        email_campaign.emails_sent = actual_sent
+        email_campaign.save
+      end
     end
   end
 end
