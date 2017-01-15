@@ -2,7 +2,7 @@
   <script type="text/javascript" src="#{Rails.application.config.sharethis_url}"></script>
   <script type="text/javascript">stLight.options({publisher: "ur-1371f185-fe25-98ba-28b6-848939c08f14", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 
-= content_for(:title, "#{@product.product_code} #{@product.name} - #{@product.product_type.name}")
+= content_for(:title, "Purchase custom Lego #{@product.product_type.name.downcase}: #{@product.name}")
 .centered_text
   %h1= "#{@product.product_code} #{@product.name}"
 - if @product.ready_for_public?
