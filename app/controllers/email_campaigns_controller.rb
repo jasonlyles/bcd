@@ -72,6 +72,18 @@ class EmailCampaignsController < ApplicationController
     end
   end
 
+  def send_marketing_email_preview
+    @email_campaign = EmailCampaign.find(params[:email_campaign][:id])
+    queued = NewMarketingNotificationJob.create({email_campaign: @email_campaign.id, preview_only: true})
+    if queued.nil?
+      flash[:alert] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"
+      redirect_to @email_campaign
+    else
+      flash[:notice] = "Sending marketing email preview"
+      redirect_to @email_campaign
+    end
+  end
+
   def register_click_through_and_redirect
     @email_campaign = EmailCampaign.find_by_guid(params[:guid])
     if @email_campaign

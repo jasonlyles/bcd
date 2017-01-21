@@ -2,7 +2,7 @@
   <script type="text/javascript" src="#{Rails.application.config.sharethis_url}"></script>
   <script type="text/javascript">stLight.options({publisher: "ur-1371f185-fe25-98ba-28b6-848939c08f14", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
 
-= content_for(:title, "#{@product.product_code} #{@product.name} - #{@product.product_type.name}")
+= content_for(:title, "Purchase custom Lego #{@product.product_type.name.downcase}: #{@product.name}")
 .centered_text
   %h1= "#{@product.product_code} #{@product.name}"
 - if @product.ready_for_public?
@@ -81,7 +81,36 @@
     %br
     %br
     %br
+
+    :javascript
+      $(document).ready(function(){
+        $("a[rel^='prettyPhoto']").prettyPhoto({
+          theme: 'facebook',
+          social_tools: '<div class="pp_social"><div class="twitter"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></scr'+'ipt></div><div class="facebook"><iframe src="http://www.facebook.com/plugins/like.php?locale=en_US&href='+location.href+'&amp;layout=button_count&amp;show_faces=true&amp;width=500&amp;action=like&amp;font&amp;colorscheme=light&amp;height=23&amp;share=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:500px; height:23px;" allowTransparency="true"></iframe></div></div>',
+          deeplinking: false
+        });
+      });
+
+    %script{:type => "application/ld+json"}
+      { "@context" : "http://schema.org",
+      "@type" : "Product",
+      "name" : "#{ @product.name }",
+      "image" : "#{host_url}#{ @product.images.first.url }",
+      "description" : "#{ @product.description }",
+      "offers": {
+      "@type": "Offer",
+      "priceCurrency": "USD",
+      "price": "#{ @product.price }",
+      "availability": "http://schema.org/InStock",
+      "seller": {
+      "@type": "Organization",
+      "name": "Brick City Depot"
+      }
+      }
+      }
 - else
+  %br
+  %br
   %br
   %br
   .centered_text
@@ -90,31 +119,7 @@
         Sorry! This model is not currently available.
     %br
     %br
+    %br
+    %br
 = render 'similar_products', similar_products: @similar_products
 
-:javascript
-  $(document).ready(function(){
-    $("a[rel^='prettyPhoto']").prettyPhoto({
-      theme: 'facebook',
-      social_tools: '<div class="pp_social"><div class="twitter"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></scr'+'ipt></div><div class="facebook"><iframe src="http://www.facebook.com/plugins/like.php?locale=en_US&href='+location.href+'&amp;layout=button_count&amp;show_faces=true&amp;width=500&amp;action=like&amp;font&amp;colorscheme=light&amp;height=23&amp;share=true" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:500px; height:23px;" allowTransparency="true"></iframe></div></div>',
-      deeplinking: false
-    });
-  });
-
-%script{:type => "application/ld+json"}
-  { "@context" : "http://schema.org",
-  "@type" : "Product",
-  "name" : "#{ @product.name }",
-  "image" : "#{host_url}#{ @product.images.first.url }",
-  "description" : "#{ @product.description }",
-  "offers": {
-  "@type": "Offer",
-  "priceCurrency": "USD",
-  "price": "#{ @product.price }",
-  "availability": "http://schema.org/InStock",
-  "seller": {
-  "@type": "Organization",
-  "name": "Brick City Depot"
-  }
-  }
-  }

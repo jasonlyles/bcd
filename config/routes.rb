@@ -81,6 +81,7 @@ BrickCity::Application.routes.draw do
   end
   resources :email_campaigns
   patch '/send_marketing_emails' => 'email_campaigns#send_marketing_emails'
+  patch '/send_marketing_email_preview' => 'email_campaigns#send_marketing_email_preview'
   get '/campaign/:guid' => 'email_campaigns#register_click_through_and_redirect'
 
   resources :categories do

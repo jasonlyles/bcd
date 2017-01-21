@@ -40,6 +40,9 @@
   = @email_campaign.updated_at.strftime("%D %r")
 %br
 - if @email_campaign.emails_sent == 0
+  = form_for @email_campaign, url: {action: :send_marketing_email_preview} do |f|
+    = f.hidden_field :id
+    = f.submit 'Send Preview to Admins', data: {disable_with: 'Sending...'}
   = form_for @email_campaign, url: {action: :send_marketing_emails} do |f|
     = f.hidden_field :id
     = f.submit 'Send Emails', data: {disable_with: 'Sending...'}

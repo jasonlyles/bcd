@@ -17,18 +17,22 @@ class InstantPaymentNotificationsController < ApplicationController
   def create
     # All I need to do in here is save the params to an IPN and pass the ID to the job
     begin
-      ipn = InstantPaymentNotification.create(params: params.except('controller','action'))
+      ipn = InstantPaymentNotification.create(params: paypal_params)
       InstantPaymentNotificationJob.create(ipn_id: ipn.id)
     rescue => e
-      ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), :env => request.env, :data => {:message => e.message})
+      ExceptionNotifier.notify_exception(e, :env => request.env, :data => {:message => e.message})
+    ensure
+      return render :nothing => true
     end
-    return render :nothing => true
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_instant_payment_notification
-      @instant_payment_notification = InstantPaymentNotification.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_instant_payment_notification
+    @instant_payment_notification = InstantPaymentNotification.find(params[:id])
+  end
 
+  def paypal_params
+    params.except('controller','action')
+  end
 end
