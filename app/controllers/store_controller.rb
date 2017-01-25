@@ -185,8 +185,12 @@ class StoreController < ApplicationController
   end
 
   def product_details
-    @product = Product.where(["product_code=?",params[:product_code].upcase]).first || not_found
-    @similar_products = @product.find_live_products_from_same_category
+    @product = Product.where(["product_code=?",params[:product_code].upcase]).first
+    if @product
+      @similar_products = @product.find_live_products_from_same_category
+    else
+      not_found
+    end
   end
 
   #:nocov:
