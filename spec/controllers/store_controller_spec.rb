@@ -363,6 +363,15 @@ describe StoreController do
 
       expect(assigns(:product).name).to eq(product.name)
     end
+
+    it 'should return a 404 if the product cannot be found' do
+      FactoryGirl.create(:category)
+      FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:product)
+      get :product_details, :product_code => 'Fake', :product_name => 'Fake'
+
+      expect(response.code).to eq('404')
+    end
   end
 
   describe "submit_order" do
