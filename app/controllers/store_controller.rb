@@ -236,12 +236,6 @@ class StoreController < ApplicationController
 
   private
 
-  def helper
-    @helper ||= Class.new do
-      include ActionView::Helpers::NumberHelper
-    end.new
-  end
-
   def set_return_to_checkout
     session[:return_to_checkout] = true
   end
