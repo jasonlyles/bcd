@@ -52,8 +52,8 @@ class StoreController < ApplicationController
         @category.name = "Completely FREE Instructions!"
         @category.description = "Enjoy these completely free instructions, complements of Brick City Depot!"
       else
-        @category.name = "$#{params[:price]} instructions"
-        @category.description = "$#{params[:price]} instructions"
+        @category.name = "$#{sprintf("%g", params[:price].to_f)} instructions"
+        @category.description = "$#{sprintf("%g", params[:price].to_f)} instructions"
       end
       @products = Product.find_all_by_price(params[:price]).page(params[:page]).per(12)
     else
@@ -235,6 +235,12 @@ class StoreController < ApplicationController
   end
 
   private
+
+  def helper
+    @helper ||= Class.new do
+      include ActionView::Helpers::NumberHelper
+    end.new
+  end
 
   def set_return_to_checkout
     session[:return_to_checkout] = true

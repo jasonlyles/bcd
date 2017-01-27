@@ -32,7 +32,7 @@ class Product < ActiveRecord::Base
   #letting this product be made available to the public
   validates :ready_for_public, :pdf_exists => true
 
-  scope :ready, -> {where(ready_for_public: true)}
+  scope :ready, -> {where(ready_for_public: true).includes(:category).includes(:subcategory)}
   scope :featured, -> {where(featured: true)}
   scope :in_stock, -> {where("quantity > 0")} #Maybe set up to use only physical products, and not digital products
   scope :instructions, -> {Product.joins(:product_type).where("product_types.name='Instructions'")}
@@ -41,7 +41,7 @@ class Product < ActiveRecord::Base
 
   def self.find_all_by_price(price)
     price = 0 if price == 'free'
-    Product.ready_instructions.where(["price=?",price])
+    Product.ready_instructions.where(["price=?",price.to_f])
   end
 
   def self.sort_by_price
