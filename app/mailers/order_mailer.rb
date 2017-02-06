@@ -28,6 +28,29 @@ class OrderMailer < AsyncMailer
 
     mail(to: EmailConfig.config.physical_order, subject: 'Physical Item Purchased')
   end
+
+  def follow_up(order_id)
+    number_of_products = 3
+    @host = Rails.application.config.web_host
+    order = Order.where(["id=?",order_id]).includes(:line_items).first
+    @user = order.user
+    products_bought = @user.products.pluck(:product_id)
+    categories = order.products.pluck(:category_id).uniq
+    subcategories = order.products.pluck(:subcategory_id).uniq
+    @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and subcategory_id IN (?) and id NOT IN (?)",categories,subcategories,products_bought]).limit(number_of_products)
+    # If there's not enough products, ditch the subcategory clause
+    if @products_to_recommend.length < number_of_products
+      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and id NOT IN (?)",categories,products_bought]).limit(number_of_products)
+    end
+    # If there's still not enough products, ditch the category clause
+    if @products_to_recommend.length < number_of_products
+      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and id NOT IN (?)",products_bought]).limit(number_of_products)
+    end
+
+    unless @products_to_recommend.blank?
+      mail(to: @user.email, subject: 'Thanks for your recent order')
+    end
+  end
 #:nocov
   def queue_name
     "mailer"
@@ -58,6 +81,13 @@ if Rails.env.development?
       @order = Order.first
 
       OrderMailer.physical_item_purchased(@user.id, @order.id)
+    end
+
+    def follow_up
+      @order = Order.first
+      @user = @order.user
+
+      OrderMailer.follow_up(@order.id)
     end
   end
 end

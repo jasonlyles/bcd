@@ -81,6 +81,14 @@ BrickCity::Application.configure do
 
   #Force SSL
   config.force_ssl = true
+
+  # lograge config
+  config.lograge.enabled = true
+
+  # add time to lograge
+  config.lograge.custom_options = lambda do |event|
+    {:time => event.time}
+  end
 end
 
 BrickCity::Application.config.middleware.use ExceptionNotification::Rack,
