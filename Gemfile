@@ -29,7 +29,7 @@ gem 'rake'
 gem 'resque'
 gem 'resque_mailer'
 gem 'resque-status'
-gem 'heroku-api'
+gem 'platform-api' # For Heroku's API
 gem 'roboto'
 gem 'sitemap_generator'
 gem 'responders', '~> 2.0'
