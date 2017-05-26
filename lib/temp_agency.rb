@@ -1,26 +1,26 @@
 # An auto-scaler for Heroku workers, which borrows heavily from the example here:
 # http://verboselogging.com/2010/07/30/auto-scale-your-resque-workers-on-heroku
-# I mostly just tweaked it to use the heroku-api gem and be able to handle different queues
+# I mostly just tweaked it to use the platform-api gem and be able to handle different queues
 module TempAgency
   class Scaler
-    @@heroku = Heroku::API.new(api_key: ENV['HEROKU_API_KEY'])
 
     attr_accessor :ps_name, :queue_name
     def initialize(args)
       args.each{|key,value| eval("@#{key}=value")}
       @ps_name = @queue_name
+      @heroku = PlatformAPI.connect_oauth(HerokuOauthToken.get_token)
       self
     end
 
     def workers
-      workers = @@heroku.get_ps(ENV['APP_NAME']).body.select { |ps| ps["process"] =~ /#{@ps_name}/ }
-      Rails.logger.debug("ACTIVE WORKERS FOR #{@ps_name}: #{workers.size}")
-      workers.size
+      workers = @heroku.formation.info(ENV['APP_NAME'], @ps_name)
+      Rails.logger.debug("ACTIVE WORKERS FOR #{@ps_name}: #{workers['quantity']}")
+      workers['quantity']
     end
 
     def workers=(qty)
       Rails.logger.debug("SETTING WORKERS TO: #{qty} on PS #{@ps_name}")
-      @@heroku.post_ps_scale(ENV['APP_NAME'], @ps_name, qty)
+      @heroku.formation.update(ENV['APP_NAME'], @ps_name, {"quantity" => qty, "size" => "Standard-1X"})
     end
 
     def job_count
