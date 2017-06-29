@@ -8,6 +8,8 @@ class HerokuOauthToken
                                      "global"
                                  ]
                              })
+    request['Content-Type'] = "application/json"
+    request['Accept'] = "application/vnd.heroku+json; version=3"
 
     req_options = {
         use_ssl: uri.scheme == "https"
@@ -16,6 +18,6 @@ class HerokuOauthToken
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-    token = JSON.parse(response.body)['access_tokens'][0]['token']
+    JSON.parse(response.body)['access_token']['token']
   end
 end
