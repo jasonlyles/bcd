@@ -1,8 +1,9 @@
 source 'http://rubygems.org'
 
-ruby '2.2.6'
+ruby '2.4.1'
 
-gem 'rails', '4.2.7'
+gem 'rails', '4.2.9'
+gem 'json', '1.8.5'
 gem 'activerecord-session_store'
 gem 'protected_attributes'
 gem 'devise', '3.5.10'
