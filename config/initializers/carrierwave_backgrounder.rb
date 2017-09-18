@@ -1,7 +1,7 @@
 module CarrierWave
   module Workers
     class ProcessAsset
-      def queue_name
+      def self.queue_name
         @queue
       end
       extend TempAgency
