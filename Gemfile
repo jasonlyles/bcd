@@ -23,7 +23,6 @@ gem 'kaminari'
 gem 'nested_form'
 gem 'twitter'
 gem 'exception_notification'
-gem "haml-rails"
 gem 'jquery-rails'
 gem 'rake'
 

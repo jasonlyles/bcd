@@ -1,0 +1,108 @@
+<br/>
+<br/>
+<br/>
+<% if resource_name.to_s == "user" %>
+  <div id="auth_login_div">
+    <a class="facebook_login auth_provider" href="/auth/facebook"></a>
+    <a class="twitter_login auth_provider" href="/auth/twitter"></a>
+    <br/>
+    <div class="clear"></div>
+    <br/>
+    <hr/>
+  </div>
+  <br/>
+  <div id="regular_signup_div">
+    <div>
+      <b>
+        Or, sign in with a Brick City Depot account
+      </b>
+    </div>
+    <br/>
+    <%= form_for(@user, url: session_path(resource_name)) do |f| %>
+    <div>
+      <%= f.label :email %>
+      <br/>
+      <%= f.email_field :email, autofocus: true, :class => 'login_form_text_field' %>
+    </div>
+    <div>
+      <%= f.label :password %>
+      <br/>
+      <%= f.password_field :password, autocomplete: "off", :class => 'login_form_text_field' %>
+    </div>
+    <br/>
+    <div>
+      <%= f.submit "Sign in", :class => 'nice_signup_button', data: {disable_with: 'Sign In'} %>
+    </div>
+  <% end %>
+  <br/>
+  <% if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+    <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+    <br/>
+    <br/>
+  <% end %>
+</div>
+<% end %>
+<% if session[:show_guest_checkout_link] %>
+<div class="clear"></div>
+<br/>
+<hr class="centered"/>
+<br/>
+<br/>
+<div class="centered_text guest_checkout_info">
+  No thanks! I want to
+  <%= link_to("Checkout as a guest", "/guest_registration") %>
+</div>
+<br/>
+<br/>
+<br/>
+<br/>
+<div class="centered_text guest_checkout_info">
+  Why create a Brick City Depot account?
+</div>
+<br/>
+<p>
+  <b>
+    What we do for those with accounts:
+  </b>
+  <br/>
+  <b>
+    1.
+  </b>
+  Give you free instructions.
+  <br/>
+  <b>
+    2.
+  </b>
+  Keep you informed of sales, new models, etc. Update you when we've had to make changes to the PDF or parts lists for a set of instructions you bought. (If you want us to, you can always opt out.)
+  <br/>
+  <b>
+    3.
+  </b>
+  Download your instructions any time. You won't need to keep track of an order confirmation email we send you with a download link. Computer crashed? Lost the files? No problem. Just sign in and go to the 'My Account' page and download from there.
+</p>
+<br/>
+<p>
+  <b>
+    What we don't do for those with accounts:
+  </b>
+  <br/>
+  <b>
+    1.
+  </b>
+  Sell your information (We wouldn't do that to guests either.)
+  <br/>
+  <b>
+    2.
+  </b>
+  Email you if you don't want us to. The exception would be emails relating specifically to your orders.
+</p>
+<% else %>
+<div class="centered_text">
+  <p>
+    Don't worry if you don't want to use a Twitter, Facebook or Brick City Depot account.
+    <br/>
+    <br/>
+    You can still check out as a guest.
+  </p>
+</div>
+<% end %>

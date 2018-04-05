@@ -1,0 +1,108 @@
+<%= h1("Edit My Account") %>
+<br/>
+<br/>
+<div id="authentications_wrapper">
+  <% unless @authentications.empty? %>
+    <% @auths = @authentications.collect{|x| x.provider} %>
+      <div class="authentications">
+        You can sign in to this account using:
+        <br/>
+        <br/>
+        <% for authentication in @authentications %>
+          <div class="authentication">
+            <%= image_tag "#{authentication.provider}_32.png", :size => "32x32" %>
+            <div class="provider">
+              <%= authentication.provider.titleize %>
+            </div>
+            <%= link_to "X", authentication, data: {confirm: 'Are you sure you want to remove this authentication option?'}, :method => :delete, :class => "remove" %>
+          </div>
+        <% end %>
+        <div class="clear"></div>
+      </div>
+    <% end %>
+    <div id="add_a_service">
+      <strong>Add a service to sign in with:</strong>
+      <br/>
+      <br/>
+    </div>
+    <div id="auth_login_div">
+      <% if @auths && @auths.include?('facebook') %>
+        <div class="float_right">
+          <%= image_tag "facebook_login_button.jpeg", :alt => "Facebook", :class => 'grayed_out' %>
+        </div>
+      <% else %>
+        <a class="facebook_login auth_provider" href="/auth/facebook"></a>
+      <% end %>
+      <% if @auths && @auths.include?('twitter') %>
+        <div class="float_left">
+          <%= image_tag "twitter_login_button.jpeg", :alt => "Twitter", :class => 'grayed_out' %>
+        </div>
+      <% else %>
+        <a class="twitter_login auth_provider" href="/auth/twitter"></a>
+      <% end %>
+      <br/>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <br/>
+  <div id="account_preferences_wrapper">
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+    <p class="centered_text preference_header">
+      EMAIL
+    </p>
+    <br/>
+    <p>
+      <%= f.label :email %>
+      <br/>
+      <%= f.text_field :email, :class => 'login_form_text_field', :type => 'email' %>
+    </p>
+    <br/>
+    <p>
+      Email Preferences
+    </p>
+    <p>
+      <%= f.radio_button :email_preference, 2 %>
+      <%= f.label :email_preference, "I want them all!... promotions, discounts, new model announcements, etc.", :value => 2 %>
+      <br/>
+      <%= f.radio_button :email_preference, 1 %>
+      <%= f.label :email_preference, "Just important emails, like when you update a parts list or PDF that I own.", :value => 1 %>
+      <br/>
+      <%= f.radio_button :email_preference, 0 %>
+      <%= f.label :email_preference, "No emails please. (You'll only get order confirmation emails.)", :value => 0 %>
+    </p>
+    <br/>
+    <br/>
+    <p>
+      <%= f.submit "Update", :class => 'update_preferences_button', data: {disable_with: 'Updating...'} %>
+    </p>
+  <% end %>
+  <br/>
+  <% if @user.encrypted_password? %>
+    <%= form_for(@user, url: passwords_update_password_path, html: { method: :patch }) do |f| %>
+    <p class="centered_text preference_header">
+      UPDATE BRICK CITY DEPOT PASSWORD
+    </p>
+    <br/>
+    <p>
+      <%= f.label :password, "New password" %>
+      <br/>
+      <%= f.password_field :password, autofocus: true, autocomplete: "off", :class => 'login_form_text_field' %>
+    </p>
+    <p>
+      <%= f.label :password_confirmation, "Confirm new password" %>
+      <br/>
+      <%= f.password_field :password_confirmation, autocomplete: "off", :class => 'login_form_text_field' %>
+    </p>
+    <br/>
+    <p>
+      <%= f.submit "Update", :class => 'update_preferences_button', data: {disable_with: 'Updating...'} %>
+    </p>
+  <% end %>
+<% end %>
+</div>
+<br/>
+<br/>
+<p class="centered_text">
+Unhappy with Brick City Depot?
+<%= link_to "Cancel my account", registration_path(resource_name), data: {confirm: "Are you sure? You will no longer be able to download PDFs you have paid for!"}, :method => :delete} %>.
+</p>

@@ -1,0 +1,16 @@
+<b>Full URL</b>
+<br/>
+<%= @image.url %>
+<br/>
+<br/>
+<% if @image.product %>
+  <b>Image for:</b>
+  <%= "#{@image.product.product_code} #{@image.product.name}" %>
+<% else %>
+  <%= @image.url.to_s.split('.')[0].humanize %>
+<% end %>
+<br/>
+<br/>
+<%= link_to 'Edit', edit_image_path(@image) %>
+\|
+<%= link_to 'Back', images_path %>

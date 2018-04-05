@@ -1,0 +1,91 @@
+<%= h1("Order Details") %>
+<br/>
+<%= link_to "< Order History", account_order_history_path %>
+<br/>
+<br/>
+<div class="user_order_history">
+  <table>
+    <tr>
+      <td>
+        <b>Order Date:</b>
+      </td>
+      <td></td>
+      <td>
+        <%= @order.created_at.to_s(:date_time12) %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Confirmation ID:</b>
+      </td>
+      <td></td>
+      <td>
+        <%= @order.request_id %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Transaction ID:</b>
+      </td>
+      <td class="td_spacer"></td>
+      <td>
+        <%= @order.transaction_id %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Status:</b>
+      </td>
+      <td></td>
+      <td>
+        <% if @order.status && @order.status.upcase == "COMPLETED" %>
+          <b class="happy">
+            <%= @order.status %>
+          </b>
+        <% else %>
+          <b class="sad">
+            <%= @order.status %>
+          </b>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+  <% if @order.status && @order.status.upcase != "COMPLETED" %>
+    <br/>
+    <p>We're not sure why this order is messed up, but we want to fix it. Please email us at
+      <a href="mailto:service@brickcitydepot.com">service@brickcitydepot.com</a>
+      and tell us your Confirmation ID, Transaction ID (if available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.</p>
+  <% end %>
+  <br/>
+  <b>Items Purchased:</b>
+  <table class="cart_table">
+    <tr>
+      <th colspan="2">Model</th>
+      <th>Type</th>
+      <th>Qty</th>
+      <th>Price Paid</th>
+    </tr>
+    <% @order.line_items.each do |item| %>
+      <tr>
+        <% product = item.product %>
+          <% image = product.images %>
+            <% image_url = image[0].url.thumb if !image.blank? %>
+              <td class="left_most_cell">
+                <%= image_tag(image_url.url) if !image_url.nil? %>
+              </td>
+              <td>
+                <%= "#{product.product_code} #{product.name}" %>
+              </td>
+              <td>
+                <%= product.product_type.name %>
+              </td>
+              <td>
+                <%= item.quantity %>
+              </td>
+              <td class="right_most_cell">
+                <%= number_to_currency(item.total_price) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>

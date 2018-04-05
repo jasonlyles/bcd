@@ -1,0 +1,40 @@
+<h1>Listing images</h1>
+<br/>
+<%= paginate @images %>
+<table class="admin_table">
+  <tr>
+    <th>Filename</th>
+    <th>Product</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  <% @images.each do |image| %>
+    <tr>
+      <td>
+        <%= image.url %>
+      </td>
+      <% if image.product %>
+        <td>
+          <%= "#{image.product.product_code} #{image.product.name}" %>
+        </td>
+      <% else %>
+        <td>
+          <%= image.url.to_s.split('.')[0].humanize %>
+        </td>
+      <% end %>
+      <td>
+        <%= link_to 'Show', image %>
+      </td>
+      <td>
+        <%= link_to 'Edit', edit_image_path(image) %>
+      </td>
+      <td>
+        <%= link_to 'Destroy', image, data: {confirm: 'Are you sure?'}, :method => :delete %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<%= paginate @images %>
+<br/>
+<%= link_to 'New Image', new_image_path %>

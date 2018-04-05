@@ -1,0 +1,157 @@
+<br/>
+<br/>
+<br/>
+<div id="auth_login_div">
+  <a class="facebook_login auth_provider" href="/auth/facebook" id="facebook_link"></a>
+  <a class="twitter_login auth_provider" href="/auth/twitter" id="twitter_link"></a>
+  <br/>
+  <div class="clear"></div>
+  <br/>
+  <hr/>
+</div>
+<br/>
+<% if session["omniauth"] %>
+  <% if resource.email.blank? %>
+    <div id="omniauth_text">
+      <p>
+        We will need your email as a way to identify you in our system.
+      </p>
+      <br/>
+      <br/>
+    </div>
+  <% end %>
+  <div id="changed_mind_about_auth">
+    <%= link_to "Changed your mind about using #{session["omniauth"]["provider"].capitalize}?", clear_authentications_path, method: :post %>
+    <br/>
+    <br/>
+  </div>
+  <div id="regular_signup_div">
+    <%= form_for(@user, :url => registration_path(resource_name)) do |f| %>
+    <% if resource.email.blank? %>
+      <%= f.text_field :email, :class => 'login_form_text_field', :placeholder => 'Email', :type => 'email' %>
+      <br/>
+    <% else %>
+      <%= f.hidden_field :email, :class => 'login_form_text_field' %>
+    <% end %>
+    <br/>
+    Email Preferences
+    <br/>
+    <%= f.radio_button :email_preference, 2 %>
+    <%= f.label :email_preference, "I want them all!... promotions, discounts, new model announcements, etc.", :value => 2 %>
+    <br/>
+    <%= f.radio_button :email_preference, 1 %>
+    <%= f.label :email_preference, "Just important emails, like when you update a parts list or PDF that I own.", :value => 1 %>
+    <br/>
+    <%= f.radio_button :email_preference, 0 %>
+    <%= f.label :email_preference, "No emails please. (You'll only get order confirmation emails.)", :value => 0 %>
+    <br/>
+    <br/>
+    <%= f.check_box :tos_accepted, {:checked => @user.tos_accepted}#,1,0 %>
+    <%= f.label :tos_accepted, "I have read and agree to the " %>
+    <%= link_to 'Terms of Service', terms_of_service_path %>
+    and
+    <%= link_to 'Privacy Policy', privacy_policy_path, :style => "color:red;" %>
+    <br/>
+    <br/>
+    <%= f.submit "Sign up", :class => 'nice_signup_button', data: {disable_with: 'Sign Up'} %>
+    <br/>
+  <% end %>
+</div>
+<% else %>
+<div id="regular_signup_div">
+  <div>
+    <b>
+      Or, create a Brick City Depot account
+    </b>
+  </div>
+  <br/>
+  <%= form_for(@user, url: registration_path(resource_name)) do |f| %>
+  <div>
+    <%= f.label :email %>
+    <br/>
+    <%= f.email_field :email, autofocus: true, :class => 'login_form_text_field' %>
+  </div>
+  <div>
+    <%= f.label :password %>
+    <br/>
+    <%= f.password_field :password, autocomplete: "off", :class => 'login_form_text_field' %>
+  </div>
+  <div>
+    <%= f.label :password_confirmation %>
+    <br/>
+    <%= f.password_field :password_confirmation, autocomplete: "off", :class => 'login_form_text_field' %>
+  </div>
+  <br/>
+  <div>
+    Email Preferences
+    <br/>
+    <%= f.radio_button :email_preference, 2 %>
+    <%= f.label :email_preference, "I want them all!... promotions, discounts, new model announcements, etc.", :value => 2 %>
+    <br/>
+    <%= f.radio_button :email_preference, 1 %>
+    <%= f.label :email_preference, "Just important emails, like when you update a parts list or PDF that I own.", :value => 1 %>
+    <br/>
+    <%= f.radio_button :email_preference, 0 %>
+    <%= f.label :email_preference, "No emails please. (You'll only get order confirmation emails.)", :value => 0 %>
+  </div>
+  <br/>
+  <div>
+    <%= f.check_box :tos_accepted, {:checked => @user.tos_accepted}#,1,0 %>
+    <%= f.label :tos_accepted, "I have read and agree to the " %>
+    <%= link_to 'Terms of Service', terms_of_service_path %>
+    and
+    <%= link_to 'Privacy Policy', privacy_policy_path, :style => "color:red;" %>
+  </div>
+  <br/>
+  <div>
+    <%= f.submit "Sign up", data: {disable_with: 'Sign Up'}, :class => 'nice_signup_button' %>
+  </div>
+<% end %>
+</div>
+<div class="centered_text">
+<br/>
+<br/>
+<p>
+  Don't worry if you don't want to use a Twitter, Facebook or Brick City Depot account.
+  <br/>
+  <br/>
+  You can still check out as a guest.
+</p>
+</div>
+<% end %>
+<script>
+
+$(document).ready(function () {
+//window.onload = enableButtonsIfChecked();
+});
+
+function enableButtons() {
+var fb = document.getElementById('facebook_link');
+var twit = document.getElementById('twitter_link');
+if (document.getElementById('user_terms_of_service2').checked) {
+  fb.href = '/auth/facebook';
+  twit.href = '/auth/twitter';
+  fb.className = fb.className.replace(/(?:^|)facebook_login_disabled(?!S)/, 'facebook_login');
+  twit.className = twit.className.replace(/(?:^|)twitter_login_disabled(?!S)/, 'twitter_login');
+} else {
+  fb.href = '#';
+  twit.href = '#';
+  fb.className = fb.className.replace(/(?:^|)facebook_login(?!S)/, 'facebook_login_disabled');
+  twit.className = twit.className.replace(/(?:^|)twitter_login(?!S)/, 'twitter_login_disabled');
+}
+}
+
+function enableButtonsIfChecked() {
+var fb = document.getElementById('facebook_link');
+var twit = document.getElementById('twitter_link');
+if (document.getElementById('user_terms_of_service2').checked) {
+  fb.href = '/auth/facebook';
+  twit.href = '/auth/twitter';
+  fb.className = fb.className.replace(/(?:^|)facebook_login_disabled(?!S)/, 'facebook_login');
+  twit.className = twit.className.replace(/(?:^|)twitter_login_disabled(?!S)/, 'twitter_login');
+} else {
+  fb.href = '#';
+  twit.href = '#';
+}
+}
+</script>

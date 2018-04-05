@@ -1,0 +1,50 @@
+<h1>Instant Payment Notifications</h1>
+<br/>
+<p>
+  * Red payment status indicates unprocessed, green payment status indicates processed
+</p>
+<br/>
+<%= paginate @instant_payment_notifications %>
+<table class="admin_table">
+  <thead>
+    <tr>
+      <th>Payment Status</th>
+      <th>Request ID</th>
+      <th>Transaction ID</th>
+      <th>Order ID</th>
+      <th>Payer Email</th>
+      <th>Transaction Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @instant_payment_notifications.each do |ipn| %>
+      <tr>
+        <% if ipn.processed? %>
+          <td class="happy">
+            <%= ipn.payment_status %>
+          </td>
+        <% else %>
+          <td class="sad">
+            <%= ipn.payment_status %>
+          </td>
+        <% end %>
+        <td>
+          <%= link_to ipn.request_id, ipn %>
+        </td>
+        <td>
+          <%= ipn.txn_id %>
+        </td>
+        <td>
+          <%= ipn.order_id %>
+        </td>
+        <td>
+          <%= ipn.payer_email %>
+        </td>
+        <td>
+          <%= ipn.created_at %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @instant_payment_notifications %>

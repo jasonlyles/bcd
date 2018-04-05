@@ -1,0 +1,18 @@
+Hello
+<%= @user.email %>
+\ \ Thank you for your recent order with Brick City Depot. We just wanted to follow up and make sure that everything was to your satisfaction. If you have any questions or concerns, please feel free to email us at service@brickcitydepot.com so we can
+help you. \ \ Based on your purchase, here are some other items we think you might like: \ \
+<% @products_to_recommend.each do |product| %>
+  <%= "#{number_to_currency(product.price)} #{product.name}" %>
+  <%= "#{@host}/#{product.product_code}/#{product.name.to_snake_case}" %>
+<% end %>
+\
+\
+\
+\
+Thank you for your business.
+\
+Brick City Depot
+\
+\
+\

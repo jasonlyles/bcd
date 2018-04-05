@@ -1,0 +1,12 @@
+<% if @derivative_product %>
+  <h1>New derivative product</h1>
+  <br/>
+  <br/>
+  <p class="sad">
+    * Make sure to change the Name, Product Type and Product Code accordingly
+  </p>
+<% else %>
+  <h1>New product</h1>
+<% end %>
+<%= render 'form', product: @product, product_types: @product_types, categories: @categories %>
+<%= link_to 'Back', products_path %>

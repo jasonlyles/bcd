@@ -1,0 +1,15 @@
+<%= h1 'Forgot your password?' %>
+<br/>
+<br/>
+<br/>
+<div id="forgot_password_div">
+  <div style="color:red;text-align:center;">
+    Enter the email address you use for this site
+  </div>
+  <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f| %>
+  <%= f.text_field :email, :class => 'forgot_password_text_field', :placeholder => 'Email', :type => 'email' %>
+  <br/>
+  <br/>
+  <%= f.submit "Send me reset password instructions", :class => 'forgot_password_button', data: {disable_with: 'Sending...'} %>
+<% end %>
+</div>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Brick City Depot</title>
+    <!--/= stylesheet_link_tag 'screen.css', :media => 'screen, projection' -->
+    <!--/= stylesheet_link_tag 'print.css', :media => 'print' -->
+    <!--//[if IE] -->
+    <!--/ = stylesheet_link_tag 'ie.css', :media => 'screen, projection' -->
+    <%= stylesheet_link_tag 'application.css' %>
+    <!--/= stylesheet_link_tag :all -->
+    <!--/= javascript_include_tag 'jquery' -->
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tag %>
+    <%= yield :head %>
+  </head>
+  <body>
+    <div class="content">
+      <div class="header">
+        <div class="admin_navigation">
+          <%= render :partial => 'shared/admin_navigation' %>
+        </div>
+      </div>
+      <div class="admin_main">
+        <% if notice %>
+          <div id="alert_wrapper">
+            <div id="speech_bubble_thing">
+              <%= image_tag('speech_bubble_thing.png') %>
+            </div>
+            <div id="lego_head">
+              <%= image_tag('happy_head.png') %>
+            </div>
+            <div id="notice">
+              <div id="alert_message">
+                <%= notice %>
+              </div>
+            </div>
+          </div>
+          <br/>
+        <% end %>
+        <% if alert %>
+          <div id="alert_wrapper">
+            <div id="speech_bubble_thing">
+              <%= image_tag('speech_bubble_thing.png') %>
+            </div>
+            <div id="lego_head">
+              <%= image_tag('happy_head.png') %>
+            </div>
+            <div id="alert">
+              <div id="alert_message">
+                <%= alert %>
+              </div>
+            </div>
+          </div>
+          <br/>
+        <% end %>
+        <div class="clear"></div>
+        <br/>
+        <%= yield %>
+      </div>
+      <div class="footer">
+        <%= render :partial => 'shared/footer' %>
+      </div>
+    </div>
+  </body>
+</html>

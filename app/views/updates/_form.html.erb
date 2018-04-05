@@ -1,0 +1,40 @@
+<br/>
+<br/>
+<%= form_for update, :html => {:multipart => true} do |f| %>
+<div class="field">
+  <%= f.label :title %>
+  <br/>
+  <%= f.text_field :title, placeholder: "Amsterdam Sale!" %>
+</div>
+<div class="field">
+  <%= f.label :link, "Link (Where BCD will go to when user clicks on the image.) Example:. To go to FAQ, make the link look like this: /faq" %>
+  <br/>
+  <%= f.text_field :link, placeholder: "/faq" %>
+</div>
+<div class="field">
+  <%= f.label :description, "Description, disabled for now, as I'm not presently using this." %>
+  <br/>
+  <%= f.text_field :description, :disabled => true %>
+</div>
+<div class="field">
+  <%= f.label :body, "Body, disabled for now, as I'm not presently using this." %>
+  <br/>
+  <%= f.text_area :body, :disabled => true %>
+</div>
+<% if update.image? %>
+  <div class="field">
+    <%= f.label :delete_image %>
+    <%= f.check_box :remove_image %>
+  </div>
+<% else %>
+  <div class="field">
+    <%= f.label :image %>
+    <br/>
+    <%= f.file_field :image %>
+    <%= f.hidden_field :image_cache %>
+  </div>
+<% end %>
+<div class="actions">
+  <%= f.submit 'Save' %>
+</div>
+<% end %>

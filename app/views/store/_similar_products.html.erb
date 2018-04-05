@@ -1,0 +1,16 @@
+<% if similar_products.length > 0 %>
+  <b>
+    Check out these other great models from Brick City Depot
+  </b>
+  <div class="centered_products_table">
+    <table class="products_table">
+      <tr>
+        <% similar_products.each do |product| %>
+          <td>
+            <%= render 'product_teaser', product: product %>
+          </td>
+        <% end %>
+      </tr>
+    </table>
+  </div>
+<% end %>

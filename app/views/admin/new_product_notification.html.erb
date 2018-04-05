@@ -1,0 +1,17 @@
+<h1>New Product Notification</h1>
+<br/>
+<%= form_for(:email, :url => {:action => :send_new_product_notification}) do |f| %>
+<div class="field">
+  <%= f.label :product_id, 'Product' %>
+  <br/>
+  <%= f.select :product_id, @products, prompt: true %>
+</div>
+<div class="field">
+  <%= f.label :optional_message %>
+  <br/>
+  <%= f.text_area :optional_message, cols: 40, rows: 10, placeholder: 'Optional message to send to users about the product' %>
+</div>
+<div class="actions">
+  <%= f.submit 'Send Notifications' %>
+</div>
+<% end %>

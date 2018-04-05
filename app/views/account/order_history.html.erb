@@ -1,0 +1,63 @@
+<%= h1("My Order History") %>
+<br/>
+<%= link_to "< My Account", account_path %>
+<br/>
+<br/>
+<div class="user_order_history">
+  <% @orders.each do |order| %>
+    <table>
+      <tr>
+        <td>
+          <b>Order Date:</b>
+        </td>
+        <td></td>
+        <td>
+          <%= order.created_at.to_s(:date_time12) %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Confirmation ID:</b>
+        </td>
+        <td></td>
+        <td>
+          <%= order.request_id %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Transaction ID:</b>
+        </td>
+        <td class="td_spacer"></td>
+        <td>
+          <%= order.transaction_id %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Status:</b>
+        </td>
+        <td></td>
+        <td>
+          <% if order.status && order.status.upcase == "COMPLETED" %>
+            <b class="happy">
+              <%= order.status %>
+            </b>
+          <% else %>
+            <b class="sad">
+              <%= order.status %>
+            </b>
+            <%= render :partial => 'shared/help', :locals => {:title => 'Why is my order messed up?', :content => "We're not sure, but we want to fix it. Please email us at service@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if
+            available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.", :type => 'info'} %>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%= link_to "Order Details", {:controller => :account, :action => :order, :request_id => order.request_id} %>
+        </td>
+      </tr>
+    </table>
+    <br/>
+  <% end %>
+</div>

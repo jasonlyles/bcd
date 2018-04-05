@@ -1,0 +1,26 @@
+<div class="products_detail_medium drop_shadow">
+  <div class="centered_product_medium">
+    <div class="medium_image_div">
+      <%= link_to(image_tag(product.main_image.medium), {:action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless product.main_image.blank? %>
+    </div>
+    <div class="thumb_details">
+      <br/>
+      <%= link_to product.code_and_name, {:action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, class: 'medium_model_name' %>
+      <br/>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <% if product.is_free? %>
+    <h2>FREE</h2>
+  <% else %>
+    <div class="medium_add_to_cart_div">
+      <div class="medium_price">
+        <%= number_to_currency(product.price) %>
+      </div>
+      <div class="medium_detail_button_div">
+        <%= button_to "Add to Cart", {:action => "add_to_cart", :product_code => product.product_code}, {:class => 'add_to_cart_button', data: {disable_with: 'Adding...'}} %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<br/>

@@ -1,0 +1,45 @@
+<%= h1("Contact Us!") %>
+<br/>
+Before you contact us, please check out our
+<%= link_to 'FAQ', faq_path %>
+page. We may have already answered your question there.
+<br/>
+<br/>
+Looking for the Lego Neighborhood Book companion files? No problem, you can find them
+<%= link_to 'here', books_path %>.
+<br/>
+<br/>
+If you have any questions or concerns about an order, please contact us and give us a chance to clarify or straighten out any issues.
+<br/>
+<a href="mailto:service@brickcitydepot.com">service@brickcitydepot.com</a>
+<br/>
+<br/>
+If you have any questions before you purchase instructions, please let us know.
+<br/>
+<a href="mailto:sales@brickcitydepot.com">sales@brickcitydepot.com</a>
+<br/>
+<br/>
+<br/>
+Random stuff to say? Idea for a model we should build? Let us hear it!
+<br/>
+<br/>
+<%= form_for @email, :url => send_contact_email_path do |f| %>
+<%= f.label :name %>
+<br/>
+<%= f.text_field :name, :class => 'login_form_text_field', :placeholder => 'Bob Smith' %>
+<br/>
+<br/>
+<%= f.label :email_address %>
+<br/>
+<%= f.text_field :email_address, :class => 'login_form_text_field', :placeholder => 'bob@smith.com', :type => 'email' %>
+<br/>
+<br/>
+<%= f.label :body, "Message" %>
+<br/>
+<%= f.text_area :body, :class => 'form_text_area', :placeholder => 'Stuff I want to say' %>
+<br/>
+<br/>
+<div class="actions">
+  <%= f.submit 'Send Email', :class => 'nice_email_button', data: {disable_with: 'Sending...'} %>
+</div>
+<% end %>

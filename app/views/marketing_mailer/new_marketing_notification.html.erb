@@ -1,0 +1,23 @@
+<p>
+  Hi
+  <%= @user.email %>!
+</p>
+<br/>
+<p>
+  <%= @email_campaign.message %>
+</p>
+<br/>
+<div align="center">
+  <%= link_to 'LEARN MORE', "#{@host}/campaign/#{@email_campaign.guid}" %>
+</div>
+<br/>
+<% if @email_campaign.image %>
+  <div align="center" style="padding: 5px">
+    <img alt="Brick City Depot" src="<%= @host %>/<%= @email_campaign.image.large %>" style="max-width:500px"/>
+  </div>
+<% end %>
+<br/>
+<div align="center">
+  <%= link_to 'LEARN MORE', "#{@host}/campaign/#{@email_campaign.guid}" %>
+</div>
+<br/>

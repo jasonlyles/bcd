@@ -1,0 +1,33 @@
+<% if @category.name && !@category.image %>
+  <%= h1(@category.name.capitalize) %>
+<% else %>
+  <div id="category_banner">
+    <%= image_tag(@category.image.url) if @category.image && @category.image.url %>
+  </div>
+<% end %>
+<br/>
+<p>
+  <%= @category.description %>
+</p>
+<br/>
+<% if @products.blank? %>
+  <br/>
+  <br/>
+  <div class="centered_text">
+    <%= "Sorry, there are currently no #{@category.name.capitalize} products for sale." %>
+  </div>
+<% end %>
+<%= paginate @products %>
+<div class="centered_products_table">
+  <table class="products_table">
+    <% @products.each_with_index do |product,index| %>
+      <% if index.even? %>
+        <tr></tr>
+      <% end %>
+      <td>
+        <%= render 'product_teaser_medium', :product => product %>
+      </td>
+    <% end %>
+  </table>
+</div>
+<%= paginate @products %>

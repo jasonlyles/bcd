@@ -1,0 +1,157 @@
+<br/>
+<br/>
+<%= nested_form_for product, :html => {:multipart => true} do |f| %>
+<div class="field">
+  <%= f.label :name, "Name" %>
+  <br/>
+  <%= f.text_field :name, placeholder: "Colonial Revival House" %>
+</div>
+<div class="field">
+  <%= f.label :product_type_id, 'Product Type' %>
+  <br/>
+  <%= f.select :product_type_id, product_types %>
+</div>
+<div class="field">
+  <%= f.label :quantity, 'Quantity (Only fill this out if product is a physical item.)' %>
+  <br/>
+  <%= f.text_field :quantity, :size => 4 %>
+</div>
+<div class="field">
+  <%= f.label :category_id %>
+  <br/>
+  <%= f.select :category_id, categories, :prompt => true %>
+</div>
+<div class="field">
+  <%= f.label :subcategory_id %>
+  <br/>
+  <%= f.select :subcategory_id, Subcategory.where("category_id=?",product.category_id).map{|p| [p['name'],p['id']]} %>
+</div>
+<div class="field">
+  <%= f.label :product_code, "Product Code *, **" %>
+  <br/>
+  <%= f.text_field :product_code, :size => 6, placeholder: "CV002" %>
+</div>
+<div class="field">
+  <%= f.label :description, "Description (min 100 characters)" %>
+  <br/>
+  <%= f.text_area :description, :class => 'form_text_area', placeholder: "This model is a great addition to your town..." %>
+</div>
+<div class="field">
+  <%= f.label :discount_percentage, "Percentage off, expressed as an integer. i.e. 25 would mean 25% off (This is not fully functional yet)" %>
+  <br/>
+  <%= f.text_field :discount_percentage, :size => 4, placeholder: "0.25" %>
+</div>
+<div class="field">
+  <%= f.label :price %>
+  <br/>
+  <%= f.text_field :price, :size => 4, placeholder: "10" %>
+</div>
+<div class="field">
+  <%= f.label :ready_for_public, "Ready for public? ***" %>
+  <%= f.check_box :ready_for_public, {:checked => product.ready_for_public},1,0 %>
+</div>
+<div class="field">
+  <%= f.label :youtube_url, "Youtube Video ID (If full url is http://www.youtube.com/watch?v=oavMtUWDBTM I just want oavMtUWDBTM)" %>
+  <br/>
+  <%= f.text_field :youtube_url, :size => 12, placeholder: "oavMtUWDBTM" %>
+</div>
+<b>Images:</b>
+(If you're trying to delete an image, click "Remove this image" and then "Save")
+<br/>
+<div class="field">
+  <% field_count = 0 %>
+    <%= f.fields_for :images do |image_form| %>
+    <% field_count += 1 %>
+      <p>
+        <%= image_form.label :url, "Image (Images should be 700x700)" %>
+        <br/>
+        <% if product.images && product.images.length >= field_count %>
+          <%= image_form.text_field :url, :disabled => true %>
+        <% else %>
+          <%= image_form.file_field :url %>
+          <%= image_form.hidden_field :url_cache %>
+        <% end %>
+        <%= image_form.link_to_remove "Remove this image" %>
+      </p>
+    <% end %>
+  </div>
+  <br/>
+  <%= f.link_to_add "Add Image", :images %>
+  <br/>
+  <% if product.is_digital_product? %>
+    <br/>
+    <b>Instructions specific fields</b>
+    <br/>
+    <br/>
+    <div class="field">
+      <% pl_field_count = 0 %>
+        <%= f.fields_for :parts_lists do |pl_form| %>
+        <% pl_field_count += 1 %>
+          <p>
+            <%= pl_form.label :name, "Parts List" %>
+            <br/>
+            <% if product.parts_lists && product.parts_lists.length >= pl_field_count %>
+              <%= pl_form.text_field :name, :disabled => true %>
+            <% else %>
+              <%= pl_form.file_field :name %>
+              File Type:
+              <%= pl_form.select :parts_list_type, ['HTML','XML'] %>
+              <%= pl_form.hidden_field :name_cache %>
+            <% end %>
+            <%= pl_form.link_to_remove "Remove this parts list" %>
+          </p>
+        <% end %>
+        <br/>
+        <%= f.link_to_add "Add Parts List", :parts_lists %>
+      </div>
+      <br/>
+      <div class="field">
+        <% if product.pdf? && !product.pdf.blank? %>
+          <%= f.label :pdf, "PDF" %>
+          <br/>
+          <% if product.pdf_cache %>
+            <%= f.text_field :pdf_cache, :disabled => true %>
+          <% else %>
+            <%= f.text_field :pdf, :disabled => true %>
+          <% end %>
+          <br/>
+        <% end %>
+        <br/>
+        <%= f.label :pdf, "PDF" %>
+        <br/>
+        <%= f.file_field :pdf %>
+        <%= f.hidden_field :pdf_cache %>
+        <% if product.pdf? %>
+          <div class="field">
+            <%= f.label :delete_pdf, "Delete PDF" %>
+            <%= f.check_box :remove_pdf %>
+          </div>
+        <% end %>
+      </div>
+      <div class="field">
+        <%= f.label :free %>
+        <%= f.check_box :free, {:checked => product.free},1,0 %>
+      </div>
+      <div class="field">
+        <%= f.label :alternative_build %>
+        <%= f.check_box :alternative_build, {:checked => product.alternative_build},1,0 %>
+      </div>
+      <div class="field">
+        <%= f.label :featured %>
+        <%= f.check_box :featured, {:checked => product.featured},1,0 %>
+      </div>
+    <% end %>
+    <br/>
+    <div class="actions">
+      <%= f.submit 'Save' %>
+    </div>
+  <% end %>
+  <br/>
+  * Product code for instructions fits the pattern 'CB002'. A physical model would be 'CB002M' and a kit would be 'CB002K'
+  <br/>
+  ** A model or kit must have a 'base' product (set of instructions) before you try to add a model or kit.
+  <br/>
+  *** Products that aren't ready for the public will only be visible in the admin areas. If you want to un-retire a retired model, make sure to check the 'ready for public?' checkbox. Also, set the category and subcategory for the product to an
+  appropriate cat/subcat
+  <br/>
+  <br/>
