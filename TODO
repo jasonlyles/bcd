@@ -2,6 +2,52 @@ TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
 
+0.1 IPNs come to us for refunds. What should I do with those? Remove the item from the users account? Maybe I can just
+store them, and not flag that there was a 2nd IPN if the payment_status for the 2nd is 'Refunded'
+
+0.3 I think my batchmailer jobs other than the email campaign should update something somewhere that tells me how many
+emails were sent.
+
+0.6 Look at setting up either circleci or travis CI.
+
+0.7 Add Faker gem to generate a lot of orders and customers in the local database to see if I need to add any indexes to
+speed up page load times.
+
+0.9 Try to get this app on Elastic Beanstalk or Digital Ocean
+
+0.10 In order to get Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
+and verify it, maybe verify my FB and Twitter with google if possible.
+
+0.11 Fix up my specs so I don't have to use database cleaner, and use the truncation strategy, which slows down specs
+
+0.12 MUST GET OFF PEERONS IMAGES!!!!! This means getting/creating images and moving our html parts lists to the website,
+and not distribute them via downloads any more. I wonder if I couldn't create some sprites where I have
+an image that's not colored in, and color in according to a pieces HTML color code. That could allow me to make
+several requests for images instead of hundreds for a single parts list.
+
+0.13 After getting off Peerons images, add network marketing.
+    a. Customers who refer other paying customers can get credit towards instructions.
+    b. Send out an email to all customers with a custom referral code and an instant credit.
+    c. Referrers get credit to spend how they want and new customers get instant discounts.
+    d. Maybe look at the language Casper uses for this type of thing.
+
+0.14 Figure out a way to encourage customers to post their creations built from our instructions on social media and
+try to incentivize it.
+
+0.15 Either fix the download process for PDFs, or add something that tells people to right click and "Save As", etc. like
+AWS S3 does, and like that company I bought an Access license from does when downloading.
+
+0.16 Build Brian an Access database that will allow him to enter customer data there instead of trying to keep track of
+it all in a Word doc.
+
+0.17 See if I can incentivize reviews for instructions by sending people an email some number of days
+after their purchase and offer them some free/discounted instructions if they'll leave reviews of the
+instructions they've purchased.
+
+0.18 Look into adding AWS XRay, just to play around with it and get familiar.
+
+0.19 Check out and possibly implement http://railseventstore.org/ to create an audit log.
+
 1. See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
 is created, and the user can see it in "My Account", but should it be visible yet? Or should it just say something
 relating to not having heard back from paypal about the transaction yet? Maybe that's the way, if the order_status is nil,
@@ -10,9 +56,6 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
 2. Try to move logic out of store/products and the product_list partial and into the controller/models.
 
 3. Set up asset caching/expiry
-
-4. Set up a dev branch in github after I roll out to production. Then all changes should be to the dev branch, and
-merged into the master branch after confirmed that everything is working properly. Then deploy from master.
 
 5.  Issues:
     a. Make sure batch emails go out
@@ -76,7 +119,7 @@ merged into the master branch after confirmed that everything is working properl
 that I can put at the bottom of the layout, below the js loading, so I can have js load from a individual page, but still
 load after jquery, etc. Also, set up CDN/hosted file trick like on page 355 of the javascript/jquery book I've been reading.
 
-10. Upgrade gems/ruby. Gotta get off 1.9.3.
+10. Can get birthday from FB users. Maybe offer users a credit on their birthdays.
 
 GETTING READY FOR PROD #######################################################
 
@@ -147,7 +190,7 @@ or just nice to have?
 9. For the sake of smoothness, it might make sense to have TOS be its own page. That way, a guest can enter their email,
     and I don't have to give the impression that they need to check the TOS box again. Just a thought.
 
-10. Maybe make a fun maintenance page, or image for maintenance mode.
+10. Maybe make a fun maintenance page, or image for maintenance mode. Probably want to redo my 404, 422 and 500 pages.
 
 11. I just added the protected_attributes gem for trying to get on rails 4 quickly. Work on removing that by removing
 attr_accessible and setting up strong params. After I've done this, try to remove this line from
