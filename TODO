@@ -9,8 +9,8 @@ RESKIN:
 * Sort out font CORS issue
 
 Nav:
-* Get logo in the nav header to sit on the bottom of the nav properly
 * Fix collapsed nav styles
+* Fix dropdown store links when scrolled down
 * Make sure nav looks ok when in the process of shrinking, before collapsed nav kicks in.
 
 TODO:  List of the things left to do, in no particular order

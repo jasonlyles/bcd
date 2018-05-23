@@ -17,7 +17,20 @@
 }
 
 .navbar-brand-logo {
-  height: 70px;
+  height: 114px;
+}
+@media(max-width: 992px) {
+  .navbar-brand-logo {
+    height: 102px;
+  }
+}
+@media(max-width: 370px) {
+  .navbar-brand-logo {
+    position: fixed;
+    top: 2px;
+    right: 20px;
+    height: 80px;
+  }
 }
 
 .navbar-toggler {
