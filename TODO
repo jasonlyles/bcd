@@ -7,7 +7,6 @@ RESKIN:
 
 * Similar products cards at bottom of product details page are not equal widths.
 * Sort out font CORS issue
-* I broke the description of what you get with models and kits. It's the same as for instructions. Fix!
 
 Nav:
 * Get logo in the nav header to sit on the bottom of the nav properly
