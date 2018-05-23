@@ -23,34 +23,7 @@
   </head>
 
   <body>
-    <div class="container">
-      <div class="nav-scroller">
-        <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon">
-              <i class="fa fa-bars"></i>
-            </span>
-          </button>
-          <a class="navbar-brand" href="/"><%= image_tag('logo180x115.png', alt: "BCD logo", title: "Brick City Depot", class: 'img-fluid navbar-brand-logo') %></a>
-          <div id="navbar" class="collapse navbar-collapse">
-            <div>
-              <%= link_to "Home", root_path, class: 'p-2 text-white' %>
-              <%= link_to 'Instructions', store_products_path(product_type_name: 'Instructions'), class: 'p-2 text-white' %>
-              <%= link_to 'Models', store_products_path(product_type_name: 'Models'), class: 'p-2 text-white' %>
-              <%= link_to 'Kits', store_products_path(product_type_name: 'Kits'), class: 'p-2 text-white' %>
-              <%= link_to "Account", account_path, class: 'p-2 text-white' %>
-              <%= link_to "FAQ", faq_path, class: 'p-2 text-white' %>
-              <%= link_to "Contact", contact_path, class: 'p-2 text-white' %>
-              <%= link_to 'New User Tutorial', new_user_tutorial_path, class: 'p-2 text-white' %>
-            </div>
-            <div class="mr-auto"></div>
-            <div class="navbar-right">
-              <%= render :partial => 'shared/cart_info', locals: {cart: @cart} %>
-            </div>
-          </div>
-        </nav>
-      </div>
-    </div>
+    <%= render partial: 'shared/navigation' %>
 
     <main>
       <% unless current_page?(root_path) %>

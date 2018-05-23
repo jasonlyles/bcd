@@ -1,9 +1,49 @@
-<%= link_to "Home", root_path %>
-|
-<%= link_to "Store", store_path %>
-|
-<%= link_to "My Account", account_path %>
-|
-<%= link_to "FAQ", faq_path %>
-|
-<%= link_to "Contact", contact_path %>
+<div class="container">
+  <div class="nav-scroller">
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+      <a class="navbar-brand" href="/"><%= image_tag('logo180x115.png', alt: "BCD logo", title: "Brick City Depot", class: 'img-fluid navbar-brand-logo') %></a>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <%= link_to "Home", root_path, class: 'p-2 text-white nav-link' %>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle p-2 text-white" href="#" id="navbarStoreDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Store
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarStoreDropdown">
+              <%= link_to 'Instructions', store_products_path(product_type_name: 'Instructions'), class: 'dropdown-item' %>
+              <%= link_to 'Books', books_path, class: 'dropdown-item' %>
+              <%= link_to 'Kits', store_products_path(product_type_name: 'Kits'), class: 'dropdown-item' %>
+              <%= link_to 'Models', store_products_path(product_type_name: 'Models'), class: 'dropdown-item' %>
+            </div>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Books", books_path, class: 'p-2 text-white nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Account", account_path, class: 'p-2 text-white nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "FAQ", faq_path, class: 'p-2 text-white nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Contact", contact_path, class: 'p-2 text-white nav-link' %>
+          </li>
+          <li class="nav-item">
+            <%= link_to 'New User Tutorial', new_user_tutorial_path, class: 'p-2 text-white nav-link' %>
+          </li>
+        </ul>
+        <div class="mr-auto"></div>
+        <div class="navbar-right">
+          <%= render :partial => 'shared/cart_info', locals: {cart: @cart} %>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
