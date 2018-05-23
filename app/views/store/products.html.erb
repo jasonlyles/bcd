@@ -12,7 +12,7 @@
           <div class="col-md-6 d-flex">
             <div class="card mb-4 mt-4">
               <div class="category-header">
-                <%= link_to image_tag("/assets/category_images/#{category.name.to_snake_case}_logo.png", class: 'card-img-top img-fluid'), {controller: :store, action: :categories, product_type_name: @product_type.name, category_name: category.name} %>
+                <%= link_to image_tag("category_images/#{category.name.to_snake_case}_logo.png", class: 'card-img-top img-fluid'), {controller: :store, action: :categories, product_type_name: @product_type.name, category_name: category.name} %>
               </div>
               <div class="card-body">
                 <h3 class="card-title"><%= category.name %></h3>

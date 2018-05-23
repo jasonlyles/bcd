@@ -4,7 +4,12 @@ RESKIN:
 * need to style devise validation messages?
 * need to confirm password edit page looks good by getting an email sent for forgotten password
 * Category images need to be scaled down once I figure out which images I'm using.
-* Similar products cards may be screwy. will need to view with real product images.
+* Similar products cards at bottom of product details page are not equal widths.
+* Move book reviews to a tabbed section up top where reviews is in one tab, and description is in another.
+* Style models and kits teaser cards.
+* Sort out font CORS issue
+* Add 'Books' to nav, set up store dropdown, that has instructions, books, kits and models underneath.
+* On page details, try to make sure all circle images are the same size.
 Nav:
 * Get logo in the nav header to sit on the bottom of the nav properly
 * Fix collapsed nav styles
