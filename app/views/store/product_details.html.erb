@@ -26,13 +26,13 @@
             <h1><%= "#{@product.product_code} #{@product.name}" %></h1><br/>
             <% if @product.youtube_url? %>
               <a data-toggle="lightbox" data-gallery="product-images" href="https://www.youtube.com/watch?v=<%= @product.youtube_url %>">
-                <%= image_tag('youtube_logo.png', class: 'img-fluid border rounded-circle m-1 bg-white', style: 'width: 100px; height: 100px;') %>
+                <div class='border rounded-circle m-1 d-inline-block youtube-logo'></div>
               </a>
             <% end %>
             <% unless @product.images.empty? %>
               <% @product.images.each_with_index do |image, index| %>
                 <a href="<%= image.url %>" data-toggle="lightbox" data-gallery="product-images">
-                  <img src="<%= image.url.thumb %>" class="img-fluid m-1 border rounded-circle" style="width:100px;" itemprop="<%= 'image' if index == 0 %>"/>
+                  <div class="rounded-circle m-1 border img-fluid d-inline-block" itemprop="<%= 'image' if index == 0 %>" style="background-image: url(<%= image.url.thumb %>);background-size:cover;background-position:center;height:100px;width:100px;"></div>
                 </a>
               <% end %>
               <br/>
@@ -93,7 +93,6 @@
                       <%= number_to_currency(@product.price) %>
                     <% end %>
                     <br/>
-
                     <% unless @product.out_of_stock? || @product.is_free? %>
                       <%= link_to raw("<i class='fa fa-cart-plus'>&nbsp; <span style='font-size:larger'>Add to Cart</span></i>"), {action: "add_to_cart", product_code: @product.product_code}, class: 'btn btn-primary', data: {disable_with: 'Adding...'}, method: :post %>
                     <% end %>
