@@ -61,25 +61,23 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
-/*
-@media (min-width: 767px) {
-  .navbar {
-    padding: 20px 0;
-    border-bottom: none;
-    -webkit-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
-    -moz-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
-    transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+@media (max-width: 992px) {
+  .navbar-collapse {
+    padding: 0;
+    background-color: #FFF;
+    opacity: 0.95;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+    a {
+      color: black !important;
+    }
   }
 }
-*/
+
 .top-nav-collapse {
   padding: 0;
   background-color: #262C28;
   opacity: 0.95;
-}
-
-.top-nav-collapse a {
-  color: white;
 }
 
 .navbar-custom .top-nav-collapse {

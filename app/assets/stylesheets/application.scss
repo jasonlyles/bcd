@@ -45,12 +45,18 @@ h6 {
   height: 30px;
 }
 
-#index-notifications {
+#notifications {
+  width: auto;
   position: absolute;
   top: 100px;
   left: 150px;
   max-height: 40px;
+  /*
+
+
+
   width: 80%;
+  */
 }
 /* Class styles */
 .object-fit-contain {
@@ -172,15 +178,22 @@ h6 {
 .box-shadow {
   box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, .05);
 }
-
-.background {
+@mixin background($height) {
   background: image-url('standingoncorner.png') no-repeat right bottom scroll;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  height: 700px;
+  height: $height;
   background-attachment: fixed;
+}
+
+.background {
+  @include background(700px);
+}
+
+.short-background {
+  @include background(40px);
 }
 
 .field_with_errors label {

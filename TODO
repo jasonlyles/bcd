@@ -7,11 +7,12 @@ RESKIN:
 
 * Similar products cards at bottom of product details page are not equal widths.
 * Sort out font CORS issue
+* Footer background is messed up on mobile
 
 Nav:
 * Fix collapsed nav styles
-* Fix dropdown store links when scrolled down
-* Make sure nav looks ok when in the process of shrinking, before collapsed nav kicks in.
+* Make sure nav looks ok when in the process of shrinking, before collapsed nav kicks in. Will
+  need to either move cart/sign up/in out of the header, or make sure it collapses well.
 
 TODO:  List of the things left to do, in no particular order
 
