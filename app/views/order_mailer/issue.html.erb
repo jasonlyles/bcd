@@ -1,0 +1,33 @@
+<p>
+  Hi Brick City Depot.
+</p>
+<p>
+  I had an issue with this order:
+  <br/>
+  <br/>
+  <b>Order Status:
+  </b><%= @order.status %>
+  <br/>
+  <b>Confirmation ID:
+  </b><%= @order.request_id %>
+  <br/>
+  <b>Transaction ID:
+  </b><%= @order.transaction_id %>
+  <br/>
+  <b>Order Date:
+  </b><%= @order.created_at.to_s(:long_ordinal) %>
+</p>
+<p>
+  This is the problem:
+  <br/>
+  <br/>
+  <%= @comment %>
+</p>
+<p>
+  Please address the issue for me.
+  <br/>
+  <br/>
+  Thanks!
+  <br/>
+  <%= @name %>
+</p>

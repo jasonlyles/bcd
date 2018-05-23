@@ -1,33 +1,38 @@
-<% if @category.name && !@category.image %>
-  <%= h1(@category.name.capitalize) %>
-<% else %>
-  <div id="category_banner">
-    <%= image_tag(@category.image.url) if @category.image && @category.image.url %>
-  </div>
-<% end %>
-<br/>
-<p>
-  <%= @category.description %>
-</p>
-<br/>
-<% if @products.blank? %>
-  <br/>
-  <br/>
-  <div class="centered_text">
-    <%= "Sorry, there are currently no #{@category.name.capitalize} products for sale." %>
-  </div>
-<% end %>
-<%= paginate @products %>
-<div class="centered_products_table">
-  <table class="products_table">
-    <% @products.each_with_index do |product,index| %>
-      <% if index.even? %>
-        <tr></tr>
-      <% end %>
-      <td>
-        <%= render 'product_teaser_medium', :product => product %>
-      </td>
+<section class="content">
+  <div class="container">
+    <% if @category.name && @category.image.blank? %>
+      <h1><%= @category.name %></h1>
+    <% else %>
+      <div class="jumbotron category-jumbotron" style="background-image: url('<%= @category.image.url %>');">
+        <div class="row">
+          <div class="col-md-5 category-jumbotron-callout">
+            <h1 class="text-white brand-heading"><%= @category.name %></h1>
+            <br/>
+            <p class="lead text-white">
+              <%= @category.description %>
+            </p>
+            <p class="lead text-white">
+              Check out available models below
+            </p>
+          </div>
+        </div>
+      </div>
     <% end %>
-  </table>
-</div>
-<%= paginate @products %>
+    <% if @products.blank? %>
+      <br/>
+      <br/>
+      <div class="text-center">
+        <%= "Sorry, there are currently no #{@category.name.capitalize} products for sale." %>
+      </div>
+    <% end %>
+    <%= paginate @products %>
+    <div class="row">
+      <% @products.each do |product| %>
+        <div class="col-md-3 d-flex">
+          <%= render 'product_teaser_medium', product: product %>
+        </div>
+      <% end %>
+    </div>
+    <%= paginate @products %>
+  </div>
+</section>

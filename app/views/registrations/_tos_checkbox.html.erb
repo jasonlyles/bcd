@@ -1,0 +1,4 @@
+<div class="form-check">
+  <%= f.check_box :tos_accepted, {checked: @user.tos_accepted}, class: 'form-check-input' %>
+  <%= f.label :tos_accepted, raw("&nbsp; I have read and agree to the #{link_to 'Terms of Service', terms_of_service_path} and #{link_to 'Privacy Policy', privacy_policy_path, style: 'color:red;'}"), class: 'form-check-label' %>
+</div>

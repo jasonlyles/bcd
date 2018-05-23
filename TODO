@@ -1,63 +1,80 @@
+RESKIN:
+
+* Need to set some validation to not let a user create more than the max number of authentications allowed.
+* need to style devise validation messages?
+* need to confirm password edit page looks good by getting an email sent for forgotten password
+* Category images need to be scaled down once I figure out which images I'm using.
+* Similar products cards may be screwy. will need to view with real product images.
+Nav:
+* Get logo in the nav header to sit on the bottom of the nav properly
+* Fix collapsed nav styles
+* Make sure nav looks ok when in the process of shrinking, before collapsed nav kicks in.
+
 TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
 
-0.1 IPNs come to us for refunds. What should I do with those? Remove the item from the users account? Maybe I can just
+* It appears FB oauth is broken!!!
+
+* Add functionality for Brian to be able to add downloads to someones account for a given product,
+  in case they've had trouble downloading.
+
+* IPNs come to us for refunds. What should I do with those? Remove the item from the users account? Maybe I can just
 store them, and not flag that there was a 2nd IPN if the payment_status for the 2nd is 'Refunded'
 
-0.3 I think my batchmailer jobs other than the email campaign should update something somewhere that tells me how many
+* I think my batchmailer jobs other than the email campaign should update something somewhere that tells me how many
 emails were sent.
 
-0.6 Look at setting up either circleci or travis CI.
+* Look at setting up either circleci or travis CI.
 
-0.7 Add Faker gem to generate a lot of orders and customers in the local database to see if I need to add any indexes to
+* Add Faker gem to generate a lot of orders and customers in the local database to see if I need to add any indexes to
 speed up page load times.
 
-0.9 Try to get this app on Elastic Beanstalk or Digital Ocean
+* Try to get this app on Elastic Beanstalk or Digital Ocean
 
-0.10 In order to get Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
+* In order to get Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
 and verify it, maybe verify my FB and Twitter with google if possible.
 
-0.11 Fix up my specs so I don't have to use database cleaner, and use the truncation strategy, which slows down specs
+* Fix up my specs so I don't have to use database cleaner, and use the truncation strategy, which slows down specs
 
-0.12 MUST GET OFF PEERONS IMAGES!!!!! This means getting/creating images and moving our html parts lists to the website,
+* MUST GET OFF PEERONS IMAGES!!!!! This means getting/creating images and moving our html parts lists to the website,
 and not distribute them via downloads any more. I wonder if I couldn't create some sprites where I have
 an image that's not colored in, and color in according to a pieces HTML color code. That could allow me to make
 several requests for images instead of hundreds for a single parts list.
 
-0.13 After getting off Peerons images, add network marketing.
+* After getting off Peerons images, add network marketing.
     a. Customers who refer other paying customers can get credit towards instructions.
     b. Send out an email to all customers with a custom referral code and an instant credit.
     c. Referrers get credit to spend how they want and new customers get instant discounts.
     d. Maybe look at the language Casper uses for this type of thing.
 
-0.14 Figure out a way to encourage customers to post their creations built from our instructions on social media and
+* Figure out a way to encourage customers to post their creations built from our instructions on social media and
 try to incentivize it.
 
-0.15 Either fix the download process for PDFs, or add something that tells people to right click and "Save As", etc. like
+* Either fix the download process for PDFs, or add something that tells people to right click and "Save As", etc. like
 AWS S3 does, and like that company I bought an Access license from does when downloading.
 
-0.16 Build Brian an Access database that will allow him to enter customer data there instead of trying to keep track of
+* Build Brian an Access database that will allow him to enter customer data there instead of trying to keep track of
 it all in a Word doc.
 
-0.17 See if I can incentivize reviews for instructions by sending people an email some number of days
+* See if I can incentivize reviews for instructions by sending people an email some number of days
 after their purchase and offer them some free/discounted instructions if they'll leave reviews of the
 instructions they've purchased.
 
-0.18 Look into adding AWS XRay, just to play around with it and get familiar.
+* Look into adding AWS XRay, just to play around with it and get familiar.
 
-0.19 Check out and possibly implement http://railseventstore.org/ to create an audit log.
+* Check out and possibly implement http://railseventstore.org/ to create an audit log.
 
-1. See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
+* See if there's a better way to handle someone going to paypal and then back to the site without doing anything. An order
 is created, and the user can see it in "My Account", but should it be visible yet? Or should it just say something
 relating to not having heard back from paypal about the transaction yet? Maybe that's the way, if the order_status is nil,
 paypal hasn't talked to us yet, and we can say that we haven't heard back from paypal yet.
 
-2. Try to move logic out of store/products and the product_list partial and into the controller/models.
+* Try to move logic out of store/products and the product_list partial and into the controller/models.
 
-3. Set up asset caching/expiry
+* Set up asset caching/expiry
 
-5.  Issues:
+*  Issues:
     a. Make sure batch emails go out
     b. I'm serving Images through my image bucket name, and not the cname or cloudfront.
     c. Add some stuff to protect me from some of these hack requests. Check out: https://github.com/kickstarter/rack-attack/wiki/Example-Configuration
@@ -106,27 +123,27 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
         and then use them to generate params for urls used in emails, banner ads, etc.
     y. Seems I don't have sitemaps sent to Google yet. Fix!
 
-6. FOR THE BUSINESS, NOT THE WEBSITE: Get the script working that creates images for parts, and get it to upload to
+* FOR THE BUSINESS, NOT THE WEBSITE: Get the script working that creates images for parts, and get it to upload to
     the S3 image bucket. Then update all parts lists to use the cloudfront url to get images. Also, update the parts
     lists to use a logo I upload to S3 via cloudfront. That will ease the load of requests coming in for the logo to
     be served by Heroku.
 
-7. Set up Modernizr and https://github.com/ai/autoprefixer-rails
+* Set up Modernizr and https://github.com/ai/autoprefixer-rails
 
-8. See if there's any sweet animations I can put together using this: http://greensock.com/gsap
+* See if there's any sweet animations I can put together using this: http://greensock.com/gsap
 
-9. Move javascript loading to just below closing body tag. Create something like the content_for :title for javascript
+* Move javascript loading to just below closing body tag. Create something like the content_for :title for javascript
 that I can put at the bottom of the layout, below the js loading, so I can have js load from a individual page, but still
 load after jquery, etc. Also, set up CDN/hosted file trick like on page 355 of the javascript/jquery book I've been reading.
 
-10. Can get birthday from FB users. Maybe offer users a credit on their birthdays.
+* Can get birthday from FB users. Maybe offer users a credit on their birthdays.
 
 GETTING READY FOR PROD #######################################################
 
-1. Paypal!
+* Paypal!
     a. Do a test for a physical product against prod.
 
-2. Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
+* Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
     not work properly to submit the sitemap from the s3 url until the https prod version is set up, because all the urls
     in the sitemap are for https://www.brickcitydepot.com  Heroku's scheduler doesn't have options for weekly or monthly,
     but I can fake it by wrapping the call to the rake task in a bash if statement:
@@ -142,15 +159,15 @@ GETTING READY FOR PROD #######################################################
 ###########################
 THINGS I NEED TO DO FOR LAUNCH:
 
-1. Set up maintenance rake tasks(reap stale carts, etc.)
-2. Set up some sort of database backup task.
+* Set up maintenance rake tasks(reap stale carts, etc.)
+* Set up some sort of database backup task.
 
 ##########################
 
 ##########################
 IMMEDIATELY AFTER LAUNCH:
 
-1. Do a test transaction with just instructions, and one with just a physical item, and one with both.
+* Do a test transaction with just instructions, and one with just a physical item, and one with both.
 
 ##########################
 
@@ -160,132 +177,132 @@ IMMEDIATELY AFTER LAUNCH:
 
 V1.1: (Revisit this after 1.0 gets launched.)
 
-1. Make it so that the product_details action renders a page that says "We can't find that item, check out these other great items."
+* Make it so that the product_details action renders a page that says "We can't find that item, check out these other great items."
 instead of rendering a 404 if we can't find the item.
 
-2. Some way of creating discounts for a product, or multiple products, or for an entire category/subcategory
+* Some way of creating discounts for a product, or multiple products, or for an entire category/subcategory
 
-3. Have a way for customers to rate a product and leave comments about it.
+* Have a way for customers to rate a product and leave comments about it.
 
-4. Add expires_in shtuff to pages that don't have user-specific info, or things that don't change much. Examples would be /,
+* Add expires_in shtuff to pages that don't have user-specific info, or things that don't change much. Examples would be /,
    the product details pages, FAQ, contact, etc. This can avoid trips to the database for stuff that doesn't change often.
    Can check this out here: https://devcenter.heroku.com/articles/http-caching-ruby-rails
 
-5. I might want a way to sweep addresses out of the database after an order has been completed for 60 days. That minimizes
+* I might want a way to sweep addresses out of the database after an order has been completed for 60 days. That minimizes
    a users info in our database.
 
-6. Set up something for the instructions products model that keeps track of the version of the instructions, or at least
+* Set up something for the instructions products model that keeps track of the version of the instructions, or at least
    the parts lists. That way, I can add something to the html parts list that does a check of BCD.com when loading, looking for the latest
    version of the parts list. Send the version number to BCD, and if there's a newer version of the parts list, return the new
    version number, and the updates. (Replaced so and so brick with so and so) so that the user can decide if they want to
    upgrade or not. This will require setting up a new model for Updates related to instructions/parts lists
 
-7. Look into adding other countries for shipping, and see what that entails, what fields I might have to add/change.
+* Look into adding other countries for shipping, and see what that entails, what fields I might have to add/change.
    Make sure I'm in synch with what paypal returns.
 
-8. Work on an auto-logout for timed out sessions. Through devise, I have a mechanism to expire sessions, but the site doesn't
+* Work on an auto-logout for timed out sessions. Through devise, I have a mechanism to expire sessions, but the site doesn't
 actually redirect users to the home page, so it's not obvious they've timed out until their next request. Is this necessary,
 or just nice to have?
 
-9. For the sake of smoothness, it might make sense to have TOS be its own page. That way, a guest can enter their email,
+* For the sake of smoothness, it might make sense to have TOS be its own page. That way, a guest can enter their email,
     and I don't have to give the impression that they need to check the TOS box again. Just a thought.
 
-10. Maybe make a fun maintenance page, or image for maintenance mode. Probably want to redo my 404, 422 and 500 pages.
+* Maybe make a fun maintenance page, or image for maintenance mode. Probably want to redo my 404, 422 and 500 pages.
 
-11. I just added the protected_attributes gem for trying to get on rails 4 quickly. Work on removing that by removing
+* I just added the protected_attributes gem for trying to get on rails 4 quickly. Work on removing that by removing
 attr_accessible and setting up strong params. After I've done this, try to remove this line from
 config/initializers/session_store.rb: ActiveRecord::SessionStore::Session.attr_accessible :data, :session_id
 
-12. Had to comment out brakeman in Gemfile. Try adding it back periodically to see if it will play nice with the version
+* Had to comment out brakeman in Gemfile. Try adding it back periodically to see if it will play nice with the version
 of tilt I have installed
 
-13. Fill out details for the Lego neighborhood extras page.
+* Fill out details for the Lego neighborhood extras page.
 
-14. store/products page, work on the condition that checks if product_type name is Instructions. Eventually work on
+* store/products page, work on the condition that checks if product_type name is Instructions. Eventually work on
 making that check if the category has subcategories, and if so, display subcategories. If there are categories,
 display categories.
 
-15. I really need to spend some time cleaning and DRYing up my tests.
+* I really need to spend some time cleaning and DRYing up my tests.
 
-16. Look into pros/cons of moving from thin to unicorn on heroku
+* Look into pros/cons of moving from thin to unicorn on heroku
 
-17. Work on adding titles to most of the customer facing pages. Also, I might want to do a little more customization
+* Work on adding titles to most of the customer facing pages. Also, I might want to do a little more customization
    on the facebook meta tags to reflect the current page. Maybe the product pages could have the image be the medium image.
    The description could be the product description, etc. If I'm going to do that, I'm going to need to feed that data in
    on a per page basis via some helper. I think I may have to do one or more content_for-style helpers, feed them args
    and if those args are populated, use the values, else use a default. Similar to the way I set up the title in the
    application layout.
 
-18. Think about adding a Bricklink Seller model. This could be the basis of a preferred BL seller for a given model. Say
+* Think about adding a Bricklink Seller model. This could be the basis of a preferred BL seller for a given model. Say
     I arranged deals with various BL sellers to try and keep in stock the pieces needed to make a model. Then I could
     create a BL Seller, and have a join table with a BL seller ID and product ID  to tie preferred BL sellers to a given
     model.
 
-19. Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
+* Work through code and apply the law of demeter to where I've chained methods for object attributes. This ought to
     help me clean up testing code also.
 
-20. I need a public page for 503s, like I have 404s, 422s and 500s
+* I need a public page for 503s, like I have 404s, 422s and 500s
 
-21. Update Users Download Counts admin tool could use a nice search feature instead of the huge dropdown.
+* Update Users Download Counts admin tool could use a nice search feature instead of the huge dropdown.
 
-22. Figure out how to add a feature to allow a user to get an email about a product when it's back in stock.
+* Figure out how to add a feature to allow a user to get an email about a product when it's back in stock.
 
-23. Add a main flag for image model. Going forward, I can grab the image flagged main for a given product instead of
+* Add a main flag for image model. Going forward, I can grab the image flagged main for a given product instead of
 just the first image uploaded.
 
-24. Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
+* Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
 black aren't distinct enough from each other.
 
-25. I need some tagging to be able to group products, such as the buildings in the Amsterdam series, SanFran series,
+* I need some tagging to be able to group products, such as the buildings in the Amsterdam series, SanFran series,
 Richmond series, City Res, ComPaks, Alternatives etc. https://github.com/mbleigh/acts-as-taggable-on
 
 
 ########################################################################################################################
 V1.2 AND BEYOND:
 
-1. Work on caching, starting with the most visited pages. Look into adding some caching using memcached
+* Work on caching, starting with the most visited pages. Look into adding some caching using memcached
 
-2. Limit access to admin urls by IP
+* Limit access to admin urls by IP
 
-3. Break products into their respective subcategories for display in the store.
+* Break products into their respective subcategories for display in the store.
 
-4. I don't like the jquery alert popup I picked and I want to change it.
+* I don't like the jquery alert popup I picked and I want to change it.
 
-5. More Email Stuff!
+* More Email Stuff!
     a. Set up a promotion email style
 
-6. Add some functionality for cancelling admins accounts
+* Add some functionality for cancelling admins accounts
 
-7. Extend reporting on advertising campaigns. Right now I just have a total user count for an advertising campaign.
+* Extend reporting on advertising campaigns. Right now I just have a total user count for an advertising campaign.
 Maybe I could just have something that spit out a csv with all users created_at dates for a given campaign, and then we can
 import that data into some graphing something-or-other offline.
 
-8. For errors I don't know I need to rescue, I set up exception_notification. I might want to set up exception_logger
+* For errors I don't know I need to rescue, I set up exception_notification. I might want to set up exception_logger
     like I had for the reportal. https://github.com/undees/jchunky-exception_logger I think I'll see how exception_notification
     does first and if I feel I need to be logging to the database also, then I can maybe set up exception_logger also.
 
-9. Make it so ALL of my styled buttons give some indication they've been hovered over and clicked
+* Make it so ALL of my styled buttons give some indication they've been hovered over and clicked
 
-10. I might want to re-do the 422 and 500 pages a little bit. They seem... meh. Maybe freshen up the 404 page too.
+* I might want to re-do the 422 and 500 pages a little bit. They seem... meh. Maybe freshen up the 404 page too.
 
-11. For full-site maintenance mode, I'm currently using the stock Heroku mm page. I'd like to set up a custom mm page
+* For full-site maintenance mode, I'm currently using the stock Heroku mm page. I'd like to set up a custom mm page
 at public/maintenance_mode.html
 
-12. Content slider on main page:
+* Content slider on main page:
      a.) Need to set up to position text and image. Image can have no position, peg to the top or bottom, left or right. Then I
      need to be able to do the same thing for text.
 
-13. Go through controllers and rescue potential 404s the same way I did in the store/product_details action.
+* Go through controllers and rescue potential 404s the same way I did in the store/product_details action.
 
-14. Spending tiers will earn coupon codes worth $. $50, $100, $200 and $300 will get $5, $10, $20 and $30 coupon codes.
+* Spending tiers will earn coupon codes worth $. $50, $100, $200 and $300 will get $5, $10, $20 and $30 coupon codes.
 
-15. Make cart remove/update functionality ajax-y
+* Make cart remove/update functionality ajax-y
 
-16. Have an order fulfillment screen for physical orders in admin area where we can change status of orders. If an item
+* Have an order fulfillment screen for physical orders in admin area where we can change status of orders. If an item
 stays in a non-shipped status for a couple of days, send a reminder email to let us know to deal with it. (Update May 2014.
 The order fulfillment screen is done, but I don't yet have the reminder email set up.)
 
-17. Be able to 'gift' instructions. This tool will allow us to give a user free instructions, for whatever reason. There should be 2
+* Be able to 'gift' instructions. This tool will allow us to give a user free instructions, for whatever reason. There should be 2
 forms on the page. The first will allow us to look up a user by email, and then display the items they've already purchased from us.
 The 2nd form should only be displayed after the first one has been used, and will include a hidden field with the users email address
 in it. It will also list out every model we have instructions for and have a checkbox next to each for easily selecting multiple
@@ -295,7 +312,7 @@ that doesn't make sense. For those users, it might make more sense if there was 
 all instructions, always. We would want a tool like that for Brian and I and anybody else that helps us out greatly anyways. So then,
 the gifting tool really just needs a combobox to allow us to gift a user 1 set of instructions.
 
-18. Set up a way to create codes that we can send to buyers from Ebay. Then, as part of the checkout process on ebay, we can send them a
+* Set up a way to create codes that we can send to buyers from Ebay. Then, as part of the checkout process on ebay, we can send them a
 link to BCD, along with a code that allows them to download from us. This will give us more control over the process, end
 our relationship with yousendit, force the user to learn about our website (which will hopefully lead to future purchases on our website instead of ebay).
 This will entail either an API that can be called via an ebay checkout process, or for Brian to use a tool I set up that generates a
@@ -303,39 +320,39 @@ link with a guid that can be sent to the user. The guid will essentially be a un
 to the downloads they purchased. (Update - May 2014. I have this set up, but in order to use it via ebay, I'll have to work on setting up a
 custom ebay checkout.)
 
-19. Enhance the basic order reporting. I don't really like the way I did it.
+* Enhance the basic order reporting. I don't really like the way I did it.
 
-20. Add a friends page, where we link to Crowkillers, Dustin Crops, our Authorized Resellers, etc.
+* Add a friends page, where we link to Crowkillers, Dustin Crops, our Authorized Resellers, etc.
 
-21. See if it's possible to integrate with Rebrickable. They have an API at rebrickable.com/api that I could maybe use to get a users sets,
+* See if it's possible to integrate with Rebrickable. They have an API at rebrickable.com/api that I could maybe use to get a users sets,
 and then with those sets inventories, I could perhaps figure out how many of the pieces necessary to build one of our models a
 user already had. Then I could present them with that information: "You already have 85% of the parts necessary to build this model", or
 something like that. That would have to be on-demand sort of feature, that would shuffle a task into the background, and then
 present the information after some processing. This would probably be a really expensive operation, and it might not be worth it,
 but may be fun to try. This could possibly work using the get_set_match API, if we could pay him to upload our models as sets.
 
-22. Figure out some way to have codes that can be redeemed for x numbers of dollars.
+* Figure out some way to have codes that can be redeemed for x numbers of dollars.
 
-23. Admin products page could benefit from a live search feature.
+* Admin products page could benefit from a live search feature.
 
-24. Figure out how to accommodate Lisa's letters. This would be the first product with options. Options for this particular
+* Figure out how to accommodate Lisa's letters. This would be the first product with options. Options for this particular
 product would include the letter of the alphabet and a style. On the admin side, I could have a product_options table, with
 fields for product_id, name, description. When a user buys a product with an option, create a item_options record. This table
 would have item_id, and a number of optionx fields. Maybe 3-4 fields, so: option1, option2, etc. Make sure to include option
 information in the emails, what I send to paypal (just for display purposes), and to the order fulfillment junk on the back
 end. Probably the easiest way to do this would just be a static page.
 
-25. Craft (built-to-order) products should have an interest form on their product pages. The interest form could have dropdowns for
+* Craft (built-to-order) products should have an interest form on their product pages. The interest form could have dropdowns for
 options specifically for that product. After the user has filled out the form, they can then submit the form, and it
 will come to us in the form of email. In order to have the dropdowns with the options in the option families, I'll need to
 implement something similar to what I was thinking of in the previous item. Probably ought to just do a static page.
 
-26. Add a task that looks for users who haven't logged in for 3 months or so and send them a "come on back" email. The
+* Add a task that looks for users who haven't logged in for 3 months or so and send them a "come on back" email. The
 email would include products that had launched since the last time the user had logged in. This shouldn't run but once a
 month or so, and when the email is sent, it should update a timestamp for the user so I know not to send the user the same
 email a month later. Think about this some more...
 
-27. See about getting our domain added to some non-junk whitelists if our emails showing up in spam folders becomes a problem:
+* See about getting our domain added to some non-junk whitelists if our emails showing up in spam folders becomes a problem:
     http://stackoverflow.com/questions/294894/are-there-white-lists-for-yahoo-gmail-hotmail-and-aol
     Also check out some of these tips:
     http://emailmarketing.comm100.com/email-marketing-tutorial/emails-going-to-junk.aspx
@@ -343,7 +360,7 @@ email a month later. Think about this some more...
 ########################################################################################################################
 NICE TO HAVE EVENTUALLY:
 
-1. Reward users for passing the word on. If they tweet/FB/stumbleupon, digg,
+* Reward users for passing the word on. If they tweet/FB/stumbleupon, digg,
 or whatever, then unlock a special set of instructions. They will be able to
 download that set of instructions, for free. Might want there to only be one
 set of instructions they can download, or maybe let them choose from 3 or 4,
@@ -353,7 +370,7 @@ the session and something gets posted to flash for every page that user visits
 until they login/sign up. When they sign in/ sign up, will need to check to
 make sure they haven't previously unlocked instructions.
 
-2. Something fun to try would be "team buying", where users
+* Something fun to try would be "team buying", where users
 can recommend a set of instructions to a friend, and if x number of friends
 buy using the recommenders recommendation, then the recommender gets free
 instructions. Maybe instead of team buying, I can set it up so that every time
@@ -362,19 +379,19 @@ to friends to use. The coupon codes are good for maybe 25% off a set of instruct
 and if the coupon code gets used, then the person who shared the code also gets
 25% off a set of instructions.
 
-3. Try to decouple external resources as much as possible, so that I can
+* Try to decouple external resources as much as possible, so that I can
 quickly switch providers if Amazon or Paypal get too expensive.
 
-4. Might want to look into customizing PDFs using PDFKit, Railscast 220.
+* Might want to look into customizing PDFs using PDFKit, Railscast 220.
 
-5. Right now, behavior is such that when users go to checkout, I won't let
+* Right now, behavior is such that when users go to checkout, I won't let
 them buy instructions they've bought before. Might want to change this to
 allowing them to do so, but they're just buying more downloads at a discounted
 rate.
 
-6. i18n and l10n
+* i18n and l10n
 
-7. Add a refund form on the individual orders page in the admin console. In order to do refunds right, I would probably
+* Add a refund form on the individual orders page in the admin console. In order to do refunds right, I would probably
 have to dip in to paypals api and have some sort of little refund button right on the order
 details page. This button would kill the users link to the instructions, refund them and set the download records remaining = 0.
 

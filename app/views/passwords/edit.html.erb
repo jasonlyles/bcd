@@ -1,17 +1,22 @@
-<%= h1 'Change your password' %>
-<br/>
-<br/>
-<br/>
-<div id="forgot_password_div">
-  <%= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :reset_password_token %>
-  <%= f.password_field :password, :class => 'forgot_password_text_field', :placeholder => 'Password' %>
-  <br/>
-  <br/>
-  <%= f.password_field :password_confirmation, :class => 'forgot_password_text_field', :placeholder => 'Password Confirmation' %>
-  <br/>
-  <br/>
-  <%= f.submit "Change my password", :class => 'forgot_password_button', data: {disable_with: 'Changing...'} %>
-<% end %>
+<section class="content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <h1>Change your password</h1>
+        <br/>
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+        <%= devise_error_messages! %>
+        <%= f.hidden_field :reset_password_token %>
+        <div class="form-group">
+          <%= f.password_field :password, class: 'form-control', placeholder: 'Password' %>
+        </div>
+        <div class="form-group">
+          <%= f.password_field :password_confirmation, class: 'form-control', placeholder: 'Password Confirmation' %>
+        </div>
+        <br/>
+        <%= f.submit "Change my password", class: 'btn btn-primary', data: {disable_with: 'Changing...'} %>
+      <% end %>
+    </div>
+  </div>
 </div>
+</section>

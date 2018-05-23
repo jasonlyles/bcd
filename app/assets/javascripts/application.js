@@ -1,8 +1,40 @@
-//= require jquery.min
+//= require jquery
+//= require popper
+//= require bootstrap
 //= require jquery_ujs
+//= require jquery.carousel
 //= require nested_form
+//= require easing
+//= require_tree .
 
+$(window).scroll(function() {
+  if ($('.navbar').offset().top > 8) {
+    $('.fixed-top').addClass('top-nav-collapse');
+    $('#scroll-down').removeClass('d-lg-block');
+    $('.navbar-toggler').addClass('white-navbar-toggler');
+    $('.navbar-toggler-icon').addClass('white-navbar-toggler-icon');
+  } else {
+    $('.fixed-top').removeClass('top-nav-collapse');
+    $('#scroll-down').addClass('d-lg-block');
+    $('.navbar-toggler').removeClass('white-navbar-toggler');
+    $('.navbar-toggler-icon').removeClass('white-navbar-toggler-icon');
+  }
+});
 
+$(function() {
+  $('[data-toggle="popover"]').popover()
+})
+/*
+$(function() {
+  $('.page-scroll a').bind('click', function(e) {
+    var $anchor = $(this);
+    $('html, body').stop().animate({
+      scrollTop: $($anchor.attr('href')).offset().top
+    }, 1500, 'easeInOutExpo');
+    e.preventDefault();
+  })
+})
+*/
 //This function is used in the products/new and edit pages to populate the subcategory dropdown based on the category selection
 $(function() {
   $("#product_category_id").change(function() {

@@ -1,18 +1,4 @@
-<p>
-  <table class="cart_nav_buttons">
-    <tr>
-      <td>
-        <%= link_to "Return to Shopping", :back %>
-      </td>
-      <td>
-        |
-      </td>
-      <td>
-        <%= link_to "Checkout", checkout_path %>
-      </td>
-      <td>
-        <%= button_to "Empty Cart", empty_cart_path, :class => 'empty_cart_button', data: {disable_with: 'Emptying...'} %>
-      </td>
-    </tr>
-  </table>
-</p>
+<div class="float-right">
+  <%= link_to "Checkout", checkout_path, class: 'btn btn-primary btn-sm' %>
+  <%= link_to "Empty Cart", empty_cart_path, class: 'btn btn-primary btn-sm', data: {disable_with: 'Emptying...'}, method: :post %>
+</div>

@@ -1,62 +1,69 @@
-<%= h1("Thanks for your Order!") %>
-<br/>
-<br/>
-<b>What's next?</b>
-<p>
-  A confirmation email for this order will be sent to the email address you registered with us. You may log into your account at www.paypal.com to view details of this transaction.
-</p>
-<br/>
-<b>If you checked out as a guest</b>
-<p>
-  You will see in your confirmation email a link back to Brick City Depot. That link is especially for your order. When you click the link, you will be taken to a page on Brick City Depot that will have links that you can use to download your PDFs and
-  parts lists. If you don't see an email from us, check your junk or spam folders. If you still don't see an email, contact us and we'll get you your download link.
-  <% if @download_link %>
+<section class="content">
+  <div class="container">
+    <h1>Thank you for your Order!</h1>
     <br/>
     <br/>
+    <b>What's next?</b>
+    <p>
+      A confirmation email for this order will be sent to the email address you registered with us. You may log into your
+      <a href="https://www.paypal.com">PayPal</a>
+      account to view details of this transaction.
+    </p>
+    <b>If you checked out as a guest</b>
+    <p>
+      You will see in your confirmation email a link back to Brick City Depot. That link is especially for your order. When you click the link, you will be taken to a page on Brick City Depot that will have links that you can use to download your PDFs and
+      parts lists. If you don't see an email from us, check your junk or spam folders. If you still don't see an email, contact us and we'll get you your download link.
+      <% if @download_link %>
+        <br/>
+        <br/>
+        <br/>
+        Alternatively, you can just use this link to get to your downloads:
+        <%= link_to 'DOWNLOADS', @download_link %>
+        <br/>
+        <br/>
+        <div class="sad">
+          <p>
+            * Note that this link will not be here the next time you load this page, so in the future you'll have to link to your downloads from the email we send you.
+          </p>
+        </div>
+        <br/>
+      <% end %>
+    </p>
+    <b>If you checked out using your Twitter, Facebook or Brick City Depot account</b>
+    <p>
+      Check out your Brick City Depot account by clicking the
+      <%= link_to 'Account', account_path %>
+      link above. You'll be taken to a page where you can download the files you paid for.
+    </p>
+    <b>Ok, I have my instructions. Now what?</b>
+    <p>
+      If you have any questions about what's next, where to acquire parts to build the model, etc., click on the
+      <%= link_to 'FAQ', faq_path %>
+      link above where we'll answer a lot of your questions. If that page isn't helping you with your specific question, contact us via the
+      <%= link_to 'Contact', contact_path %>
+      link above and we'll help you with any concerns.
+    </p>
+    <p>
+      If for any reason you don't get a confirmation email, or you don't see instructions you paid for when you click the
+      <%= link_to 'Account', account_path %>
+      link, let us know and we'll get everything straightened out.
+    </p>
+    <p>
+      If you are new to Brick City Depot, check out the
+      <%= link_to 'Brick City Depot New User Tutorial', new_user_tutorial_path %>, where we'll tell you everything you need to know. If you are new to Bricklink, check out their
+      <%= link_to "New User Tutorial", "http://www.bricklink.com/help.asp?topicID=35" %>
+      to get a handle on how to use Bricklink.
+    </p>
+    <p>
+      If you purchased a physical model or kit from us and you're an international buyer (non-US), we will be contacting you shortly to arrange additional shipping as our prices for models and kits only include domestic shipping.
+    </p>
     <br/>
-    Alternatively, you can just use this link to get to your downloads:
-    <%= link_to 'DOWNLOADS', @download_link %>
+    <p>
+      Thanks!
+      <br/>
+      The Brick City Depot team
+    </p>
     <br/>
-    <br/>
-    <div class="sad">
-      <p>
-        * Note that this link will not be here the next time you load this page, so in the future you'll have to link to your downloads from the email we send you.
-      </p>
-    </div>
-    <br/>
-  <% end %>
-</p>
-<br/>
-<b>If you checked out using your Twitter, Facebook or Brick City Depot account</b>
-<p>
-  Check out your Brick City Depot account by clicking the "My Account" link above. You'll be taken to a page where you can download the files you paid for.
-</p>
-<br/>
-<b>Ok, I have my instructions. Now what?</b>
-<p>
-  If you have any questions about what's next, where to acquire parts to build the model, etc., click on the FAQ link above where we'll answer a lot of your questions. If that page isn't helping you with your specific question, contact us via the
-  "Contact" link above and we'll help you with any concerns.
-</p>
-<br/>
-<p>
-  If for any reason you don't get a confirmation email, or you don't see instructions you paid for when you click the "My Account" link, let us know and we'll get everything straightened out.
-</p>
-<br/>
-<p>
-  If you are new to Brick City Depot, check out the
-  <%= link_to 'Brick City Depot New User Tutorial', new_user_tutorial_path %>, where we'll tell you everything you need to know. If you are new to Bricklink, check out their
-  <%= link_to "New User Tutorial", "http://www.bricklink.com/help.asp?topicID=35" %>
-  to get a handle on how to use Bricklink.
-</p>
-<br/>
-<p>
-  If you purchased a physical model or kit from us and you're an international buyer (non-US), we will be contacting you shortly to arrange additional shipping as our prices for models and kits only include domestic shipping.
-</p>
-<br/>
-<br/>
-<br/>
-<p>
-  Thanks!
-  <br/>
-  The Brick City Depot team
-</p>
+    <%= image_tag('bri_jj_5.png', class: 'img-fluid sigfig') %>
+  </div>
+</section>

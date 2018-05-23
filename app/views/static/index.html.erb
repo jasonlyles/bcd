@@ -1,64 +1,204 @@
-<% content_for :head do %>
-  <script>
-    $(document).ready(function () {
-      $('#homepage_slideshow').cycle({timeout: 12000, pause: 1, prev: '#prev', next: '#next'});
-    });
-  </script>
-<% end %>
-<%= h1("Welcome to Brick City Depot") %>
-<br/>
-<p>At Brick City Depot, we focus on making affordable, high quality instructions to help you expand your Lego&reg; collection and building skills.</p>
-<br/>
-<div class="main_item_div" id="homepage_slideshow">
-  <% @updates.each do |item| %>
-    <div class="main_item">
-      <%= link_to image_tag(item.image), item.link, :class => 'image_link' if item.image? %>
-    </div>
-  <% end %>
+<div id="index-notifications" class="background">
+  <%= render partial: 'shared/notifications' %>
 </div>
-<div class="clear"></div>
-<div class="prev_next_centered">
-  &nbsp;<a id='prev' href="#">Prev</a>&nbsp; | &nbsp;<a id='next' href="#">Next</a>
-</div>
-<br/>
-<div class="featured_item float_right">
-  <% product = featured_item %>
-    <div class="news_item_header drop_shadow">
-      <h3>Featured Product</h3>
-    </div>
-    <div class="news_item drop_shadow">
-      <% unless product.nil? %>
-        <div class="news_item_image">
-          <%= link_to(image_tag(product.main_image.medium), {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') unless product.main_image.blank? %>
-        </div>
-        <br/>
-        <b>
-          <%= "#{product.product_code} #{product.name}" %>
-        </b>
-        <br/>
-        <%= snippet(product.description) %>
-        <%= link_to "More", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case} %>
-      <% end %>
-    </div>
-  </div>
-  <div class="under_construction float_left">
-    <div class="news_item_header drop_shadow">
-      <h3>On store shelves now!</h3>
-    </div>
-    <div class="news_item drop_shadow">
-      <div class="centered_text">
-        <%= link_to(image_tag('lego_neighborhood_book.png'), "/books") %>
+<section id="hero" class="background">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-7">
+        <h1 class="brand-heading">Welcome to Brick City Depot</h1>
+        <p class="intro-text">
+          At Brick City Depot, we make
+          <strong>affordable</strong>,
+          <strong>high quality</strong>
+          instructions to help you expand your Lego® collection and building skills.
+        </p>
       </div>
-      <br/>
-      Check it out, our first book! The book is published by No Starch Press and is available all over the internet, and also in Barnes & Noble stores. We'll teach you our process for creating our modulars, and give you the instructions on how to make the
-      corner building on the front to boot. Order now on
-      <a href="http://amzn.to/1qlDH26" target='_blank'>Amazon</a>,
-      <a href="http://www.nostarch.com/legoneighborhood/" target='_blank'>No Starch</a>
-      or
-      <a href="http://www.barnesandnoble.com/w/the-lego-neighborhood-book-brian-lyles/1119972426" target='_blank'>Barnes & Noble</a>.
-      <a href="/books">Learn More.</a>
-      After you've bought the book, you can find the companion files #{link_to 'here', books_path}.
     </div>
   </div>
-  <div class="clear"></div>
-  <br/>
+</section>
+<section id="news" class="pt-5 background">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10">
+        <h2 class="text-center text-white">News</h2>
+        <div id="c-carousel">
+          <div id="wrapper">
+            <div id="slider">
+              <% @updates.each_with_index do |update,i| %>
+                <div class="slide" style="background-image: url(<%= update.image %>);">
+                  <div class="slide-block">
+                    <h4><%= link_to update.title, update.link %></h4>
+                    <p><%= update.body %></p>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row"> <div class="col-md-7"> <h2 class="text-center text-white">News</h2> <div id="carouselIndicators" class="carousel slide" data-ride="carousel"> <ol class="carousel-indicators"> <% @updates.length.times do |u| %> <li
+    data-target="#carouselIndicators" data-slide-to="<%= u %>" class="<%= 'active' if u == 0 %>"></li> <% end %> </ol> <div class="carousel-inner"> <% @updates.each_with_index do |update,i| %> <div class="carousel-item card mb-4 box-shadow h-md-350 <%=
+    'active' if i == 0 %>"> <%= link_to image_tag(update.image, class: 'card-img img-fluid object-fit-contain', style: 'height: 348px'), update.link if update.image? %> </div> <% end %> </div> <a class="carousel-control-prev" href="#carouselIndicators"
+    role="button" data-slide="prev"> <span class="carousel-control-prev-icon" aria-hidden="true"></span> <span class="sr-only">Previous</span> </a> <a class="carousel-control-next" href="#carouselIndicators" role="button" data-slide="next"> <span
+    class="carousel-control-next-icon" aria-hidden="true"></span> <span class="sr-only">Next</span> </a> </div> </div> </div> -->
+    <section class="section-spacer background" style="height: 25px;"></section>
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="text-center text-white">Books</h2>
+        <div class="card flex-md-row mb-4 box-shadow h-md-250">
+          <div class="card-body d-flex flex-column align-items-start">
+            <strong class="d-inline-block mb-2 text-primary">Books</strong>
+            <h3 class="mb-0">
+              Pre-order now!
+            </h3>
+            <p class="card-text mb-auto">
+              Our 2nd book is on the way! The book is published by No Starch Press and is available all over the internet, and also in Barnes & Noble stores.
+            </p>
+            <%= link_to 'Continue reading', '/books' %>
+          </div>
+          <%= link_to(image_tag('lego_neighborhood_2.jpg', class: "card-img-right flex-auto feature", alt: "The Lego Neighborhood Book 2"), "/books") %>
+        </div>
+        <%= image_tag('brian_c4_rotated.png', class: 'img-fluid sigfig', style: 'margin-top: -30px; margin-left: 60px;') %>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section-spacer background" style="height: 40px;"></section>
+<section id="features" class="pt-5 background">
+  <div class="container">
+    <div class="row">
+      <% featured = featured_items %>
+        <% featured.each do |product| %>
+          <div class="col-md-6 offset-md-3">
+            <h2 class="text-center text-white">Featured Product</h2>
+            <div class="card flex-md-row mb-4 box-shadow h-md-250">
+              <div class="card-body d-flex flex-column align-items-start">
+                <strong class="d-inline-block mb-2 text-success">Instructions</strong>
+                <h3 class="mb-0">
+                  On Sale All
+                  <%= current_month %>!
+                </h3>
+
+                <% unless product.nil? %>
+                  <p class="text-muted"><%= "#{product.product_code} #{product.name}" %></p>
+                  <p class="card-text mb-auto"><%= snippet(product.description, word_count: 15) %></p>
+                  <%= link_to "Continue Reading", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case} %>
+                <% end %>
+              </div>
+              <% unless product.nil? || product.main_image.blank? %>
+                <%= link_to(image_tag(product.main_image.medium, class: 'card-img-right flex-auto d-none d-md-block feature', alt: "#{product.name}"), controller: :store, action: :product_details, product_code: product.product_code, product_name:
+                product.name.to_snake_case) %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="row">
+        <div class="col-md-5">
+          <h2 class="text-center text-white">Free instructions!</h2>
+          <div class="card h-md-250">
+            <%= link_to(image_tag('adventure_truck_banner.jpg', class: "img-fluid object-fit-contain", style: 'height: 248px', alt: "Adventure Truck"), account_path) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="scroll-down" class="background d-none d-lg-block">
+  <div class="container">
+    <i class="fa fa-angle-double-down fa-2x"></i>&nbsp;<h3 class='d-inline'>Scroll Down</h3>
+  </div>
+</section>
+
+<script type="text/javascript">
+  $(function () {
+    $('#slider').carouFredSel({
+      width: '100%',
+      align: false,
+      items: 3,
+      items: {
+        width: $('#wrapper').width() * 0.15,
+        height: 350,
+        visible: 1,
+        minimum: 1
+      },
+      scroll: {
+        items: 1,
+        timeoutDuration: 8000,
+        onBefore: function (data) {
+
+          //	find current and next slide
+          var currentSlide = $('.slide.active', this),
+            nextSlide = data.items.visible,
+            _width = $('#wrapper').width();
+
+          //	resize currentslide to small version
+          currentSlide.stop().animate({
+            width: _width * 0.15
+          });
+          currentSlide.removeClass('active');
+
+          //	hide current block
+          data.items.old.add(data.items.visible).find('.slide-block').stop().fadeOut();
+
+          //	animate clicked slide to large size
+          nextSlide.addClass('active');
+          nextSlide.stop().animate({
+            width: _width * 0.7
+          });
+        },
+        onAfter: function (data) {
+          //	show active slide block
+          data.items.visible.last().find('.slide-block').stop().fadeIn();
+        }
+      },
+      onCreate: function (data) {
+
+        //	clone images for better sliding and insert them dynamacly in slider
+        var newitems = $('.slide', this).clone(true),
+          _width = $('#wrapper').width();
+
+        $(this).trigger('insertItem', [newitems, newitems.length, false]);
+
+        //	show images
+        $('.slide', this).fadeIn();
+        $('.slide:first-child', this).addClass('active');
+        $('.slide', this).width(_width * 0.15);
+
+        //	enlarge first slide
+        $('.slide:first-child', this).animate({
+          width: _width * 0.7
+        });
+
+        //	show first title block and hide the rest
+        $(this).find('.slide-block').hide();
+        $(this).find('.slide.active .slide-block').stop().fadeIn();
+      }
+    });
+
+    //	Handle click events
+    $('#slider').children().click(function () {
+      $('#slider').trigger('slideTo', [this]);
+    });
+
+    //	Enable code below if you want to support browser resizing
+    $(window).resize(function () {
+
+      var slider = $('#slider'),
+        _width = $('#wrapper').width();
+
+      //	show images
+      slider.find('.slide').width(_width * 0.15);
+
+      //	enlarge first slide
+      slider.find('.slide.active').width(_width * 0.7);
+
+      //	update item width config
+      slider.trigger('configuration', [
+        'items.width', _width * 0.15
+      ]);
+    });
+
+  });
+</script>

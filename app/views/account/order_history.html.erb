@@ -1,63 +1,101 @@
-<%= h1("My Order History") %>
-<br/>
-<%= link_to "< My Account", account_path %>
-<br/>
-<br/>
-<div class="user_order_history">
-  <% @orders.each do |order| %>
-    <table>
-      <tr>
-        <td>
-          <b>Order Date:</b>
-        </td>
-        <td></td>
-        <td>
-          <%= order.created_at.to_s(:date_time12) %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <b>Confirmation ID:</b>
-        </td>
-        <td></td>
-        <td>
-          <%= order.request_id %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <b>Transaction ID:</b>
-        </td>
-        <td class="td_spacer"></td>
-        <td>
-          <%= order.transaction_id %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <b>Status:</b>
-        </td>
-        <td></td>
-        <td>
-          <% if order.status && order.status.upcase == "COMPLETED" %>
-            <b class="happy">
-              <%= order.status %>
-            </b>
-          <% else %>
-            <b class="sad">
-              <%= order.status %>
-            </b>
-            <%= render :partial => 'shared/help', :locals => {:title => 'Why is my order messed up?', :content => "We're not sure, but we want to fix it. Please email us at service@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if
-            available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.", :type => 'info'} %>
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <%= link_to "Order Details", {:controller => :account, :action => :order, :request_id => order.request_id} %>
-        </td>
-      </tr>
-    </table>
+<section class="content">
+  <div class="container">
+    <h1>My Order History</h1>
     <br/>
-  <% end %>
-</div>
+    <% @orders.each do |order| %>
+      <div class="card mb-4 mt-4">
+        <% header_style = order.status && order.status.upcase == "COMPLETED" ? 'bg-success text-white' : 'bg-danger text-white' %>
+          <div class="card-header <%= header_style %>">
+            <%= order.status %>
+            <% if order.status && order.status.upcase != "COMPLETED" %>
+              <a
+                tabindex="0"
+                role="button"
+                class="btn-lg text-white"
+                data-toggle="popover"
+                data-trigger="focus"
+                data-placement="bottom"
+                title="Why is my order messed up?"
+                data-content="We're not sure, but we want to fix it. Please email us at service@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if
+              available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.">
+                <i class="fa fa-question-circle"></i>
+              </a>
+              <button type="button" class="btn btn-light btn-sm" data-toggle="modal" data-target="#emailModal">
+                Email us about this order
+              </button>
+
+              <%= render partial: 'order_email_form', locals: {order: order} %>
+            <% end %>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive-md">
+              <table>
+                <tr>
+                  <td>
+                    <strong>Order Date:</strong>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= order.created_at.to_s(:date_time12) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Confirmation ID:</strong>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= order.request_id %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Transaction ID:</strong>
+                  </td>
+                  <td class="td_spacer"></td>
+                  <td>
+                    <%= order.transaction_id %>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <strong>Items Purchased:</strong>
+            <div class="table-responsive-md">
+              <table class="table table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col" colspan="2">Model</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Price Paid</th>
+                  </tr>
+                </thead>
+                <% order.line_items.each do |item| %>
+                  <tr>
+                    <% product = item.product %>
+                      <% image = product.images %>
+                        <% image_url = image[0].url.thumb if !image.blank? %>
+                          <td>
+                            <%= image_tag(image_url.url) if !image_url.nil? %>
+                          </td>
+                          <td class="align-middle">
+                            <%= "#{product.product_code} #{product.name}" %>
+                          </td>
+                          <td class="align-middle">
+                            <%= product.product_type.name %>
+                          </td>
+                          <td class="align-middle">
+                            <%= item.quantity %>
+                          </td>
+                          <td class="align-middle">
+                            <%= number_to_currency(item.total_price) %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </section>

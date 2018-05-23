@@ -1,15 +1,55 @@
-<%= link_to "Home", :root %>
-|
-<%= link_to "Store", store_path %>
-|
-<%= link_to "Contact", contact_path %>
-|
-<%= link_to "Terms of Service", terms_of_service_path %>
-|
-<%= link_to "Privacy Policy", privacy_policy_path, :style => "color:red;" %>
-<br/>
-&copy;
-<%= Date.today.year %>
-Brick City Depot, All Rights Reserved
-<br/>
-LEGO&reg; is a trademark of the LEGO Group of companies which does not sponsor, authorize, or endorse this site.
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 mt-3">
+      <div class="social_links">
+        Check us out on these sites
+        <br/>
+        <br/>
+        <a class="image-link" href="https://www.instagram.com/brickcitydepot/" target="_blank">
+          <i class="fa fa-instagram fa-3x"></i>
+        </a>
+        <a class="image-link" href="http://www.facebook.com/pages/Brick-City-Depot/137179266449728?ref=ts&fref=ts" target="_blank">
+          <i class="fa fa-facebook-square fa-3x"></i>
+        </a>
+        <a class="image-link" href="https://twitter.com/brickcitydepot" target="_blank">
+          <i class="fa fa-twitter-square fa-3x"></i>
+        </a>
+        <a class="image-link" href="http://www.bricklink.com/store.asp?p=lylesbk" target="_blank">
+          <%= image_tag('bricklink-logo.png', class: 'mb-4', alt: "http://www.bricklink.com/store.asp?p=lylesbk", title: "Check us out on Bricklink") %>
+        </a>
+      </div>
+    </div>
+    <div class="col-md-4 border-left mt-3  text-justify">
+      <div class="d-flex flex-row">
+        <div class="col-md-6">
+          <strong>About:</strong>
+          <br/>
+          <%= link_to "Contact", contact_path %>
+          <br/>
+          <%= link_to "Terms of Service", terms_of_service_path %>
+          <br/>
+          <%= link_to "Privacy Policy", privacy_policy_path, :style => "color:red;" %>
+        </div>
+        <div class="col-md-6">
+          <strong>Resources:</strong>
+          <br/>
+          <%= link_to "BCD Tutorial", new_user_tutorial_path %>
+          <br/>
+          <%= link_to "BrickLink Tutorial", "http://www.bricklink.com/help.asp?topicID=35", :target => '_blank' %>
+          <br/>
+          <%= link_to "Peeron Color Chart", "http://www.peeron.com/inv/colors", :target => '_blank' %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 border-left mt-3">
+      &copy;
+      <%= Date.today.year %>
+      Brick City Depot, All Rights Reserved
+      <br/>
+      LEGO&reg; is a trademark of the LEGO Group of companies which does not sponsor, authorize, or endorse this site.
+      <p>
+        <a href="#">Back to top</a>
+      </p>
+    </div>
+  </div>
+</div>

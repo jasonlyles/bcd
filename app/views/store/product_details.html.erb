@@ -1,166 +1,157 @@
-<% content_for :head do %>
-  <script type="text/javascript" src="#{Rails.application.config.sharethis_url}"></script>
-  <script type="text/javascript">
-    stLight.options({publisher: "ur-1371f185-fe25-98ba-28b6-848939c08f14", doNotHash: false, doNotCopy: false, hashAddressBar: false});
-  </script>
-<% end %>
-
-<%= content_for(:title, "Purchase custom Lego #{@product.product_type.name.downcase}: #{@product.name}") %>
-<div class="centered_text">
-  <h1>
-    <%= "#{@product.product_code} #{@product.name}" %>
-  </h1>
-</div>
-<% if @product.ready_for_public? %>
-  <div itemscope="<%= true %>" itemtype="http://schema.org/Product">
-    <link href="/<%= @product.product_code %>/<%= @product.name.to_snake_case %>" itemprop="url"></link>
-    <meta content="<%= @product.name %>" itemprop="name"/>
-    <meta content="<%= @product.product_code %>" itemprop="sku"/>
-    <span itemscope="<%= true %>" itemtype="http://schema.org/Brand">
-      <meta content="Brick City Depot" itemprop="name"/>
-    </span>
+<%= content_for(:title, "Custom Lego #{@product.product_type.name.downcase}: #{@product.name}") %>
+<section class="content">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <%= link_to @product.product_type.name, store_products_path(product_type_name: @product.product_type.name) %>
+        </li>
+        <li class="breadcrumb-item">
+          <%= link_to @product.category.name, {controller: :store, action: :categories, product_type_name: @product.product_type.name, category_name: @product.category.name} %>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page"><%= @product.code_and_name %></li>
+      </ol>
+    </nav>
     <br/>
-    <%= "#{@product.category.name}/#{@product.subcategory.name}" %>
-    <br/>
-    <table>
-      <tr>
-        <td rowspan="2">
-          <div id="slider">
+    <% if @product.ready_for_public? %>
+      <div itemscope="<%= true %>" itemtype="http://schema.org/Product">
+        <link href="/<%= @product.product_code %>/<%= @product.name.to_snake_case %>" itemprop="url"></link>
+        <meta content="<%= @product.name %>" itemprop="name"/>
+        <meta content="<%= @product.product_code %>" itemprop="sku"/>
+        <span itemscope="<%= true %>" itemtype="http://schema.org/Brand">
+          <meta content="Brick City Depot" itemprop="name"/>
+        </span>
+        <div class="row">
+          <div class="col-md-5">
+            <h1><%= "#{@product.product_code} #{@product.name}" %></h1><br/>
             <% if @product.youtube_url? %>
-              <a class="image_link" href="https://www.youtube.com/watch?v=<%= @product.youtube_url %>" rel="prettyPhoto[mixed]">
-                <%= image_tag('youtube_logo.png') %>
+              <a data-toggle="lightbox" data-gallery="product-images" href="https://www.youtube.com/watch?v=<%= @product.youtube_url %>">
+                <%= image_tag('youtube_logo.png', class: 'img-fluid border rounded-circle m-1 bg-white', style: 'width: 100px; height: 100px;') %>
               </a>
             <% end %>
             <% unless @product.images.empty? %>
               <% @product.images.each_with_index do |image, index| %>
-                <% if index == 0 %>
-                  <link href="<%= image.url.thumb %>" itemprop="image"></link>
-                <% end %>
-                <a class="image_link" href="<%= image.url %>" rel="prettyPhoto[mixed]">
-                  <%= image_tag(image.url.thumb) %>
+                <a href="<%= image.url %>" data-toggle="lightbox" data-gallery="product-images">
+                  <img src="<%= image.url.thumb %>" class="img-fluid m-1 border rounded-circle" style="width:100px;" itemprop="<%= 'image' if index == 0 %>"/>
                 </a>
               <% end %>
+              <br/>
+              <div class="w-50 text-center border rounded ml-auto mr-auto mt-3 image-enlarge">
+                <small class="text-white">Click on an image to enlarge</small>
+              </div>
             <% end %>
           </div>
-        </td>
-        <td id="product_details_description">
-          <p itemprop="description">
-            <%= @product.description %>
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td id="product_details_action_items">
-          <p>
-            <% if @product.is_physical_product? %>
-              <% if @product.out_of_stock? %>
-                <span class="sad">
-                  Out of Stock!
-                </span>
-              <% else %>
-                <span class="sad">
-                  Only
-                  <b>
-                    <%= @product.quantity %>
-                  </b>
-                  available!
-                </span>
-              <% end %>
-              <br/>
-              <b>
-                <%= @product.product_type.name %>
-              </b>
-              What do I get?
-            <% else %>
-              <b>Instructions only!</b>
-              What do I get?
-            <% end %>
-            <%= render :partial => 'shared/help', :locals => {:title => @product.product_type.comes_with_title, :content => @product.product_type.comes_with_description, :type => 'info'} %>
-            <br/>
-            <br/>
-            <% if @product.is_free? %>
-              <h2>FREE for users with an account!</h2>
-              <br/>
-              <p>
-                (Go to the #{link_to "My Account", account_path} page to download instructions)
-              </p>
-            <% else %>
-              <b>Price:</b>
-              <%= number_to_currency(@product.price) %>
-            <% end %>
-            <br/>
-          </p>
-          <div style="margin-left:12px;">
-            <% unless @product.out_of_stock? || @product.is_free? %>
-              <%= button_to "Add to Cart", {:action => "add_to_cart", :product_code => @product.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'} %>
-            <% end %>
+          <div class="col-md-7">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title mt-1 mb-0"><%= "#{@product.product_code} #{@product.name} #{@product.product_type.name}" %></h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-10">
+                    <p class="card-text" itemprop="description">
+                      <%= @product.description %>
+                    </p>
+                    <% if @product.is_physical_product? %>
+                      <% if @product.out_of_stock? %>
+                        <span class="sad">
+                          Out of Stock!
+                        </span>
+                      <% else %>
+                        <span class="sad">
+                          Only
+                          <strong>
+                            <%= @product.quantity %>
+                          </strong>
+                          available!
+                        </span>
+                      <% end %>
+                      <strong>
+                        <%= @product.product_type.name %>
+                      </strong>
+                    <% else %>
+                      <h5 class="d-inline">Instructions only!</h5>
+                    <% end %>
+                    What do I get?
+                    <a tabindex="0" role="button" class="btn-lg" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="<%= @product.product_type.comes_with_title %>" data-content="<%= @product.product_type.comes_with_description %>">
+                      <i class="fa fa-question-circle"></i>
+                    </a>
+                    <% if @product.is_free? %>
+                      <h5>
+                        <strong>FREE</strong>
+                        for users with an account!</h5>
+                      <br/>
+                      <p>
+                        (Go to the
+                        <%= link_to "Account page", account_path %>
+                        to download instructions)
+                      </p>
+                    <% else %>
+                      <br/>
+                      <br/>
+                      <h5 class="d-inline">Price:</h5>
+                      <%= number_to_currency(@product.price) %>
+                    <% end %>
+                    <br/>
+
+                    <% unless @product.out_of_stock? || @product.is_free? %>
+                      <%= link_to raw("<i class='fa fa-cart-plus'>&nbsp; <span style='font-size:larger'>Add to Cart</span></i>"), {action: "add_to_cart", product_code: @product.product_code}, class: 'btn btn-primary', data: {disable_with: 'Adding...'}, method: :post %>
+                    <% end %>
+                  </div>
+                  <div class="col-md-2">
+                    <%= image_tag("product_#{@product.designer}", class: 'sigfig-sm') %>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <h3>Be sure to share!</h3>
+                <div class="sharethis-inline-share-buttons mb-4 mt-4"></div>
+              </div>
+            </div>
           </div>
-        </td>
-      </tr>
-    </table>
-    <div class="clear"></div>
-    <br/>
-    <br/>
-    <div class="social_media">
-      <span class='st_facebook_vcount' displaytext='Facebook'></span>
-      <span class='st_twitter_vcount' displaytext='Tweet'></span>
-      <span class='st_pinterest_vcount' displaytext='Pinterest'></span>
-      <span class='st_googleplus_vcount' displaytext='Google +'></span>
-      <span class='st_digg_vcount' displaytext='Digg'></span>
-    </div>
-    <div class="clear"></div>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-  </div>
-  <script>
-
-    $(document).ready(function () {
-      $("a[rel^='prettyPhoto']").prettyPhoto({
-        theme: 'facebook',
-        social_tools: '<div class="pp_social"><div class="twitter"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div><div class="facebook">' +
-            '<iframe src="http://www.facebook.com/plugins/like.php?locale=en_US&href=' + location.href + '&amp;layout=button_count&amp;show_faces=true&amp;width=500&amp;action=like&amp;font&amp;colorscheme=light&amp;height=23&amp;share=true" scrolling="no" fram' +
-            'eborder="0" style="border:none; overflow:hidden; width:500px; height:23px;" allowTransparency="true"></iframe></div></div>',
-        deeplinking: false
-      });
-    });
-
-    %script { : type => "application/ld+json"
-    } {
-      "@context": "http://schema.org",
-      "@type": "Product",
-      "name": "#{ @product.name }",
-      "image": "#{host_url}#{ @product.images.first.url }",
-      "description": "#{ @product.description }",
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "USD",
-        "price": "#{ @product.price }",
-        "availability": "http://schema.org/InStock",
-        "seller": {
-          "@type": "Organization",
-          "name": "Brick City Depot"
-        }
-      }
-    }
-  </script>
-<% else %>
-  <br>
-  <br/>
-  <br/>
-  <br>
-    <div class="centered_text">
-      <div class="sad">
-        <b>
-          Sorry! This model is not currently available.
-        </b>
+        </div>
       </div>
+      <div class="clearfix"></div>
       <br/>
       <br/>
-      <br/>
-      <br/>
+      <hr/>
+      <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "Product",
+          "name": "<%= @product.name %>",
+          "image": '<%="#{host_url}#{ @product.images.first.url }"%>',
+          "description": "<%= @product.description %>",
+          "offers": {
+            "@type": "Offer",
+            "priceCurrency": "USD",
+            "price": "<%= @product.price %>",
+            "availability": "http://schema.org/InStock",
+            "seller": {
+              "@type": "Organization",
+              "name": "Brick City Depot"
+            }
+          }
+        }
+      </script>
+    <% else %>
+      <div class="text-center">
+        <div class="sad">
+          <strong>
+            Sorry! This model is not currently available.
+          </strong>
+        </div>
+      </div>
+    <% end %>
+    <div class="mt-5">
+      <%= render 'similar_products', similar_products: @similar_products, product: @product %>
     </div>
-  </br>
-<% end %>
-<%= render 'similar_products', similar_products: @similar_products %>
+  </div>
+</section>
+<script>
+  $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+    event.preventDefault();
+    $(this).ekkoLightbox({wrapping: false});
+  });
+</script>
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5af201337782d000113e15aa&product=inline-share-buttons' async='async'></script>

@@ -140,6 +140,10 @@
         <%= f.label :featured %>
         <%= f.check_box :featured, {:checked => product.featured},1,0 %>
       </div>
+      <div class="field">
+        <%= f.label :designer %>
+        <%= f.select :designer, ['brian_lyles','jason_lyles']%>
+      </div>
     <% end %>
     <br/>
     <div class="actions">

@@ -1,31 +1,25 @@
-<div class="products_detail_thumb drop_shadow">
-  <div class="centered_product_thumb">
-    <div class="thumb_image_div">
-      <% image = product.images %>
-        <% image_url = image[0].url.thumb.url unless image.blank? %>
-          <%= link_to(image_tag(image_url), {:action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case}, :class => 'image_link') if !image_url.blank? %>
-        </div>
-        <div class="thumb_details">
-          <div class="model_name">
-            <%= link_to product.name, {:action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case} %>
-          </div>
-        </div>
-        <b>Model #:</b>
-        <%= product.product_code %>
-        <% unless product.is_free? %>
-          <br/>
-          <b>Price:</b>
-          <%= number_to_currency(product.price) %>
-        <% end %>
-        <br/>
-        <br/>
-        <div class="add_to_cart_div">
-          <% if product.is_free? %>
-            <h2>FREE</h2>
-          <% else %>
-            <%= button_to "Add to Cart", {:action => "add_to_cart", :product_code => product.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'} %>
-          <% end %>
-        </div>
-        <br/>
-      </div>
+<div class="card mb-4 mt-4">
+  <% unless product.main_image.blank? %>
+    <div class="similar-product-header">
+      <%= link_to(image_tag(product.main_image.medium, class: 'card-img-top img-fluid'), {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case}) %>
     </div>
+  <% end %>
+  <div class="card-body">
+    <h5 class="card-title"><%= link_to product.code_and_name, {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case} %></h5>
+  </div>
+  <div class="card-footer card-footer-no-border bg-transparent">
+    <% if product.is_free? %>
+      <span class="h4">
+        <strong>FREE</strong>
+      </span>
+    <% else %>
+      <span class="hero-price">
+        <%= number_to_currency(product.price) %>
+      </span>
+      <div class="mt-2">
+        <%= link_to raw("<i class='fa fa-cart-plus'>&nbsp; <span style='font-size:larger'>Add to Cart</span></i>"), {action: "add_to_cart", product_code: product.product_code}, class: 'btn btn-primary btn-block', data: {disable_with: 'Adding...'}, method:
+        :post %>
+      </div>
+    <% end %>
+  </div>
+</div>

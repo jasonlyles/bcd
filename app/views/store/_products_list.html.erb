@@ -1,48 +1,41 @@
-<br/>
 <% if products.blank? %>
   <br/>
-  <br/>
-  <div class="centered_text">
+  <div class="text-center">
     <%= "Sorry, there are currently no #{product_type} for sale." %>
   </div>
 <% end %>
 <%= paginate products %>
-<div class="centered_products_table">
-  <table class="products_table">
-    <% until products.length == 0 %>
-      <% products2 = products.to_a.pop(4).reverse! %>
-        <tr>
-          <% products2.each do |p| %>
-            <td>
-              <div class="products_detail_thumb drop_shadow">
-                <div class="centered_product_thumb">
-                  <div class="thumb_image_div">
-                    <% image = p.images %>
-                      <% image_url = image[0].url.thumb.url unless image.blank? %>
-                        <%= link_to(image_tag(image_url), {:action => :product_details, :product_code => p.product_code, :product_name => p.name.to_snake_case}, :class => 'image_link') if !image_url.blank? %>
-                      </div>
-                      <br/>
-                      <div class="thumb_details">
-                        <div class="model_name">
-                          <%= link_to p.name, {:action => :product_details, :product_code => p.product_code, :product_name => p.name.to_snake_case} %>
-                        </div>
-                        <b>Model #:</b>
-                        <%= p.product_code %>
-                        <br/>
-                        <b>Price:</b>
-                        <%= number_to_currency(p.price) %>
-                      </div>
-                      <br/>
-                      <div class="add_to_cart_div">
-                        <%= button_to "Add to Cart", {:action => "add_to_cart", :product_code => p.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'} %>
-                      </div>
-                      <br/>
-                    </div>
+<table class="products_table">
+  <% products.each do |p| %>
+    <tr>
+      <td>
+        <div class="products_detail_thumb drop_shadow">
+          <div class="centered_product_thumb">
+            <div class="thumb_image_div">
+              <% image = p.images %>
+                <% image_url = image[0].url.thumb.url unless image.blank? %>
+                  <%= link_to(image_tag(image_url), {:action => :product_details, :product_code => p.product_code, :product_name => p.name.to_snake_case}, :class => 'image_link') if !image_url.blank? %>
+                </div>
+                <br/>
+                <div class="thumb_details">
+                  <div class="model_name">
+                    <%= link_to p.name, {:action => :product_details, :product_code => p.product_code, :product_name => p.name.to_snake_case} %>
                   </div>
-                </td>
-              <% end %>
-            </tr>
-          <% end %>
-        </table>
-      </div>
-      <%= paginate products %>
+                  <b>Model #:</b>
+                  <%= p.product_code %>
+                  <br/>
+                  <b>Price:</b>
+                  <%= number_to_currency(p.price) %>
+                </div>
+                <br/>
+                <div class="add_to_cart_div">
+                  <%= button_to "Add to Cart", {:action => "add_to_cart", :product_code => p.product_code}, :class => 'add_to_cart_button', data: {disable_with: 'Adding...'} %>
+                </div>
+                <br/>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+    <%= paginate products %>

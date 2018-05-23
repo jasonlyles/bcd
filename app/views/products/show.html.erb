@@ -47,7 +47,7 @@
 </p>
 <p>
   <b>Discount percentage:</b>
-  <%= "#{@product.discount_percentage.to_i}"% %>
+  <%= "#{@product.discount_percentage.to_i}%" %>
 </p>
 <p>
   <b>Price:</b>
@@ -82,6 +82,10 @@
     <br/>
     <iframe frameborder="0" height="315" src="https://www.youtube.com/embed/<%= @product.youtube_url %>?rel=0" width="420"></iframe>
   <% end %>
+</p>
+<p>
+  <b>Designer:</b>
+  <%= @product.designer %>
 </p>
 <br/>
 <%= link_to "Add Image", new_image_path(:product_id => @product.id) %>

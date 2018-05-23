@@ -1,9 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta content="m6aCl_TMUyZi-kR1BIijxqWbYrix12cNmvBR7VWX6U0" name="google-site-verification"/>
-    <meta content="width=device-width" media="all" name="viewport"/>
     <meta content="<%= meta_keywords %>" name="keywords"/>
     <meta content="<%= meta_description %>" name="description"/>
     <meta content="<%= opengraph_metadata[:image] %>" property="og:image"/>
@@ -14,124 +15,83 @@
     <meta content="<%= opengraph_metadata[:url] %>" property="og:url"/>
     <%= favicon_link_tag 'favicon.ico' %>
     <title><%= content_for?(:title) ? yield(:title) : "Brick City Depot" %></title>
-    <!--[if lt IE 9]> <script async src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script> <![endif]-->
-    <%= stylesheet_link_tag 'application.css' %>
-    <!--[if IE]> <%= stylesheet_link_tag 'ie', :media => "all" %> <![endif]-->
+    <%= stylesheet_link_tag 'application' %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
-    <!--[if !IE7]> <style type="text/css"> <div class="content" style="display:table;height:100%;"></div> </style> <![endif]-->
     <%= yield :head %>
-
   </head>
+
   <body>
-    <div class="content">
-      <div class="logo">
-        <%= image_tag('logo180x115.png', alt: "BCD logo", title: "Brick City Depot") %>
-      </div>
-      <div class="header"></div>
-      <div class="navigation">
-        <%= render :partial => 'shared/navigation' %>
-      </div>
-      <div class="header_spacer"></div>
-      <div class="rounded_corner_cart_tie-in">
-        <%= image_tag('bottom_right_rounded_corner.png', alt: "bottom_right_rounded_corner", title: "Corner") %>
-      </div>
-      <div class="cart_stuff">
-        <%= render :partial => 'shared/cart_info', locals: {cart: @cart} %>
-      </div>
-      <div class="clear"></div>
-      <div class="sidebar_wrapper">
-        <div class="sidebar_div1">
-          <%= render :partial => 'shared/categories', locals: {categories: @categories, alternatives: @alternatives, %>
-          product_type: @product_type, price_groups: @price_groups}
-        <% end %>
-      </div>
-      <div class="sidebar_div3">
-        <%= render :partial => 'shared/resources' %>
+    <div class="container">
+      <div class="nav-scroller">
+        <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon">
+              <i class="fa fa-bars"></i>
+            </span>
+          </button>
+          <a class="navbar-brand" href="/"><%= image_tag('logo180x115.png', alt: "BCD logo", title: "Brick City Depot", class: 'img-fluid navbar-brand-logo') %></a>
+          <div id="navbar" class="collapse navbar-collapse">
+            <div>
+              <%= link_to "Home", root_path, class: 'p-2 text-white' %>
+              <%= link_to 'Instructions', store_products_path(product_type_name: 'Instructions'), class: 'p-2 text-white' %>
+              <%= link_to 'Models', store_products_path(product_type_name: 'Models'), class: 'p-2 text-white' %>
+              <%= link_to 'Kits', store_products_path(product_type_name: 'Kits'), class: 'p-2 text-white' %>
+              <%= link_to "Account", account_path, class: 'p-2 text-white' %>
+              <%= link_to "FAQ", faq_path, class: 'p-2 text-white' %>
+              <%= link_to "Contact", contact_path, class: 'p-2 text-white' %>
+              <%= link_to 'New User Tutorial', new_user_tutorial_path, class: 'p-2 text-white' %>
+            </div>
+            <div class="mr-auto"></div>
+            <div class="navbar-right">
+              <%= render :partial => 'shared/cart_info', locals: {cart: @cart} %>
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
-    <div class="main">
-      <% if notice %>
-        <div id="alert_wrapper">
-          <div id="speech_bubble_thing">
-            <%= image_tag('speech_bubble_thing.png') %>
-          </div>
-          <div id="lego_head">
-            <%= image_tag('happy_head.png') %>
-          </div>
-          <div id="notice">
-            <div id="alert_message">
-              <%= notice %>
-            </div>
-          </div>
-        </div>
-        <br/>
-        <br/>
-      <% end %>
-      <% if alert %>
-        <div id="alert_wrapper">
-          <div id="speech_bubble_thing">
-            <%= image_tag('speech_bubble_thing.png') %>
-          </div>
-          <div id="lego_head">
-            <%= image_tag('happy_head.png', height: '50px') %>
-          </div>
-          <div id="alert">
-            <div id="alert_message">
-              <%= alert %>
-            </div>
-          </div>
-        </div>
-        <br/>
-        <br/>
-      <% end %>
-      <div class="clear"></div>
-      <div class="centered_text">
-        <h1>
-          <%= yield(:h1) || "Welcome to Brick City Depot" %>
-        </h1>
-      </div>
-      <div class="centered_text">
-        <h2>
-          <%= yield(:h2) %>
-        </h2>
-      </div>
-      <div class="clear"></div>
-      <% if @cart && @cart.errors.any? %>
-        <ul class="cart_errors">
-          <% @cart.errors.full_messages.each do |msg| %>
-            <li class="cart_error">
-              <%= msg %>
-            </li>
+
+    <main>
+      <% unless current_page?(root_path) %>
+        <div class="header-spacer"></div>
+        <%= render partial: 'shared/notifications' %>
+        <div class="container">
+          <% if @cart && @cart.errors.any? %>
+            <ul class="cart_errors">
+              <% @cart.errors.full_messages.each do |msg| %>
+                <li class="cart_error">
+                  <%= msg %>
+                </li>
+              <% end %>
+            </ul>
           <% end %>
-        </ul>
+        </div>
       <% end %>
-      <div class="main_content">
-        <%= yield %>
-      </div>
-    </div>
-  </div>
-  <div class="footer">
-    <%= render :partial => 'shared/footer' %>
-  </div>
-  <%= render :partial => 'shared/google_analytics_code' %>
-  <%= render :partial => 'shared/google_social_profile' %>
-</body>
-<script>
 
-  window.onpageshow = function () {
-    var cookie = getCookie('show_thank_you');
-    if (cookie) {
-      window.location.replace('/thank_you')
-    }
-  }
+      <%= yield %>
+    </main>
 
-  function getCookie(name) {
-    var value = "; " + document.cookie;
-    var parts = value.split("; " + name + "=");
-    if (parts.length == 2) 
-      return parts.pop().split(";").shift();
-    }
-</script>
+    <footer class="footer">
+      <%= render :partial => 'shared/footer' %>
+    </footer>
+    <%= render :partial => 'shared/google_analytics_code' %>
+    <%= render :partial => 'shared/google_social_profile' %>
+    <script>
+      window.onpageshow = function () {
+        var cookie = getCookie('show_thank_you');
+        if (cookie) {
+          window.location.replace('/thank_you')
+        }
+      }
 
+      function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) {
+          return parts.pop().split(";").shift();
+        }
+      }
+    </script>
+  </body>
 </html>

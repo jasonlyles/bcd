@@ -1,16 +1,16 @@
 <% if similar_products.length > 0 %>
-  <b>
+  <h3>
+    Love
+    <%= product.name %>?
+  </h3>
+  <p>
     Check out these other great models from Brick City Depot
-  </b>
-  <div class="centered_products_table">
-    <table class="products_table">
-      <tr>
-        <% similar_products.each do |product| %>
-          <td>
-            <%= render 'product_teaser', product: product %>
-          </td>
-        <% end %>
-      </tr>
-    </table>
+  </p>
+  <div class="row">
+    <% similar_products.each do |product| %>
+      <div class="col-sm-6 col-md-3 d-flex">
+        <%= render 'product_teaser', product: product %>
+      </div>
+    <% end %>
   </div>
 <% end %>

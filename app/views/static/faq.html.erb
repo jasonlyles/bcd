@@ -1,142 +1,241 @@
-<%= h1('FAQs') %>
-<br/>
-Questions
-<a name="top"></a>
-<p>1.
-  <a href="#faq1">What do I get when I buy instructions?</a>
-</p>
-<p>2.
-  <a href="#faq2">Your instructions seem kind of expensive. Just how good are they?</a>
-</p>
-<p>3.
-  <a href="#faq3">Where can I find the pieces necessary to complete a model?</a>
-</p>
-<p>4.
-  <a href="#faq4">How much will it cost to build a model?</a>
-</p>
-<p>5.
-  <a href="#faq5">Why don&apos;t your color names or part numbers match official Lego color names/part numbers?</a>
-</p>
-<p>6.
-  <a href="#faq6">How do I use the BrickLink XML parts list?</a>
-</p>
-<p>7.
-  <a href="#faq7">What if I don't understand some part of your instructions or the parts lists appear to be errant?</a>
-</p>
-<p>8.
-  <a href="#faq8">Do you issue refunds?</a>
-</p>
-<p>9.
-  <a href="#faq9">Do you use my email address or Twitter/Facebook info for nefarious purposes?</a>
-</p>
-<p>10.
-  <a href="#faq10">How do I know my credit card information is safe?</a>
-</p>
-<p>11.
-  <a href="#faq11">Why buy through this website and not buy from you on ebay?</a>
-</p>
-<p>12.
-  <a href="#faq12">Where can I get the companion files for the Lego Neighborhood Book?</a>
-</p>
-<br/>
-<a name="faq1">1. What do I get when I buy instructions?</a>
-<p>
-  Our undying love. Oh, and the best instructions package on the market. We include a pdf with complete picture instructions with only a minimal amount of text, so our instructions translate into any language in the world. :) Also, we give you 2
-  different parts lists you can use to acquire the pieces you'll need to build our models. You get an XML list that you can use to upload the parts to your Bricklink wanted list. You'll also get an HTML parts list that will open in your default browser
-  when you double-click on it. This parts list has images and descriptions of the parts, as well as part colors and quantities and links to Bricklink where you can find the individual pieces. If you have a newer browser, you can even use the HTML list
-  to assemble custom Bricklink XML based on what pieces you need to complete a model. We'll tell you all about it in our
-  <%= link_to 'New User Tutorial', new_user_tutorial_path %>. Last, but not least, you get our support. If you don't understand some part of the instructions or parts lists, let us know so we can help you figure it out.
-</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq2">2. Your instructions seem kind of expensive. Just how good are they?</a>
-<p>
-  They're the best. Each of our models can take weeks worth of time to design, build and create instructions and parts lists. This is especially true for the modular buildings. There truly is a lot of work going into each model and going into making
-  sure that our instructions and parts lists are very clear, error free and are the best on the market. Check out a sample:
-</p>
-<div id="sample_instruction">
-  <%= image_tag 'sample_instruction.jpg' %>
-</div>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq3">3. Where can I find the pieces necessary to complete a model?</a>
-<p>
-  Lego has a Pick A Brick feature that will allow you to search for many of the parts you need on their website. However, their selection is very limited relative to all the pieces that Lego produces. We send all our customers to
-  http://www.bricklink.com Bricklink is a huge aftermarket where thousands of sellers from around the world sell millions of Lego parts. Pretty much anything Lego has ever made, in any color they've ever made it in, can be found here. Careful, it's
-  easy to lose yourself on this site! For more information on how to use Brick City Depot parts lists with Bricklink, zoom on over to our
-  <%= link_to 'New User Tutorial', new_user_tutorial_path %>.
-</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq4">4. How much will it cost to build a model?</a>
-<p>
-  We get asked this question a lot and the problem is that there is no good answer. First of all, we don't know what parts you already have, and are willing to commit to building the model. Second, the market price of parts fluctuates according to the
-  law of supply and demand, and prices can vary wildly from one Bricklink seller to another. Third, the price of building a model can vary greatly depending on your willingness to use used parts or if you have to use only new parts. Fourth, we don't
-  know how much of a bargain shopper you are. Some people are content to try and get as many of the needed pieces from as few Bricklink stores as possible. Other people will have several stores open in different browser tabs at the same time and cruise
-  the inventory of several stores looking for the best prices. Using this strategy can save you a lot of money. While we don't have a good estimate for how much it will cost you to build any of our models, we can say this: we try to use widely
-  available parts, and don't like spending 50 cents or more on a single part ourselves. We try our best to use parts that can be had for 15 cents or less per piece. Obvious exceptions would be larger bricks, plates, slopes or tiles we have to use to
-  make the model look better or more structurally sound.
-</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq5">5. Why don&apos;t your color names or part numbers match official Lego color names/part numbers?</a>
-<p>
-  The reason for this is simple. We don't adhere to official Lego color names and part numbers because of Lego's very limited parts selection in their Pick A Brick feature. We send all our customers to Bricklink, and as such, we use the same color
-  names and part numbers that Bricklink uses to make it easier for our customers to find the parts necessary to complete our models. Most of the time Lego and Bricklink use the same part numbers and color names, but this isn't always the case. Where it
-  differs, we favor Bricklink.
-</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq6">6. How do I use the BrickLink XML parts list?</a>
-<p>
-  This can be somewhat complex for the first-timer. Please refer to our
-  <%= link_to 'New User Tutorial', new_user_tutorial_path %>
-  for information on how to use both our HTML and XML parts lists.
-</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq7">7. What can I do if I don't understand some part of your instructions, or the parts lists appear to be errant?</a>
-<p><%= link_to 'Contact us', contact_path %>. You're probably not the only one who doesn't get it. We will help walk you through it, and if we agree that the instructions/parts lists are errant or confusing enough, we will fix the instructions and
-  let you know when a new version is available. When we fix instructions, you get 1 additional download for the affected item.</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq8">8. Do you issue refunds?</a>
-<p>Per our policy, we only issue refunds for a set of instructions that has not been downloaded. We keep track of all user downloads. If you have not downloaded a specific set of instructions from us, you are eligible for a refund.</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq9">9. Do you use my email address or Twitter/Facebook info for nefarious purposes?</a>
-<p>We&apos;re not at all nefarious. We have no intentions of selling your information, or using anything from your Twitter/Facebook accounts other than your email address. We need your email address as a unique identifier to make sure that you'll be
-  able to access your instruction downloads. You can choose to receive as much or as little email as you want by setting email preferences
-  <%= link_to 'here', :controller => :registrations, :action => :edit %>. If you decide to use your Facebook or Twitter logins to access Brick City Depot, we do not store your Facebook/Twitter passwords, only the email address used to identify you. We
-    DO NOT share ANY of your information with ANYONE... unless, you know, you're a criminal and we have to comply with authorities. So don't be a criminal and we'll be cool.</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq10">10. How do I know my credit card information is safe?</a>
-<p>We don&apos;t store any of your credit card information, so nobody can steal it from us. When you check out, you are checking out using a secure form over SSL, sending payment to Paypal, and letting them handle security.</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq11">11. Why buy through this website and not buy from you on ebay?</a>
-<p>First, we would like to eventually phase out ebay sales, as they take too large a percentage of the sale for fees, especially for such cheap items. Those who have sold on ebay recently can relate. Second, if you purchase instructions through this
-  website, you will be able to download the instructions
-  <%= MAX_DOWNLOADS %>
-  times. Third, if we ever have to update a parts list or the PDF itself that you own due to an error on our part or to make something clearer, you will be notified by email, and be eligible to download an updated version, even if you have used all
-  your downloads.</p>
-<a href="#top">top</a>
-<br/>
-<br/>
-<a name="faq12">12. Where can I get the companion files for the Lego Neighborhood Book?</a>
-<p>Right here! Well, not on this page, but you will find them on
-  <%= link_to 'this page', books_path %>. There are XML and HTML parts lists for each of the large models, plus a bonus delivery truck for the Corner Drug Store. Not familiar with how to use our XML and HTML parts lists? That's OK, check out our
-  <%= link_to 'New User Tutorial', new_user_tutorial_path %>
-  for some tips.</p>
-<a href="#top">top</a>
+<section class="content">
+  <div class="container">
+    <h1>FAQs</h1>
+    <br/>
+    <div id="accordion">
+      <hr/>
+      <div id="faqOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            What do I get when I buy instructions?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseOne" class="collapse" aria-labelledby="faqOne" data-parent="#accordion">
+        <div class="faq-answer">
+          <div class="row">
+            <div class="col-md-2">
+              <%= image_tag('jason_c1.png', class: 'img-fluid sigfig-sm') %>
+            </div>
+            <div class="col-md-10">
+              <p>
+                Our undying love... and ice cream! Ok, maybe not ice cream, but at least the best instructions package on the market. We include a pdf with complete picture instructions with only a minimal amount of text, so our instructions translate into any
+                language in the world. :) Also, we give you 2 different parts lists you can use to acquire the pieces you'll need to build our models. You get an XML list that you can use to upload the parts to your Bricklink wanted list. You'll also get an HTML
+                parts list that will open in your default browser when you double-click on it. This parts list has images and descriptions of the parts, as well as part colors and quantities and links to Bricklink where you can find the individual pieces. If you
+                have a newer browser, you can even use the HTML list to assemble custom Bricklink XML based on what pieces you need to complete a model. We'll tell you all about it in our
+                <%= link_to 'New User Tutorial', new_user_tutorial_path %>. Last, but not least, you get our support. If you don't understand some part of the instructions or parts lists, let us know so we can help you figure it out.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Your instructions seem kind of expensive. Just how good are they?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="faqTwo" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            They're the best. Each of our models can take weeks worth of time to design, build and create instructions and parts lists. This is especially true for the modular buildings. There truly is a lot of work going into each model and going into making
+            sure that our instructions and parts lists are very clear, error free and are the best on the market. Check out the sample image below. Still not convinced? For simply
+            <%= link_to 'signing up', new_user_registration_path %>
+            for a new account, you'll get access to some free instructions to check out our work! Afraid of signing up for an account and getting too many emails? You can choose to receive as much or as little email as you want by setting email preferences
+            <%= link_to 'here', :controller => :registrations, :action => :edit %>.
+          </p>
+          <div id="sample_instruction">
+            <%= image_tag 'sample_instruction.jpg', class: 'img-fluid' %>
+          </div>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqThree">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Where can I find the pieces necessary to complete a model?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="faqThree" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            Lego has a Pick A Brick feature that will allow you to search for many of the parts you need on their website. However, their selection is very limited relative to all the pieces that Lego produces. We send all our customers to
+            http://www.bricklink.com Bricklink is a huge aftermarket where thousands of sellers from around the world sell millions of Lego parts. Pretty much anything Lego has ever made, in any color they've ever made it in, can be found here. Careful, it's
+            easy to lose yourself on this site! For more information on how to use Brick City Depot parts lists with Bricklink, zoom on over to our
+            <%= link_to 'New User Tutorial', new_user_tutorial_path %>.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqFour">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            How much will it cost to build a model?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseFour" class="collapse" aria-labelledby="faqFour" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            We get asked this question a lot and the problem is that there is no good answer. First of all, we don't know what parts you already have, and are willing to commit to building the model. Second, the market price of parts fluctuates according to the
+            law of supply and demand, and prices can vary wildly from one Bricklink seller to another. Third, the price of building a model can vary greatly depending on your willingness to use used parts or if you have to use only new parts. Fourth, we don't
+            know how much of a bargain shopper you are. Some people are content to try and get as many of the needed pieces from as few Bricklink stores as possible. Other people will have several stores open in different browser tabs at the same time and cruise
+            the inventory of several stores looking for the best prices. Using this strategy can save you a lot of money. While we don't have a good estimate for how much it will cost you to build any of our models, we can say this: we try to use widely
+            available parts, and don't like spending 50 cents or more on a single part ourselves. We try our best to use parts that can be had for 15 cents or less per piece. Obvious exceptions would be larger bricks, plates, slopes or tiles we have to use to
+            make the model look better or more structurally sound.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqFive">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            Why don&apos;t your color names or part numbers match official Lego color names/part numbers?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseFive" class="collapse" aria-labelledby="faqFive" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            The reason for this is simple. We don't adhere to official Lego color names and part numbers because of Lego's very limited parts selection in their Pick A Brick feature. We send all our customers to Bricklink, and as such, we use the same color
+            names and part numbers that Bricklink uses to make it easier for our customers to find the parts necessary to complete our models. Most of the time Lego and Bricklink use the same part numbers and color names, but this isn't always the case. Where it
+            differs, we favor Bricklink.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqSix">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+            How do I use the BrickLink XML parts list?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseSix" class="collapse" aria-labelledby="faqSix" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            This can be somewhat complex for the first-timer. Please refer to our
+            <%= link_to 'New User Tutorial', new_user_tutorial_path %>
+            for information on how to use both our HTML and XML parts lists.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqSeven">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+            What if I don&apos;t understand some part of your instructions or the parts lists appear to be errant?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseSeven" class="collapse" aria-labelledby="faqSeven" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            <%= link_to 'Contact us', contact_path %>. You're probably not the only one who doesn't get it. We will help walk you through it, and if we agree that the instructions/parts lists are errant or confusing enough, we will fix the instructions and let
+              you know when a new version is available. When we fix instructions, you get 1 additional download for the affected item.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqEight">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+            Do you issue refunds?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseEight" class="collapse" aria-labelledby="faqEight" data-parent="#accordion">
+        <div class="faq-answer">
+          <div class="row">
+            <div class="col-md-10">
+              <p>
+                Per our policy, we only issue refunds for a set of instructions that has not been downloaded. We keep track of all user downloads. If you have not downloaded a specific set of instructions from us, you are eligible for a refund.
+              </p>
+            </div>
+            <div class="col-md-2">
+              <%= image_tag('jason_20.png', class: 'img-fluid sigfig-sm') %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqNine">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+            Do you use my email address or Twitter/Facebook info for nefarious purposes?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseNine" class="collapse" aria-labelledby="faqNine" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            We are not at all nefarious. We have no intentions of selling your information, or using anything from your Twitter/Facebook accounts other than your email address. We need your email address as a unique identifier to make sure that you&apos;ll be
+            able to access your instruction downloads. You can choose to receive as much or as little email as you want by setting email preferences
+            <%= link_to 'here', :controller => :registrations, :action => :edit %>. If you decide to use your Facebook or Twitter logins to access Brick City Depot, we do not store your Facebook/Twitter passwords, only the email address used to identify you. We
+            <strong>DO NOT</strong>
+            share
+            <strong>ANY</strong>
+            of your information with
+            <strong>ANYONE</strong>... unless, you know, you&apos;re a criminal and we have to comply with authorities. So don&apos;t be a criminal and we&apos;ll be cool.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqTen">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+            How do I know my credit card information is safe?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTen" class="collapse" aria-labelledby="faqTen" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            We don&apos;t store any of your credit card information, so nobody can steal it from us. When you check out, you are checking out using a secure form over SSL, sending payment directly to Paypal, and letting them handle security.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqEleven">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+            Why buy through this website and not buy from you on eBay?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseEleven" class="collapse" aria-labelledby="faqEleven" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            First, we would like to eventually phase out ebay sales, as they take too large a percentage of the sale for fees, especially for such cheap items. Those who have sold on ebay recently can relate. Second, if you purchase instructions through this
+            website, you will be able to download the instructions
+            <%= MAX_DOWNLOADS %>
+            times. Third, if we ever have to update a parts list or the PDF itself that you own due to an error on our part or to make something clearer, you will be notified by email, and be eligible to download an updated version, even if you have used all
+            your downloads.
+          </p>
+        </div>
+      </div>
+      <hr/>
+      <div id="faqTwelve">
+        <h5 class="mb-0">
+          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+            Where can I get the companion files for the Lego Neighborhood Book?
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwelve" class="collapse" aria-labelledby="faqTwelve" data-parent="#accordion">
+        <div class="faq-answer">
+          <p>
+            Right here! Well, not on this page, but you will find them on
+            <%= link_to 'this page', books_path %>. There are XML and HTML parts lists for each of the large models, plus a bonus delivery truck for the Corner Drug Store. Not familiar with how to use our XML and HTML parts lists? That's OK, check out our
+            <%= link_to 'New User Tutorial', new_user_tutorial_path %>
+            for some tips.
+          </p>
+        </div>
+      </div>
+      <hr/>
+    </div>
+  </div>
+</section>
