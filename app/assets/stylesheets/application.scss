@@ -3,7 +3,7 @@
 @import "bootstrap";
 @import "carousel";
 @import "navigation";
-@import "font-awesome";
+/*@import "font-awesome";*/
 @import "ekko-lightbox";
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Yanone+Kaffeesatz');
 /* stylelint-disable selector-list-comma-newline-after */
@@ -259,12 +259,12 @@ h6 {
   text-decoration: none;
 }
 
-.fa-check-circle-o {
+.fa-check-circle {
   color: green;
   font-size: 18px;
 }
 
-.fa-times-circle-o {
+.fa-times-circle {
   color: red;
   font-size: 18px;
 }

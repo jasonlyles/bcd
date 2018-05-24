@@ -40,7 +40,6 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier'
 gem 'sprockets'
 gem 'asset_sync'
-gem "font-awesome-rails"
 gem 'bootstrap', '~> 4.0.0'
 
 # Use unicorn as the web server
