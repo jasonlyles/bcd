@@ -69,6 +69,10 @@ h6 {
   object-fit: contain;
 }
 
+.object-fit-cover {
+  object-fit: cover !important;
+}
+
 .header {
   line-height: 1;
   border-bottom: 1px solid #e5e5e5;
@@ -175,6 +179,10 @@ h6 {
 
 .h-250 {
   height: 250px;
+}
+
+.w-256 {
+  width: 256px;
 }
 
 .border-top {

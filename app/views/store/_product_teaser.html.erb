@@ -1,7 +1,7 @@
 <div class="card mb-4 mt-4">
   <% unless product.main_image.blank? %>
     <div class="similar-product-header">
-      <%= link_to(image_tag(product.main_image.medium, class: 'card-img-top img-fluid'), {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case}) %>
+      <%= link_to(image_tag(product.main_image.medium, class: 'card-img-top img-fluid object-fit-cover'), {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case}) %>
     </div>
   <% end %>
   <div class="card-body">
