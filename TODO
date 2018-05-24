@@ -23,6 +23,8 @@ HAVE TO GET DONE FOR V1:
 * Add functionality for Brian to be able to add downloads to someones account for a given product,
   in case they've had trouble downloading.
 
+* Set up wall art, t-shirts, etc. on Printful: https://www.printful.com/?ref=index  
+
 * IPNs come to us for refunds. What should I do with those? Remove the item from the users account? Maybe I can just
 store them, and not flag that there was a 2nd IPN if the payment_status for the 2nd is 'Refunded'
 

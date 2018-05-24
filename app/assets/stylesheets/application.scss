@@ -51,12 +51,18 @@ h6 {
   top: 100px;
   left: 150px;
   max-height: 40px;
-  /*
+}
 
+#lifting-fig {
+  margin-top: -124px;
+  margin-left: 300px;
+  position: absolute;
+  z-index: 1000;
+}
 
-
-  width: 80%;
-  */
+#hanging-fig {
+  margin-top: -45px;
+  margin-left: -30px;
 }
 /* Class styles */
 .object-fit-contain {

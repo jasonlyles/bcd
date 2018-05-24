@@ -63,7 +63,7 @@
           </div>
           <%= link_to(image_tag('lego_neighborhood_2.jpg', class: "card-img-right flex-auto feature", alt: "The Lego Neighborhood Book 2"), "/books") %>
         </div>
-        <%= image_tag('brian_c4_rotated.png', class: 'img-fluid sigfig', style: 'margin-top: -30px; margin-left: 60px;') %>
+        <%= image_tag('hanging.png', class: 'img-fluid sigfig', id: 'hanging-fig') %>
       </div>
     </div>
   </div>
@@ -95,9 +95,11 @@
                 product.name.to_snake_case) %>
               <% end %>
             </div>
+            <%= image_tag('lifting.png', class: 'img-fluid sigfig', id: 'lifting-fig') %>
           </div>
         <% end %>
       </div>
+      <section class="section-spacer background" style="height: 40px;"></section>
       <div class="row">
         <div class="col-md-5">
           <h2 class="text-center text-white">Free instructions!</h2>
@@ -109,6 +111,7 @@
     </div>
   </div>
 </section>
+<section class="section-spacer background" style="height: 100px;"></section>
 <section id="scroll-down" class="background d-none d-lg-block">
   <div class="container">
     <i class="fa fa-angle-double-down fa-2x"></i>&nbsp;<h3 class='d-inline'>Scroll Down</h3>
