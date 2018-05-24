@@ -54,8 +54,8 @@ h6 {
 }
 
 #lifting-fig {
-  margin-top: -124px;
-  margin-left: 300px;
+  margin-top: -84px;
+  margin-left: 600px;
   position: absolute;
   z-index: 1000;
 }
@@ -80,6 +80,10 @@ h6 {
 
 .sigfig {
   max-height: 250px;
+}
+
+.sigfig-md {
+  max-height: 200px;
 }
 
 .sigfig-sm {
