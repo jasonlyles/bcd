@@ -16,7 +16,8 @@ class StoreController < ApplicationController
   def products
     @product_type = ProductType.where('name=?', params[:product_type_name])[0]
     if @product_type.blank?
-      return redirect_to('/store')
+      flash[:notice] = "Sorry. We don't have any of those."
+      redirect_to(root_path)
     else
       if !params[:product_type_name].casecmp('instructions').zero?
         @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
@@ -202,7 +203,7 @@ class StoreController < ApplicationController
 
   def thank_you_for_your_order
     cookies.delete :show_thank_you
-    if session[:guest]
+    if session[:guest] && session[:guest].is_a?(Integer)
       @user = User.find session[:guest]
       @order = @user.orders.last
       @download_link = @order.get_link_to_downloads
