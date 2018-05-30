@@ -10,14 +10,8 @@
   <div class="container">
     <h1>My Account</h1>
     <br/>
-    <p>
-      <%= link_to "Edit Profile", :controller => :registrations, :action => :edit %>
-      |
-      <%= link_to "Order History", account_order_history_path %>
-    </p>
     <h2>Instructions I've purchased</h2>
-    <br/>
-    <p>
+    <p class="text-muted">
       If you don't see a set of instructions you've purchased, check out your
       <%= link_to "Order History", account_order_history_path %>
       to see if there is a problem.

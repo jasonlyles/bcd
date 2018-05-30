@@ -1,19 +1,24 @@
 <div class="container">
   <div class="nav-scroller">
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon">
-          <i class="fa fa-bars"></i>
-        </span>
-      </button>
+      <div id="collapse-left-wrapper">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon">
+            <i class="fa fa-bars"></i>
+          </span>
+        </button>
+        <div class="d-lg-none d-inline mobile-cart">
+          <%= render :partial => 'shared/cart_info', locals: {cart: @cart} %>
+        </div>
+      </div>
       <a class="navbar-brand" href="/"><%= image_tag('logo180x115.png', alt: "BCD logo", title: "Brick City Depot", class: 'navbar-brand-logo') %></a>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <%= link_to "Home", root_path, class: 'p-2 text-white nav-link' %>
+            <%= link_to "Home", root_path, class: 'text-white nav-link h3' %>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle p-2 text-white" href="#" id="navbarStoreDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link text-white h3" href="#" id="navbarStoreDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Store
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarStoreDropdown">
@@ -24,24 +29,49 @@
             </div>
           </li>
           <li class="nav-item">
-            <%= link_to "Books", books_path, class: 'p-2 text-white nav-link' %>
+            <%= link_to "Books", books_path, class: 'text-white nav-link h3' %>
           </li>
           <li class="nav-item">
-            <%= link_to "Account", account_path, class: 'p-2 text-white nav-link' %>
+            <%= link_to 'New User Tutorial', new_user_tutorial_path, class: 'text-white nav-link h3' %>
           </li>
           <li class="nav-item">
-            <%= link_to "FAQ", faq_path, class: 'p-2 text-white nav-link' %>
+            <%= link_to "FAQ", faq_path, class: 'text-white nav-link h3' %>
           </li>
           <li class="nav-item">
-            <%= link_to "Contact", contact_path, class: 'p-2 text-white nav-link' %>
-          </li>
-          <li class="nav-item">
-            <%= link_to 'New User Tutorial', new_user_tutorial_path, class: 'p-2 text-white nav-link' %>
+            <%= link_to "Contact", contact_path, class: 'text-white nav-link h3' %>
           </li>
         </ul>
         <div class="mr-auto"></div>
         <div class="navbar-right">
-          <%= render :partial => 'shared/cart_info', locals: {cart: @cart} %>
+          <div class="d-none d-lg-inline">
+            <%= render :partial => 'shared/cart_info', locals: {cart: @cart} %>
+          </div>
+          <div class="d-inline-block">
+            <ul class="list-unstyled">
+              <li class="nav-item dropdown">
+                <a class="nav-link text-white pl-3" href="#" id="navbarAccountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="far fa-id-card fa-2x d-none d-lg-inline" data-fa-transform='down-8 grow-3'></i>
+                  <span class="d-lg-none h3">Account</span>
+                </a>
+                <div class="dropdown-menu account-dropdown-menu" aria-labelledby="navbarAccountDropdown">
+                  <%= link_to "My Account", account_path, class: 'dropdown-item' %>
+                  <% if (user_signed_in? && !current_user.guest?) || radmin_signed_in? %>
+                    <% if current_user %>
+                      <%= link_to "Edit Profile", {controller: :registrations, action: :edit}, class: 'dropdown-item' %>
+                      <%= link_to("Sign Out",destroy_user_session_path, class: 'dropdown-item') %>
+                    <% end %>
+                    <% if current_radmin %>
+                      <%= link_to("Sign Out Admin",destroy_radmin_session_path, class: 'dropdown-item') %>
+                      <%= link_to("Admin Stuff",admin_index_path, class: 'dropdown-item') %>
+                    <% end %>
+                  <% else %>
+                    <%= link_to("Sign In",new_user_session_path, class: 'dropdown-item') %>
+                    <%= link_to("Sign Up",new_user_registration_path, class: 'dropdown-item') %>
+                  <% end %>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>

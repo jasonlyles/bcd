@@ -65,6 +65,12 @@ h6 {
   margin-left: -30px;
 }
 /* Class styles */
+.mobile-cart {
+  padding-left: 10px;
+  position: relative;
+  top: -8px;
+}
+
 .object-fit-contain {
   object-fit: contain;
 }
@@ -235,6 +241,20 @@ h6 {
   font-weight: bold;
 }
 
+.bordered-cart {
+  stroke: $primary;
+  stroke-width: 25;
+}
+
+.bordered-empty-cart {
+  stroke: black;
+  stroke-width: 10;
+}
+
+.tomato {
+  background: Tomato;
+}
+
 .book-medium-img {
   height: 250px;
 }
@@ -291,6 +311,34 @@ h6 {
   font-size: 1.1rem;
   color: #999;
 }
+/*
+
+// Breakpoints
+$bp-small: 48em; // 768px
+$bp-medium: 64em; // 1024px
+$bp-large: 85.375em; // 1366px
+$bp-xlarge: 120em; // 1920px
+$bp-xxlarge: 160em; // 2560px
+Extra Small Devices, Phones
+@media only screen and (min-width : 480px) {
+
+}
+
+Small Devices, Tablets
+@media only screen and (min-width : 768px) {
+
+}
+
+Medium Devices, Desktops
+@media only screen and (min-width : 992px) {
+
+}
+
+Large Devices, Wide Screens
+@media only screen and (min-width : 1200px) {
+
+}
+*/
 /* Media queries */
 @media (min-width: 40em) {
   .title {
@@ -301,10 +349,41 @@ h6 {
   .display-4 {
     font-size: 3rem;
   }
-}
-@media (min-width: 768px) {
+
   .h-md-250 {
     height: 250px;
+  }
+}
+@media (max-width: 1200px) and (min-width: 992px) {
+  main {
+    margin-bottom: 215px !important;
+  }
+
+  .footer {
+    height: 215px !important;
+  }
+}
+@media (max-width: 992px) and (min-width: 768px) {
+  main {
+    margin-bottom: 235px !important;
+  }
+
+  .footer {
+    height: 235px !important;
+  }
+}
+@media (max-width: 768px) and (min-width: 480px) {
+  main {
+    margin-bottom: 390px !important;
+  }
+
+  .footer {
+    height: 390px !important;
+  }
+}
+@media (max-width: 480px) {
+  .footer {
+    background-color: white !important;
   }
 }
 /* Pagination */

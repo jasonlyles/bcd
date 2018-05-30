@@ -19,9 +19,36 @@
 .navbar-brand-logo {
   height: 114px;
 }
+
+.nav-link {
+  padding-top: 2.3rem !important;
+  padding-bottom: 1rem !important;
+  font-family: 'Yanone Kaffeesatz', sans-serif !important;
+}
+
+.account-dropdown-menu {
+  left: auto !important;
+  right: 0 !important;
+}
 @media(max-width: 992px) {
   .navbar-brand-logo {
     height: 102px;
+  }
+
+  .nav-link {
+    padding-left: 1rem !important;
+    padding-top: 0.1rem !important;
+    padding-bottom: 0.1rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .navbar-nav li {
+    padding: 0 !important;
+  }
+
+  .account-dropdown-menu {
+    left: 0 !important;
+    right: auto !important;
   }
 }
 @media(max-width: 370px) {
@@ -93,12 +120,12 @@
   font-family: arial;
   text-transform: none;
 }
-/*
+
+.nav-item a:hover,
 .navbar-nav > .active > a,
 .navbar-nav > .active > a:focus,
 .navbar-nav > .active > a:hover,
 .navbar-nav a:hover {
-  background-image: linear-gradient(to bottom, #74021e, #830323, #920427, #a2062c, #b20831);
+  background-color: rgba(18, 63, 135, 0.3);
   color: #fff !important;
 }
-*/

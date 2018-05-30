@@ -94,7 +94,7 @@
                     <% end %>
                     <br/>
                     <% unless @product.out_of_stock? || @product.is_free? %>
-                      <%= link_to raw("<i class='fa fa-cart-plus'>&nbsp; <span style='font-size:larger'>Add to Cart</span></i>"), {action: "add_to_cart", product_code: @product.product_code}, class: 'btn btn-primary', data: {disable_with: 'Adding...'}, method: :post %>
+                      <%= link_to raw("<i class='fas fa-cart-plus'>&nbsp; <span style='font-size:larger'>Add to Cart</span></i>"), {action: "add_to_cart", product_code: @product.product_code}, class: 'btn btn-primary', data: {disable_with: 'Adding...'}, method: :post %>
                     <% end %>
                   </div>
                   <div class="col-md-2">

@@ -5,12 +5,10 @@ RESKIN:
 * need to confirm password edit page looks good by getting an email sent for forgotten password
 * Category images need to be scaled down once I figure out which images I'm using.
 
-* Footer background is messed up on mobile
-
 Nav:
-* Fix collapsed nav styles
-* Make sure nav looks ok when in the process of shrinking, before collapsed nav kicks in. Will
-  need to either move cart/sign up/in out of the header, or make sure it collapses well.
+* Account link in mobile collapsed nav hasn't quite got the right selector yet in the css. I'm
+  using this in the meantime to get close: .nav-item a:hover It works, but the highlight doesn't
+  go all the way across the screen like it does for the other links.
 
 TODO:  List of the things left to do, in no particular order
 

@@ -18,6 +18,7 @@
     <%= stylesheet_link_tag 'application' %>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script defer="defer" src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
     <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
     <%= yield :head %>
@@ -29,7 +30,9 @@
     <main>
       <% unless current_page?(root_path) %>
         <div class="header-spacer"></div>
-        <%= render partial: 'shared/notifications' %>
+        <div class="container">
+          <%= render partial: 'shared/notifications' %>
+        </div>
         <div class="container">
           <% if @cart && @cart.errors.any? %>
             <ul class="cart_errors">
