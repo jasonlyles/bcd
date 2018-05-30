@@ -8,10 +8,10 @@
           <h3>Add a service to sign in with</h3>
           <br/>
           <% if @auths && !@auths.include?('facebook') %>
-            <a href="/auth/facebook" class="btn fab fa-facebook">&nbsp; Login with Facebook</a>
+            <%= link_to raw("<i class='fab fa-facebook'></i>&nbsp; Login with Facebook"), '/auth/facebook', class: "btn btn-facebook" %>
           <% end %>
           <% if @auths && !@auths.include?('twitter') %>
-            <a href="/auth/twitter" class="btn fab fa-twitter">&nbsp; Login with Twitter</a>
+            <%= link_to raw("<i class='fab fa-twitter'></i>&nbsp; Login with Twitter"), '/auth/twitter', class: "btn btn-twitter" %>
           <% end %>
           <br/>
         </div>
@@ -21,7 +21,8 @@
           <h3>You can sign in to this account using</h3>
           <br/>
           <% for authentication in @authentications %>
-            <%= link_to raw("&nbsp; #{authentication.provider.titleize} &times;"), authentication, data: {confirm: 'Are you sure you want to remove this authentication option?'}, method: :delete, class: "btn fab fa-#{authentication.provider}" %>
+            <%= link_to raw("<i class='fab fa-#{authentication.provider}'></i>&nbsp; #{authentication.provider.titleize} &times;"), authentication, data: {confirm: 'Are you sure you want to remove this authentication option?'}, method: :delete, class: "btn
+            btn-#{authentication.provider}" %>
           <% end %>
         </div>
       <% end %>

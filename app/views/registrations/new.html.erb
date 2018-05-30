@@ -1,8 +1,8 @@
 <section class="content">
   <div class="container">
     <div class="social-login-buttons">
-      <a href="/auth/facebook" class="btn fab fa-facebook">&nbsp; Login with Facebook</a>
-      <a href="/auth/twitter" class="btn fab fa-twitter">&nbsp; Login with Twitter</a>
+      <%= link_to raw("<i class='fab fa-facebook'></i>&nbsp; Login with Facebook"), '/auth/facebook', class: "btn btn-facebook" %>
+      <%= link_to raw("<i class='fab fa-twitter'></i>&nbsp; Login with Twitter"), '/auth/twitter', class: "btn btn-twitter" %>
     </div>
     <hr/>
     <br/>
