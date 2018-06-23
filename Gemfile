@@ -38,7 +38,7 @@ gem 'responders', '~> 2.0'
 #assets
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier'
-gem 'sprockets'
+gem 'sprockets', '~> 3.7'
 gem 'asset_sync'
 gem 'bootstrap', '~> 4.0.0'
 
