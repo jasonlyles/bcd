@@ -3,10 +3,11 @@
     <h1>Contact Us!</h1>
     <br/>
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-md-2 d-none d-md-block">
         <%= image_tag('jason_8.png', class: 'img-fluid sigfig') %>
       </div>
-      <div class="col-md-8">
+      <div class="col-xs-12 col-sm-12 col-md-8">
+        <%= image_tag('jason_8.png', class: 'img-fluid sigfig-sm float-left d-xs-block d-md-none') %>
         <p>
           Before you contact us, please check out our
           <%= link_to 'FAQ', faq_path %>
@@ -16,6 +17,7 @@
           Looking for the Lego Neighborhood Book companion files? No problem, you can find them
           <%= link_to 'here', books_path %>.
         </p>
+        <%= image_tag('brian_c2.png', class: 'img-fluid sigfig-sm float-right d-xs-block d-md-none') %>
         <p>
           If you have any questions or concerns about an order, please contact us at
           <a href="mailto:service@brickcitydepot.com">service@brickcitydepot.com</a>
@@ -27,7 +29,7 @@
           and let us know.
         </p>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-2 d-none d-md-block">
         <%= image_tag('brian_c2.png', class: 'img-fluid sigfig') %>
       </div>
     </div>

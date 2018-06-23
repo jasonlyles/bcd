@@ -6,57 +6,53 @@
       <hr/>
       <div id="faqOne">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
             What do I get when I buy instructions?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseOne" class="collapse" aria-labelledby="faqOne" data-parent="#accordion">
         <div class="faq-answer">
-          <div class="row">
-            <div class="col-md-2">
-              <%= image_tag('jason_c1.png', class: 'img-fluid sigfig-sm') %>
-            </div>
-            <div class="col-md-10">
-              <p>
-                Our undying love... and ice cream! Ok, maybe not ice cream, but at least the best instructions package on the market. We include a pdf with complete picture instructions with only a minimal amount of text, so our instructions translate into any
-                language in the world. :) Also, we give you 2 different parts lists you can use to acquire the pieces you'll need to build our models. You get an XML list that you can use to upload the parts to your Bricklink wanted list. You'll also get an HTML
-                parts list that will open in your default browser when you double-click on it. This parts list has images and descriptions of the parts, as well as part colors and quantities and links to Bricklink where you can find the individual pieces. If you
-                have a newer browser, you can even use the HTML list to assemble custom Bricklink XML based on what pieces you need to complete a model. We'll tell you all about it in our
-                <%= link_to 'New User Tutorial', new_user_tutorial_path %>. Last, but not least, you get our support. If you don't understand some part of the instructions or parts lists, let us know so we can help you figure it out.
-              </p>
-            </div>
+          <div class="float-left">
+            <%= image_tag('jason_c1.png', class: 'img-fluid sigfig-sm mr-3') %>
           </div>
+          <p>
+            Our undying love... and ice cream! Ok, maybe not ice cream, but at least the best instructions package on the market. We include a pdf with complete picture instructions with only a minimal amount of text, so our instructions translate into any
+            language in the world. :) Also, we give you 2 different parts lists you can use to acquire the pieces you'll need to build our models. You get an XML list that you can use to upload the parts to your Bricklink wanted list. You'll also get an HTML
+            parts list that will open in your default browser when you double-click on it. This parts list has images and descriptions of the parts, as well as part colors and quantities and links to Bricklink where you can find the individual pieces. If you
+            have a newer browser, you can even use the HTML list to assemble custom Bricklink XML based on what pieces you need to complete a model. We'll tell you all about it in our
+            <%= link_to 'New User Tutorial', new_user_tutorial_path %>. Last, but not least, you get our support. If you don't understand some part of the instructions or parts lists, let us know so we can help you figure it out.
+          </p>
         </div>
+        <div class="clearfix"></div>
       </div>
       <hr/>
       <div id="faqTwo">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
             Your instructions seem kind of expensive. Just how good are they?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseTwo" class="collapse" aria-labelledby="faqTwo" data-parent="#accordion">
         <div class="faq-answer">
+          <%= image_tag 'sample_instruction.jpg', class: 'img-fluid float-right ml-3' %>
           <p>
             They're the best. Each of our models can take weeks worth of time to design, build and create instructions and parts lists. This is especially true for the modular buildings. There truly is a lot of work going into each model and going into making
             sure that our instructions and parts lists are very clear, error free and are the best on the market. Check out the sample image below. Still not convinced? For simply
             <%= link_to 'signing up', new_user_registration_path %>
-            for a new account, you'll get access to some free instructions to check out our work! Afraid of signing up for an account and getting too many emails? You can choose to receive as much or as little email as you want by setting email preferences
-            <%= link_to 'here', :controller => :registrations, :action => :edit %>.
+            for a new account, you'll get access to some free instructions to check out our work! Afraid of signing up for an account and getting too many emails? You can choose to receive as much or as little email as you want by setting email preferences for
+            your account.
           </p>
-          <div id="sample_instruction">
-            <%= image_tag 'sample_instruction.jpg', class: 'img-fluid' %>
-          </div>
         </div>
+        <div class="clearfix"></div>
       </div>
       <hr/>
       <div id="faqThree">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
             Where can I find the pieces necessary to complete a model?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseThree" class="collapse" aria-labelledby="faqThree" data-parent="#accordion">
@@ -72,9 +68,9 @@
       <hr/>
       <div id="faqFour">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
             How much will it cost to build a model?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseFour" class="collapse" aria-labelledby="faqFour" data-parent="#accordion">
@@ -92,9 +88,9 @@
       <hr/>
       <div id="faqFive">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
             Why don&apos;t your color names or part numbers match official Lego color names/part numbers?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseFive" class="collapse" aria-labelledby="faqFive" data-parent="#accordion">
@@ -109,9 +105,9 @@
       <hr/>
       <div id="faqSix">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
             How do I use the BrickLink XML parts list?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseSix" class="collapse" aria-labelledby="faqSix" data-parent="#accordion">
@@ -126,9 +122,9 @@
       <hr/>
       <div id="faqSeven">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
             What if I don&apos;t understand some part of your instructions or the parts lists appear to be errant?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseSeven" class="collapse" aria-labelledby="faqSeven" data-parent="#accordion">
@@ -142,31 +138,26 @@
       <hr/>
       <div id="faqEight">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
             Do you issue refunds?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseEight" class="collapse" aria-labelledby="faqEight" data-parent="#accordion">
         <div class="faq-answer">
-          <div class="row">
-            <div class="col-md-10">
-              <p>
-                Per our policy, we only issue refunds for a set of instructions that has not been downloaded. We keep track of all user downloads. If you have not downloaded a specific set of instructions from us, you are eligible for a refund.
-              </p>
-            </div>
-            <div class="col-md-2">
-              <%= image_tag('jason_20.png', class: 'img-fluid sigfig-sm') %>
-            </div>
-          </div>
+          <%= image_tag('jason_20.png', class: 'img-fluid sigfig-sm float-left mr-3') %>
+          <p>
+            Per our policy, we only issue refunds for a set of instructions that has not been downloaded. We keep track of all user downloads. If you have not downloaded a specific set of instructions from us, you are eligible for a refund.
+          </p>
         </div>
+        <div class="clearfix"></div>
       </div>
       <hr/>
       <div id="faqNine">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
             Do you use my email address or Twitter/Facebook info for nefarious purposes?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseNine" class="collapse" aria-labelledby="faqNine" data-parent="#accordion">
@@ -186,9 +177,9 @@
       <hr/>
       <div id="faqTen">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
             How do I know my credit card information is safe?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseTen" class="collapse" aria-labelledby="faqTen" data-parent="#accordion">
@@ -201,9 +192,9 @@
       <hr/>
       <div id="faqEleven">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
             Why buy through this website and not buy from you on eBay?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseEleven" class="collapse" aria-labelledby="faqEleven" data-parent="#accordion">
@@ -220,9 +211,9 @@
       <hr/>
       <div id="faqTwelve">
         <h5 class="mb-0">
-          <button class="btn btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
+          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve">
             Where can I get the companion files for the Lego Neighborhood Book?
-          </button>
+          </a>
         </h5>
       </div>
       <div id="collapseTwelve" class="collapse" aria-labelledby="faqTwelve" data-parent="#accordion">

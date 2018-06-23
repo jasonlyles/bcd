@@ -20,10 +20,12 @@
               <% image = item.product.images[0] %>
                 <% image_url = image.url.thumb if !image.blank? %>
                   <td>
-                    <%= image_tag(image_url.url) if !image_url.blank? %>
+                    <%= link_to image_tag(image_url.url), {:action => :product_details, :product_code => item.product.product_code, :product_name => item.product.name.to_snake_case} %>
                   </td>
                   <td class="align-middle">
-                    <%= link_to "#{item.product.product_code} #{item.product.name}", {:action => :product_details, :product_code => item.product.product_code, :product_name => item.product.name.to_snake_case} %>
+                    <span class="d-none d-md-block">
+                      <%= link_to "#{item.product.product_code} #{item.product.name}", {:action => :product_details, :product_code => item.product.product_code, :product_name => item.product.name.to_snake_case} %>
+                    </span>
                   </td>
                   <td class="align-middle"><%= item.product.product_type.name %></td>
                   <td class="align-middle"><%= number_to_currency(item.price) %></td>
@@ -50,22 +52,17 @@
                 <% end %>
               </td>
             </tr>
-            <tr>
-              <td colspan="3"></td>
-              <td colspan="1">
-                <b>Items:</b>
-                <br/>
-                <b>Subtotal:</b>
-              </td>
-              <td>
-                <%= @cart.total_quantity %>
-                <br/>
-                <%= number_to_currency @cart.total_price %>
-              </td>
-            </tr>
           <% end %>
         </table>
       </p>
+      <div class="float-right mr-1">
+        <strong>Items:</strong>
+        <%= @cart.total_quantity %>
+        <br/>
+        <strong>Subtotal:</strong>
+        <%= number_to_currency @cart.total_price %>
+      </div>
+      <div class="clearfix"></div>
       <br/>
       <%= render :partial => 'shared/cart_nav_buttons' %>
     <% else %>

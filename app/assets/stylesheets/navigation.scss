@@ -51,11 +51,11 @@
     right: auto !important;
   }
 }
-@media(max-width: 370px) {
+@media(max-width: 404px) {
   .navbar-brand-logo {
     position: fixed;
     top: 2px;
-    right: 20px;
+    right: 10px;
     height: 80px;
   }
 }
@@ -64,7 +64,7 @@
   margin-right: 20px;
   margin-left: 30px;
   padding-top: 10px !important;
-  border-color: black !important;
+  border-color: white !important;
 }
 
 .white-navbar-toggler {
@@ -72,7 +72,7 @@
 }
 
 .navbar-toggler-icon {
-  color: black;
+  color: white;
 }
 
 .white-navbar-toggler-icon {
@@ -88,7 +88,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
 }
-@media (max-width: 992px) {
+@media (max-width: 991px) {
   .navbar-collapse {
     padding: 0;
     background-color: #FFF;

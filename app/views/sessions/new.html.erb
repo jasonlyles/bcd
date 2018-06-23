@@ -1,10 +1,7 @@
-<section class="content">
+<section class="contentzz">
   <div class="container">
     <% if resource_name.to_s == "user" %>
-      <div class="social-login-buttons">
-        <%= link_to raw("<i class='fab fa-facebook'></i>&nbsp; Login with Facebook"), '/auth/facebook', class: "btn btn-facebook" %>
-        <%= link_to raw("<i class='fab fa-twitter'></i>&nbsp; Login with Twitter"), '/auth/twitter', class: "btn btn-twitter" %>
-      </div>
+      <%= render partial: 'shared/social_login_buttons' %>
       <hr/>
       <br/>
       <div class="text-center">

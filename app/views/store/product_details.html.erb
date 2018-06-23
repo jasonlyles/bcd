@@ -22,7 +22,7 @@
           <meta content="Brick City Depot" itemprop="name"/>
         </span>
         <div class="row">
-          <div class="col-md-5">
+          <div class="col-md-5 mb-4">
             <h1><%= "#{@product.product_code} #{@product.name}" %></h1><br/>
             <% if @product.youtube_url? %>
               <a data-toggle="lightbox" data-gallery="product-images" href="https://www.youtube.com/watch?v=<%= @product.youtube_url %>">
@@ -47,59 +47,59 @@
                 <h3 class="card-title mt-1 mb-0"><%= "#{@product.product_code} #{@product.name} #{@product.product_type.name unless ['Models', 'Kits'].include? @product.product_type.name}" %></h3>
               </div>
               <div class="card-body">
-                <div class="row">
-                  <div class="col-md-10">
+                <div>
+                  <div class="float-right">
+                    <%= image_tag("product_#{@product.designer}", class: 'sigfig-sm') %>
+                  </div>
+                  <div>
                     <p class="card-text" itemprop="description">
                       <%= @product.description %>
                     </p>
-                    <% if @product.is_physical_product? %>
-                      <% if @product.out_of_stock? %>
-                        <span class="sad">
-                          Out of Stock!
-                        </span>
-                      <% else %>
-                        <span class="sad">
-                          Only
-                          <strong>
-                            <%= @product.quantity %>
-                          </strong>
-                          available!
-                        </span>
-                      <% end %>
-                      <strong>
-                        <%= @product.product_type.name %>
-                      </strong>
+                  </div>
+                  <% if @product.is_physical_product? %>
+                    <% if @product.out_of_stock? %>
+                      <span class="sad">
+                        Out of Stock!
+                      </span>
                     <% else %>
-                      <h5 class="d-inline">Instructions only!</h5>
+                      <span class="sad">
+                        Only
+                        <strong>
+                          <%= @product.quantity %>
+                        </strong>
+                        available!
+                      </span>
                     <% end %>
-                    What do I get?
-                    <a tabindex="0" role="button" class="btn-lg" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="<%= @product.product_type.comes_with_title %>" data-content="<%= @product.product_type.comes_with_description %>">
-                      <i class="fa fa-question-circle"></i>
-                    </a>
-                    <% if @product.is_free? %>
-                      <h5>
-                        <strong>FREE</strong>
-                        for users with an account!</h5>
-                      <br/>
-                      <p>
-                        (Go to the
-                        <%= link_to "Account page", account_path %>
-                        to download instructions)
-                      </p>
-                    <% else %>
-                      <br/>
-                      <br/>
-                      <h5 class="d-inline">Price:</h5>
-                      <%= number_to_currency(@product.price) %>
-                    <% end %>
+                    <strong>
+                      <%= @product.product_type.name %>
+                    </strong>
+                  <% else %>
+                    <h5 class="d-inline">Instructions only!</h5>
+                  <% end %>
+                  What do I get?
+                  <a tabindex="0" role="button" class="btn-lg" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="<%= @product.product_type.comes_with_title %>" data-content="<%= @product.product_type.comes_with_description %>">
+                    <i class="fa fa-question-circle"></i>
+                  </a>
+                  <% if @product.is_free? %>
+                    <h5>
+                      <strong>FREE</strong>
+                      for users with an account!</h5>
                     <br/>
-                    <% unless @product.out_of_stock? || @product.is_free? %>
-                      <%= link_to raw("<i class='fas fa-cart-plus'></i>&nbsp; <span style='font-size:larger'>Add to Cart</span>"), {action: "add_to_cart", product_code: @product.product_code}, class: 'btn btn-primary', data: {disable_with: 'Adding...'}, method: :post %>
-                    <% end %>
-                  </div>
-                  <div class="col-md-2">
-                    <%= image_tag("product_#{@product.designer}", class: 'sigfig-sm') %>
-                  </div>
+                    <p>
+                      (Go to the
+                      <%= link_to "Account page", account_path %>
+                      to download instructions)
+                    </p>
+                  <% else %>
+                    <br/>
+                    <br/>
+                    <h5 class="d-inline">Price:</h5>
+                    <%= number_to_currency(@product.price) %>
+                  <% end %>
+                  <br/>
+                  <% unless @product.out_of_stock? || @product.is_free? %>
+                    <%= link_to raw("<i class='fas fa-cart-plus'></i>&nbsp; <span style='font-size:larger'>Add to Cart</span>"), {action: "add_to_cart", product_code: @product.product_code}, class: 'btn btn-primary', data: {disable_with: 'Adding...'}, method: :post %>
+                  <% end %>
                 </div>
               </div>
               <div class="card-footer">

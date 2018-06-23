@@ -20,13 +20,12 @@
     <% if @products.length == 0 %>
       You are not yet the proud owner of any of Brick City Depot's fine Instructions. Please visit the store to rectify that.
     <% else %>
-      <div class="table-responsive-md">
+      <div class="table-responsive-lg">
         <table class="table table-hover">
           <thead class="thead-light">
             <tr>
               <th scope="col" colspan="2">Model</th>
-              <th scope="col">Parts Lists</th>
-              <th scope="col">PDF</th>
+              <th scope="col">PDF &amp; Parts Lists</th>
               <th scope="col">Downloads Remaining</th>
             </tr>
           </thead>
@@ -36,18 +35,25 @@
                 <%= image_tag(product_info.image_url) unless product_info.image_url.nil? %>
               </td>
               <td class="align-middle">
-                <%= "#{product_info.product.product_code} #{product_info.product.name}" %>
+                <span class="d-none d-md-block">
+                  <%= "#{product_info.product.product_code} #{product_info.product.name}" %>
+                </span>
               </td>
               <% if product_info.product.includes_instructions? %>
                 <td class="align-middle">
+                  <noscript class="sad">
+                    Won't work if javascript is disabled
+                  </noscript>
+                  <%= button_tag raw("<i class='fa fa-download'></i> PDF"), class: 'btn btn-primary', type: 'button', onclick: "setUpRedirect('#{product_info.product.product_code}',this)" %>
                   <% if !product_info.html_list_ids.blank? %>
                     <% product_info.html_list_ids.each_with_index do |hlid,index| %>
+                      <% if index == 0 %>
+                        <br/>
+                        <br/>
+                      <% end %>
                       <%= link_to "Checklist #{index+1}", controller: :downloads, action: :download_parts_list, parts_list_id: hlid %>
                       <br/>
                     <% end %>
-                  <% end %>
-                  <% if !product_info.html_list_ids.blank? && !product_info.xml_list_ids.blank? %>
-                    <br/>
                   <% end %>
                   <% if !product_info.xml_list_ids.blank? %>
                     <% product_info.xml_list_ids.each_with_index do |xlid,index| %>
@@ -55,12 +61,6 @@
                       <br/>
                     <% end %>
                   <% end %>
-                </td>
-                <td class="align-middle">
-                  <noscript class="sad">
-                    Won't work if javascript is disabled
-                  </noscript>
-                  <%= button_tag raw("<i class='fa fa-download'></i> &nbsp; Download"), class: 'btn btn-primary', type: 'button', onclick: "setUpRedirect('#{product_info.product.product_code}',this)" %>
                 </td>
                 <td class="align-middle">
                   <% if downloads_remaining(product_info.product.id) < 2 %>
