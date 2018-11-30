@@ -1,5 +1,5 @@
 class OrderMailer < AsyncMailer
-  default :from => "Brick City Depot <sales@brickcitydepot.com>"
+  default from: 'Brick City Depot <sales@brickcitydepot.com>'
   layout 'base_email', except: [:physical_item_purchased]
 
   def order_confirmation(user_id, order_id)
@@ -32,30 +32,41 @@ class OrderMailer < AsyncMailer
   def follow_up(order_id)
     number_of_products = 3
     @host = Rails.application.config.web_host
-    order = Order.where(["id=?",order_id]).includes(:line_items).first
+    order = Order.where(['id=?', order_id]).includes(:line_items).first
     @user = order.user
     products_bought = @user.products.pluck(:product_id)
     categories = order.products.pluck(:category_id).uniq
     subcategories = order.products.pluck(:subcategory_id).uniq
-    @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and subcategory_id IN (?) and id NOT IN (?)",categories,subcategories,products_bought]).limit(number_of_products)
+    @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and subcategory_id IN (?) and id NOT IN (?)", categories, subcategories, products_bought]).limit(number_of_products)
     # If there's not enough products, ditch the subcategory clause
     if @products_to_recommend.length < number_of_products
-      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and id NOT IN (?)",categories,products_bought]).limit(number_of_products)
+      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and id NOT IN (?)", categories, products_bought]).limit(number_of_products)
     end
     # If there's still not enough products, ditch the category clause
     if @products_to_recommend.length < number_of_products
-      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and id NOT IN (?)",products_bought]).limit(number_of_products)
+      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and id NOT IN (?)", products_bought]).limit(number_of_products)
     end
 
     unless @products_to_recommend.blank?
       mail(to: @user.email, subject: 'Thanks for your recent order')
     end
   end
-#:nocov
-  def queue_name
-    "mailer"
+
+  def issue(order_id, comment, name)
+    @order = Order.where(['id=?', order_id]).first
+    user = @order.user
+    @comment = comment
+    @name = name
+    @hide_unsubscribe = true
+
+    mail(reply_to: user.email, to: [user.email, 'service@brickcitydepot.com'], subject: "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}")
   end
-#:nocov
+
+  #:nocov
+  def queue_name
+    'mailer'
+  end
+  #:nocov
 end
 
 #:nocov:
@@ -88,6 +99,13 @@ if Rails.env.development?
       @user = @order.user
 
       OrderMailer.follow_up(@order.id)
+    end
+
+    def issue
+      @order = Order.first
+      comment = 'Something bad happened'
+
+      OrderMailer.issue(@order.id, comment, 'Roger')
     end
   end
 end

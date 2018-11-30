@@ -1,0 +1,33 @@
+<h1>Maintenance Mode!</h1>
+<br/>
+<br/>
+<p>
+  There are 2 ways to put the site into maintenance mode. The first way is if there's a lot of heavy database stuff to do, or something similar that will take the site down for a bit. To do that, from the heroku console, run `heroku maintenance:on` and
+  then `heroku maintenance:off` when done. This blocks the entire site, from users and admins.
+</p>
+<br/>
+<p>
+  The 2nd way to put the site into maintenance mode is to click the button below. This will effectively block out all non-admin users from using the site, but the admins can still access the entire site. Make sure you take the site back out of
+  maintenance mode or else this site will be inaccessible to our users!
+</p>
+<br/>
+<br/>
+<%= form_for(:switches, :url => {:action => :switch_maintenance_mode}) do |f| %>
+<div class="actions">
+  <% if @mm_switch.on? %>
+    <%= f.submit 'Take app out of Maintenance Mode', data: {disable_with: 'Going in...'} %>
+  <% else %>
+    <%= f.submit 'Put app into Maintenance Mode', data: {disable_with: 'Going out...'} %>
+  <% end %>
+</div>
+<% end %>
+<br/>
+<% if @mm_switch.on? %>
+<p class="sad">
+  MAINTENANCE MODE ON
+</p>
+<% else %>
+<p class="happy">
+  Maintenance Mode Off
+</p>
+<% end %>

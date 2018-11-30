@@ -1,0 +1,78 @@
+<section class="content">
+  <div class="container">
+    <h1>Edit My Account</h1>
+    <br/>
+    <div class="row mb-5">
+      <% unless all_auths_taken(@auths) %>
+        <div class="col-md-7 mb-4">
+          <h3>Add a service to sign in with</h3>
+          <br/>
+          <% if @auths && !@auths.include?('facebook') %>
+            <%= link_to raw("<i class='fab fa-facebook'></i>&nbsp; Login with Facebook"), '/auth/facebook', class: "btn btn-facebook mb-3" %>
+          <% end %>
+          <% if @auths && !@auths.include?('twitter') %>
+            <%= link_to raw("<i class='fab fa-twitter'></i>&nbsp; Login with Twitter"), '/auth/twitter', class: "btn btn-twitter" %>
+          <% end %>
+          <br/>
+        </div>
+      <% end %>
+      <% unless @auths && @auths.empty? %>
+        <div class="col-md-5">
+          <h3>You can sign in using</h3>
+          <br/>
+          <% for authentication in @authentications %>
+            <%= link_to raw("<i class='fab fa-#{authentication.provider}'></i>&nbsp; #{authentication.provider.titleize} &times;"), authentication, data: {confirm: 'Are you sure you want to remove this authentication option?'}, method: :delete, class: "btn
+            btn-#{authentication.provider}" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <hr/>
+    <div class="row mt-5">
+      <div class="col-md-7 mb-4">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+        <h3>
+          Update Email Preferences
+        </h3>
+        <br/>
+        <div class="form-group">
+          <%= f.label :email %>
+          <br/>
+          <%= f.email_field :email, class: 'form-control', type: 'email' %>
+        </div>
+        <br/>
+        <%= render partial: 'email_preferences', locals: {f: f} %>
+        <%= f.submit "Update", class: 'btn btn-primary', data: {disable_with: 'Updating...'} %>
+      <% end %>
+    </div>
+    <div class="col-md-5">
+      <% if @user.encrypted_password? %>
+        <%= form_for(@user, url: passwords_update_password_path, html: { method: :patch }) do |f| %>
+        <h3>
+          Update Password
+        </h3>
+        <br/>
+        <div class="form-group">
+          <%= f.label :password, "New password" %>
+          <br/>
+          <%= f.password_field :password, autocomplete: "off", class: 'form-control', required: true %>
+        </div>
+        <div class="form-group">
+          <%= f.label :password_confirmation, "Confirm new password" %>
+          <br/>
+          <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control', required: true %>
+        </div>
+        <br/>
+        <%= f.submit "Update", class: 'btn btn-primary', data: {disable_with: 'Updating...'} %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+<br/>
+<br/>
+<p class="text-center">
+  Unhappy with Brick City Depot?
+  <%= link_to "Cancel my account", registration_path(resource_name), data: {confirm: "Are you sure? You will no longer be able to download PDFs you have paid for!"}, method: :delete %>.
+</p>
+</div>
+</section>

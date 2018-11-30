@@ -1,0 +1,44 @@
+<section class="content">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <% if !@user.email? || !@user.valid? %>
+          <h2>Register an email address</h2>
+        <% else %>
+          <h2>Update email info</h2>
+        <% end %>
+        <br/>
+        <% if @cart.has_physical_item? %>
+          <br/>
+          <div class="text-center">
+            We'll need your email address to have a way to communicate with you.
+          </div>
+          <br/>
+          <% elsif @cart.has_digital_item? %>
+            <br/>
+            <div class="text-center">
+              We'll need your email address to have somewhere to send download links to.
+            </div>
+            <br/>
+          <% end %>
+          <br/>
+          <div id="regular_signup_div">
+            <%= form_for(@user, :url => '/register_guest', :html => {:method => :post}) do |f| %>
+            <div class="form-group">
+              <%= f.label :email %>
+              <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
+            </div>
+            <br/>
+            <%= render partial: 'registrations/email_preferences', locals: {f: f} %>
+            <% if !@user.email? || !@user.valid? %>
+              <%= render partial: 'registrations/tos_checkbox', locals: {f: f} %>
+            <% end %>
+            <br/>
+            <%= f.submit "Submit", class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
+            <br/>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,8 +1,9 @@
 class StaticController < ApplicationController
   def index
-    #session.delete(:guest_has_arrived_for_downloads)
-    #session.delete(:guest) #for testing
-    #reset_session #for testing
+    # session.delete(:guest_has_arrived_for_downloads)
+    # session.delete(:guest) #for testing
+    # reset_session #for testing
+    # flash[:notice] = 'This is only a test. If this had been the real thing...'
     @updates = Update.live_updates
   end
 
@@ -22,40 +23,40 @@ class StaticController < ApplicationController
   # This will do for now.
   # /exception_notification_test
   def test_exception_notification_delivery
-    1/0
+    1 / 0
   end
 
   def send_contact_email
     @email = Email.new(params[:email])
 
     if @email.valid?
-      #begin
-        ContactMailer.new_contact_email(@email.name, @email.email_address, @email.body).deliver
-        #@email = nil
-        flash[:notice] = "Thanks for your email. We'll get back with you shortly."
-        redirect_to :contact
-      #rescue => e
+      # begin
+      ContactMailer.new_contact_email(@email.name, @email.email_address, @email.body).deliver
+      # @email = nil
+      flash[:notice] = "Thanks for your email. We'll get back with you shortly."
+      redirect_to :contact
+      # rescue => e
 
-       # flash[:alert] = "Something went wrong. Please wait a moment and try again."
-       # render :contact
-      #end
+      # flash[:alert] = "Something went wrong. Please wait a moment and try again."
+      # render :contact
+      # end
     else
-      flash[:alert] = "Uh oh. Look below to see what you need to fix."
+      flash[:alert] = 'Uh oh. Look below to see what you need to fix.'
       render :contact
     end
   end
 
-  #Legacy routes
+  # Legacy routes
   def legacy_name_signs
-    legacy_no_page_redirect_and_flash("Name Signs")
+    legacy_no_page_redirect_and_flash('Name Signs')
   end
 
   def legacy_custom_letters
-    legacy_no_page_redirect_and_flash("Custom Letters")
+    legacy_no_page_redirect_and_flash('Custom Letters')
   end
 
   def legacy_lego_prints
-    legacy_no_page_redirect_and_flash("Lego Prints")
+    legacy_no_page_redirect_and_flash('Lego Prints')
   end
 
   def legacy_books
@@ -79,23 +80,23 @@ class StaticController < ApplicationController
   end
 
   def legacy_logo_theme_sign
-    legacy_no_page_redirect_and_flash("Lego Logo Theme Sign")
+    legacy_no_page_redirect_and_flash('Lego Logo Theme Sign')
   end
 
   def legacy_city_theme_sign
-    legacy_no_page_redirect_and_flash("City Theme Sign")
+    legacy_no_page_redirect_and_flash('City Theme Sign')
   end
 
   def legacy_friends_theme_sign
-    legacy_no_page_redirect_and_flash("Friends Theme Sign")
+    legacy_no_page_redirect_and_flash('Friends Theme Sign')
   end
 
   def legacy_star_wars_theme_sign
-    legacy_no_page_redirect_and_flash("Star Wars Theme Sign")
+    legacy_no_page_redirect_and_flash('Star Wars Theme Sign')
   end
 
   def legacy_sales_deals
-    legacy_no_page_redirect_and_flash("Sales/Deals")
+    legacy_no_page_redirect_and_flash('Sales/Deals')
   end
 
   def legacy_lego_neighborhood_extras
@@ -107,15 +108,15 @@ class StaticController < ApplicationController
   end
 
   def legacy_gallery
-    legacy_no_page_redirect_and_flash("Gallery")
+    legacy_no_page_redirect_and_flash('Gallery')
   end
 
   def legacy_commissions
-    legacy_no_page_redirect_and_flash("Commissions")
+    legacy_no_page_redirect_and_flash('Commissions')
   end
 
   def legacy_instructions
-    redirect_to :controller => :store, :action => :instructions
+    redirect_to controller: :store, action: :instructions
   end
 
   def legacy_contact
@@ -147,21 +148,19 @@ class StaticController < ApplicationController
 
   def legacy_no_page_redirect_and_flash(page_desc)
     flash[:notice] = "We don't currently have a #{page_desc} page. Please check back for an update soon."
-    return redirect_to '/'
+    redirect_to '/'
   end
 
   def legacy_product_redirect(product_code)
-    begin
-      product = Product.find_by_product_code(product_code)
-     return redirect_to :controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case
-    rescue NoMethodError, ActiveRecord::RecordNotFound
-      logger.error("Failed trying to get a legacy product page using product code: #{product_code}")
-      flash[:notice] = "Could not find that product. Please try navigating to the product through the store"
-      return redirect_to :controller => :store, :action => :instructions
-    end
+    product = Product.find_by_product_code(product_code)
+    return redirect_to controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case
+  rescue NoMethodError, ActiveRecord::RecordNotFound
+    logger.error("Failed trying to get a legacy product page using product code: #{product_code}")
+    flash[:notice] = 'Could not find that product. Please try navigating to the product through the store'
+    return redirect_to controller: :store, action: :instructions
   end
 
   def legacy_category_redirect(cat_name)
-    redirect_to :controller => :store, :action => :categories, :product_type_name => 'Instructions', :category_name => cat_name
+    redirect_to controller: :store, action: :categories, product_type_name: 'Instructions', category_name: cat_name
   end
 end

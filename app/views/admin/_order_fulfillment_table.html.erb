@@ -1,0 +1,35 @@
+<%= paginate orders if paginate_it == true %>
+<table class="admin_table">
+  <tr>
+    <th>Date</th>
+    <th>Transaction ID/Request ID</th>
+    <th>User</th>
+    <th>Status</th>
+    <th></th>
+  </tr>
+  <% orders.each do |order| %>
+    <%= form_for order, :url => {:action => :update_order_shipping_status} do |f| %>
+    <%= hidden_field_tag(:order_id,order.id) %>
+    <tr>
+      <td>
+        <%= order.created_at.strftime("%m/%d/%Y") %>
+      </td>
+      <td>
+        <%= link_to order.transaction_id, {:controller => :admin, :action => :order, :id => order.id} %>
+        <br/>
+        <%= order.request_id %>
+      </td>
+      <td>
+        <%= order.user.email %>
+      </td>
+      <td>
+        <%= select_tag(:shipping_status, options_for_select(shipping_statuses,order.shipping_status)) %>
+      </td>
+      <td>
+        <%= f.submit "Update Order" %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>
+</table>
+<%= paginate orders if paginate_it == true %>

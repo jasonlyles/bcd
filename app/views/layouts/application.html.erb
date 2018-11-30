@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="m6aCl_TMUyZi-kR1BIijxqWbYrix12cNmvBR7VWX6U0" name="google-site-verification"/>
+    <meta content="<%= meta_keywords %>" name="keywords"/>
+    <meta content="<%= meta_description %>" name="description"/>
+    <meta content="<%= opengraph_metadata[:image] %>" property="og:image"/>
+    <meta content="<%= content_for?(:title) ? yield(:title) : "Brick City Depot" %>" property="og:title"/>
+    <meta content="<%= opengraph_metadata[:description] %>" property="og:description"/>
+    <meta content="<%= opengraph_metadata[:app_id] %>" property="fb:app_id"/>
+    <meta content="<%= opengraph_metadata[:site_name] %>" property="og:site_name"/>
+    <meta content="<%= opengraph_metadata[:url] %>" property="og:url"/>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <link rel="apple-touch-icon" href="favicon.ico"/>
+    <title><%= content_for?(:title) ? yield(:title) : "Brick City Depot" %></title>
+    <%= stylesheet_link_tag 'application' %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script defer="defer" src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tags %>
+    <%= yield :head %>
+  </head>
+
+  <body>
+    <%= render partial: 'shared/navigation' %>
+
+    <main>
+      <% unless current_page?(root_path) %>
+        <div class="header-spacer"></div>
+        <div class="container">
+          <%= render partial: 'shared/notifications' %>
+        </div>
+        <div class="container">
+          <% if @cart && @cart.errors.any? %>
+            <ul class="cart_errors">
+              <% @cart.errors.full_messages.each do |msg| %>
+                <li class="cart_error">
+                  <%= msg %>
+                </li>
+              <% end %>
+            </ul>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </main>
+
+    <footer class="footer">
+      <%= render :partial => 'shared/footer' %>
+    </footer>
+    <%= render :partial => 'shared/google_analytics_code' %>
+    <%= render :partial => 'shared/google_social_profile' %>
+    <script>
+      window.onpageshow = function () {
+        var cookie = getCookie('show_thank_you');
+        if (cookie) {
+          window.location.replace('/thank_you')
+        }
+      }
+
+      function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) {
+          return parts.pop().split(";").shift();
+        }
+      }
+    </script>
+  </body>
+</html>

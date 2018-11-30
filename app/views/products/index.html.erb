@@ -1,0 +1,70 @@
+<h1>Listing products</h1>
+<br/>
+<%= paginate @products %>
+<table class="admin_table">
+  <tr>
+    <th>Product</th>
+    <th>Type</th>
+    <th>Cat/Subcat</th>
+    <th>Qty</th>
+    <th>Imgs</th>
+    <th>Discount%</th>
+    <th>Price</th>
+    <th>Live?</th>
+    <th>Free?</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <% @products.each do |product| %>
+    <tr>
+      <td>
+        <%= link_to "#{product.product_code} #{product.name}", product %>
+      </td>
+      <td>
+        <%= product.product_type.name %>
+      </td>
+      <td>
+        <%= "#{product.category.name}/#{product.subcategory.name}" %>
+      </td>
+      <% if product.product_type.name == 'Instructions' %>
+        <td class="sad">N/A</td>
+      <% else %>
+        <td>
+          <%= product.quantity %>
+        </td>
+      <% end %>
+      <td>
+        <%= product.images.count %>
+      </td>
+      <td>
+        <%= product.discount_percentage %>
+      </td>
+      <td>
+        <%= number_to_currency(product.price) %>
+      </td>
+      <% if product.ready_for_public == true %>
+        <td class="happy">
+          <%= product.ready_for_public %>
+        </td>
+      <% else %>
+        <td class="sad">
+          <%= product.ready_for_public %>
+        </td>
+      <% end %>
+      <% if product.free? %>
+        <td class="sad">FREE</td>
+      <% else %>
+        <td>$$$</td>
+      <% end %>
+      <td>
+        <%= link_to 'Edit', edit_product_path(product) %>
+      </td>
+      <td>
+        <%= link_to 'Destroy', product, data: {confirm: 'Are you sure?'}, :method => :delete %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<%= paginate @products %>
+<br/>
+<%= link_to 'New Product', new_product_path %>

@@ -1,0 +1,52 @@
+<h1>Admin Tools</h1>
+<br/>
+<%= link_to "Maintenance Mode", maintenance_mode_path %>
+<br/>
+<%= link_to "Edit Admin profile", admin_profile_admin_path(current_radmin.id) %>
+<br/>
+<br/>
+<h2>User Tools</h2>
+<br/>
+<%= link_to "User Lookup", account_info_path %>
+<br/>
+<%= link_to "Notify Users of PDF/parts list fix", update_users_download_counts_path %>
+<br/>
+<br/>
+<h2>Product Tools</h2>
+<br/>
+<%= link_to "Add new Category", new_category_path %>
+<br/>
+<%= link_to "Add new Subcategory", new_subcategory_path %>
+<br/>
+<%= link_to 'Add new Product', new_product_path %>
+<br/>
+<%= link_to 'Add an Image!', new_image_path %>
+<br/>
+<%= link_to 'Add a Product Type', new_product_type_path %>
+<br/>
+<%= link_to 'Featured Products Tool', featured_products_path %>
+<br/>
+<br/>
+<h2>Marketing Tools</h2>
+<br/>
+<%= link_to 'Partners', partners_path %>
+<br/>
+<%= link_to 'Advertising Campaigns', advertising_campaigns_path %>
+<br/>
+<%= link_to 'New Product Notification', new_product_notification_path %>
+<br/>
+<%= link_to 'Marketing Emails', email_campaigns_path %>
+<br/>
+<br/>
+<h2>Order Info</h2>
+<br/>
+<%= link_to 'Order Lookup', order_info_path %>
+<br/>
+<%= link_to 'Order Fulfillment', order_fulfillment_path %>
+<br/>
+<%= link_to 'Sales Reporting', sales_report_path %>
+<br/>
+<br/>
+<h2>Background Tasks</h2>
+<br/>
+<%= link_to 'Resque Dashboard', jobs_path %>

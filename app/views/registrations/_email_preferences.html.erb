@@ -1,0 +1,15 @@
+Email Preferences
+<br/>
+<div class="form-check">
+  <%= f.radio_button :email_preference, 2, class: 'form-check-input' %>
+  <%= f.label :email_preference, "I want them all!... promotions, discounts, new model announcements, etc.", value: 2, class: 'form-check-label' %>
+</div>
+<div class="form-check">
+  <%= f.radio_button :email_preference, 1, class: 'form-check-input' %>
+  <%= f.label :email_preference, "Just important emails, like when you update a parts list or PDF that I own.", value: 1, class: 'form-check-label' %>
+</div>
+<div class="form-check">
+  <%= f.radio_button :email_preference, 0, class: 'form-check-input' %>
+  <%= f.label :email_preference, "No emails please. (You'll only get order confirmation emails.)", value: 0, class: 'form-check-label' %>
+</div>
+<br/>

@@ -1,7 +1,0 @@
-- if user
-  - if download
-    Updated download count for #{model.product_code + " " + model.name} for #{user.email} from #{download.remaining-1} to #{download.remaining}
-  -else
-    Did not update count for #{model.product_code + " " + model.name} for #{user.email} because he/she already was at #{MAX_DOWNLOADS} downloads
-- elsif users
-  Updated #{model.product_code + " " + model.name} for #{users.length} users.

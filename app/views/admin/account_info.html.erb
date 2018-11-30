@@ -1,0 +1,14 @@
+<h1>User Account Info</h1>
+<br/>
+<%= form_for(:user, :url => {:action => :find_user, :email => /.*/},:remote => true) do |f| %>
+<div class="field">
+  <%= f.label :email %>
+  <br/>
+  <%= f.text_field :email, :id => 'account_info_user_email', placeholder: "ralph@ralph.mil" %>
+</div>
+<div class="actions">
+  <%= f.submit 'Search', :id => 'account_info_user_search_submit' %>
+</div>
+<% end %>
+<br/>
+<div id="account_info"></div>

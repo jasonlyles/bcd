@@ -1,0 +1,60 @@
+<section class="content">
+  <div class="container">
+    <h1>Contact Us!</h1>
+    <br/>
+    <div class="row">
+      <div class="col-md-2 d-none d-md-block">
+        <%= image_tag('jason_8.png', class: 'img-fluid sigfig') %>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-8">
+        <%= image_tag('jason_8.png', class: 'img-fluid sigfig-sm float-left d-xs-block d-md-none') %>
+        <p>
+          Before you contact us, please check out our
+          <%= link_to 'FAQ', faq_path %>
+          page. We may have already answered your question there.
+        </p>
+        <p>
+          Looking for the Lego Neighborhood Book companion files? No problem, you can find them
+          <%= link_to 'here', books_path %>.
+        </p>
+        <%= image_tag('brian_c2.png', class: 'img-fluid sigfig-sm float-right d-xs-block d-md-none') %>
+        <p>
+          If you have any questions or concerns about an order, please contact us at
+          <a href="mailto:service@brickcitydepot.com">service@brickcitydepot.com</a>
+          and give us a chance to clarify or straighten out any issues.
+        </p>
+        <p>
+          If you have any questions before you purchase instructions, please contact us at
+          <a href="mailto:sales@brickcitydepot.com">sales@brickcitydepot.com</a>
+          and let us know.
+        </p>
+      </div>
+      <div class="col-md-2 d-none d-md-block">
+        <%= image_tag('brian_c2.png', class: 'img-fluid sigfig') %>
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <p>
+      Random stuff to say? Idea for a model we should build? Let us hear it!
+    </p>
+    <br/>
+    <%= form_for @email, :url => send_contact_email_path do |f| %>
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name, :class => 'form-control', :placeholder => 'Bob Smith' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :email_address %>
+      <%= f.text_field :email_address, :class => 'form-control', :placeholder => 'bob@smith.com', :type => 'email' %>
+    </div>
+    <div class="form-group">
+      <%= f.label :body, "Message" %>
+      <%= f.text_area :body, :class => 'form-control', :placeholder => 'Stuff I want to say' %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Send Email", :class => 'btn btn-primary', data: {disable_with: 'Sending...'} %>
+    </div>
+  <% end %>
+</div>
+</section>

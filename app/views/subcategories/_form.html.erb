@@ -1,0 +1,24 @@
+<%= form_for subcategory do |f| %>
+<div class="field">
+  <%= f.label :category_id %>
+  <br/>
+  <%= f.select :category_id, categories %>
+</div>
+<div class="field">
+  <%= f.label :name %>
+  <br/>
+  <%= f.text_field :name, placeholder: "Vehicles" %>
+</div>
+<div class="field">
+  <%= f.label :code %>
+  <br/>
+  <%= f.text_field :code, placeholder: "CV" %>
+  <div class="field"></div>
+  <%= f.label :description %>
+  <br/>
+  <%= f.text_area :description, placeholder: "Some marketing mumbo-jumbo about this subcategory.." %>
+</div>
+<div class="actions">
+  <%= f.submit 'Save' %>
+</div>
+<% end %>

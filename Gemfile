@@ -23,8 +23,8 @@ gem 'kaminari'
 gem 'nested_form'
 gem 'twitter'
 gem 'exception_notification'
-gem "haml-rails"
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'rake'
 
 gem 'resque'
@@ -36,12 +36,11 @@ gem 'sitemap_generator'
 gem 'responders', '~> 2.0'
 
 #assets
-gem 'sass-rails'
-gem 'compass-rails'
-gem 'compass-blueprint'
+gem 'sass-rails', '~> 5.0'
 gem 'uglifier'
-gem 'sprockets'
+gem 'sprockets', '~> 3.7'
 gem 'asset_sync'
+gem 'bootstrap', '~> 4.0.0'
 
 # Use unicorn as the web server
 #gem 'unicorn'
@@ -64,12 +63,8 @@ group :development, :test do
   gem 'dotenv-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'rb-fsevent', :require => false #if RUBY_PLATFORM =~ /darwin/i
-  gem 'guard-livereload'
-  gem 'guard-compass', :require => false
   gem 'rack-mini-profiler'
   gem "nifty-generators"
-  #gem 'guard-rspec'
   gem "factory_girl_rails"
   gem "factory_girl_generator"
   gem "rspec-rails", '~> 3.0'

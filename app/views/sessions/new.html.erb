@@ -1,0 +1,98 @@
+<section class="contentzz">
+  <div class="container">
+    <% if resource_name.to_s == "user" %>
+      <%= render partial: 'shared/social_login_buttons' %>
+      <hr/>
+      <br/>
+      <div class="text-center">
+        <b>
+          Or, sign in with a Brick City Depot account
+        </b>
+      </div>
+      <br/>
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <%= form_for(@user, url: session_path(resource_name)) do |f| %>
+          <div class="form-group">
+            <%= f.label :email %>
+            <%= f.email_field :email, autofocus: true, class: 'form-control', placeholder: 'Enter email' %>
+            <small id="emailHelp" class="form-text text-muted">We'll
+              <strong>never</strong>
+              share your email with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <%= f.label :password %>
+            <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password' %>
+          </div>
+          <%= f.submit "Sign in", :class => 'btn btn-primary', data: {disable_with: 'Sign In'} %>
+        <% end %>
+        <% if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+          <div class="mt-2 mb-4">
+            <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <% if session[:show_guest_checkout_link] %>
+    <hr/>
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="text-center mt-4 mb-4">
+          No thanks! I want to
+          <%= link_to("checkout as a guest", "/guest_registration") %>
+        </div>
+        <br/>
+        <p class="lead">
+          Why create a Brick City Depot account?
+        </p>
+        <p>
+          <strong class="why-bcd">
+            We do:
+          </strong>
+        </p>
+        <ul class="list-unstyled">
+          <li>
+            <i class="far fa-check-circle"></i>
+            <strong class="why-bcd">Give you free instructions.</strong>
+          </li>
+          <li>
+            <i class="far fa-check-circle"></i>
+            <strong class="why-bcd">Keep you informed of sales, new models, etc.</strong>
+            (If you want us to. You can always opt out.) We will also update you when we've had to make changes to the PDF or parts lists for a set of instructions you bought.
+          </li>
+          <li>
+            <i class="far fa-check-circle"></i>
+            <strong class="why-bcd">Allow you to download your instructions any time.</strong>
+            You won't need to keep track of an order confirmation email we send you with a download link. Computer crashed? Lost the files? No problem. Just sign in and go to the
+            <%= link_to 'Account page', account_path %>
+            and download from there.</li>
+        </ul>
+        <p>
+          <strong class="why-bcd">
+            We don't:
+          </strong>
+        </p>
+        <ul class="list-unstyled">
+          <li>
+            <i class="far fa-times-circle"></i>
+            <strong class="why-bcd">Sell your information.</strong>
+            We wouldn't do that to guests either.</li>
+          <li>
+            <i class="far fa-times-circle"></i>
+            <strong class="why-bcd">Email you if you don't want us to.</strong>
+            The exception would be emails relating specifically to your orders.</li>
+        </ul>
+      </div>
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <p>
+          Don't worry if you don't want to use a Twitter, Facebook or Brick City Depot account; you can still check out as a guest.
+        </p>
+      </div>
+    </div>
+  <% end %>
+</div>
+</section>

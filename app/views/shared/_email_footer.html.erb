@@ -1,0 +1,20 @@
+<table align="center" border="0" width="80%">
+  <tr>
+    <td>
+      <%= link_to "Privacy Policy", "#{host}/privacy_policy" %>
+    </td>
+    <td>
+      <%= link_to "Brick City Depot", "#{host}" %>
+    </td>
+    <td>
+      <%= link_to "Account Preferences", "#{host}/account/edit" %>
+    </td>
+    <% unless defined?(hide_unsubscribe) %>
+      <td>
+        <%= link_to 'Unsubscribe here', "#{host}/unsubscribe?id=#{user.guid}&token=#{user.unsubscribe_token}", :target => '_blank' %>
+      </td>
+    <% end %>
+  </tr>
+</table>
+</body>
+</html>

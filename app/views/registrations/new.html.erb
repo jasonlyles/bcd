@@ -1,0 +1,87 @@
+<section class="content">
+  <div class="container">
+    <%= render partial: 'shared/social_login_buttons' %>
+    <hr/>
+    <br/>
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <% if session["omniauth"] %>
+          <% if resource.email.blank? %>
+            <div id="omniauth_text">
+              <p>
+                We will need your email as a way to identify you in our system.
+              </p>
+              <br/>
+            </div>
+          <% end %>
+          <div id="changed_mind_about_auth">
+            <%= link_to "Changed your mind about using #{session["omniauth"]["provider"].capitalize}?", clear_authentications_path, method: :post %>
+            <br/>
+            <br/>
+          </div>
+          <div id="regular_signup_div">
+            <%= form_for(@user, :url => registration_path(resource_name)) do |f| %>
+            <% if resource.email.blank? %>
+              <div class="form-group">
+                <%= f.email_field :email, class: 'form-control', placeholder: 'Email' %>
+                <small id="emailHelp" class="form-text text-muted">We'll
+                  <strong>never</strong>
+                  share your email with anyone else.</small>
+              </div>
+            <% else %>
+              <%= f.hidden_field :email %>
+            <% end %>
+            <br/>
+            <%= render partial: 'email_preferences', locals: {f: f} %>
+            <%= render partial: 'tos_checkbox', locals: {f: f} %>
+            <br/>
+            <br/>
+            <%= f.submit "Sign up", class: 'btn btn-primary', data: {disable_with: 'Sign Up'} %>
+            <br/>
+          <% end %>
+        </div>
+      <% else %>
+        <div id="regular_signup_div">
+          <div>
+            <b>
+              Or, create a Brick City Depot account
+            </b>
+          </div>
+          <br/>
+          <%= form_for(@user, url: registration_path(resource_name)) do |f| %>
+          <div class="form-group">
+            <%= f.label :email %>
+            <br/>
+            <%= f.email_field :email, autofocus: true, class: 'form-control', required: true %>
+          </div>
+          <div class="form-group">
+            <%= f.label :password %>
+            <br/>
+            <%= f.password_field :password, autocomplete: "off", class: 'form-control', required: true %>
+          </div>
+          <div class="form-group">
+            <%= f.label :password_confirmation %>
+            <br/>
+            <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control', required: true %>
+          </div>
+          <br/>
+          <%= render partial: 'email_preferences', locals: {f: f} %>
+          <%= render partial: 'tos_checkbox', locals: {f: f} %>
+          <br/>
+          <div>
+            <%= f.submit "Sign up", data: {disable_with: 'Sign Up'}, class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+      <div class="text-center">
+        <br/>
+        <br/>
+        <p>
+          Don't worry if you don't want to use a Twitter, Facebook or Brick City Depot account; you can still check out as a guest.
+        </p>
+      </div>
+    <% end %>
+  </div>
+</div>
+</div>
+</section>

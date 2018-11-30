@@ -1,0 +1,27 @@
+<h1>Order Info</h1>
+<br/>
+<div class="centered_text">
+  <%= image_tag("paypal_screen.png") %>
+</div>
+<br/>
+<br/>
+<%= form_for(:order, :url => {:action => :find_order},:remote => true) do |f| %>
+<div class="field">
+  <%= f.radio_button :lookup_field, 'request_id', checked: true %>
+  <%= f.label :lookup_field, "Request ID", :value => 'request_id' %>
+  <br/>
+  <%= f.radio_button :lookup_field, 'transaction_id' %>
+  <%= f.label :lookup_field, "Transaction ID", :value => 'transaction_id' %>
+</div>
+<div class="field">
+  <%= f.label :lookup_id, 'ID' %>
+  <br/>
+  <%= f.text_field :lookup_id, :id => 'order_info_request_id', placeholder: "1V3B2BB6F", size: 40 %>
+</div>
+<br/>
+<div class="actions">
+  <%= f.submit 'Search', :id => 'order_info_search_submit' %>
+</div>
+<% end %>
+<br/>
+<div id="order_info"></div>

@@ -1,0 +1,86 @@
+<section class="content">
+  <div class="container">
+    <div class="div" id="<%= @submission_method == "form" ? "form-selected" : "paypal-selected" %>"></div>
+    <h2>Enter Address</h2>
+    <br/>
+    We noticed that you have a physical item in your cart. In order for us to be able to ship it to you, we'll need your street address. If you want us to ship to the address you have registered with Paypal, select "Use my Paypal address". Otherwise,
+    select "Enter my address here".
+    <br/>
+    <br/>
+    <%= form_for(@order, url: "validate_street_address", html: { method: :post }) do |f| %>
+    <div class="form-check">
+      <%= f.radio_button :address_submission_method, 'paypal', onclick: 'hideAddressForm()', class: 'form-check-input' %>
+      <%= f.label :address_submission_method_paypal, 'Use my Paypal address (Use this if you live somewhere other than the United States)', class: 'form-check-label' %>
+    </div>
+    <div class="form-check">
+      <%= f.radio_button :address_submission_method, 'form', checked: true, onclick: 'showAddressForm()', class: 'form-check-input' %>
+      <%= f.label :address_submission_method_form, 'Enter my address here', class: 'form-check-label' %>
+    </div>
+    <br/>
+    <div class="div" id="address_form">
+      <div class="form-group">
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :address_street_1, "Address 1" %>
+        <%= f.text_field :address_street_1, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :address_street_2, "Address 2" %>
+        <%= f.text_field :address_street_2, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :address_city, "City" %>
+        <%= f.text_field :address_city, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :address_state, "State" %>
+        <%= f.select(:address_state, @states, {prompt: 'Select State'}, class: 'form-control') %>
+      </div>
+      <div class="form-group">
+        <%= f.label :address_zip, "Zip" %>
+        <%= f.text_field :address_zip, maxlength: "5", class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :address_country, "Country" %>
+        <%= f.select(:address_country, @countries, class: 'form-control') %>
+      </div>
+      <br/>
+    </div>
+    <%= f.submit "Submit", class: 'btn btn-primary', data: {disable_with: 'Submitting...'} %>
+  <% end %>
+</div>
+</section>
+<script>
+
+$(document).ready(function () {
+  window.onload = showAddressForm();
+});
+
+function showAddressForm() {
+  var paypalDiv = document.getElementById('paypal-selected');
+  var formDiv = document.getElementById('form-selected');
+  var addressForm = document.getElementById('address_form');
+  var paypalRadio = document.getElementById('order_address_submission_method_paypal');
+  var formRadio = document.getElementById('order_address_submission_method_form');
+  if (formDiv === null && paypalDiv === null) {
+    addressForm.style.display = 'block';
+  } else if (formDiv === null && paypalDiv != null) {
+    paypalDiv.parentNode.removeChild(paypalDiv);
+    addressForm.style.display = 'none';
+    paypalRadio.checked = true;
+  } else {
+    formDiv.parentNode.removeChild(formDiv);
+    addressForm.style.display = 'block';
+  }
+}
+
+function hideAddressForm() {
+  document.getElementById('address_form').style.display = 'none';
+}
+</script>

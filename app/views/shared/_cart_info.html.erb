@@ -1,0 +1,14 @@
+<div class='d-inline-block'>
+  <div class="cart-details d-inline-block pr-3">
+    <div class="d-inline-block">
+      <span class="fa-layers fa-fw">
+        <% if cart %>
+          <%= link_to raw("<i class='fa fa-shopping-cart fa-2x bordered-cart' data-fa-transform='down-4.2 left-6 grow-3'></i>"), cart_path, class: 'text-white' %>
+          <%= link_to raw("<span class='fa-layers-counter fa-3x tomato'>#{cart.total_quantity}</span>"), cart_path %>
+        <% else %>
+          <%= link_to raw("<i class='fa fa-shopping-cart fa-2x bordered-empty-cart' data-fa-transform='down-4.2 left-6 grow-3'></i>"), cart_path, class: 'text-white' %>
+        <% end %>
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+.navbar {
+  height: 80px;
+  margin-bottom: 0 !important;
+  padding: 0;
+  background-color: rgba(18, 63, 135, 0.4);
+  color: #f4f4f4;
+  opacity: 0.95;
+  -webkit-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+  -moz-transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+  transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+}
+
+.navbar-brand {
+  padding: 5px 20px;
+  height: 80px;
+  margin: 0;
+}
+
+.navbar-brand-logo {
+  height: 114px;
+}
+
+.nav-link {
+  padding-top: 2.3rem !important;
+  padding-bottom: 1rem !important;
+  font-family: 'Yanone Kaffeesatz', sans-serif !important;
+}
+
+.account-dropdown-menu {
+  left: auto !important;
+  right: 0 !important;
+}
+@media(max-width: 992px) {
+  .navbar-brand-logo {
+    height: 102px;
+  }
+
+  .nav-link {
+    padding-left: 1rem !important;
+    padding-top: 0.1rem !important;
+    padding-bottom: 0.1rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .navbar-nav li {
+    padding: 0 !important;
+  }
+
+  .account-dropdown-menu {
+    left: 0 !important;
+    right: auto !important;
+  }
+}
+@media(max-width: 404px) {
+  .navbar-brand-logo {
+    position: fixed;
+    top: 2px;
+    right: 10px;
+    height: 80px;
+  }
+}
+
+.navbar-toggler {
+  margin-right: 20px;
+  margin-left: 30px;
+  padding-top: 10px !important;
+  border-color: white !important;
+}
+
+.white-navbar-toggler {
+  border-color: white !important;
+}
+
+.navbar-toggler-icon {
+  color: white;
+}
+
+.white-navbar-toggler-icon {
+  color: white;
+}
+
+.navbar-nav {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-nav li {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+@media (max-width: 991px) {
+  .navbar-collapse {
+    padding: 0;
+    background-color: #FFF;
+    opacity: 0.95;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+    a {
+      color: black !important;
+    }
+  }
+}
+
+.top-nav-collapse {
+  padding: 0;
+  background-color: #262C28;
+  opacity: 0.95;
+}
+
+.navbar-custom .top-nav-collapse {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.navbar-nav > li > a span {
+  margin: 5px 0 0;
+  padding: 0;
+  font-size: 14px;
+  display: block;
+  font-weight: normal;
+  font-family: arial;
+  text-transform: none;
+}
+
+.nav-item a:hover,
+.navbar-nav > .active > a,
+.navbar-nav > .active > a:focus,
+.navbar-nav > .active > a:hover,
+.navbar-nav a:hover {
+  background-color: rgba(18, 63, 135, 0.3);
+  color: #fff !important;
+}

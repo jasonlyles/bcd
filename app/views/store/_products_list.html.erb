@@ -1,0 +1,13 @@
+<% if products.blank? %>
+  <br/>
+  <div class="text-center">
+    <%= "Sorry, there are currently no #{product_type} for sale." %>
+  </div>
+<% end %>
+<%= paginate products %>
+<% products.each do |p| %>
+  <div class="col-md-3 d-flex">
+    <%= render partial: 'product_teaser_medium', locals: {product: p} %>
+  </div>
+<% end %>
+<%= paginate products %>
