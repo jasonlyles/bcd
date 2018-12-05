@@ -34,7 +34,7 @@ BrickCity::Application.configure do
 
   # Disable Rails's static asset server
   # In production, Apache or nginx will already do this
-  config.serve_static_assets = true
+  config.serve_static_files = true
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # Using the cloudfront name until I can get prod deployed, switch DNS providers, and get my cname set up again
@@ -64,7 +64,7 @@ BrickCity::Application.configure do
   config.assets.css_compressor = :sass
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  # config.assets.compile = true
+  config.assets.compile = false
 
   config.cache_classes = true
 
