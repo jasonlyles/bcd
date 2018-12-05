@@ -9,7 +9,7 @@ gem 'protected_attributes'
 gem 'devise', '3.5.10'
 gem 'aws-sdk'
 gem 'aws-sdk-rails'
-gem 'omniauth'
+gem 'omniauth', '~> 1.3'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'hpricot'
@@ -26,6 +26,8 @@ gem 'exception_notification'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'rake'
+gem "rack-protection", ">= 1.5.5"
+gem "ffi", ">= 1.9.24"
 
 gem 'resque'
 gem 'resque_mailer'
@@ -40,7 +42,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier'
 gem 'sprockets', '~> 3.7'
 gem 'asset_sync'
-gem 'bootstrap', '~> 4.0.0'
+gem 'bootstrap', '~> 4.1'
 
 gem 'thin'
 
