@@ -2,8 +2,8 @@ BrickCity::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
   config.web_host = 'http://bcd-stg.herokuapp.com'
 
-  #sharethis url needs to be different from the production url
-  config.sharethis_url = "https://ws.sharethis.com/button/buttons.js"
+  # sharethis url needs to be different from the production url
+  config.sharethis_url = 'https://ws.sharethis.com/button/buttons.js'
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -13,7 +13,7 @@ BrickCity::Application.configure do
   config.action_controller.perform_caching = true
 
   # Specifies the header that your server uses for sending files
-  #config.action_dispatch.x_sendfile_header = "X-Sendfile"
+  # config.action_dispatch.x_sendfile_header = "X-Sendfile"
 
   # For nginx:
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect'
@@ -22,7 +22,7 @@ BrickCity::Application.configure do
   # just comment this out and Rails will serve the files
 
   # See everything in the log (default is :info)
-  #config.log_level = :debug
+  # config.log_level = :debug
   config.logger = Logger.new(STDOUT)
   config.logger.level = Logger::DEBUG
 
@@ -37,8 +37,8 @@ BrickCity::Application.configure do
   config.serve_static_assets = true
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
-  #Using the cloudfront name until I can get prod deployed, switch DNS providers, and get my cname set up again
-  config.action_controller.asset_host = "dkki5p6pvm5jx.cloudfront.net" #"assets-stg.brickcitydepot.com"
+  # Using the cloudfront name until I can get prod deployed, switch DNS providers, and get my cname set up again
+  config.action_controller.asset_host = 'dkki5p6pvm5jx.cloudfront.net' # "assets-stg.brickcitydepot.com"
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
@@ -54,31 +54,31 @@ BrickCity::Application.configure do
   config.active_support.deprecation = :notify
 
   # Devise needs a default url
-  config.action_mailer.default_url_options = { :host => 'bcd-stg.herokuapp.com' }
+  config.action_mailer.default_url_options = { host: 'bcd-stg.herokuapp.com' }
 
-  #Set to use Amazon ses via aws-ses gem
+  # Set to use Amazon ses via aws-ses gem
   config.action_mailer.delivery_method = :aws_sdk
 
-  #Compress JS and CSS
+  # Compress JS and CSS
   config.assets.js_compressor = :uglifier
   config.assets.css_compressor = :sass
 
-  #Don't fallback to assets pipeline if a precompiled asset is missed
-  config.assets.compile = true
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  # config.assets.compile = true
 
   config.cache_classes = true
 
   config.assets.initialize_on_precompile = true
 
-  #Generate digests for assets URLs
+  # Generate digests for assets URLs
   config.assets.digest = true
 
-  #Version of the assets. Change this to expire all assets
+  # Version of the assets. Change this to expire all assets
   config.assets.version = '1.1'
 
   config.eager_load = true
 
-  #Force SSL
+  # Force SSL
   config.force_ssl = true
 
   # lograge config
@@ -86,12 +86,12 @@ BrickCity::Application.configure do
 
   # add time to lograge
   config.lograge.custom_options = lambda do |event|
-    {:time => event.time}
+    { time: event.time }
   end
 end
 
 BrickCity::Application.config.middleware.use ExceptionNotification::Rack,
-                                             :email => {
-                                              :sender_address => %{"BrickCityDepot Exception" <service@brickcitydepot.com>},
-                                              :exception_recipients => ["lylesjt@gmail.com"]
+                                             email: {
+                                               sender_address: %("BrickCityDepot Exception" <service@brickcitydepot.com>),
+                                               exception_recipients: ['lylesjt@gmail.com']
                                              }
