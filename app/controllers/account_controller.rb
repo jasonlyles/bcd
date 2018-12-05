@@ -13,14 +13,6 @@ class AccountController < ApplicationController
     @orders = current_user.orders.order('orders.created_at DESC')
   end
 
-  def order
-    @order = Order.where('request_id=? and user_id=?', params[:request_id], current_user.id).first
-    if @order.blank?
-      flash[:notice] = "We couldn't find that order. Please contact us and let us know what order is giving you trouble."
-      return redirect_to action: :order_history
-    end
-  end
-
   def order_issue
     OrderMailer.issue(params['order_id'], params['comment'], params['name']).deliver
     redirect_to :back, notice: "Thanks! We both should have emails in our inboxes soon. If you don't receive an email, check your junk folder, or email us directly."
