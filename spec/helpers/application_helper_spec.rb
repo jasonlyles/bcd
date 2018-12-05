@@ -22,7 +22,7 @@ describe ApplicationHelper do
                                       ready_for_public: 't',
                                       featured: 't')]
 
-      expect(helper.featured_items.name).to match(/Colonial Revival House|Grader/)
+      expect(helper.featured_items[0].name).to match(/Colonial Revival House|Grader/)
     end
   end
 

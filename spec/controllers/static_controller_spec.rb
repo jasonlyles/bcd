@@ -6,21 +6,21 @@ describe StaticController do
   end
 
   describe "GET 'index'" do
-    it "should be successful" do
+    it 'should be successful' do
       get 'index'
       expect(response).to be_success
     end
   end
 
-  describe "GET contact" do
-    it "should get contact" do
+  describe 'GET contact' do
+    it 'should get contact' do
       get 'contact'
       expect(response).to be_success
     end
   end
 
-  describe "GET maintenance" do
-    context "maintenance is completed" do
+  describe 'GET maintenance' do
+    context 'maintenance is completed' do
       it 'should redirect to the home page' do
         @switch = FactoryGirl.create(:switch, switch_on: false)
         get 'maintenance'
@@ -40,23 +40,23 @@ describe StaticController do
     end
   end
 
-  describe "POST send_contact_email" do
-    it "should send a contact email if email has valid params" do
-      post 'send_contact_email', :email => {:name => "Charlie Brown", :email_address => "charlie_brown@peanuts.com", :body => 'I have too much money. Please help.'}
+  describe 'POST send_contact_email' do
+    it 'should send a contact email if email has valid params' do
+      post 'send_contact_email', email: { name: 'Charlie Brown', email_address: 'charlie_brown@peanuts.com', body: 'I have too much money. Please help.' }
 
       expect(response).to redirect_to('/contact')
       expect(flash[:notice]).to eq("Thanks for your email. We'll get back with you shortly.")
     end
 
-    it "should not send a contact email if email has invalid params" do
-      post 'send_contact_email', :email => {:name => '', :email_address => "blah", :body => "I have too much money. Please help."}
+    it 'should not send a contact email if email has invalid params' do
+      post 'send_contact_email', email: { name: '', email_address: 'blah', body: 'I have too much money. Please help.' }
 
-      expect(flash[:alert]).to eq("Uh oh. Look below to see what you need to fix.")
+      expect(flash[:alert]).to eq('Uh oh. Look below to see what you need to fix.')
       expect(response).to render_template('contact')
     end
   end
 
-  describe "legacy routes" do
+  describe 'legacy routes' do
     it 'should get legacy_name_signs' do
       get 'legacy_name_signs'
       expect(flash[:notice]).to eq("We don't currently have a Name Signs page. Please check back for an update soon.")
@@ -86,25 +86,25 @@ describe StaticController do
     it 'should get legacy_menswear_instructions' do
       cat = FactoryGirl.create(:category)
       subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product, :product_code => 'CB027')
+      product = FactoryGirl.create(:product, product_code: 'CB027')
       get 'legacy_menswear_instructions'
-      expect(response).to redirect_to :controller => :store, :action => :product_details, :product_code => 'CB027', :product_name => 'colonial_revival_house'
+      expect(response).to redirect_to controller: :store, action: :product_details, product_code: 'CB027', product_name: 'colonial_revival_house'
     end
 
     it 'should get legacy_archfirm_instructions' do
       cat = FactoryGirl.create(:category)
       subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product, :product_code => 'CB028')
+      product = FactoryGirl.create(:product, product_code: 'CB028')
       get 'legacy_archfirm_instructions'
-      expect(response).to redirect_to :controller => :store, :action => :product_details, :product_code => 'CB028', :product_name => 'colonial_revival_house'
+      expect(response).to redirect_to controller: :store, action: :product_details, product_code: 'CB028', product_name: 'colonial_revival_house'
     end
 
     it 'should get legacy_speakeasy_instructions' do
       cat = FactoryGirl.create(:category)
       subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product, :product_code => 'CB029')
+      product = FactoryGirl.create(:product, product_code: 'CB029')
       get 'legacy_speakeasy_instructions'
-      expect(response).to redirect_to :controller => :store, :action => :product_details, :product_code => 'CB029', :product_name => 'colonial_revival_house'
+      expect(response).to redirect_to controller: :store, action: :product_details, product_code: 'CB029', product_name: 'colonial_revival_house'
     end
 
     it 'should get legacy_logo_theme_sign' do
@@ -137,59 +137,54 @@ describe StaticController do
       expect(flash[:notice]).to eq("We don't currently have a Sales/Deals page. Please check back for an update soon.")
     end
 
-    it 'should get legacy_lego_neighborhood_extras' do
-      get 'legacy_lego_neighborhood_extras'
-      expect(response).to render_template('lego_neighborhood_extras')
-    end
-
-    it "should get legacy_google_hosted_service" do
+    it 'should get legacy_google_hosted_service' do
       get 'legacy_google_hosted_service'
       expect(response).to render_template('google_hosted_service')
     end
 
-    it "should get legacy_commissions" do
-      get "legacy_commissions"
+    it 'should get legacy_commissions' do
+      get 'legacy_commissions'
       expect(response).to redirect_to('/')
       expect(flash[:notice]).to eq("We don't currently have a Commissions page. Please check back for an update soon.")
     end
 
-    it "should get legacy_gallery" do
+    it 'should get legacy_gallery' do
       get 'legacy_gallery'
       expect(response).to redirect_to('/')
       expect(flash[:notice]).to eq("We don't currently have a Gallery page. Please check back for an update soon.")
     end
 
-    it "should get legacy_instructions" do
+    it 'should get legacy_instructions' do
       get 'legacy_instructions'
       expect(response).to redirect_to('/store/instructions')
     end
 
-    it "should get legacy_contact" do
+    it 'should get legacy_contact' do
       get 'legacy_contact'
       expect(response).to render_template('contact')
     end
 
-    it "should get legacy_city_category" do
+    it 'should get legacy_city_category' do
       get 'legacy_city_category'
       expect(response).to redirect_to('/store/products/Instructions/City')
     end
 
-    it "should get legacy_winter_village_category" do
+    it 'should get legacy_winter_village_category' do
       get 'legacy_winter_village_category'
       expect(response).to redirect_to('/store/products/Instructions/Winter%20Village')
     end
 
-    it "should get legacy_military_category" do
+    it 'should get legacy_military_category' do
       get 'legacy_military_category'
       expect(response).to redirect_to('/store/products/Instructions/Military')
     end
 
-    it "should get legacy_castle_category" do
+    it 'should get legacy_castle_category' do
       get 'legacy_castle_category'
       expect(response).to redirect_to('/store/products/Instructions/Other')
     end
 
-    it "should get legacy_train_category" do
+    it 'should get legacy_train_category' do
       get 'legacy_train_category'
       expect(response).to redirect_to('/store/products/Instructions/Train')
     end

@@ -99,10 +99,6 @@ class StaticController < ApplicationController
     legacy_no_page_redirect_and_flash('Sales/Deals')
   end
 
-  def legacy_lego_neighborhood_extras
-    render 'lego_neighborhood_extras'
-  end
-
   def legacy_google_hosted_service
     render 'google_hosted_service'
   end

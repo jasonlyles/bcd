@@ -1,16 +1,15 @@
 require 'spec_helper'
 
 describe AccountController do
-
   before do
     @user ||= FactoryGirl.create(:user)
   end
 
-  describe "order_history" do
+  describe 'order_history' do
     it "should return all orders in order history, even if they don't have a status" do
       order1 = FactoryGirl.create(:order)
-      order2 = FactoryGirl.create(:order, :status => 'INVALID')
-      order3 = FactoryGirl.create(:order, :status => nil)
+      order2 = FactoryGirl.create(:order, status: 'INVALID')
+      order3 = FactoryGirl.create(:order, status: nil)
       sign_in @user
       get :order_history
 
@@ -18,45 +17,27 @@ describe AccountController do
     end
   end
 
-  describe "order" do
-    it "should return an order given a request ID" do
-      order = FactoryGirl.create(:order, :request_id => '1234566778', :transaction_id => '555')
-      sign_in @user
-      get :order, :request_id => '1234566778'
-
-      expect(assigns(:order).transaction_id).to eq('555')
-    end
-
-    it "should set order to nil if order could not be found by request_id and user_id" do
-      order = FactoryGirl.create(:order, :user_id => 3000, :request_id => '12344321')
-      sign_in @user
-      get :order, :request_id => '12344321'
-
-      expect(assigns(:order)).to be_nil
-    end
-  end
-
-  describe "GET index" do
-    it "should redirect to login page if there is no user" do
+  describe 'GET index' do
+    it 'should redirect to login page if there is no user' do
       get :index
 
       expect(response).to redirect_to('/users/sign_in')
     end
 
-    it "should take user to index page if there is a user" do
+    it 'should take user to index page if there is a user' do
       sign_in @user
       get :index
 
       expect(response).to be_success
     end
 
-    it "should get only completed orders for display" do
+    it 'should get only completed orders for display' do
       product_type = FactoryGirl.create(:product_type)
       category = FactoryGirl.create(:category)
       subcat = FactoryGirl.create(:subcategory)
       product = FactoryGirl.create(:product)
       order1 = FactoryGirl.create(:order_with_line_items)
-      order2 = FactoryGirl.create(:order, :status => 'INVALID')
+      order2 = FactoryGirl.create(:order, status: 'INVALID')
       sign_in @user
       get :index
 
@@ -67,7 +48,7 @@ describe AccountController do
   describe 'unsubscribe_from_emails' do
     context 'cannot find user based on guid and unsubscribe_token passed in' do
       it 'should render still_subscribed' do
-        get :unsubscribe_from_emails, :id => 'fake', :unsubscribe_token => 'also_fake'
+        get :unsubscribe_from_emails, id: 'fake', unsubscribe_token: 'also_fake'
 
         expect(response).to render_template(:still_subscribed)
       end
@@ -76,9 +57,9 @@ describe AccountController do
     context 'finds user based on guid and unsubscribe_token passed in' do
       context 'and user cannot be saved' do
         it 'should render still_subscribed' do
-          @user = FactoryGirl.create(:user, :unsubscribe_token => 'chimichangas', :email_preference => 2, :email => 'ralph@mil.mil', :guid => 'guid')
+          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'ralph@mil.mil', guid: 'guid')
           allow_any_instance_of(User).to receive(:save).and_return(false)
-          get :unsubscribe_from_emails, :id => @user.guid, :token => @user.unsubscribe_token
+          get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
 
           @user.reload
           expect(@user.email_preference).to eq(2)
@@ -88,8 +69,8 @@ describe AccountController do
 
       context 'and user can be saved' do
         it 'should render unsubscribed' do
-          @user = FactoryGirl.create(:user, :unsubscribe_token => 'chimichangas', :email_preference => 2, :email => 'mil@ralph.ralph', :guid => 'guid')
-          get :unsubscribe_from_emails, :id => @user.guid, :token => @user.unsubscribe_token
+          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'mil@ralph.ralph', guid: 'guid')
+          get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
 
           @user.reload
           expect(@user.email_preference).to eq(0)
