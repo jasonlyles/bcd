@@ -1,4 +1,117 @@
+GEM POST INSTALL MESSAGES:
+
+Post-install message from sass:
+remote:
+remote:        Ruby Sass is deprecated and will be unmaintained as of 26 March 2019.
+remote:
+remote:        * If you use Sass as a command-line tool, we recommend using Dart Sass, the new
+remote:          primary implementation: https://sass-lang.com/install
+remote:
+remote:        * If you use Sass as a plug-in for a Ruby web framework, we recommend using the
+remote:          sassc gem: https://github.com/sass/sassc-ruby#readme
+remote:
+remote:        * For more details, please refer to the Sass blog:
+remote:          http://sass.logdown.com/posts/7081811
+remote:
+remote:        Post-install message from sitemap_generator:
+remote:        NOTE: SitemapGenerator 4.x uses a new file naming scheme which is more standards-compliant.
+remote:        If you're upgrading from 3.x, please see the release note in the README:
+remote:
+remote:        https://github.com/kjvarga/sitemap_generator#important-changes-in-version-4
+remote:
+remote:        The simple answer is that your index file is now called sitemap.xml.gz
+remote:        and not sitemap_index.xml.gz, but please take a look and see what else has changed.
+
+ACTIVEADMIN BACKEND SWAP:
+
+* Products
+  * Need to address product parts lists
+* Updates (add a preview after I figure out how news will be displayed on the front page.)
+* Featured Products tool (add this back once I figure out how I'm going to display news on the front page)
+* Comments (make sure I add this to every new model as I fill out the show pages.)
+* Dashboard
+  * Notifications
+* EmailCampaign
+  * Add back ability to send preview email to admins before sending out the email to the real world.
+    <% if @email_campaign.emails_sent == 0 %>
+      <%= form_for @email_campaign, url: {action: :send_marketing_email_preview} do |f| %>
+      <%= f.hidden_field :id %>
+      <%= f.submit 'Send Preview to Admins', data: {disable_with: 'Sending...'} %>
+    <% end %>
+
+* Need to make sure I haven't broken any functionality using enums for user account_status and email_preference    
+
+* Parts Lists (maybe this is only accessible via it's product)
+  * Hit BL API for a catalog item to verify I have my item correct.
+  * Hit BL API for a catalog item to get an image, unless I already have the image stored.
+  * Maybe when creating an item in the db for the first time, I'll need to hit this API:
+    http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/CatalogMethod#Get-Supersets
+    to see if the part is part of a superset. Possibly also would want to know if it has a subset:
+    http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/CatalogMethod#Get-Subsets  This
+    might be good for things like windows, so we can use the complete window in ldraw and then
+    break it into its subset when creating the parts list. This may be useful too:
+    http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/ItemMappingMethod#Get-ElementID
+  * Might also want to play with this to allay peoples fears about price:
+    http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/CatalogMethod#Get-Price-Guide
+    That might make things worse. :) Maybe I can make that information available to subscribers/power users.
+    This information should be updated weekly, monthly, something like that. The price could
+    be used for an estimated price to complete, that used rebrickable info to see how many
+    pieces the user would need to buy. Maybe this could be accessible to the subscription user
+    before they decided which model to select for the month.
+  * Maybe the product part list could have an option to subtract the users rebrickable inventory
+    from the parts list and only return the additional items the user would have to buy. After this,
+    recalc how much it would cost to complete the model.
+* Switches (Maintenance mode)
+* Functionality to add back in:
+  * Maintenance mode
+  * Notify users of PDF/Parts List fix/Increment Download count
+  * Link to Resque Dashboard
+  * New Product Notifications... maybe I just need a notifications center where
+    I can choose which notification to send.
+  * Make sure that any bulk emailing jobs split off into jobs for each
+    individual email. That way, individual jobs can fail, but it won't hurt
+    the overall bulk job. If I do this, I need some foolproof way to make sure
+    I kill the service worker that was spun up. Also, I would need some way to
+    keep the service worker alive until all the emails were sent, rather than
+    spinning up a service worker for each individual email background job.
+  * Order fulfillment screen for physical products? Maybe could just do this off order index/update pages.
+  * Sales Reporting - this could maybe just be based off the Orders index page. Just
+    work on what gets output in the CSV. That should be good enough. Make the output
+    the same as what Brian gets now from the old sales_summary page
+* NEW FUNCTIONALITY:
+  * kill off attr_accessible in the models
+  * Advertising Campaigns
+    * Add additional information, such as number of users who came to us through
+      the link, and how many converted. I've done something similar with email
+      campaigns. Maybe this can be the root of an affiliate program.
+  * May want to add some sort of notifications for admins about things that
+    need to be done, such as orders that need to be fulfilled, and ebay orders
+    that need to be dealt with. Maybe display an alert bell on the dash if there
+    are notifications, or maybe on the dashboard.
+  * Add something to pull in recent ebay orders. Show a separate table on the
+    index page for ebay orders? Or maybe a whole other page for dealing with ebay orders,
+    and ebay orders will show up on the orders index page, along with website orders.
+  * I've added a way to discount multiple instructions at once. Set up a way to actually
+    reflect/use that discount percentage.
+
+
 RESKIN:
+
+* Subscriptions? Maybe a subscription costs $10/month and unlocks a new model every month.
+  * Users would not have a model they already owned unlocked, it must be one they don't already own.
+    Maybe they get to choose which model they unlock.
+  * Why subscription? In addition to a new model unlocked every month, subscription-holders
+    get additional features, like integration with Rebrickable, price guide information, sneak peaks
+    of new models, exclusive information, discounts on physical items, etc.
+  * In order to keep people from signing up for a subscription for 1 month and then cancelling after
+    they got the $15 instructions they wanted, maybe they get 10 credits/month. 1 credit = 1 dollar. So
+    if they wanted, they could not use their credits one month to 'save up' for that $15 set of
+    instructions, and then have 5 credits left over to spend on something else, or save for something else.
+    Think about how I might implement this. Not sure this makes sense.
+  * Users might need some additional features to be convinced to get a subscription. Maybe to welcome
+    them to the subscription service, we send them a sticker along with something else (postcard?)?
+* Maybe tap into Rebrickables API so people can see what they would need to build one of our models:
+  https://rebrickable.com/api/v3/docs/?key= Maybe this can be a subscriber-level thing.
 
 * Need to set some validation to not let a user create more than the max number of authentications allowed.
 * need to style devise validation messages?
@@ -9,6 +122,7 @@ RESKIN:
   but there is no 'email us about the issue' button
 * use css clip-path to make some images Lego-shaped? https://bennettfeely.com/clippy/
 * Maybe replace some logo jpgs with svgs: https://worldvectorlogo.com/
+* Might want to add some search functionality using Ransack
 
 * On index page, free instructions image needs to scale better. At medium?, it gets too small.
 * On index page, shrink gap between intro text and news, at least for smaller than large.
@@ -38,9 +152,6 @@ Nav:
 TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
-
-* Add functionality for Brian to be able to add downloads to someones account for a given product,
-  in case they've had trouble downloading.
 
 * Set up wall art, t-shirts, etc. on Printful: https://www.printful.com/?ref=index
 
@@ -74,13 +185,13 @@ several requests for images instead of hundreds for a single parts list.
     d. Maybe look at the language Casper uses for this type of thing.
 
 * Figure out a way to encourage customers to post their creations built from our instructions on social media and
-try to incentivize it.
+try to incentivize it. Incentivize via network marketing/affiliate program?
 
 * Either fix the download process for PDFs, or add something that tells people to right click and "Save As", etc. like
 AWS S3 does, and like that company I bought an Access license from does when downloading.
 
-* Build Brian an Access database that will allow him to enter customer data there instead of trying to keep track of
-it all in a Word doc.
+* Build Brian a form to allow him to enter customer data from ebay/Bricklink sales
+  instead of tracking it in a Word file.
 
 * See if I can incentivize reviews for instructions by sending people an email some number of days
 after their purchase and offer them some free/discounted instructions if they'll leave reviews of the
@@ -275,9 +386,6 @@ display categories.
 * Add a main flag for image model. Going forward, I can grab the image flagged main for a given product instead of
 just the first image uploaded.
 
-* Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
-black aren't distinct enough from each other.
-
 * I need some tagging to be able to group products, such as the buildings in the Amsterdam series, SanFran series,
 Richmond series, City Res, ComPaks, Alternatives etc. https://github.com/mbleigh/acts-as-taggable-on
 
@@ -327,16 +435,6 @@ at public/maintenance_mode.html
 stays in a non-shipped status for a couple of days, send a reminder email to let us know to deal with it. (Update May 2014.
 The order fulfillment screen is done, but I don't yet have the reminder email set up.)
 
-* Be able to 'gift' instructions. This tool will allow us to give a user free instructions, for whatever reason. There should be 2
-forms on the page. The first will allow us to look up a user by email, and then display the items they've already purchased from us.
-The 2nd form should only be displayed after the first one has been used, and will include a hidden field with the users email address
-in it. It will also list out every model we have instructions for and have a checkbox next to each for easily selecting multiple
-instructions. There can also be a 'select all' checkbox that will select all the instructions for gifting. This can come in handy when
-the time comes to start getting the site translated, and then I can offer to give the translators all the instructions for free. Maybe
-that doesn't make sense. For those users, it might make more sense if there was a tool that allowed us to just give a user access to
-all instructions, always. We would want a tool like that for Brian and I and anybody else that helps us out greatly anyways. So then,
-the gifting tool really just needs a combobox to allow us to gift a user 1 set of instructions.
-
 * Set up a way to create codes that we can send to buyers from Ebay. Then, as part of the checkout process on ebay, we can send them a
 link to BCD, along with a code that allows them to download from us. This will give us more control over the process, end
 our relationship with yousendit, force the user to learn about our website (which will hopefully lead to future purchases on our website instead of ebay).
@@ -357,8 +455,6 @@ present the information after some processing. This would probably be a really e
 but may be fun to try. This could possibly work using the get_set_match API, if we could pay him to upload our models as sets.
 
 * Figure out some way to have codes that can be redeemed for x numbers of dollars.
-
-* Admin products page could benefit from a live search feature.
 
 * Figure out how to accommodate Lisa's letters. This would be the first product with options. Options for this particular
 product would include the letter of the alphabet and a style. On the admin side, I could have a product_options table, with
@@ -414,7 +510,8 @@ them buy instructions they've bought before. Might want to change this to
 allowing them to do so, but they're just buying more downloads at a discounted
 rate.
 
-* i18n and l10n
+* i18n and l10n. Maybe advertise on the front page that we're looking for translators,
+  and will give them access to all instructions they translate for.
 
 * Add a refund form on the individual orders page in the admin console. In order to do refunds right, I would probably
 have to dip in to paypals api and have some sort of little refund button right on the order

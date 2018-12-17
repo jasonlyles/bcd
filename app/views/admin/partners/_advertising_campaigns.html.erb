@@ -1,0 +1,23 @@
+<div class="panel">
+  <h3>Advertising Campaigns</h3>
+  <div class="panel_contents">
+    <div id="table-for-advertising-campaigns" class="attributes-table advertising-campaigns">
+      <table cellspacing="0" cellpadding="0" border="0">
+        <thead>
+          <th>Reference Code</th>
+          <th>Description</th>
+          <th>Live?</th>
+        </thead>
+        <tbody>
+          <% advertising_campaigns.each do |campaign| %>
+            <tr>
+              <td><%= link_to campaign.reference_code, admin_advertising_campaign_path(campaign.id) %></td>
+              <td><%= campaign.description %></td>
+              <td><%= campaign.campaign_live %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

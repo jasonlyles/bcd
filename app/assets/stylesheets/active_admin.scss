@@ -1,0 +1,89 @@
+//= require activeadmin_addons/all
+// SASS variable overrides must be declared before loading up Active Admin's styles.
+//
+// To view the variables that Active Admin provides, take a look at
+// `app/assets/stylesheets/active_admin/mixins/_variables.scss` in the
+// Active Admin source.
+//
+// For example, to change the sidebar width:
+// $sidebar-width: 242px;
+// Active Admin's got SASS!
+$am-theme-primary: #256B9B;
+@import "active_admin/mixins";
+@import "active_material"; // Overriding any non-variable SASS must be done after the fact.
+// For example, to change the default status-tag color:
+//
+//   .status_tag { background: #6090DB; }
+
+.footnotes {
+  padding-left: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
+}
+
+textarea {
+  height: 150px !important;
+}
+
+.image-list {
+  padding: 20px;
+}
+
+.image-list > ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.image-list > ul > li {
+  display: inline-block;
+}
+
+img.medium {
+  height: 150px;
+}
+
+fieldset.inputs {
+  display: inline;
+}
+
+input:not([type=submit]):not([type=file]):not([type=checkbox]) {
+  height: 30px;
+}
+$caution-color: #FF9900;
+$sad-color: #FF0000;
+$happy-color: #08A510;
+
+.status_tag {
+  &.active {
+    background: $happy-color;
+  }
+
+  &.cancelled {
+    background: $sad-color;
+  }
+
+  &.guest {
+    background: $caution-color;
+  }
+
+  &.all_emails {
+    background: $happy-color;
+  }
+
+  &.important_emails {
+    background: $caution-color;
+  }
+
+  &.no_emails {
+    background: $sad-color;
+  }
+}
+
+.column {
+  float: left;
+}
+
+div.nice-padding {
+  padding: 15px;
+}

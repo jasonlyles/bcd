@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe SessionsController do
-  describe "destroy" do
-    it "should destroy the cart_id in session" do
-      @user = User.create!(:email => "charles@mcwoofay.net", :password => 'password', :tos_accepted => true)
+  describe 'destroy' do
+    it 'should destroy the cart_id in session' do
+      @user = User.create!(email: 'charles@mcwoofay.net', password: 'password', tos_accepted: true)
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
       @cart = FactoryGirl.create(:cart)
@@ -14,27 +14,27 @@ describe SessionsController do
     end
   end
 
-  describe "create" do
-    it "should create a new session" do
-      @user = User.create!(:email => "charles@mcwoofay.net", :password => 'password', :tos_accepted => true)
+  describe 'create' do
+    it 'should create a new session' do
+      @user = User.create!(email: 'charles@mcwoofay.net', password: 'password', tos_accepted: true)
       request.env['devise.mapping'] = Devise.mappings[:user]
-      post :create, :user => {:email => "charles@mcwoofay.net", :password => 'password'}
+      post :create, user: { email: 'charles@mcwoofay.net', password: 'password' }
 
       expect(response).to redirect_to('/')
       expect(flash[:notice]).to eq('Signed in successfully.')
       expect(subject.current_user).to_not be_nil
     end
 
-    it "should not create a new session if user is cancelled" do
-      @user = User.create!(:email => "charles@mcwoofay.net", :password => 'password', :account_status => 'C', :tos_accepted => true)
+    it 'should not create a new session if user is cancelled' do
+      @user = User.create!(email: 'charles@mcwoofay.net', password: 'password', account_status: 'cancelled', tos_accepted: true)
       request.env['devise.mapping'] = Devise.mappings[:user]
-      post :create, :user => {:email => "charles@mcwoofay.net", :password => 'password'}
+      post :create, user: { email: 'charles@mcwoofay.net', password: 'password' }
 
       expect(response).to redirect_to('/users/sign_out')
     end
   end
 
-  describe "kill_guest_checkout_flag" do
+  describe 'kill_guest_checkout_flag' do
     it 'should delete show_guest_checkout_flag in session' do
       session[:show_guest_checkout_link] = true
       controller.send(:kill_guest_checkout_flag)
@@ -42,10 +42,10 @@ describe SessionsController do
     end
   end
 
-  describe "guest_registration" do
+  describe 'guest_registration' do
     context 'with a current_guest' do
       it 'should assign current_guest to @user' do
-        current_guest = FactoryGirl.create(:user, :email => 'blahblah@blah.blah')
+        current_guest = FactoryGirl.create(:user, email: 'blahblah@blah.blah')
         @cart = FactoryGirl.create(:cart, user_id: current_guest.id)
         expect(controller).to receive(:set_guest_status).and_return(true)
         expect(controller).to receive(:current_guest).at_least(1).times.and_return(current_guest)
@@ -73,24 +73,24 @@ describe SessionsController do
     context 'if current_guest' do
       context 'and user record is valid' do
         it 'should find the user record and update it' do
-          user = FactoryGirl.create(:user, :email => 'fake@fake.fake')
+          user = FactoryGirl.create(:user, email: 'fake@fake.fake')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(user)
           request.env['devise.mapping'] = Devise.mappings[:user]
-          post :register_guest, :guest => {:email => user.email, :email_preference => 0}
+          post :register_guest, guest: { email: user.email, email_preference: 'no_emails' }
 
           user.reload
-          expect(user.email_preference).to eq(0)
+          expect(user.email_preference).to eq('no_emails')
           expect(response).to redirect_to('/checkout')
         end
       end
 
       context 'and user record is not valid' do
         it 'should render guest_registration' do
-          user = FactoryGirl.create(:user, :email => 'blar@blar.blar')
+          user = FactoryGirl.create(:user, email: 'blar@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(user)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).and_return(false)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 0}
+          post :register_guest, guest: { email: user.email, email_preference: 'no_emails' }
 
           expect(response).to render_template(:guest_registration)
         end
@@ -103,47 +103,47 @@ describe SessionsController do
         request.env['devise.mapping'] = Devise.mappings[:user]
         expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
 
-        expect( lambda{ post :register_guest, :guest => {:email => 'blar2@blar.blar', :email_preference => 2}}).to change(User, :count).by(1)
+        expect(-> { post :register_guest, guest: { email: 'blar2@blar.blar', email_preference: 'all_emails' } }).to change(User, :count).by(1)
       end
 
       it 'should not create a new guest record if a guest record could be found by email' do
-        user = FactoryGirl.create(:user, :email => 'blar3@blar.blar')
+        user = FactoryGirl.create(:user, email: 'blar3@blar.blar')
         expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
         request.env['devise.mapping'] = Devise.mappings[:user]
         expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
         expect(Guest).to receive(:find_by_email).and_return(user)
 
-        expect(lambda{post :register_guest, :guest => {:email => user.email, :email_preference => 2}}).to_not change(User, :count)
+        expect(-> { post :register_guest, guest: { email: user.email, email_preference: 'all_emails' } }).to_not change(User, :count)
       end
 
       context 'and user record is valid' do
         it 'should save the user' do
-          user = FactoryGirl.create(:user, :email => 'blar4@blar.blar', :account_status => '')
+          user = FactoryGirl.create(:user, email: 'blar4@blar.blar', account_status: '')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, guest: { email: user.email, email_preference: 'all_emails' }
 
           user.reload
-          expect(user.account_status).to eq('G')
+          expect(user.account_status).to eq('guest')
         end
 
         it 'should set session[:guest] to the user ID' do
-          user = FactoryGirl.create(:user, :email => 'blar5@blar.blar')
+          user = FactoryGirl.create(:user, email: 'blar5@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, guest: { email: user.email, email_preference: 'all_emails' }
 
           expect(session[:guest]).to eq(user.id)
         end
 
         it 'should redirect to checkout' do
-          user = FactoryGirl.create(:user, :email => 'blar6@blar.blar')
+          user = FactoryGirl.create(:user, email: 'blar6@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, guest: { email: user.email, email_preference: 'all_emails' }
 
           expect(response).to redirect_to('/checkout')
         end
@@ -151,21 +151,21 @@ describe SessionsController do
 
       context 'and user record is not valid' do
         it 'should flash an alert message' do
-          user = FactoryGirl.create(:user, :email => 'blar7@blar.blar')
+          user = FactoryGirl.create(:user, email: 'blar7@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(false)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, guest: { email: user.email, email_preference: 'all_emails' }
 
           expect(flash[:alert]).to eq('You must enter a valid email and accept the terms of service before you can proceed.')
         end
 
         it 'should render guest_registration' do
-          user = FactoryGirl.create(:user, :email => 'blar8@blar.blar')
+          user = FactoryGirl.create(:user, email: 'blar8@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(false)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, guest: { email: user.email, email_preference: 'all_emails' }
 
           expect(response).to render_template(:guest_registration)
         end

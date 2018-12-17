@@ -1,0 +1,25 @@
+<div class="panel">
+  <h3>Authentications</h3>
+  <div class="panel_contents">
+    <div id="table-for-authentications" class="attributes-table authentications">
+      <table cellspacing="0" cellpadding="0" border="0">
+        <thead>
+          <th>Provider</th>
+          <th>Provider UID</th>
+          <th>Created</th>
+          <th>Last Modified</th>
+        </thead>
+        <tbody>
+          <% authentications.each do |authentication| %>
+            <tr>
+              <td><%= authentication.provider %></td>
+              <td><%= authentication.uid %></td>
+              <td><%= authentication.created_at %></td>
+              <td><%= authentication.updated_at %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class='image-list'>
+  <ul>
+    <% product.images.each do |image| %>
+      <li>
+        <% if image.url_processing? %>
+          Image available soon...
+        <% else %>
+          <%= image_tag(image.url.url, class: 'medium') %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

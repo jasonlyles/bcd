@@ -1,0 +1,6 @@
+<% if product.youtube_url.present? %>
+  <%= product.youtube_url %>
+  <br/>
+  <br/>
+  <iframe frameborder="0" height="315" src="https://www.youtube.com/embed/<%= product.youtube_url %>?rel=0" width="420"></iframe>
+<% end %>

@@ -6,7 +6,7 @@ class Order < ActiveRecord::Base
 
   attr_accessible :request_id, :status, :transaction_id, :user_id, :first_name, :last_name,
                   :address_street_1, :address_street_2, :address_city, :address_state, :address_country,
-                  :address_zip, :address_submission_method
+                  :address_zip, :address_submission_method, :shipping_status, :address_name
   attr_accessor :address_submission_method
 
   # Need some form of validation, but probably not this, or not the traditional
@@ -28,6 +28,38 @@ class Order < ActiveRecord::Base
   def has_digital_item?
     items = get_digital_items
     items.blank? ? false : true
+  end
+
+  ransacker :has_instant_payment_notifications,
+            formatter: proc { |boolean|
+              results = Order.has_instant_payment_notifications(boolean).map(&:id)
+              results = results.present? ? results : nil
+            }, splat_params: true do |parent|
+    parent.table[:id]
+  end
+
+  def self.has_instant_payment_notifications(boolean)
+    if boolean == 'true'
+      includes(:instant_payment_notifications).where.not(instant_payment_notifications: { id: nil })
+    else
+      includes(:instant_payment_notifications).where(instant_payment_notifications: { id: nil })
+    end
+  end
+
+  ransacker :has_physical_items,
+            formatter: proc { |boolean|
+              results = Order.has_physical_items(boolean).map(&:id)
+              results = results.present? ? results : nil
+            }, splat_params: true do |parent|
+    parent.table[:id]
+  end
+
+  def self.has_physical_items(boolean)
+    if boolean == 'true'
+      where('shipping_status IS NOT NULL')
+    else
+      where('shipping_status IS NULL')
+    end
   end
 
   def get_digital_items
@@ -59,6 +91,12 @@ class Order < ActiveRecord::Base
     total
   end
 
+  def total_item_count
+    line_item_count = 0
+    line_items.each { |item| line_item_count += item.quantity }
+    line_item_count
+  end
+
   def self.all_transactions_for_month(month, year)
     report_date = Date.parse("#{month}/#{year}").strftime('%Y-%m-%d')
     orders = Order.where('created_at >= ? AND created_at < ?', report_date.to_s, Date.parse(report_date.to_s).next_month.strftime('%Y-%m-01').to_s)
@@ -78,6 +116,18 @@ class Order < ActiveRecord::Base
       end
     end
     transactions
+  end
+
+  def self.transactions_month_to_date
+    date = Date.today.beginning_of_month
+    Order.where('created_at >= ?', date.to_s).includes(:line_items)
+  end
+
+  def self.month_to_date_summary
+    orders = Order.transactions_month_to_date
+    month_to_date_total_price = orders.map(&:total_price).sum
+    month_to_date_total_items = orders.map(&:total_item_count).sum
+    { total_price: month_to_date_total_price, total_item_count: month_to_date_total_items }
   end
 
   def self.transaction_csv(transactions)

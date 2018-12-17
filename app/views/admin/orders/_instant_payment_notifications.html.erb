@@ -1,0 +1,29 @@
+<div class="panel">
+  <h3>Instant Payment Notifications</h3>
+  <div class="panel_contents">
+    <div id="table-for-instant-payment-notifications" class="attributes-table instant-payment-notifications">
+      <table cellspacing="0" cellpadding="0" border="0">
+        <thead>
+          <th>Details</th>
+          <th>Payment Status</th>
+          <th>Transaction ID / Request ID</th>
+          <th>Payer Email</th>
+          <th>Processed</th>
+          <th>Created</th>
+        </thead>
+        <tbody>
+          <% instant_payment_notifications.each do |ipn| %>
+            <tr>
+              <td><%= link_to 'Details', admin_instant_payment_notification_path(ipn.id) %></td>
+              <td><%= ipn.payment_status %></td>
+              <td><%= "#{ipn.txn_id} / #{ipn.request_id}" %></td>
+              <td><%= ipn.payer_email %></td>
+              <td><%= ipn.processed %></td>
+              <td><%= ipn.created_at %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

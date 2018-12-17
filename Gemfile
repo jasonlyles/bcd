@@ -28,6 +28,10 @@ gem 'jquery-ui-rails'
 gem 'rake'
 gem "rack-protection", ">= 1.5.5"
 gem "ffi", ">= 1.9.24"
+gem 'activeadmin'
+gem "active_material", github: "vigetlabs/active_material"
+gem 'activeadmin_addons'
+gem 'country_select', require: 'country_select_without_sort_alphabetical'
 
 gem 'resque'
 gem 'resque_mailer'

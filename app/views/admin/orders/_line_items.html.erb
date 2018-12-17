@@ -1,0 +1,34 @@
+<div class="panel">
+  <h3>Line Items</h3>
+  <div class="panel_contents">
+    <div id="table-for-line-items" class="attributes-table line-items">
+      <table cellspacing="0" cellpadding="0" border="0">
+        <thead>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+        </thead>
+        <tbody>
+          <% line_items.each do |line_item| %>
+            <tr>
+              <td><%= "#{line_item.product.code_and_name} #{line_item.product.product_type.name}" %></td>
+              <td><%= line_item.quantity %></td>
+              <td><%= number_to_currency(line_item.total_price) %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td>
+              <strong>Total</strong>
+            </td>
+            <td>
+              <strong><%= order.total_item_count %></strong>
+            </td>
+            <td>
+              <strong><%= number_to_currency(order.total_price) %></strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

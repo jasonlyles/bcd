@@ -23,7 +23,7 @@ class AccountController < ApplicationController
     token = params[:token]
     @user = User.where(['guid=? and unsubscribe_token=?', guid, token]).first
     if @user
-      @user.email_preference = 0
+      @user.email_preference = 'no_emails'
       if @user.save
         return render :unsubscribed
       else

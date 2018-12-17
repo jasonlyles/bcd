@@ -1,0 +1,31 @@
+<div class="panel">
+  <h3>Download Details</h3>
+  <div class="panel_contents">
+    <div id="table-for-downloads" class="attributes-table downloads">
+      <table cellspacing="0" cellpadding="0" border="0">
+        <thead>
+          <th>Product</th>
+          <th>Downloads</th>
+          <th>Downloads Remaining</th>
+          <th>Download Token</th>
+          <th>Created / Updated</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <% downloads.each do |download| %>
+            <tr>
+              <td><%= download.product.code_and_name %></td>
+              <td><%= download.count %></td>
+              <td><%= download.remaining %></td>
+              <td><%= download.download_token %></td>
+              <td><%= download.created_at %>
+                <br/>
+                <%= download.updated_at %></td>
+              <td><%= button_to 'Reset Downloads', reset_downloads_admin_user_path(download.id), method: :put %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

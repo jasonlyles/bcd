@@ -19,57 +19,37 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe InstantPaymentNotificationsController do
-
   before do
     @radmin ||= FactoryGirl.create(:radmin)
     @product_type = FactoryGirl.create(:product_type)
   end
 
   before(:each) do |example|
-    unless example.metadata[:skip_before]
-      sign_in @radmin
-    end
+    sign_in @radmin unless example.metadata[:skip_before]
   end
 
   # This should return the minimal set of attributes required to create a valid
   # InstantPaymentNotification. As you add validations to InstantPaymentNotification, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
+  let(:valid_attributes) do
     {
-        payer_email: 'test@test.com',
-        notify_version: '3.8'
+      payer_email: 'test@test.com',
+      notify_version: '3.8'
     }
-  }
-
-  describe "GET #index" do
-    it "assigns all instant_payment_notifications as @instant_payment_notifications" do
-      instant_payment_notification = InstantPaymentNotification.create! valid_attributes
-      get :index, params: {}
-      expect(assigns(:instant_payment_notifications)).to eq([instant_payment_notification])
-    end
   end
 
-  describe "GET #show" do
-    it "assigns the requested instant_payment_notification as @instant_payment_notification" do
-      instant_payment_notification = InstantPaymentNotification.create! valid_attributes
-      get :show, id: instant_payment_notification.id
-      expect(assigns(:instant_payment_notification)).to eq(instant_payment_notification)
-    end
-  end
-
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new InstantPaymentNotification", :skip_before do
-        expect {
-          post :create, params: {instant_payment_notification: valid_attributes}
-        }.to change(InstantPaymentNotification, :count).by(1)
+  describe 'POST #create' do
+    context 'with valid params' do
+      it 'creates a new InstantPaymentNotification', :skip_before do
+        expect do
+          post :create, params: { instant_payment_notification: valid_attributes }
+        end.to change(InstantPaymentNotification, :count).by(1)
       end
 
-      it "returns a 200", :skip_before do
-        post :create, params: {instant_payment_notification: valid_attributes}
+      it 'returns a 200', :skip_before do
+        post :create, params: { instant_payment_notification: valid_attributes }
         expect(response.status).to eq(200)
       end
     end
   end
-
 end

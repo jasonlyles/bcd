@@ -1,6 +1,20 @@
 require 'resque/server'
 
 BrickCity::Application.routes.draw do
+  devise_for :radmins, ActiveAdmin::Devise.config
+  authenticate :radmin do
+    mount Resque::Server.new, at: '/jobs', as: 'jobs'
+    get '/jobs/bcd admin', to: redirect('/woofay') # Trick for adding a link back to BCD admin from Resque dashboard
+  end
+
+  devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', passwords: 'passwords' }
+  devise_scope :user do
+    get 'account/edit' => 'registrations#edit' # , :as => :edit_user_registration
+    get '/guest_registration' => 'sessions#guest_registration', :as => :guest_registration
+    post '/register_guest' => 'sessions#register_guest', :as => :register_guest
+    patch 'passwords/update_password', to: 'passwords#update_password'
+  end
+  ActiveAdmin.routes(self)
   mount_roboto
   # Legacy routes
   get 'for-sale', to: 'static#legacy_instructions', constraints: { format: 'html' }
@@ -54,20 +68,6 @@ BrickCity::Application.routes.draw do
     mount UpdateMailer::Preview => 'update_preview'
     mount OrderMailer::Preview => 'order_preview'
     mount MarketingMailer::Preview => 'marketing_preview'
-  end
-
-  devise_for :radmins
-  authenticate :radmin do
-    mount Resque::Server.new, at: '/jobs', as: 'jobs'
-    get '/jobs/bcd admin', to: redirect('/woofay') # Trick for adding a link back to BCD admin from Resque dashboard
-  end
-
-  devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', passwords: 'passwords' }
-  devise_scope :user do
-    get 'account/edit' => 'registrations#edit' # , :as => :edit_user_registration
-    get '/guest_registration' => 'sessions#guest_registration', :as => :guest_registration
-    post '/register_guest' => 'sessions#register_guest', :as => :register_guest
-    patch 'passwords/update_password', to: 'passwords#update_password'
   end
 
   get '/auth/:provider/callback' => 'authentications#create'

@@ -1,0 +1,31 @@
+<div class="panel">
+  <h3>Orders</h3>
+  <div class="panel_contents">
+    <div id="table-for-orders" class="attributes-table orders">
+      <table cellspacing="0" cellpadding="0" border="0">
+        <thead>
+          <th>Transaction ID / Request ID</th>
+          <th>Status</th>
+          <th>Total Price</th>
+          <th>Total Item Count</th>
+          <th>Created/Updated</th>
+        </thead>
+        <tbody>
+          <% orders.each do |order| %>
+            <tr>
+              <td><%= link_to order.transaction_id, admin_order_path(order.id) %>
+                <br/>
+                <%= link_to order.request_id, admin_order_path(order.id) %></td>
+              <td><%= order.status %></td>
+              <td><%= number_to_currency(order.total_price) %></td>
+              <td><%= order.total_item_count %></td>
+              <td><%= order.created_at %>
+                <br/>
+                <%= order.updated_at %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

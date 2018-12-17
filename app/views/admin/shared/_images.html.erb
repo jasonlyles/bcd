@@ -1,0 +1,21 @@
+<div class='image-list'>
+  <% if model.respond_to?(:images) %>
+    <ul>
+      <% model.images.each do |image| %>
+        <li>
+          <% if image.url_processing? %>
+            Image available soon...
+          <% else %>
+            <%= image_tag(image.url.url, class: 'medium') %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <% if model.image_processing? %>
+      Image available soon...
+    <% else %>
+      <%= image_tag(model.image, class: 'medium') %>
+    <% end %>
+  <% end %>
+</div>

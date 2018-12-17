@@ -11,10 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511202317) do
+ActiveRecord::Schema.define(version: 20181210234850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "active_admin_comments", force: :cascade do |t|
+    t.string   "namespace"
+    t.text     "body"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.integer  "author_id"
+    t.string   "author_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "advertising_campaigns", force: :cascade do |t|
     t.integer  "partner_id"
@@ -154,9 +169,9 @@ ActiveRecord::Schema.define(version: 20180511202317) do
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
 
   create_table "partners", force: :cascade do |t|
-    t.string   "name",       limit: 40
-    t.string   "url",        limit: 40
-    t.string   "contact",    limit: 40
+    t.string   "name",       limit: 255
+    t.string   "url",        limit: 255
+    t.string   "contact",    limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -206,6 +221,7 @@ ActiveRecord::Schema.define(version: 20180511202317) do
     t.boolean  "pdf_processing",      default: false
     t.boolean  "featured",            default: false
     t.string   "designer",            default: "brian_lyles"
+    t.json     "images"
   end
 
   add_index "products", ["category_id"], name: "index_products_on_category_id", using: :btree

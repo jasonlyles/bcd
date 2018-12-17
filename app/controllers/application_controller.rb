@@ -1,29 +1,33 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  layout proc{ |controller| controller.request.xhr? ? false : "application" }
-  #Need to find a way to not call these before_filters on certain controllers, or maybe these should just be on the controllers with urls a customer might hit.
-  before_filter :check_admin_mode, :except => [:maintenance]
-  before_filter :find_cart
-  before_filter :get_categories
-  before_filter :set_users_referrer_code
-  before_filter :prepare_exception_notifier
-  #before_filter :set_locale #Don't need this yet
+  layout proc { |controller| controller.request.xhr? ? false : 'application' }
+  # Need to find a way to not call these before_filters on certain controllers, or maybe these should just be on the controllers with urls a customer might hit.
+  before_filter :check_admin_mode, except: [:maintenance]
+  before_filter :find_cart, unless: :active_admin_controller?
+  before_filter :get_categories, unless: :active_admin_controller?
+  before_filter :set_users_referrer_code, unless: :active_admin_controller?
+  before_filter :prepare_exception_notifier, unless: :active_admin_controller?
+  # before_filter :set_locale #Don't need this yet
 
   private
 
+  def active_admin_controller?
+    is_a?(ActiveAdmin::BaseController)
+  end
+
   def prepare_exception_notifier
     if current_user && current_user.guid
-      request.env["exception_notifier.exception_data"] = {
-          current_user: current_user.guid
+      request.env['exception_notifier.exception_data'] = {
+        current_user: current_user.guid
       }
     end
   end
 
-  #This is used on the admin side to get all categories for product and subcategory forms
+  # This is used on the admin side to get all categories for product and subcategory forms
   def get_categories_for_admin
     categories = Category.all
     @categories = []
-    categories.each{|category|@categories << [category.name,category.id]}
+    categories.each { |category| @categories << [category.name, category.id] }
   end
 
   def set_locale
@@ -46,9 +50,7 @@ class ApplicationController < ActionController::Base
 
   def current_guest
     guest_id = session[:guest]
-    if guest_id && guest_id.is_a?(Integer)#meaning it's not true or false, and is the ID of the guest
-      return User.find(guest_id)
-    end
+    return User.find(guest_id) if guest_id && guest_id.is_a?(Integer) # meaning it's not true or false, and is the ID of the guest
     nil
   end
 
@@ -58,8 +60,10 @@ class ApplicationController < ActionController::Base
   end
 
   def check_admin_mode
-    if admin_mode? && controller_name != 'sessions' && controller_name != 'products' && !current_radmin
-      redirect_to :controller => :static, :action => :maintenance
+    unless Rails.env.development?
+      if admin_mode? && controller_name != 'sessions' && controller_name != 'products' && !current_radmin
+        redirect_to controller: :static, action: :maintenance
+      end
     end
   end
 
@@ -68,27 +72,23 @@ class ApplicationController < ActionController::Base
   end
 
   def find_cart
-    @cart = Cart.where("id=?",session[:cart_id]).last
+    @cart = Cart.where('id=?', session[:cart_id]).last
     if @cart
       if @cart.user_id?
-        return #This cart is good to go
+        return # This cart is good to go
       else
-        if current_customer
-          use_older_cart_or_update_existing_cart
-        end
+        use_older_cart_or_update_existing_cart if current_customer
       end
     elsif current_customer
-      #When a user has logged in, try to pick up a previous cart. Maybe they didn't finish shopping
-      #before getting timed out
+      # When a user has logged in, try to pick up a previous cart. Maybe they didn't finish shopping
+      # before getting timed out
       use_older_cart_if_available
     end
   end
 
   def use_older_cart_or_update_existing_cart
-    if @cart.empty? #Only look for an older cart if the current one is empty
-      use_older_cart_if_available
-    end
-    update_cart_with_user unless @cart.user_id? #The cart would only have a user ID now if an older cart was found
+    use_older_cart_if_available if @cart.empty? # Only look for an older cart if the current one is empty
+    update_cart_with_user unless @cart.user_id? # The cart would only have a user ID now if an older cart was found
   end
 
   def update_cart_with_user
@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
   def use_older_cart_if_available
     cart = Cart.users_most_recent_cart(current_customer.id)
     if cart
-      @cart.destroy if @cart #Delete the old cart so it doesn't end up abandoned by the code
+      @cart.destroy if @cart # Delete the old cart so it doesn't end up abandoned by the code
       @cart = cart
       session[:cart_id] = @cart.id
     end
@@ -127,8 +127,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  #for declaring 404s
+  # for declaring 404s
   def not_found
-    render :file => "#{Rails.root}/public/404.html", :status => :not_found, :layout => false
+    render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false
   end
 end

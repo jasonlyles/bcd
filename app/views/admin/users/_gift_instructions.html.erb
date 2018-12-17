@@ -1,0 +1,18 @@
+<div class="panel">
+  <h3>Gift Instructions to User (User already owns checked off products)</h3>
+  <div class="panel_contents">
+    <table>
+      <% products.each_with_index do |product,index| %>
+        <% if index % 4 == 0 %>
+          <tr></tr>
+        <% end %>
+        <td style="padding:1px 3px 1px 3px;">
+          <% owned = user.owns_product?(product.id) %>
+            <%= check_box_tag("product_ids[]", product.id, owned, id: product.id, onchange: "giftInstructions(#{user.id}, #{product.id})", disabled: owned) %>
+            &nbsp;
+            <%= product.code_and_name %>
+          </td>
+        <% end %>
+      </table>
+    </div>
+  </div>

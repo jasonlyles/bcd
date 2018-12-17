@@ -23,7 +23,7 @@ class RegistrationsController < Devise::RegistrationsController
     if @user.blank?
       build_resource(signup_params)
     else
-      @user.account_status = 'A'
+      @user.account_status = 'active'
       save_authentication
     end
 

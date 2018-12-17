@@ -57,23 +57,23 @@ describe AccountController do
     context 'finds user based on guid and unsubscribe_token passed in' do
       context 'and user cannot be saved' do
         it 'should render still_subscribed' do
-          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'ralph@mil.mil', guid: 'guid')
+          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 'all_emails', email: 'ralph@mil.mil', guid: 'guid')
           allow_any_instance_of(User).to receive(:save).and_return(false)
           get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
 
           @user.reload
-          expect(@user.email_preference).to eq(2)
+          expect(@user.email_preference).to eq('all_emails')
           expect(response).to render_template(:still_subscribed)
         end
       end
 
       context 'and user can be saved' do
         it 'should render unsubscribed' do
-          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'mil@ralph.ralph', guid: 'guid')
+          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 'all_emails', email: 'mil@ralph.ralph', guid: 'guid')
           get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
 
           @user.reload
-          expect(@user.email_preference).to eq(0)
+          expect(@user.email_preference).to eq('no_emails')
           expect(response).to render_template(:unsubscribed)
         end
       end
