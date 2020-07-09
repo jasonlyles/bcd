@@ -18,6 +18,12 @@ gem 'carrierwave'
 gem 'carrierwave_backgrounder'
 gem 'fog'
 gem 'pg'
+gem 'sprite-factory'
+# TODO: I might be able to write an adapter for mini_magick for sprite-factory.
+# If I can get things the way I like with Rmagick, then I can try to write the
+# adapter so I only have to use mini_magick
+# https://github.com/jakesgordon/sprite-factory/blob/master/lib/sprite_factory/library/rmagick.rb
+gem 'rmagick'
 gem 'mini_magick'
 gem 'kaminari'
 gem 'nested_form'
@@ -32,7 +38,7 @@ gem 'activeadmin'
 gem "active_material", github: "vigetlabs/active_material"
 gem 'activeadmin_addons'
 gem 'country_select', require: 'country_select_without_sort_alphabetical'
-
+gem 'oauth'
 gem 'resque'
 gem 'resque_mailer'
 gem 'resque-status'

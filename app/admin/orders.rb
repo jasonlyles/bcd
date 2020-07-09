@@ -110,4 +110,14 @@ ActiveAdmin.register Order do
     end
     f.actions
   end
+
+  controller do
+    def scoped_collection
+      if params['action'] == 'index'
+        super.includes :user, :instant_payment_notifications, line_items: [product: [:product_type]]
+      else
+        super  
+      end
+    end
+  end
 end

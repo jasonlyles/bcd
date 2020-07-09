@@ -22,10 +22,11 @@ remote:
 remote:        The simple answer is that your index file is now called sitemap.xml.gz
 remote:        and not sitemap_index.xml.gz, but please take a look and see what else has changed.
 
+GDPR:
+Need to add a thing about the use of cookies.
+
 ACTIVEADMIN BACKEND SWAP:
 
-* Products
-  * Need to address product parts lists
 * Updates (add a preview after I figure out how news will be displayed on the front page.)
 * Featured Products tool (add this back once I figure out how I'm going to display news on the front page)
 * Comments (make sure I add this to every new model as I fill out the show pages.)
@@ -38,12 +39,50 @@ ACTIVEADMIN BACKEND SWAP:
       <%= f.hidden_field :id %>
       <%= f.submit 'Send Preview to Admins', data: {disable_with: 'Sending...'} %>
     <% end %>
+* Add auditing to keep track of changes made to at the very least parts lists.
+  Can actually use those changelogs/auditing for notifying users of what's changed
+  when we have to notify them of parts list changes.
 
-* Need to make sure I haven't broken any functionality using enums for user account_status and email_preference    
+* Need to make sure I haven't broken any functionality using enums for user account_status and email_preference
+* Move images that I can to S3 and let S3 and/or Cloudfront server them instead of
+  having the Rails server serve them. Maybe I can roll some of my images into a spritesheet?
 
 * Parts Lists (maybe this is only accessible via it's product)
-  * Hit BL API for a catalog item to verify I have my item correct.
-  * Hit BL API for a catalog item to get an image, unless I already have the image stored.
+  * Parts lists are not available to the customer until the static file/partial is generated
+    and approved. When the parts list is updated, admin will need to regenerate the file.
+    should_regenerate boolean is flipped to true when parts list is updated. Part of
+    the regeneration process flips the boolean back to false. A reminder should be shown
+    if there is a parts list that needs to be approved or regenerated. Maybe in a notification
+    center.
+    Maybe instead of storing a file/partial, I can store json on the record that
+    will be used to populate an html template. That way the template can change without
+    having to change all the parts lists. The json should include part name, color name,
+    quantity, link to image (or somehow positioning on a sprite sheet.)
+    after_save callback can be used to completely regenerate the json every time,
+    or maybe it could just update the json.
+  * Maybe after all the parts list processing, I need to try to assemble a sprite
+    sheet based on the images used? This would maybe require a button to recreate
+    the sprite sheet after any editing was done to the parts list.
+    Looking at https://github.com/jakesgordon/sprite-factory
+    https://github.com/jakesgordon/sprite-factory#customizing-the-css-image-url
+    http://blog.nickburwell.com/blog/2017/04/generating-css-sprites-with-retina-support-from-ruby/
+    http://miekd.com/articles/using-css-sprites-to-optimize-your-website-for-retina-displays/
+
+    Maybe I can have the code generate the sprite sheet css and image, and then upload them to S3.
+    After they're uploaded, save the S3 url to the parts_list record, and then
+    dynamically load the image and css on the customer-facing parts list page.
+    Take into account that when I generate a new css and sprite sheet, that I'll
+    need to bust the cache with a similar strategy to what Rails uses to bust
+    caches, adding a timestamp or something.
+  * Remove the restriction to only get the first 10 parts and move the code to a background job.
+  * Parts list edit page takes too long to load. I think I could add some includes to speed things up.
+  * Need to come up with a good way to handle alternate #s. Right now, the code
+    that tries alternate_nos if it couldn't get anything from Rebrickable or Bricklink
+    with the LDraw ID will try the alternate_nos column. That needs to handle the
+    possibility of multiple alternate #s in there. Also need a better way to enter/edit
+    alternate_nos than just a text field.
+  * Convert PNG to SVG to cut down on the size of images in a parts list?
+
   * Maybe when creating an item in the db for the first time, I'll need to hit this API:
     http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/CatalogMethod#Get-Supersets
     to see if the part is part of a superset. Possibly also would want to know if it has a subset:
@@ -51,6 +90,22 @@ ACTIVEADMIN BACKEND SWAP:
     might be good for things like windows, so we can use the complete window in ldraw and then
     break it into its subset when creating the parts list. This may be useful too:
     http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/ItemMappingMethod#Get-ElementID
+    This can maybe wait a little bit, because it's only really useful when parsing LDRs.
+    If I'm just uploading XML files initially, those have already been sorted and
+    don't need this functionality.
+  * For BrickOwl, and maybe Bricklink, I might be able to get the current state of a
+    wishlist, and use it to update a users parts list. Then the user could further update
+    the parts list, or sync it to the other service.
+  * I might be able to do some interesting stuff with BrickOwls API, such as send a parts list directly
+    to a BrickOwl wishlist. https://www.brickowl.com/api_docs
+    I could only do this if the user is willing to give me their API key.
+  * For a user loading up their parts list, I can run a check against BL to see current inventory
+    counts and decide whether I should suggest a user buys new or used. The user can then adjust
+    desired condition themselves, and that's what gets used in the BL XML, or sent to their BrickOwl wish list.
+  * I can use the BL get_price_guide call to check a parts list and see if some part is maybe not
+    advisable to use because it's expensive, or there are not many of them for that color.
+  * Hit BL API for a catalog item to verify I have my item correct. (Not sure anymore what I
+    meant by this, but something like this is done or mostly done.)
   * Might also want to play with this to allay peoples fears about price:
     http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/CatalogMethod#Get-Price-Guide
     That might make things worse. :) Maybe I can make that information available to subscribers/power users.
@@ -60,7 +115,43 @@ ACTIVEADMIN BACKEND SWAP:
     before they decided which model to select for the month.
   * Maybe the product part list could have an option to subtract the users rebrickable inventory
     from the parts list and only return the additional items the user would have to buy. After this,
-    recalc how much it would cost to complete the model.
+    recalc how much it would cost to complete the model. Or, I can just do the recalc based on what's
+    left to get for the parts list, after the user has manipulated the list, either via
+    rebrickable import or just manually tweaking the parts list.
+  * Might need to up the ante on the parts list form the customers use, and give them
+    more control. https://www.bricklink.com/help.asp?helpID=207
+  * On parts show page, show available colors, and maybe how many times we've
+    used it, and for what sets.
+  * On colors show page, show what parts it comes in that we've used.
+  * I might want to add validation to allow only 1 parts list per model, or
+    maybe I don't, because there are some models where I might want more than 1
+    parts list. If that's the case, then I probably need to force the user to
+    name the parts list.
+  * Maybe allow user to select primary and secondary colors to override the default
+    colors in the parts list. If all pieces exist for a primary or secondary color
+    in another color, make that color an option to select, in case someone likes a
+    design, but maybe wants to customize colors a bit. Would be cool to somehow show
+    a preview of what it would look like. Might be able to convert ldrs to something
+    that three.js could render via https://beta.makerbrane.com/tools/ldraw-viewer/
+    or https://mecabricks.com/
+    * Possibly I can use LDView to export to 3DS or STL formats, and then convert
+      those to GLTF via some tool like https://blackthread.io/gltf-converter/ After
+      I've done that, I might be able to display that file using three.js If that
+      works, then maybe I could even dynamically change colors via three.js? If not,
+      I could render different primary/secondary color combinations and make them
+      available for viewing on the site.
+    * Might this be of use? https://github.com/LasseD/buildinginstructions.js/
+
+
+
+    boolean :approved (When approved, generate new parts list for consumption by customer?)
+    json :parts (ref to element_id, and qty for that element)
+    string :url (this is where the file is stored after it's generated)
+
+
+
+
+
 * Switches (Maintenance mode)
 * Functionality to add back in:
   * Maintenance mode
@@ -91,8 +182,19 @@ ACTIVEADMIN BACKEND SWAP:
   * Add something to pull in recent ebay orders. Show a separate table on the
     index page for ebay orders? Or maybe a whole other page for dealing with ebay orders,
     and ebay orders will show up on the orders index page, along with website orders.
+    Ebay order fulfillment process should give Brian a button to approve orders, a flag for if a
+    customer is a repeat customer so he can just automatically approve the order, and a
+    button to send a confirmation email to anyone he wants to send a confirmation email to.
+    Could maybe even have the email have a yes or no button that they click to trigger
+    an automatic fulfillment.
+  * I can apparently also pull Order info from BrickLink, so I can pull orders from there,
+    and fulfill those too. I probably need to just pull the order and then let Brian click
+    a button to fulfill the order. If order status is other than Paid, Brian can click a
+    button to get a status update.
   * I've added a way to discount multiple instructions at once. Set up a way to actually
     reflect/use that discount percentage.
+  * I can also pull order info from Amazon, meaning we can sell on Amazon:
+    https://developer.amazonservices.com/
 
 
 RESKIN:
@@ -102,7 +204,7 @@ RESKIN:
     Maybe they get to choose which model they unlock.
   * Why subscription? In addition to a new model unlocked every month, subscription-holders
     get additional features, like integration with Rebrickable, price guide information, sneak peaks
-    of new models, exclusive information, discounts on physical items, etc.
+    of new models, exclusive information, exclusive instructions, discounts on physical items, etc.
   * In order to keep people from signing up for a subscription for 1 month and then cancelling after
     they got the $15 instructions they wanted, maybe they get 10 credits/month. 1 credit = 1 dollar. So
     if they wanted, they could not use their credits one month to 'save up' for that $15 set of
@@ -112,6 +214,7 @@ RESKIN:
     them to the subscription service, we send them a sticker along with something else (postcard?)?
 * Maybe tap into Rebrickables API so people can see what they would need to build one of our models:
   https://rebrickable.com/api/v3/docs/?key= Maybe this can be a subscriber-level thing.
+    Possibly might want to write a rebrickable api wrapper gem.
 
 * Need to set some validation to not let a user create more than the max number of authentications allowed.
 * need to style devise validation messages?
@@ -149,6 +252,8 @@ Nav:
   using this in the meantime to get close: .nav-item a:hover It works, but the highlight doesn't
   go all the way across the screen like it does for the other links.
 
+
+
 TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
@@ -168,7 +273,7 @@ speed up page load times.
 
 * Try to get this app on Elastic Beanstalk or Digital Ocean
 
-* In order to get Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
+* In order to get Google Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
 and verify it, maybe verify my FB and Twitter with google if possible.
 
 * Fix up my specs so I don't have to use database cleaner, and use the truncation strategy, which slows down specs

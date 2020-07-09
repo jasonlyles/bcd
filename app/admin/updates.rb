@@ -15,7 +15,7 @@ ActiveAdmin.register Update do
     column 'Description' do |update|
       snippet(update.description, word_count: 10) if update.description
     end
-    toggle_bool_column :live
+    toggle_bool_column :live, success_message: 'Successfully Updated'
     column :link
     column 'Image?', &:image?
     column :created_at

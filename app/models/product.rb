@@ -86,9 +86,37 @@ class Product < ActiveRecord::Base
     Product.ready.where(["free != 't' and quantity >= 1 and category_id = ? and id <> ?", category_id, id]).limit(4)
   end
 
+  ransacker :has_discount_percentage,
+            formatter: proc { |boolean|
+              results = Product.has_discount_percentage(boolean).map(&:id)
+              results = results.present? ? results : nil
+            }, splat_params: true do |parent|
+    parent.table[:id]
+  end
+
+  def self.has_discount_percentage(boolean)
+    if boolean == 'true'
+      where('discount_percentage > 0')
+    else
+      where('discount_percentage = 0')
+    end
+  end
+
   def has_orders?
     line_item = LineItem.where(['product_id = ?', id]).limit(1)
     line_item.empty? ? false : true
+  end
+
+  def can_be_made_live?
+    !is_instructions? || (is_instructions? && has_parts_list?)
+  end
+
+  def is_instructions?
+    product_type.name == 'Instructions'
+  end
+
+  def has_parts_list?
+    parts_lists.present?
   end
 
   def destroy

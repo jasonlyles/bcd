@@ -1,0 +1,14 @@
+<table>
+  <%# parts_list.lots.sort{ |a,b| a.part_name <=> b.part_name }.each do |lot| %>
+    <% parts_list.lots.each do |lot| %>
+      <tr>
+        <td>
+          <%= image_tag(lot.element.image, style: 'width: 100px; display: inline') %>
+        </td>
+        <td>
+          <%= "#{lot.quantity} x " %>
+          <%= link_to lot.element.part_and_color_name_string, controller: :elements, action: :show, id: lot.element.id %>
+        </td>
+      </tr>
+    <% end %>
+  </table>

@@ -24,7 +24,10 @@ ActiveAdmin.register Product do
   filter :product_type
   filter :name
   filter :product_code
-  filter :discount_percentage
+  filter :has_discount_percentage_in,
+         as: :select,
+         label: 'Discounted?',
+         collection: proc { %w[true false] }
   filter :price
   filter :ready_for_public, label: 'Live?', as: :check_boxes
   filter :free, label: 'Free?', as: :check_boxes
@@ -56,7 +59,7 @@ ActiveAdmin.register Product do
     column 'Price' do |product|
       number_to_currency(product.price)
     end
-    column 'Live?', &:ready_for_public
+    toggle_bool_column 'Live?', :ready_for_public, success_message: 'Successfully Updated', if: proc { |product| product.can_be_made_live? }
     actions defaults: true do |product|
       link_to 'Clone', duplicate_admin_product_path(product,product)
     end
@@ -140,7 +143,9 @@ ActiveAdmin.register Product do
           f.input :description, label: 'Description (min 100 characters)'
           f.input :designer, as: :select, collection: Product.pluck(:designer).uniq, include_blank: 'Select Designer'
           f.input :alternative_build
-          f.input :ready_for_public, label: 'Ready for public? ***'
+          if f.object.can_be_made_live?
+            f.input :ready_for_public, label: 'Ready for public? ***'
+          end
         end
         render 'footnotes'
       end
@@ -190,5 +195,15 @@ ActiveAdmin.register Product do
   member_action :duplicate, method: :get do
     @product = resource.dup
     render :new, layout: false
+  end
+
+  controller do
+    def scoped_collection
+      if params['action'] == 'index'
+        super.includes :parts_lists
+      else
+        super
+      end
+    end
   end
 end

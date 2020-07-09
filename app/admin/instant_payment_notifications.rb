@@ -53,4 +53,14 @@ ActiveAdmin.register InstantPaymentNotification do
     end
     active_admin_comments
   end
+
+  controller do
+    def scoped_collection
+      if params['action'] == 'index'
+        super.includes :order
+      else
+        super  
+      end
+    end
+  end
 end

@@ -585,6 +585,7 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    rmagick (4.0.0)
     roboto (0.2.0)
       actionpack (>= 3.0.0)
       rails (>= 3.1.0)
@@ -645,6 +646,7 @@ GEM
     slop (3.6.0)
     sort_alphabetical (1.1.0)
       unicode_utils (>= 1.2.2)
+    sprite-factory (1.7.1)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -743,6 +745,7 @@ DEPENDENCIES
   nested_form
   newrelic_rpm
   nifty-generators
+  oauth
   omniauth (~> 1.3)
   omniauth-facebook
   omniauth-twitter
@@ -760,6 +763,7 @@ DEPENDENCIES
   resque
   resque-status
   resque_mailer
+  rmagick
   roboto
   rspec-activemodel-mocks
   rspec-rails (~> 3.0)
@@ -768,6 +772,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   simplecov
   sitemap_generator
+  sprite-factory
   sprockets (~> 3.7)
   thin
   twitter

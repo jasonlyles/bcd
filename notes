@@ -1,0 +1,10 @@
+Had been doing this to save parts images to S3, but it wasn't compatible with
+what I was doing with Carrierwave
+# s3 = Aws::S3::Resource.new(region: 'us-east-1')
+# bucket = ENV['BCD_S3_IMAGE_BUCKET']
+# s3_file = "parts_images/#{color_id}/#{guid}#{extension}"
+# obj = s3.bucket(bucket).object(s3_file)
+# truth = obj.upload_file(file)
+# if truth
+#   self.image = "https://s3.amazonaws.com/#{bucket}/#{s3_file}"
+# end

@@ -42,4 +42,14 @@ ActiveAdmin.register Subcategory do
     end
     f.actions
   end
+
+  controller do
+    def scoped_collection
+      if params['action'] == 'index'
+        super.includes :category
+      else
+        super
+      end
+    end
+  end
 end

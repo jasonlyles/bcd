@@ -1,0 +1,4 @@
+<%= image_tag(element.image, class: 'medium') %>
+<br/>
+<%= button_to "Update Via Rebrickable", { action: "refresh_image", id: element.id, source: 'rebrickable' }, method: :post, data: { disable_with: 'Updating...' }, form_class: "inline-button-form" %>
+<%= button_to "Update Via Bricklink", { action: "refresh_image", id: element.id, source: 'bricklink' }, method: :post, data: { disable_with: 'Updating...' }, form_class: "inline-button-form" %>

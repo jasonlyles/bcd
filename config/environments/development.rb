@@ -39,16 +39,14 @@ BrickCity::Application.configure do
   config.assets.quiet = true
 
   #config.action_controller.asset_host = "http://images.brickcitydepot.com" #Just set this up to test whether I had it working or not. It works
-=begin
   config.after_initialize do
-    Bullet.enable
-    Bullet.alert
-    Bullet.bullet_logger
-    Bullet.console
-    Bullet.rails_logger
-    Bullet.raise
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+    #Bullet.raise
   end
-=end
 end
 
 #For troubleshooting exception notifications:

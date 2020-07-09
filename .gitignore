@@ -9,6 +9,7 @@ public/carrierwave
 public/sitemaps
 coverage
 public/pdfs
+public/temp*
 brakeman.html
 public/uploads/tmp
 public/parts_lists

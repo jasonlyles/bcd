@@ -4,7 +4,7 @@ ActiveAdmin.register_page 'Dashboard' do
   content title: proc { I18n.t('active_admin.dashboard') } do
     columns do
       column span: 4 do
-        panel 'Notiications' do
+        panel 'Notifications' do
           div class: 'nice-padding' do
             'TODO'
           end
@@ -25,7 +25,7 @@ ActiveAdmin.register_page 'Dashboard' do
     columns do
       column do
         panel 'Recent Orders' do
-          table_for Order.order('created_at desc').last(10) do
+          table_for Order.order('created_at desc').includes(:user, :instant_payment_notifications, line_items: [product: [:product_type]]).last(10) do
             column('User') { |order| link_to order.user.email, admin_user_path(order.user_id) }
             column('Order Date', &:created_at)
             column('Transaction ID') { |order| link_to order.transaction_id, admin_order_path(order.id) }
@@ -52,7 +52,7 @@ ActiveAdmin.register_page 'Dashboard' do
         end
       end
       column do
-        panel 'Recent Email Campaigns' do
+        panel 'Last 10 Email Campaigns' do
           table_for EmailCampaign.order('created_at desc').last(10) do
             column('Description') { |campaign| link_to snippet(campaign.description, word_count: 10), admin_email_campaign_path(campaign.id) }
             column('Emails Sent', &:emails_sent)

@@ -1,0 +1,9 @@
+<div class='image-list'>
+  <ul>
+    <% part.elements.each do |element| %>
+      <li>
+        <%= image_tag(element.image, class: 'small') %>
+      </li>
+    <% end %>
+  </ul>
+</div>

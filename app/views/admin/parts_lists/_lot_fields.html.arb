@@ -1,0 +1,8 @@
+panel '' do
+  f.inputs do
+    f.input :part_name, wrapper_html: { class: 'fl' }
+    f.input :color_name, wrapper_html: { class: 'fl' }
+    f.input :quantity, wrapper_html: { class: 'fl' }
+    f.input :_destroy, as: :boolean, label: 'Destroy?', wrapper_html: { class: 'fl' }
+  end
+end

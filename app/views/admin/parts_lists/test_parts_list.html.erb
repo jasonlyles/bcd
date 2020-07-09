@@ -1,0 +1,15 @@
+<%= stylesheet_link_tag @parts_list.spritesheet_css %>
+<table>
+  <% @parts_list.parts.each do |k,v| %>
+    <!-- There's something going on in here where the 10 elements I initially created are not showing images. Why? -->
+    <tr>
+      <td>
+        <!-- <div style="max-height: 125px;"> -->
+        <div>
+          <%# image_tag('s.png', class: "medium_#{v['guid']}", style: "transform: scale(0.4); transform-origin: top;") %>
+            <%= image_tag('s.png', class: "thumb_#{v['guid']}") %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </table>

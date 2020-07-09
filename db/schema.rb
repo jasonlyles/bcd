@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210234850) do
+ActiveRecord::Schema.define(version: 20191207030737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,6 +81,19 @@ ActiveRecord::Schema.define(version: 20181210234850) do
     t.boolean  "image_processing", default: false
   end
 
+  create_table "colors", force: :cascade do |t|
+    t.integer  "bl_id",      limit: 2
+    t.integer  "ldraw_id",   limit: 2
+    t.integer  "lego_id",    limit: 2
+    t.string   "name",       limit: 50
+    t.string   "bl_name",    limit: 50
+    t.string   "lego_name",  limit: 50
+    t.string   "ldraw_rgb",  limit: 6
+    t.string   "rgb",        limit: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "downloads", force: :cascade do |t|
     t.integer  "product_id"
     t.integer  "count",          default: 0
@@ -93,6 +106,21 @@ ActiveRecord::Schema.define(version: 20181210234850) do
 
   add_index "downloads", ["product_id"], name: "index_downloads_on_product_id", using: :btree
   add_index "downloads", ["user_id"], name: "index_downloads_on_user_id", using: :btree
+
+  create_table "elements", force: :cascade do |t|
+    t.integer  "part_id"
+    t.integer  "color_id"
+    t.string   "image"
+    t.string   "original_image_url"
+    t.string   "guid",               limit: 36
+    t.boolean  "image_processing",              default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "elements", ["color_id"], name: "index_elements_on_color_id", using: :btree
+  add_index "elements", ["part_id", "color_id"], name: "index_elements_on_part_id_and_color_id", unique: true, using: :btree
+  add_index "elements", ["part_id"], name: "index_elements_on_part_id", using: :btree
 
   create_table "email_campaigns", force: :cascade do |t|
     t.text     "description"
@@ -147,6 +175,18 @@ ActiveRecord::Schema.define(version: 20181210234850) do
   add_index "line_items", ["order_id"], name: "index_line_items_on_order_id", using: :btree
   add_index "line_items", ["product_id"], name: "index_line_items_on_product_id", using: :btree
 
+  create_table "lots", force: :cascade do |t|
+    t.integer  "parts_list_id"
+    t.integer  "element_id"
+    t.integer  "quantity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "lots", ["element_id"], name: "index_lots_on_element_id", using: :btree
+  add_index "lots", ["parts_list_id", "element_id"], name: "index_lots_on_parts_list_id_and_element_id", unique: true, using: :btree
+  add_index "lots", ["parts_list_id"], name: "index_lots_on_parts_list_id", using: :btree
+
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "transaction_id",   limit: 50
@@ -176,13 +216,36 @@ ActiveRecord::Schema.define(version: 20181210234850) do
     t.datetime "updated_at"
   end
 
+  create_table "parts", force: :cascade do |t|
+    t.string   "bl_id",             limit: 20
+    t.string   "ldraw_id",          limit: 20
+    t.string   "lego_id",           limit: 20
+    t.string   "name"
+    t.boolean  "check_bricklink",              default: true
+    t.boolean  "check_rebrickable",            default: true
+    t.json     "alternate_nos"
+    t.boolean  "is_obsolete",                  default: false
+    t.string   "year_from",         limit: 4
+    t.string   "year_to",           limit: 4
+    t.json     "brickowl_ids"
+    t.boolean  "is_lsynth",                    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "parts_lists", force: :cascade do |t|
     t.string   "parts_list_type"
     t.string   "name"
     t.integer  "product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "name_processing", default: false
+    t.boolean  "name_processing",   default: false
+    t.boolean  "approved",          default: false
+    t.json     "parts"
+    t.string   "spritesheet_image"
+    t.text     "bricklink_xml"
+    t.text     "ldr"
+    t.string   "spritesheet_css"
   end
 
   add_index "parts_lists", ["product_id"], name: "index_parts_lists_on_product_id", using: :btree

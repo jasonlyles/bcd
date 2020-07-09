@@ -43,6 +43,10 @@ img.medium {
   height: 150px;
 }
 
+img.small {
+  width: 125px;
+}
+
 fieldset.inputs {
   display: inline;
 }
@@ -86,4 +90,43 @@ $happy-color: #08A510;
 
 div.nice-padding {
   padding: 15px;
+}
+
+fieldset ol li.fl {
+  display: inline-block;
+}
+
+span.select2 {
+  width: 100% !important;
+}
+
+fieldset.inputs.has_many_fields {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.hidden-file-input {
+  label {
+    display: none;
+  }
+
+  input {
+    display: none !important;
+  }
+}
+
+ul.errors {
+  border: #FF6347 solid 1px;
+  border-radius: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  li {
+    color: #FF6347;
+    font-size: 1.2em;
+  }
+}
+
+form.inline-button-form {
+  display: inline-block;
 }
