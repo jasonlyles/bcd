@@ -27,6 +27,14 @@ class StaticController < ApplicationController
   end
 
   def send_contact_email
+    # Adding this as a simple honeypot to try and stop spambots sending emails
+    # through the contact form.
+    if params['email']['contact_info'].present?
+      flash[:notice] = "Thanks for your email. We'll get back with you shortly."
+      redirect_to :contact
+      return
+    end
+
     @email = Email.new(params[:email])
 
     if @email.valid?
