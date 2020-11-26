@@ -4,7 +4,8 @@ class Email
   include ActiveModel::Conversion
   extend ActiveModel::Naming
 
-  attr_accessor :name, :body, :email_address
+  # contact_info exists here only for a simple honeypot on the contact form.
+  attr_accessor :name, :body, :email_address, :contact_info
 
   validates :name, :body, :email_address, :presence => true
   validates :email_address, :format => { :with => %r{.+@.+\..+} }, :allow_blank => true

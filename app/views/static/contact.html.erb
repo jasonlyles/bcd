@@ -52,6 +52,10 @@
       <%= f.label :body, "Message" %>
       <%= f.text_area :body, :class => 'form-control', :placeholder => 'Stuff I want to say' %>
     </div>
+    <div class="form-group">
+      <%= f.label :contact_info, :class => 'd-none' %>
+      <%= f.text_field :contact_info, :class => 'form-control d-none', :placeholder => 'Contact Info' %>
+    </div>
     <div class="actions">
       <%= f.submit "Send Email", :class => 'btn btn-primary', data: {disable_with: 'Sending...'} %>
     </div>
