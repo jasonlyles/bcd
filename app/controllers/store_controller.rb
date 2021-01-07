@@ -16,7 +16,8 @@ class StoreController < ApplicationController
   def products
     @product_type = ProductType.where('name=?', params[:product_type_name])[0]
     if @product_type.blank?
-      flash[:notice] = "Sorry. We don't have any of those."
+      # TODO: Figure out why favicon requests are coming here. But for now, just don't flash this confusing message for those requests
+      flash[:notice] = "Sorry. We don't have any of those." unless params[:product_type_name] == 'favicon'
       redirect_to(root_path)
     else
       if !params[:product_type_name].casecmp('instructions').zero?
