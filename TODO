@@ -1,3 +1,18 @@
+PARTS LIST REBUILD:
+Steps:
+DONE 1. Build out models/relationships
+   a. color
+   b. element
+   c. lot
+   d. part
+   e. parts_list
+DONE 2. Build out services for calls to 3rd parties and restrict the calls
+   available to only what I need for now.
+   a. Rebrickable
+   b. BrickLink
+DONE 3. Build out service for creating parts lists, moving it out of the job it's in currently.
+4. Add interface for uploading/editing parts lists.
+
 RESKIN:
 
 * Need to set some validation to not let a user create more than the max number of authentications allowed.

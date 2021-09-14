@@ -66,6 +66,7 @@ group :development, :test do
   gem 'bullet'
   gem 'gemsurance'
   gem 'pry'
+  gem 'faker'
 end
 
 group :development do

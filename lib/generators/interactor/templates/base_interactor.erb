@@ -1,0 +1,25 @@
+module <%= "#{plural_name.singularize.titleize}Interactions" %>
+  class Base<%= class_name %>Interaction
+
+    attr_accessor :error
+
+    def initialize(options)
+      @<%= plural_name.singularize %> = options[:<%= plural_name.singularize %>]
+    end
+
+    def succeeded?
+      error.blank?
+    end
+
+    def self.run(*args)
+      interactor = new(*args)
+      interactor.run
+      interactor
+    end
+
+    private_class_method :new
+
+    private
+
+  end
+end

@@ -72,16 +72,17 @@ class User < ActiveRecord::Base
     product_info = Struct.new(:product, :download, :xml_list_ids, :html_list_ids, :image_url)
     image_url = product.main_image.thumb if product.main_image
     download = Download.find_by_user_id_and_product_id(self.id,product.id)
+    # TODO: This becomes a place maybe to get a link to the parts list page?
     if product.includes_instructions?
       html_list_ids,xml_list_ids = [],[]
 
-      html_lists = PartsList.get_list(product.parts_lists, 'html')
-      html_lists.each{|hl| html_list_ids << hl.id} if html_lists
-      html_list_ids = nil if html_list_ids.blank?
-
-      xml_lists = PartsList.get_list(product.parts_lists, 'xml')
-      xml_lists.each{|xl| xml_list_ids << xl.id} if xml_lists
-      xml_list_ids = nil if xml_list_ids.blank?
+      # html_lists = PartsList.get_list(product.parts_lists, 'html')
+      # html_lists.each{|hl| html_list_ids << hl.id} if html_lists
+      # html_list_ids = nil if html_list_ids.blank?
+      #
+      # xml_lists = PartsList.get_list(product.parts_lists, 'xml')
+      # xml_lists.each{|xl| xml_list_ids << xl.id} if xml_lists
+      # xml_list_ids = nil if xml_list_ids.blank?
     else
       html_list_ids,xml_list_ids = nil, nil
     end

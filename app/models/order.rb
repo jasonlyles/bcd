@@ -98,10 +98,12 @@ class Order < ActiveRecord::Base
         product = Product.find(line_item.product_id)
         next unless product.includes_instructions?
         product_name = product.code_and_name
-        html_lists = PartsList.get_list(product.parts_lists, 'html')
-        xml_lists = PartsList.get_list(product.parts_lists, 'xml')
-        html_lists.each { |hl| links << ["#{product_name} HTML Parts List", "/guest_download_parts_list/#{hl.id}/#{id}"] } if html_lists
-        xml_lists.each { |xl| links << ["#{product_name} XML Parts List for Bricklink Wanted List Feature", "/guest_download_parts_list/#{xl.id}/#{id}"] } if xml_lists
+
+        # TODO: Won't be downloading parts lists anymore. Will have to switch it to internal URLs
+        # html_lists = PartsList.get_list(product.parts_lists, 'html')
+        # xml_lists = PartsList.get_list(product.parts_lists, 'xml')
+        # html_lists.each { |hl| links << ["#{product_name} HTML Parts List", "/guest_download_parts_list/#{hl.id}/#{id}"] } if html_lists
+        # xml_lists.each { |xl| links << ["#{product_name} XML Parts List for Bricklink Wanted List Feature", "/guest_download_parts_list/#{xl.id}/#{id}"] } if xml_lists
 
         download = Download.where(['user_id=? and product_id=?', user_id, product.id])
                            .first_or_create(download_token: SecureRandom.hex(20), product_id: product.id, user_id: user_id)

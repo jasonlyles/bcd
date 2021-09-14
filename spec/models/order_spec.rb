@@ -180,13 +180,13 @@ describe Order do
         @subcategory = FactoryGirl.create(:subcategory)
         @user = FactoryGirl.create(:user)
         @product = FactoryGirl.create(:product)
-        html_list = FactoryGirl.create(:html_parts_list, :product_id => @product.id)
+        html_list = FactoryGirl.create(:ldr_parts_list, :product_id => @product.id)
         xml_list = FactoryGirl.create(:xml_parts_list, :product_id => @product.id)
         @order = FactoryGirl.create(:order_with_line_items, :created_at => Date.today, :user_id => @user.id)
         expect(SecureRandom).to receive(:hex).and_return('fake_hex')
 
         links = @order.get_download_links
-        expect(links).to eq([["CB001 Colonial Revival House HTML Parts List", "/guest_download_parts_list/1/1"], ["CB001 Colonial Revival House XML Parts List for Bricklink Wanted List Feature", "/guest_download_parts_list/2/1"], ["CB001 Colonial Revival House PDF", "/guest_download?id=#{@user.guid}&token=fake_hex"]])
+        expect(links).to eq([["CB001 Colonial Revival House PDF", "/guest_download?id=#{@user.guid}&token=fake_hex"]])
       end
     end
 

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe AuthenticationsController do
-  fixtures :all
   render_views
 
   describe "failure" do

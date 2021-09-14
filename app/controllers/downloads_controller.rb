@@ -2,67 +2,69 @@ class DownloadsController < ApplicationController
   before_filter :authenticate_user!, :only => [:download, :download_parts_list]
   before_filter :valid_guest, :only => [:guest_download_parts_list]
 
+  # TODO: Clean up this code once interfaces for adding parts lists and linking
+  # customers to parts lists are complete:
+  # def download_parts_list
+  #   @parts_list = PartsList.find(params[:parts_list_id])
+  #   if @parts_list
+  #     @product = Product.find(@parts_list.product_id)
+  #     #Check users completed orders and see if they're entitled to the parts lists
+  #     @orders = current_user.completed_orders
+  #     products = []
+  #     @orders.each do |order|
+  #       order.line_items.each do |li|
+  #         products << li.product_id
+  #       end
+  #     end
+  #
+  #     #Now, get all freebie product IDs
+  #     products << Product.find_all_by_price('free').pluck(:id)
+  #     products.flatten!
+  #
+  #     unless products.include?(@parts_list.product_id)
+  #       return redirect_cheater_to_product_page
+  #     end
+  #
+  #     deliver_download(@parts_list.name.path)
+  #   else
+  #     logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
+  #   end
+  # end
 
-  def download_parts_list
-    @parts_list = PartsList.find(params[:parts_list_id])
-    if @parts_list
-      @product = Product.find(@parts_list.product_id)
-      #Check users completed orders and see if they're entitled to the parts lists
-      @orders = current_user.completed_orders
-      products = []
-      @orders.each do |order|
-        order.line_items.each do |li|
-          products << li.product_id
-        end
-      end
-
-      #Now, get all freebie product IDs
-      products << Product.find_all_by_price('free').pluck(:id)
-      products.flatten!
-
-      unless products.include?(@parts_list.product_id)
-        return redirect_cheater_to_product_page
-      end
-
-      deliver_download(@parts_list.name.path)
-    else
-      logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
-    end
-  end
-
-  def guest_download_parts_list
-    @parts_list = PartsList.find(params[:parts_list_id])
-    if @parts_list
-      @product = Product.find(@parts_list.product_id)
-      #Check users completed orders and see if they're entitled to the parts lists
-      #Make sure I test this via unit tests  and actually clicking around in the browser
-      @order = Order.find(params[:order_id])
-      @user = @order.user
-      products = []
-      @order.line_items.each do |li|
-        products << li.product_id
-      end
-      unless @user.guest?
-        @freebies = Product.find_all_by_price('free')
-        @freebies.each do |product|
-          products << product.id
-        end
-      end
-
-      if @product.is_free? && @user.guest? #Guest User is trying to download parts list for free instructions
-        flash[:alert] = "Sorry, free instructions are only available to non-guests."
-        return redirect_to '/'
-      end
-
-      unless products.include?(@parts_list.product_id)
-        return redirect_cheater_to_product_page
-      end
-
-      deliver_download(@parts_list.name.path)
-    else
-      logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
-    end
-  end
+  # TODO: Clean up this code:
+  # def guest_download_parts_list
+  #   @parts_list = PartsList.find(params[:parts_list_id])
+  #   if @parts_list
+  #     @product = Product.find(@parts_list.product_id)
+  #     #Check users completed orders and see if they're entitled to the parts lists
+  #     #Make sure I test this via unit tests  and actually clicking around in the browser
+  #     @order = Order.find(params[:order_id])
+  #     @user = @order.user
+  #     products = []
+  #     @order.line_items.each do |li|
+  #       products << li.product_id
+  #     end
+  #     unless @user.guest?
+  #       @freebies = Product.find_all_by_price('free')
+  #       @freebies.each do |product|
+  #         products << product.id
+  #       end
+  #     end
+  #
+  #     if @product.is_free? && @user.guest? #Guest User is trying to download parts list for free instructions
+  #       flash[:alert] = "Sorry, free instructions are only available to non-guests."
+  #       return redirect_to '/'
+  #     end
+  #
+  #     unless products.include?(@parts_list.product_id)
+  #       return redirect_cheater_to_product_page
+  #     end
+  #
+  #     deliver_download(@parts_list.name.path)
+  #   else
+  #     logger.error("Someone tried to access a nonexistent parts list with an ID of #{params[:parts_list_id]}")
+  #   end
+  # end
 
   def download
     @product = Product.find_by_base_product_code(params[:product_code])

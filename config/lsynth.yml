@@ -1,0 +1,12 @@
+lsynth:
+  parts:                   ['LS01', 'LS100', 'LS101', 'LS102', 'LS02', 'LS03', 'LS04', 'LS05', 'LS06', 'LS07', 'LS08', 'LS09', '79', '80', '208', '209', 'LS60', 'LS11', 'LS70', 'ls10', '4-4cyli', 'LS30', '755', '756', '758', '759', '57539a', '57539b', 'LS61', '572c', 'LS40', 'LS41', '342', 'LS50', 'LS51', 'LS20', 'LS21', 'box', '680']
+  translations:
+    HOSE_FLEXIBLE_8.5L:    3001
+    HOSE_FLEXIBLE_12L:     3001
+    HOSE_FLEXIBLE_19L:     3001
+    MINIFIG_CHAIN_16L:     3001
+    STRING_11L:            3001
+    STRING_21L:            3001
+    STRING_31L:            3001
+    STRING_41L:            3001
+    STRING_WITH_GRIPS_21L: 3001

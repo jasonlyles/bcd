@@ -95,13 +95,13 @@ describe User do
       @user = FactoryGirl.create(:user)
       @download = FactoryGirl.create(:download)
       @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
+      @html_list = FactoryGirl.create(:ldr_parts_list)
       product_info = @user.get_info_for_product(@product)
 
       expect(product_info.product).to be_a(Product)
       expect(product_info.download).to be_a(Download)
-      expect(product_info.html_list_ids).to eq([2])
-      expect(product_info.xml_list_ids).to eq([1])
+      # expect(product_info.html_list_ids).to eq([2])
+      # expect(product_info.xml_list_ids).to eq([1])
       expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
     end
 
@@ -115,13 +115,13 @@ describe User do
       @image = FactoryGirl.create(:image, product_id: @product2.id)
       @user = FactoryGirl.create(:user)
       @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
+      @html_list = FactoryGirl.create(:ldr_parts_list)
       product_info = @user.get_info_for_product(@product2)
 
       expect(product_info.product).to be_a(Product)
       expect(product_info.download).to be_nil
-      expect(product_info.html_list_ids).to be_nil
-      expect(product_info.xml_list_ids).to be_nil
+      # expect(product_info.html_list_ids).to be_nil
+      # expect(product_info.xml_list_ids).to be_nil
       expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
     end
   end
@@ -138,14 +138,14 @@ describe User do
       @user = FactoryGirl.create(:user)
       @download = FactoryGirl.create(:download)
       @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
+      @html_list = FactoryGirl.create(:ldr_parts_list)
       product_info = @user.get_product_info_for_products_owned
 
       expect(product_info.length).to eq(2)
       expect(product_info[0].product).to be_a(Product)
       expect(product_info[0].download).to be_a(Download)
-      expect(product_info[0].html_list_ids).to eq([2])
-      expect(product_info[0].xml_list_ids).to eq([1])
+      # expect(product_info[0].html_list_ids).to eq([2])
+      # expect(product_info[0].xml_list_ids).to eq([1])
       expect(product_info[0].image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
       expect(product_info[1].product).to be_a(Product)
     end
@@ -162,7 +162,7 @@ describe User do
       @user = FactoryGirl.create(:user)
       @download = FactoryGirl.create(:download)
       @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
+      @html_list = FactoryGirl.create(:ldr_parts_list)
       product_info = @user.get_product_info_for_products_owned
 
       expect(product_info.length).to eq(2)

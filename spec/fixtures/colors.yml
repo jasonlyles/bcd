@@ -1,0 +1,1242 @@
+one:
+  bl_id:                  41
+  ldraw_id:               118
+  lego_id:                118
+  name:                   Aqua
+  bl_name:                Aqua
+  lego_name:              Light bluish green
+  ldraw_rgb:              B7D7D5
+  rgb:                    B7D7D5
+two:
+  bl_id:                  11
+  ldraw_id:               0
+  lego_id:                26
+  name:                   Black
+  bl_name:                Black
+  lego_name:              Black
+  ldraw_rgb:              212121
+  rgb:                    1B2A34
+three:
+  bl_id:                  116
+  ldraw_id:               75
+  lego_id:                ''
+  name:                   BlackCopperGlitter
+  bl_name:                Speckle Black-Copper
+  lego_name:              ''
+  ldraw_rgb:              0
+  rgb:                    ''
+four:
+  bl_id:                  111
+  ldraw_id:               132
+  lego_id:                132
+  name:                   BlackGlitter
+  bl_name:                Speckle Black-Silver
+  lego_name:              "[Black Glitter]"
+  ldraw_rgb:              0
+  rgb:                    ''
+five:
+  bl_id:                  151
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   BlackGoldGlitter
+  bl_name:                'Speckle Black-Gold '
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+six:
+  bl_id:                  7
+  ldraw_id:               1
+  lego_id:                23
+  name:                   Blue
+  bl_name:                Blue
+  lego_name:              Bright Blue
+  ldraw_rgb:              0033B2
+  rgb:                    0D69AB
+seven:
+  bl_id:                  36
+  ldraw_id:               10
+  lego_id:                37
+  name:                   BtGreen
+  bl_name:                Bright Green
+  lego_name:              Bright Green
+  ldraw_rgb:              6BEE90
+  rgb:                    4B974A
+eight:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   BtLtBlue
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+nine:
+  bl_id:                  110
+  ldraw_id:               191
+  lego_id:                191
+  name:                   BtLtOrange
+  bl_name:                Bright Light Orange
+  lego_name:              Flame yellowish orange
+  ldraw_rgb:              E8AB2D
+  rgb:                    E8AB2D
+ten:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   BtPink
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+eleven:
+  bl_id:                  93
+  ldraw_id:               69
+  lego_id:                198
+  name:                   BtPurple
+  bl_name:                Light Purple
+  lego_name:              Bright Reddish Lilac
+  ldraw_rgb:              CD6298
+  rgb:                    8E4285
+twelve:
+  bl_id:                  122
+  ldraw_id:               64
+  lego_id:                ''
+  name:                   ChromeBlack
+  bl_name:                Chrome Black
+  lego_name:              ''
+  ldraw_rgb:              1B2A34
+  rgb:                    ''
+thirteen:
+  bl_id:                  52
+  ldraw_id:               61
+  lego_id:                ''
+  name:                   ChromeBlue
+  bl_name:                Chrome Blue
+  lego_name:              ''
+  ldraw_rgb:              5C66A4
+  rgb:                    ''
+fourteen:
+  bl_id:                  57
+  ldraw_id:               60
+  lego_id:                ''
+  name:                   ChromeBrass
+  bl_name:                Chrome Antique Brass
+  lego_name:              ''
+  ldraw_rgb:              645A4C
+  rgb:                    ''
+fifteen:
+  bl_id:                  21
+  ldraw_id:               334
+  lego_id:                ''
+  name:                   ChromeGold
+  bl_name:                Chrome Gold
+  lego_name:              ''
+  ldraw_rgb:              E16E13
+  rgb:                    ''
+sixteen:
+  bl_id:                  64
+  ldraw_id:               62
+  lego_id:                ''
+  name:                   ChromeGreen
+  bl_name:                Chrome Green
+  lego_name:              ''
+  ldraw_rgb:              3CB371
+  rgb:                    ''
+seventeen:
+  bl_id:                  82
+  ldraw_id:               63
+  lego_id:                ''
+  name:                   ChromePink
+  bl_name:                Chrome Pink
+  lego_name:              ''
+  ldraw_rgb:              AA4D8E
+  rgb:                    ''
+eighteen:
+  bl_id:                  22
+  ldraw_id:               383
+  lego_id:                301
+  name:                   ChromeSilver
+  bl_name:                Chrome Silver
+  lego_name:              "[Silver]"
+  ldraw_rgb:              E0E0E0
+  rgb:                    ''
+nineteen:
+  bl_id:                  12
+  ldraw_id:               47
+  lego_id:                40
+  name:                   Clear
+  bl_name:                Trans-Clear
+  lego_name:              Transparent
+  ldraw_rgb:              FFFFFF
+  rgb:                    ECECEC
+twenty:
+  bl_id:                  101
+  ldraw_id:               117
+  lego_id:                117
+  name:                   ClearGlitter
+  bl_name:                Glitter Trans-Clear
+  lego_name:              "[Transparent Glitter]"
+  ldraw_rgb:              FFFFFF
+  rgb:                    ''
+twentyone:
+  bl_id:                  103
+  ldraw_id:               226
+  lego_id:                226
+  name:                   CoolYellow
+  bl_name:                Bright Light Yellow
+  lego_name:              Cool Yellow
+  ldraw_rgb:              FDEA8C
+  rgb:                    FDEA8C
+twentytwo:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                180
+  name:                   Curry
+  bl_name:                ''
+  lego_name:              Curry
+  ldraw_rgb:              ''
+  rgb:                    D7A94B
+twentythree:
+  bl_id:                  120
+  ldraw_id:               308
+  lego_id:                308
+  name:                   DkBrown
+  bl_name:                Dark Brown
+  lego_name:              Dark Brown
+  ldraw_rgb:              352100
+  rgb:                    ''
+twentyfour:
+  bl_id:                  91
+  ldraw_id:               86
+  lego_id:                217
+  name:                   DkFlesh
+  bl_name:                Dark Flesh
+  lego_name:              Brown
+  ldraw_rgb:              7C5C45
+  rgb:                    7C5C45
+twentyfive:
+  bl_id:                  80
+  ldraw_id:               288
+  lego_id:                141
+  name:                   DkGreen
+  bl_name:                Dark Green
+  lego_name:              Earth Green
+  ldraw_rgb:              27462C
+  rgb:                    27462C
+twentysix:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                128
+  name:                   DkNougat
+  bl_name:                ''
+  lego_name:              Dark Nougat
+  ldraw_rgb:              ''
+  rgb:                    AE7A59
+twentyseven:
+  bl_id:                  68
+  ldraw_id:               484
+  lego_id:                38
+  name:                   DkOrange
+  bl_name:                Dark Orange
+  lego_name:              Dark Orange
+  ldraw_rgb:              B33E00
+  rgb:                    A05F34
+twentyeight:
+  bl_id:                  47
+  ldraw_id:               5
+  lego_id:                22
+  name:                   DkPink
+  bl_name:                Dark Pink
+  lego_name:              Med. reddish violet
+  ldraw_rgb:              DF6695
+  rgb:                    C470A0
+twentynine:
+  bl_id:                  59
+  ldraw_id:               320
+  lego_id:                154
+  name:                   DkRed
+  bl_name:                Dark Red
+  lego_name:              Dark red
+  ldraw_rgb:              78001C
+  rgb:                    7B2E2F
+thirty:
+  bl_id:                  109
+  ldraw_id:               23
+  lego_id:                196
+  name:                   DkRoyalBlue
+  bl_name:                Dark Blue-Violet
+  lego_name:              Dark Royal blue
+  ldraw_rgb:              4732B0
+  rgb:                    ''
+thirtyone:
+  bl_id:                  85
+  ldraw_id:               72
+  lego_id:                199
+  name:                   DkStone
+  bl_name:                Dark Bluish Gray
+  lego_name:              Dark stone grey
+  ldraw_rgb:              635F61
+  rgb:                    635F61
+thirtytwo:
+  bl_id:                  117
+  ldraw_id:               76
+  lego_id:                ''
+  name:                   DkStoneGlitter
+  bl_name:                Speckle DBGray-Silver
+  lego_name:              ''
+  ldraw_rgb:              635F61
+  rgb:                    ''
+thirtythree:
+  bl_id:                  69
+  ldraw_id:               28
+  lego_id:                138
+  name:                   DkTan
+  bl_name:                Dark Tan
+  lego_name:              Sand yellow
+  ldraw_rgb:              C59750
+  rgb:                    958A73
+thirtyfour:
+  bl_id:                  87
+  ldraw_id:               232
+  lego_id:                232
+  name:                   DoveBlue
+  bl_name:                Sky Blue
+  lego_name:              Dove blue
+  ldraw_rgb:              7DBBDD
+  rgb:                    7DBBDD
+thirtyfive:
+  bl_id:                  94
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   DuploRose
+  bl_name:                Medium Dark Pink
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+thirtysix:
+  bl_id:                  29
+  ldraw_id:               366
+  lego_id:                12
+  name:                   EarthOrange
+  bl_name:                Earth Orange
+  lego_name:              Light orange brown
+  ldraw_rgb:              D18304
+  rgb:                    CB8442
+thirtyseven:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                176
+  name:                   FFRed
+  bl_name:                ''
+  lego_name:              Red Flip/Flop
+  ldraw_rgb:              ''
+  rgb:                    ''
+thirtyeight:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                178
+  name:                   FFYellow
+  bl_name:                ''
+  lego_name:              Yellow Flip/Flop
+  ldraw_rgb:              ''
+  rgb:                    ''
+thirtynine:
+  bl_id:                  106
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   FabuBrown
+  bl_name:                Fabuland Brown
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+forty:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   FabuLime
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+fortyone:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   FabuOrange
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+fortytwo:
+  bl_id:                  28
+  ldraw_id:               92
+  lego_id:                18
+  name:                   Flesh
+  bl_name:                Flesh
+  lego_name:              Nougat
+  ldraw_rgb:              CC8E68
+  rgb:                    CC8E68
+fortythree:
+  bl_id:                  46
+  ldraw_id:               21
+  lego_id:                50
+  name:                   GlowInTheDark
+  bl_name:                Glow In Dark Opaque
+  lego_name:              Phosp. White
+  ldraw_rgb:              E0FFB0
+  rgb:                    ECE8DE
+fortyfour:
+  bl_id:                  6
+  ldraw_id:               2
+  lego_id:                28
+  name:                   Green
+  bl_name:                Green
+  lego_name:              Dark green
+  ldraw_rgb:              '008C14'
+  rgb:                    287F46
+fortyfive:
+  bl_id:                  34
+  ldraw_id:               27
+  lego_id:                119
+  name:                   Lime
+  bl_name:                Lime
+  lego_name:              Br. yellowish green
+  ldraw_rgb:              D7F000
+  rgb:                    A4BD46
+fortysix:
+  bl_id:                  62
+  ldraw_id:               9
+  lego_id:                45
+  name:                   LtBlue
+  bl_name:                Light Blue
+  lego_name:              Light blue
+  ldraw_rgb:              6BABDC
+  rgb:                    B4D2E3
+fortyseven:
+  bl_id:                  90
+  ldraw_id:               78
+  lego_id:                283
+  name:                   LtFlesh
+  bl_name:                Light Flesh
+  lego_name:              Light Nougat
+  ldraw_rgb:              FAD7C3
+  rgb:                    ''
+fortyeight:
+  bl_id:                  38
+  ldraw_id:               17
+  lego_id:                6
+  name:                   LtGreen
+  bl_name:                Light Green
+  lego_name:              Light green
+  ldraw_rgb:              BAFFCE
+  rgb:                    C2DAB8
+fortynine:
+  bl_id:                  35
+  ldraw_id:               120
+  lego_id:                120
+  name:                   LtLime
+  bl_name:                Light Lime
+  lego_name:              Lig. yellowish green
+  ldraw_rgb:              D9E4A7
+  rgb:                    D9E4A7
+fifty:
+  bl_id:                  32
+  ldraw_id:               125
+  lego_id:                ''
+  name:                   LtOrange
+  bl_name:                Light Orange
+  lego_name:              ''
+  ldraw_rgb:              EAB891
+  rgb:                    ''
+fiftyone:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                223
+  name:                   LtPink
+  bl_name:                ''
+  lego_name:              Light Pink
+  ldraw_rgb:              ''
+  rgb:                    DC9095
+fiftytwo:
+  bl_id:                  104
+  ldraw_id:               29
+  lego_id:                222
+  name:                   LtPurple
+  bl_name:                Bright Pink
+  lego_name:              Light Purple
+  ldraw_rgb:              E4ADC8
+  rgb:                    E4ADC8
+fiftythree:
+  bl_id:                  105
+  ldraw_id:               212
+  lego_id:                212
+  name:                   LtRoyalBlue
+  bl_name:                Bright Light Blue
+  lego_name:              Light Royal blue
+  ldraw_rgb:              9FC3E9
+  rgb:                    9FC3E9
+fiftyfour:
+  bl_id:                  26
+  ldraw_id:               100
+  lego_id:                100
+  name:                   LtSalmon
+  bl_name:                Light Salmon
+  lego_name:              Light red
+  ldraw_rgb:              EEC4B6
+  rgb:                    EEC4B6
+fiftyfive:
+  bl_id:                  99
+  ldraw_id:               151
+  lego_id:                208
+  name:                   LtStone
+  bl_name:                Very Light Bluish Gray
+  lego_name:              Light stone grey
+  ldraw_rgb:              E5E4DE
+  rgb:                    E5E4DE
+fiftysix:
+  bl_id:                  40
+  ldraw_id:               11
+  lego_id:                116
+  name:                   LtTeal
+  bl_name:                Light Turquoise
+  lego_name:              Med. bluish green
+  ldraw_rgb:              33A6A7
+  rgb:                    55A5AF
+fiftyseven:
+  bl_id:                  44
+  ldraw_id:               20
+  lego_id:                39
+  name:                   LtViolet
+  bl_name:                Light Violet
+  lego_name:              Light bluish violet
+  ldraw_rgb:              D7C4E6
+  rgb:                    C1CADE
+fiftyeight:
+  bl_id:                  33
+  ldraw_id:               18
+  lego_id:                3
+  name:                   LtYellow
+  bl_name:                Light Yellow
+  lego_name:              Light yellow
+  ldraw_rgb:              FDE896
+  rgb:                    F9E999
+fiftynine:
+  bl_id:                  72
+  ldraw_id:               313
+  lego_id:                11
+  name:                   MaerskBlue
+  bl_name:                Maersk Blue
+  lego_name:              Pastel Blue
+  ldraw_rgb:              35A2BD
+  rgb:                    ''
+sixty:
+  bl_id:                  71
+  ldraw_id:               26
+  lego_id:                124
+  name:                   Magenta
+  bl_name:                Magenta
+  lego_name:              Bright reddish violet
+  ldraw_rgb:              D81B6D
+  rgb:                    923978
+sixtyone:
+  bl_id:                  42
+  ldraw_id:               73
+  lego_id:                102
+  name:                   MdBlue
+  bl_name:                Medium Blue
+  lego_name:              Medium blue
+  ldraw_rgb:              6E99C9
+  rgb:                    6E99C9
+sixtytwo:
+  bl_id:                  150
+  ldraw_id:               ''
+  lego_id:                312
+  name:                   MdDkFlesh
+  bl_name:                Medium Dark Flesh
+  lego_name:              Medium Nougat
+  ldraw_rgb:              ''
+  rgb:                    AC7C54
+sixtythree:
+  bl_id:                  37
+  ldraw_id:               74
+  lego_id:                29
+  name:                   MdGreen
+  bl_name:                Medium Green
+  lego_name:              Medium green
+  ldraw_rgb:              A1C48B
+  rgb:                    A1C48B
+sixtyfive:
+  bl_id:                  76
+  ldraw_id:               115
+  lego_id:                115
+  name:                   MdLime
+  bl_name:                Medium Lime
+  lego_name:              Med. yellowish green
+  ldraw_rgb:              C7D23C
+  rgb:                    C7D23C
+sixtysix:
+  bl_id:                  31
+  ldraw_id:               462
+  lego_id:                105
+  name:                   MdOrange
+  bl_name:                Medium Orange
+  lego_name:              Br. yellowish orange
+  ldraw_rgb:              FE9F06
+  rgb:                    E29B3F
+sixtyseven:
+  bl_id:                  ''
+  ldraw_id:               89
+  lego_id:                213
+  name:                   MdRoyalBlue
+  bl_name:                ''
+  lego_name:              Medium Royal blue
+  ldraw_rgb:              6C81B7
+  rgb:                    6C81B7
+sixtyeight:
+  bl_id:                  86
+  ldraw_id:               71
+  lego_id:                194
+  name:                   MdStone
+  bl_name:                Light Bluish Gray
+  lego_name:              Medium stone grey
+  ldraw_rgb:              A3A2A4
+  rgb:                    A3A2A4
+sixtynine:
+  bl_id:                  73
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   MdViolet
+  bl_name:                Medium Violet
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+seventy:
+  bl_id:                  65
+  ldraw_id:               82
+  lego_id:                ''
+  name:                   MetallicGold
+  bl_name:                Metallic Gold
+  lego_name:              ''
+  ldraw_rgb:              AA7F2E
+  rgb:                    ''
+seventyone:
+  bl_id:                  70
+  ldraw_id:               ''
+  lego_id:                200
+  name:                   MetallicGreen
+  bl_name:                Metallic Green
+  lego_name:              Lemon Metallic
+  ldraw_rgb:              ''
+  rgb:                    ''
+seventytwo:
+  bl_id:                  67
+  ldraw_id:               80
+  lego_id:                ''
+  name:                   MetallicSilver
+  bl_name:                Metallic Silver
+  lego_name:              ''
+  ldraw_rgb:              ABAFAE
+  rgb:                    ''
+seventythree:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                183
+  name:                   MetallicWhite
+  bl_name:                ''
+  lego_name:              Metallic White
+  ldraw_rgb:              ''
+  rgb:                    ''
+seventyfour:
+  bl_id:                  63
+  ldraw_id:               272
+  lego_id:                140
+  name:                   NavyBlue
+  bl_name:                Dark Blue
+  lego_name:              Earth blue
+  ldraw_rgb:              001D68
+  rgb:                    203A56
+seventyfive:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   NeonBlue
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+seventysix:
+  bl_id:                  8
+  ldraw_id:               6
+  lego_id:                25
+  name:                   OldBrown
+  bl_name:                Brown
+  lego_name:              Earth Orange
+  ldraw_rgb:              5C2000
+  rgb:                    624732
+seventyseven:
+  bl_id:                  10
+  ldraw_id:               8
+  lego_id:                27
+  name:                   OldDkGray
+  bl_name:                Dark Gray
+  lego_name:              Dark grey
+  ldraw_rgb:              635F52
+  rgb:                    6D6E6C
+seventyeight:
+  bl_id:                  9
+  ldraw_id:               7
+  lego_id:                2
+  name:                   OldGray
+  bl_name:                Light Gray
+  lego_name:              Grey
+  ldraw_rgb:              9C9999
+  rgb:                    A1A5A2
+seventynine:
+  bl_id:                  4
+  ldraw_id:               25
+  lego_id:                106
+  name:                   Orange
+  bl_name:                Orange
+  lego_name:              Bright orange
+  ldraw_rgb:              F96000
+  rgb:                    DA8540
+eighty:
+  bl_id:                  96
+  ldraw_id:               68
+  lego_id:                36
+  name:                   PaleOrange
+  bl_name:                Very Light Orange
+  lego_name:              Light Yellowish Orange
+  ldraw_rgb:              F3CF9B
+  rgb:                    F3CF9B
+eightyone:
+  bl_id:                  56
+  ldraw_id:               77
+  lego_id:                ''
+  name:                   ParaPink
+  bl_name:                Light Pink
+  lego_name:              ''
+  ldraw_rgb:              FECCCC
+  rgb:                    ''
+eightytwo:
+  bl_id:                  78
+  ldraw_id:               137
+  lego_id:                145
+  name:                   PearlBlue
+  bl_name:                Metal Blue
+  lego_name:              Sand blue metallic
+  ldraw_rgb:              7988A1
+  rgb:                    7988a1
+eightythree:
+  bl_id:                  84
+  ldraw_id:               134
+  lego_id:                139
+  name:                   PearlCopper
+  bl_name:                Copper
+  lego_name:              Copper
+  ldraw_rgb:              AE7A59
+  rgb:                    ''
+eightyfour:
+  bl_id:                  81
+  ldraw_id:               178
+  lego_id:                187
+  name:                   PearlDkGold
+  bl_name:                Flat Dark Gold
+  lego_name:              Sand Yellow Metallic
+  ldraw_rgb:              B48455
+  rgb:                    ''
+eightyfive:
+  bl_id:                  77
+  ldraw_id:               148
+  lego_id:                148
+  name:                   PearlDkGray
+  bl_name:                Pearl Dark Gray
+  lego_name:              Mettalic Dark Grey
+  ldraw_rgb:              575857
+  rgb:                    575857
+eightysix:
+  bl_id:                  115
+  ldraw_id:               297
+  lego_id:                297
+  name:                   PearlGold
+  bl_name:                Pearl Gold
+  lego_name:              Warm Gold
+  ldraw_rgb:              AA7F2E
+  rgb:                    ''
+eightyseven:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   PearlGreen
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+eightyeight:
+  bl_id:                  61
+  ldraw_id:               142
+  lego_id:                127
+  name:                   PearlLtGold
+  bl_name:                Pearl Light Gold
+  lego_name:              Gold
+  ldraw_rgb:              DCBC81
+  rgb:                    DCBC81
+eightynine:
+  bl_id:                  66
+  ldraw_id:               135
+  lego_id:                131
+  name:                   PearlLtGray
+  bl_name:                Pearl Light Gray
+  lego_name:              Silver
+  ldraw_rgb:              9CA3A8
+  rgb:                    9CA3A8
+ninety:
+  bl_id:                  95
+  ldraw_id:               179
+  lego_id:                179
+  name:                   PearlSilver
+  bl_name:                Flat Silver
+  lego_name:              Silver flip/flop
+  ldraw_rgb:              898788
+  rgb:                    ''
+ninetyone:
+  bl_id:                  119
+  ldraw_id:               150
+  lego_id:                ''
+  name:                   PearlVLGray
+  bl_name:                Pearl Very Light Gray
+  lego_name:              ''
+  ldraw_rgb:              ABADAC
+  rgb:                    ''
+ninetytwo:
+  bl_id:                  83
+  ldraw_id:               183
+  lego_id:                ''
+  name:                   Pearlescent
+  bl_name:                Pearl White
+  lego_name:              ''
+  ldraw_rgb:              F2F3F2
+  rgb:                    ''
+ninetythree:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   PearlescentPink
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+ninetyfour:
+  bl_id:                  23
+  ldraw_id:               13
+  lego_id:                9
+  name:                   Pink
+  bl_name:                Pink
+  lego_name:              Light reddish violet
+  ldraw_rgb:              F9A4C6
+  rgb:                    E8BAC7
+ninetyfive:
+  bl_id:                  24
+  ldraw_id:               22
+  lego_id:                104
+  name:                   Purple
+  bl_name:                Purple
+  lego_name:              Bright violet
+  ldraw_rgb:              81007B
+  rgb:                    6B327B
+ninetysix:
+  bl_id:                  5
+  ldraw_id:               4
+  lego_id:                21
+  name:                   Red
+  bl_name:                Red
+  lego_name:              Bright red
+  ldraw_rgb:              C40026
+  rgb:                    C4281B
+ninetyseven:
+  bl_id:                  88
+  ldraw_id:               70
+  lego_id:                192
+  name:                   RedBrown
+  bl_name:                Reddish Brown
+  lego_name:              Reddish Brown
+  ldraw_rgb:              694027
+  rgb:                    694027
+ninetyeight:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   RedPink
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+ninetynine:
+  bl_id:                  97
+  ldraw_id:               112
+  lego_id:                195
+  name:                   RoyalBlue
+  bl_name:                Blue-Violet
+  lego_name:              Royal Blue
+  ldraw_rgb:              6874AC
+  rgb:                    4667A4
+onehundred:
+  bl_id:                  ''
+  ldraw_id:               216
+  lego_id:                216
+  name:                   Rust
+  bl_name:                ''
+  lego_name:              Rust
+  ldraw_rgb:              8F4C2A
+  rgb:                    8F4C2A
+onehundredandone:
+  bl_id:                  25
+  ldraw_id:               12
+  lego_id:                101
+  name:                   Salmon
+  bl_name:                Salmon
+  lego_name:              Medium red
+  ldraw_rgb:              FF857A
+  rgb:                    DA8679
+onehundredandtwo:
+  bl_id:                  55
+  ldraw_id:               379
+  lego_id:                135
+  name:                   SandBlue
+  bl_name:                Sand Blue
+  lego_name:              Sand blue
+  ldraw_rgb:              6A7A96
+  rgb:                    74869C
+onehundredandthree:
+  bl_id:                  48
+  ldraw_id:               378
+  lego_id:                151
+  name:                   SandGreen
+  bl_name:                Sand Green
+  lego_name:              Sand green
+  ldraw_rgb:              A0BCAC
+  rgb:                    789081
+onehundredandfour:
+  bl_id:                  54
+  ldraw_id:               373
+  lego_id:                136
+  name:                   SandPurple
+  bl_name:                Sand Purple
+  lego_name:              Sand violet
+  ldraw_rgb:              845E84
+  rgb:                    877C90
+onehundredandfive:
+  bl_id:                  58
+  ldraw_id:               335
+  lego_id:                153
+  name:                   SandRed
+  bl_name:                Sand Red
+  lego_name:              Sand red
+  ldraw_rgb:              BF8782
+  rgb:                    957976
+onehundredandsix:
+  bl_id:                  49
+  ldraw_id:               503
+  lego_id:                103
+  name:                   ScalaGray
+  bl_name:                Very Light Gray
+  lego_name:              Light grey
+  ldraw_rgb:              E6E3DA
+  rgb:                    C7C1B7
+onehundredandseven:
+  bl_id:                  13
+  ldraw_id:               40
+  lego_id:                111
+  name:                   Smoke
+  bl_name:                Trans-Black
+  lego_name:              Tr. Brown
+  ldraw_rgb:              635F52
+  rgb:                    BFB7B1
+onehundredandeight:
+  bl_id:                  2
+  ldraw_id:               19
+  lego_id:                5
+  name:                   Tan
+  bl_name:                Tan
+  lego_name:              Brick yellow
+  ldraw_rgb:              E8CFA1
+  rgb:                    D7C599
+onehundredandnine:
+  bl_id:                  39
+  ldraw_id:               3
+  lego_id:                107
+  name:                   Teal
+  bl_name:                Dark Turquoise
+  lego_name:              Bright bluish green
+  ldraw_rgb:              '00999F'
+  rgb:                    '008F9B'
+onehundredandten:
+  bl_id:                  14
+  ldraw_id:               33
+  lego_id:                43
+  name:                   TrBlue
+  bl_name:                Trans-Dark Blue
+  lego_name:              Tr. Blue
+  ldraw_rgb:              0020A0
+  rgb:                    7BB6E8
+onehundredandeleven:
+  bl_id:                  108
+  ldraw_id:               35
+  lego_id:                311
+  name:                   TrBtGreen
+  bl_name:                Trans-Bright Green
+  lego_name:              Trans. Bright Green
+  ldraw_rgb:              D9E4A7
+  rgb:                    ''
+onehundredandtwelve:
+  bl_id:                  98
+  ldraw_id:               57
+  lego_id:                182
+  name:                   TrDkOrange
+  bl_name:                Trans-Orange
+  lego_name:              Tr.  Bright Orange
+  ldraw_rgb:              E09864
+  rgb:                    ''
+onehundredandthirteen:
+  bl_id:                  118
+  ldraw_id:               294
+  lego_id:                294
+  name:                   TrGlowInTheDark
+  bl_name:                Glow In Dark Trans
+  lego_name:              Phosh. Green
+  ldraw_rgb:              BDC6AD
+  rgb:                    ''
+onehundredandfourteen:
+  bl_id:                  20
+  ldraw_id:               34
+  lego_id:                48
+  name:                   TrGreen
+  bl_name:                Trans-Green
+  lego_name:              Tr. Green
+  ldraw_rgb:              27930
+  rgb:                    84B68D
+onehundredandfifteen:
+  bl_id:                  113
+  ldraw_id:               43
+  lego_id:                ''
+  name:                   TrIceBlue
+  bl_name:                Trans-Very Lt Blue
+  lego_name:              ''
+  ldraw_rgb:              C1DFF0
+  rgb:                    ''
+onehundredandsixteen:
+  bl_id:                  114
+  ldraw_id:               236
+  lego_id:                114
+  name:                   TrLilac
+  bl_name:                Trans-Light Purple
+  lego_name:              ''
+  ldraw_rgb:              96709F
+  rgb:                    ''
+onehundredandseventeen:
+  bl_id:                  15
+  ldraw_id:               41
+  lego_id:                42
+  name:                   TrLtBlue
+  bl_name:                Trans-Light Blue
+  lego_name:              Tr. Lg blue
+  ldraw_rgb:              AEEFEC
+  rgb:                    C1DFF0
+onehundredandeighteen:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   TrLtGreen
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+onehundredandnineteen:
+  bl_id:                  107
+  ldraw_id:               230
+  lego_id:                ''
+  name:                   TrLtPink
+  bl_name:                Trans-Pink
+  lego_name:              ''
+  ldraw_rgb:              E4ADC8
+  rgb:                    ''
+onehundredandtwenty:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                ''
+  name:                   TrLtYellow
+  bl_name:                ''
+  lego_name:              ''
+  ldraw_rgb:              ''
+  rgb:                    ''
+onehundredandtwentyone:
+  bl_id:                  60
+  ldraw_id:               79
+  lego_id:                20
+  name:                   TrLuWhite
+  bl_name:                Milky White
+  lego_name:              Nature
+  ldraw_rgb:              FFFFFF
+  rgb:                    ''
+onehundredandtwentytwo:
+  bl_id:                  74
+  ldraw_id:               143
+  lego_id:                143
+  name:                   TrMdBlue
+  bl_name:                Trans-Medium Blue
+  lego_name:              Tr. Flu. Blue
+  ldraw_rgb:              CFE2F7
+  rgb:                    CFE2F7
+onehundredandtwentythree:
+  bl_id:                  16
+  ldraw_id:               42
+  lego_id:                49
+  name:                   TrNeonGreen
+  bl_name:                Trans-Neon Green
+  lego_name:              Tr. Flu. Green
+  ldraw_rgb:              C0FF00
+  rgb:                    F8F184
+onehundredandtwentyfour:
+  bl_id:                  18
+  ldraw_id:               38
+  lego_id:                47
+  name:                   TrNeonOrange
+  bl_name:                Trans-Neon Orange
+  lego_name:              Tr. Flu. Reddish orange
+  ldraw_rgb:              F96000
+  rgb:                    D9856C
+onehundredandtwentyfive:
+  bl_id:                  121
+  ldraw_id:               54
+  lego_id:                ''
+  name:                   TrPeach
+  bl_name:                Trans-Neon Yellow
+  lego_name:              ''
+  ldraw_rgb:              FFF67B
+  rgb:                    ''
+onehundredandtwentysix:
+  bl_id:                  50
+  ldraw_id:               45
+  lego_id:                113
+  name:                   TrPink
+  bl_name:                Trans-Dark Pink
+  lego_name:              Tr. Medi. reddish violet
+  ldraw_rgb:              DF6695
+  rgb:                    E4ADC8
+onehundredandtwentyseven:
+  bl_id:                  100
+  ldraw_id:               114
+  lego_id:                114
+  name:                   TrPinkGlitter
+  bl_name:                Glitter Trans-Dark Pink
+  lego_name:              "[Tr. Pink Glitter]"
+  ldraw_rgb:              DF6695
+  rgb:                    ''
+onehundredandtwentyeight:
+  bl_id:                  51
+  ldraw_id:               37
+  lego_id:                126
+  name:                   TrPurple
+  bl_name:                Trans-Purple
+  lego_name:              Tr. Bright bluish violet
+  ldraw_rgb:              640061
+  rgb:                    A5A5CB
+onehundredandtwentynine:
+  bl_id:                  102
+  ldraw_id:               129
+  lego_id:                129
+  name:                   TrPurpleGlitter
+  bl_name:                Glitter Trans-Purple
+  lego_name:              "[Tr. Purple Glitter]"
+  ldraw_rgb:              640061
+  rgb:                    ''
+onehundredandthirty:
+  bl_id:                  17
+  ldraw_id:               36
+  lego_id:                41
+  name:                   TrRed
+  bl_name:                Trans-Red
+  lego_name:              Tr. Red
+  ldraw_rgb:              C40026
+  rgb:                    CD544B
+onehundredandthirtyone:
+  bl_id:                  ''
+  ldraw_id:               ''
+  lego_id:                158
+  name:                   TrSalmon
+  bl_name:                ''
+  lego_name:              Tr. Flu. Red
+  ldraw_rgb:              ''
+  rgb:                    E1A4C2
+onehundredandthirtytwo:
+  bl_id:                  19
+  ldraw_id:               46
+  lego_id:                44
+  name:                   TrYellow
+  bl_name:                Trans-Yellow
+  lego_name:              Tr. Yellow
+  ldraw_rgb:              CAB000
+  rgb:                    F7F18D
+onehundredandthirtythree:
+  bl_id:                  43
+  ldraw_id:               110
+  lego_id:                112
+  name:                   Violet
+  bl_name:                Violet
+  lego_name:              Medium bluish violet
+  ldraw_rgb:              435493
+  rgb:                    6874AC
+onehundredandthirtyfour:
+  bl_id:                  1
+  ldraw_id:               15
+  lego_id:                1
+  name:                   White
+  bl_name:                White
+  lego_name:              White
+  ldraw_rgb:              FFFFFF
+  rgb:                    F2F3F2
+onehundredandthirtyfive:
+  bl_id:                  3
+  ldraw_id:               14
+  lego_id:                24
+  name:                   Yellow
+  bl_name:                Yellow
+  lego_name:              Bright yellow
+  ldraw_rgb:              FFDC00
+  rgb:                    F5CD2F
+onehundredandthirtysix:
+  bl_id:                  150
+  ldraw_id:               84
+  lego_id:                ''
+  name:                   ''
+  bl_name:                Medium Dark Flesh
+  lego_name:              ''
+  ldraw_rgb:              CC702A
+  rgb:                    CC702A
+onehundredandthirtyseven:
+  bl_id:                  157
+  ldraw_id:               157
+  lego_id:                ''
+  name:                   Medium Lavender
+  bl_name:                Medium Lavender
+  lego_name:              ''
+  ldraw_rgb:              B5A5D5
+  rgb:                    ''
+onehundredandthirtyeight:
+  bl_id:                  156
+  ldraw_id:               156
+  lego_id:                ''
+  name:                   Medium Azure
+  bl_name:                Medium Azure
+  lego_name:              ''
+  ldraw_rgb:              42C0FB
+  rgb:                    ''
+onehundredandthirtynine:
+  bl_id:                  89
+  ldraw_id:               85
+  lego_id:                ''
+  name:                   Dark Purple
+  bl_name:                Dark Purple
+  lego_name:              ''
+  ldraw_rgb:              5f2684
+  rgb:                    ''
