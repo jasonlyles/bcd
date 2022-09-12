@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-10">
+      <div class="col-9">
         <div class="row">
           <div class="col-auto mr-auto">
             <%= paginate @colors %>
@@ -16,41 +16,38 @@
         <table class="table table-bordered table-hover">
           <thead>
             <tr class="table-secondary">
-              <th><%= sort_link(@q, :name) %></th>
-              <th><%= sort_link(@q, :ldraw_id, 'LDraw ID') %></th>
-              <th><%= sort_link(@q, :bl_name, 'Bricklink Name') %></th>
-              <th><%= sort_link(@q, :bl_id, 'Bricklink ID') %></th>
-              <th><%= sort_link(@q, :lego_name) %></th>
-              <th><%= sort_link(@q, :lego_id, 'Lego ID') %></th>
-              <th>LDraw RGB</th>
-              <th>RGB</th>
-              <th style="width: 8%;"></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :name) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :ldraw_id, 'LDraw ID') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :bl_name, 'Bricklink Name') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :bl_id, 'Bricklink ID') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :lego_name) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :lego_id, 'Lego ID') %></th>
+              <th class="align-middle text-center">LDraw RGB</th>
+              <th style="width: 10%;"></th>
             </tr>
           </thead>
           <tbody>
             <% @colors.each do |color| %>
               <tr>
-                <td>
+                <td class="align-middle text-center">
                   <%= color.name %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= color.ldraw_id %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= color.bl_name %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= color.bl_id %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= color.lego_name %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= color.lego_id %>
                 </td>
                 <td style="background-color: #<%= color.ldraw_rgb %>">
-                </td>
-                <td style="background-color: #<%= color.rgb %>">
                 </td>
                 <td class="align-middle text-center">
                   <%= link_to raw('<i class="far fa-edit"></i>'), edit_color_path(color) %>
@@ -63,7 +60,7 @@
         </table>
         <%= paginate @colors %>
       </div>
-      <div class="col-2">
+      <div class="col-3">
         <div class="card">
           <div class="card-header">
             Search
@@ -79,8 +76,8 @@
                 <%= f.search_field :ldraw_id_or_bl_id_or_lego_id_eq, class: "form-control" %>
               </div>
               <br />
-              <%= f.submit 'Search', class: 'btn btn-primary' %>
-              <%= link_to "Clear Search", request.path, class:"btn btn-warning" %>
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
             <% end %>
           </div>
         </div>

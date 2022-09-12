@@ -76,6 +76,7 @@ DONE 4. Add interface for uploading/editing parts lists.
 9. Parts autocomplete in element form should have ldraw id in params at the end that
   gets stripped out before finding by name. Doing this should help us distinguish
   between different generations when selecting parts.
+10. Add update from BL and update from rebrickable buttons to parts show and/or index pages.
 
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
 

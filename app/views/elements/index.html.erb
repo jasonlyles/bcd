@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-10">
+      <div class="col-9">
         <div class="row">
           <div class="col-auto mr-auto">
             <%= paginate @elements %>
@@ -16,19 +16,19 @@
         <table class="table table-bordered table-hover">
           <thead>
             <tr class="table-secondary">
-              <th style="width: 35%"><%= sort_link(@q, :part_name, 'Part Name') %></th>
-              <th style="width: 25%"><%= sort_link(@q, :color_name, 'Color Name') %></th>
-              <th style="width: 25%">Image</th>
-              <th style="width: 15%"></th>
+              <th class="align-middle text-center" style="width: 35%"><%= sort_link(@q, :part_name, 'Part Name') %></th>
+              <th class="align-middle text-center" style="width: 25%"><%= sort_link(@q, :color_name, 'Color Name') %></th>
+              <th class="align-middle text-center" style="width: 25%">Image</th>
+              <th class="align-middle text-center" style="width: 15%"></th>
             </tr>
           </thead>
           <tbody>
             <% @elements.each do |element| %>
               <tr>
-                <td class="align-middle">
+                <td class="align-middle text-center">
                   <%= element.part_name %>
                 </td>
-                <td class="align-middle">
+                <td class="align-middle text-center">
                   <%= element.color_name %>
                 </td>
                 <td class="align-middle text-center">
@@ -47,7 +47,7 @@
         </table>
         <%= paginate @elements %>
       </div>
-      <div class="col-2">
+      <div class="col-3">
         <div class="card">
           <div class="card-header">
             Search
@@ -67,8 +67,8 @@
                 <%= f.select :has_image_in, [true, false], { include_blank: true }, class: 'form-control' %>
               </div>
               <br />
-              <%= f.submit 'Search', class: 'btn btn-primary mb-1' %>
-              <%= link_to "Clear Search", request.path, class:"btn btn-warning" %>
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
             <% end %>
           </div>
         </div>

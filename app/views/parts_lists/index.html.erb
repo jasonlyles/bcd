@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-10">
+      <div class="col-9">
         <div class="row">
           <div class="col-auto mr-auto">
             <%= paginate @parts_lists %>
@@ -16,42 +16,42 @@
         <table class="table table-bordered table-hover">
           <thead>
             <tr class="table-secondary">
-              <th><%= sort_link(@q, :product_name, 'Product') %></th>
-              <th><%= sort_link(@q, :name) %></th>
-              <th><%= sort_link(@q, :approved) %></th>
-              <th>Parts Present?</th>
-              <th>Bricklink XML?</th>
-              <th>LDR Present?</th>
-              <th>Lots</th>
-              <th>Parts</th>
-              <th style="width: 8%;"></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :product_name, 'Product') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :name) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :approved) %></th>
+              <th class="align-middle text-center">Parts?</th>
+              <th class="align-middle text-center">BL XML?</th>
+              <th class="align-middle text-center">LDR?</th>
+              <th class="align-middle text-center">Lots</th>
+              <th class="align-middle text-center">Parts</th>
+              <th style="width: 10%;"></th>
             </tr>
           </thead>
           <tbody>
             <% @parts_lists.each do |parts_list| %>
               <tr>
-                <td>
+                <td class="align-middle text-center">
                   <%= link_to parts_list.product_name, parts_list.product %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= link_to parts_list.name, parts_list %>
                 </td>
-                <td>
-                  <%= parts_list.approved? %>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(parts_list.approved?) %>
                 </td>
-                <td>
-                  <%= parts_list.elements.exists? %>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(parts_list.parts.present?) %>
                 </td>
-                <td>
-                  <%= parts_list.bricklink_xml.present? %>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(parts_list.bricklink_xml.present?) %>
                 </td>
-                <td>
-                  <%= parts_list.ldr.present? %>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(parts_list.ldr.present?) %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= parts_list.lots.count %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= parts_list.parts_quantity %>
                 </td>
                 <td class="align-middle text-center">
@@ -65,7 +65,7 @@
         </table>
         <%= paginate @parts_lists %>
       </div>
-      <div class="col-2">
+      <div class="col-3">
         <div class="card">
           <div class="card-header">
             Search
@@ -81,8 +81,8 @@
                 <%= f.search_field :product_name_cont, class: "form-control" %>
               </div>
               <br />
-              <%= f.submit 'Search', class: 'btn btn-primary mb-1' %>
-              <%= link_to "Clear Search", request.path, class:"btn btn-warning" %>
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
             <% end %>
           </div>
         </div>
