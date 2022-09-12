@@ -27,5 +27,7 @@ class Subcategory < ActiveRecord::Base
     "#{subcategory_code.upcase}#{numeric_code}"
   end
 
-
+  def name_and_category_name
+    "#{category.name}/#{name}"
+  end
 end

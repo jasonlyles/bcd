@@ -56,7 +56,7 @@ module BrickCity
     #Enable the asset pipeline
     config.assets.enabled = true
 
-    config.assets.precompile += ['ie.css']
+    config.assets.precompile += ['ie.css', 'admin.css']
 
     config.active_record.raise_in_transactional_callbacks = true
   end

@@ -1,0 +1,44 @@
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= "#{@element.color_name} #{@element.part_name}" %></h1>
+  </div>
+  <div class="col-auto">
+    <%= link_to 'Edit', edit_element_path(@element), class: 'btn btn-primary' %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        <b>Element</b>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Original Image Url:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @element.original_image_url %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Image:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <% if @element.image_processing? %>
+                Image available soon...
+              <% else %>
+                <%= image_tag(@element.image.thumb.url) %>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', elements_path %>
+  </div>
+</div>

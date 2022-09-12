@@ -1,0 +1,58 @@
+<p class="text-danger">
+  Typically, elements will be added by when uploading Bricklink XML or an LDR on a parts list. If one of the elements doesn't create correctly for whatever reason, you can add it here.
+</p>
+
+<%= nested_form_for element do |f| %>
+  <div class="row">
+    <div class="col-7">
+      <div class="card">
+        <div class="card-header">
+          <b>Element</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :name, "Part Name (BL ID/LDraw ID)", class: 'form-label' %>
+            <br/>
+            <%= f.collection_select :part_id, Part.all.order(:name), :id, :name_and_ids, { include_blank: true }, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :name, "Color Name", class: 'form-label' %>
+            <br/>
+            <%= f.collection_select :color_id, Color.where("bl_name IS NOT NULL AND bl_id IS NOT NULL").order(:bl_name), :id, :bl_name, { include_blank: true }, class: 'form-control' %>
+          </div>
+          <% if element.persisted? %>
+            <div class="form-group">
+              <%= f.label 'Original image url', class: 'form-label' %>
+              <br/>
+              <%= f.text_field :original_image_url, placeholder: "BrickLink or Rebrickable image URL", class: 'form-control', readonly: true %>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <% if element.image? && !element.image.blank? %>
+              <%= f.label :image, "Image", class: "form-label" %>
+              <br/>
+              <% if element.image_cache %>
+                <%= f.text_field :image_cache, :disabled => true, class: "form-control" %>
+              <% else %>
+                <%= f.text_field :image, :disabled => true, class: "form-control" %>
+              <% end %>
+            <% end %>
+
+            <%= f.label :image, "Image", class: "form-label" %>
+            <%= f.file_field :image, class: "form-control-file mt-2" %>
+            <%= f.hidden_field :image_cache %>
+            <% if element.image? %>
+              <div class="form-check mt-2">
+                <%= f.check_box :remove_image, class: "form-check-input" %>
+                <%= f.label :remove_image, "Delete Image", class: "form-check-label" %>
+              </div>
+            <% end %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

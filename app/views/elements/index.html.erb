@@ -1,0 +1,78 @@
+<div class="card">
+  <div class="card-header">
+    Listing elements
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-10">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @elements %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Element', new_element_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th style="width: 35%"><%= sort_link(@q, :part_name, 'Part Name') %></th>
+              <th style="width: 25%"><%= sort_link(@q, :color_name, 'Color Name') %></th>
+              <th style="width: 25%">Image</th>
+              <th style="width: 15%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @elements.each do |element| %>
+              <tr>
+                <td class="align-middle">
+                  <%= element.part_name %>
+                </td>
+                <td class="align-middle">
+                  <%= element.color_name %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= image_tag(element.image.thumb.url) if element.image? %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="fas fa-eye"></i>'), element_path(element) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_element_path(element) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), element, data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @elements %>
+      </div>
+      <div class="col-2">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :part_name_cont %>
+                <%= f.search_field :part_name_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :color_bl_name_cont, 'Color Name contains' %>
+                <%= f.search_field :color_bl_name_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :has_image_in, 'Has Image?' %><br />
+                <%= f.select :has_image_in, [true, false], { include_blank: true }, class: 'form-control' %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,9 +4,9 @@ namespace :db do
 
     puts 'Seeding parts list colors'
     csv_text = File.read(Rails.root.join('lib', 'seeds', 'colors.csv'))
-    csv = CSV.parse(csv_text, headers: false, encoding: 'ISO-8859-1')
+    csv = CSV.parse(csv_text, headers: true, encoding: 'ISO-8859-1')
     csv.each do |row|
-      row.each { |item| item.gsub!('\N', '') }
+      row.each { |item| item[1].gsub!('\N', '') }
       c = Color.new
       c.bl_id = row[1]
       c.ldraw_id = row[2]

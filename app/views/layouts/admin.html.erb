@@ -7,6 +7,9 @@
     <!--//[if IE] -->
     <!--/ = stylesheet_link_tag 'ie.css', :media => 'screen, projection' -->
     <%= stylesheet_link_tag 'application.css' %>
+    <%= stylesheet_link_tag 'admin.css' %>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script defer="defer" src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe" crossorigin="anonymous"></script>
     <!--/= stylesheet_link_tag :all -->
     <!--/= javascript_include_tag 'jquery' -->
     <%= javascript_include_tag 'application' %>
@@ -20,36 +23,16 @@
           <%= render :partial => 'shared/admin_navigation' %>
         </div>
       </div>
-      <div class="admin_main">
+      <div class="container">
         <% if notice %>
-          <div id="alert_wrapper">
-            <div id="speech_bubble_thing">
-              <%= image_tag('speech_bubble_thing.png') %>
-            </div>
-            <div id="lego_head">
-              <%= image_tag('happy_head.png') %>
-            </div>
-            <div id="notice">
-              <div id="alert_message">
-                <%= notice %>
-              </div>
-            </div>
+          <div id="notice" class="rounded my-3 p-3">
+            <%= notice %>
           </div>
           <br/>
         <% end %>
         <% if alert %>
-          <div id="alert_wrapper">
-            <div id="speech_bubble_thing">
-              <%= image_tag('speech_bubble_thing.png') %>
-            </div>
-            <div id="lego_head">
-              <%= image_tag('happy_head.png') %>
-            </div>
-            <div id="alert">
-              <div id="alert_message">
-                <%= alert %>
-              </div>
-            </div>
+          <div id="alert" class="rounded my-3 p-3">
+            <%= alert %>
           </div>
           <br/>
         <% end %>

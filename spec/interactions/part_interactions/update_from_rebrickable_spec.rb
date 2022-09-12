@@ -27,7 +27,7 @@ describe PartInteractions::UpdateFromRebrickable do
             "print_of" => nil
     }
 
-    @part = FactoryGirl.create(:part, ldraw_id: '4276a')
+    @part = FactoryGirl.create(:part, ldraw_id: '4276a', bl_id: nil)
   end
 
   describe "run" do
@@ -40,7 +40,7 @@ describe PartInteractions::UpdateFromRebrickable do
       expect(@part.year_to).to eq('1986')
       expect(@part.brickowl_ids).to eq(167230)
       expect(@part.bl_id).to eq('4276a')
-      expect(@part.alternate_nos).to eq(['4276b', 'upn0344'])
+      expect(@part.alternate_nos).to eq({"alternates"=>["4276b", "upn0344"]})
     end
 
     it 'should set an error when having trouble saving' do
@@ -49,7 +49,7 @@ describe PartInteractions::UpdateFromRebrickable do
       interaction = PartInteractions::UpdateFromRebrickable.run(part: @part)
 
       expect(interaction.succeeded?).to eq(false)
-      expect(interaction.error).to eq('Rebrickable Update Failure')
+      expect(interaction.error).to eq("Rebrickable Update Failure. LDraw ID: #{@part.ldraw_id} ERROR: StandardError")
     end
   end
 end

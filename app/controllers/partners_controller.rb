@@ -1,10 +1,4 @@
-class PartnersController < ApplicationController
-  before_filter :authenticate_radmin!
-  skip_before_filter :find_cart
-  skip_before_filter :get_categories
-  skip_before_filter :set_users_referrer_code
-  skip_before_filter :set_locale
-  layout proc { |controller| controller.request.xhr? ? false : "admin" }
+class PartnersController < AdminController
 
   # GET /partners
   def index

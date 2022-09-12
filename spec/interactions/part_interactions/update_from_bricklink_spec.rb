@@ -45,7 +45,7 @@ describe PartInteractions::UpdateFromBricklink do
       interaction = PartInteractions::UpdateFromBricklink.run(part: @part)
 
       expect(interaction.succeeded?).to eq(false)
-      expect(interaction.error).to eq('Bricklink Update Failure')
+      expect(interaction.error).to eq("Bricklink Update Failure. LDraw ID: #{@part.ldraw_id} ERROR: StandardError")
     end
   end
 end

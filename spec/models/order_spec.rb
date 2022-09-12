@@ -180,8 +180,6 @@ describe Order do
         @subcategory = FactoryGirl.create(:subcategory)
         @user = FactoryGirl.create(:user)
         @product = FactoryGirl.create(:product)
-        html_list = FactoryGirl.create(:ldr_parts_list, :product_id => @product.id)
-        xml_list = FactoryGirl.create(:xml_parts_list, :product_id => @product.id)
         @order = FactoryGirl.create(:order_with_line_items, :created_at => Date.today, :user_id => @user.id)
         expect(SecureRandom).to receive(:hex).and_return('fake_hex')
 

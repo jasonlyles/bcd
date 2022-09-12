@@ -3,24 +3,41 @@
 class Element < ActiveRecord::Base
   belongs_to :part
   belongs_to :color
-  has_many :lots, dependent: :destroy
+  has_many :lots, dependent: :restrict_with_error
   has_many :parts_lists, through: :lots
   has_one :image
   mount_uploader :image, ImageUploader
   process_in_background :image
 
-  attr_accessible :part_id, :color_id, :image, :image_cache, :remove_image
+  after_commit :destroy_image, on: :destroy
+
+  attr_accessible :part_id, :color_id, :image, :image_cache, :remove_image, :original_image_url
 
   validates :color_id, uniqueness: { scope: :part_id }
+  validates :part_id, :color_id, presence: true
 
-  # TODO: Add this back after adding ransacker gem:
-  # ransacker :has_image,
-  #           formatter: proc { |boolean|
-  #             results = Element.has_image?(boolean).map(&:id)
-  #             results = results.present? ? results : nil
-  #           }, splat_params: true do |parent|
-  #   parent.table[:id]
-  # end
+  ransacker :has_image,
+            formatter: proc { |boolean|
+              results = Element.has_image?(boolean).map(&:id)
+              results = results.present? ? results : nil
+            }, splat_params: true do |parent|
+    parent.table[:id]
+  end
+
+  def destroy_image
+    dir_to_remove = "#{Rails.root}/public/#{image.store_dir}" # Only needed for local.
+    remove_image!
+    # Only needed for local. Empty AWS gets deleted automatically using remove_image!
+    FileUtils.rm_r(dir_to_remove) if (Rails.env.development? || Rails.env.test?) && Dir.exist?(dir_to_remove)
+  end
+
+  def part_name
+    part.name
+  end
+
+  def color_name
+    color.bl_name
+  end
 
   def self.has_image?(boolean)
     if boolean == 'true'

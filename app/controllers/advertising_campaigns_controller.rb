@@ -1,11 +1,5 @@
-class AdvertisingCampaignsController < ApplicationController
-  before_filter :authenticate_radmin!
+class AdvertisingCampaignsController < AdminController
   before_filter :get_partners, :only => [:new, :create, :edit, :update]
-  skip_before_filter :find_cart
-  skip_before_filter :get_categories
-  skip_before_filter :set_users_referrer_code
-  skip_before_filter :set_locale
-  layout proc { |controller| controller.request.xhr? ? false : "admin" }
 
   # GET /advertising_campaigns
   def get_partners

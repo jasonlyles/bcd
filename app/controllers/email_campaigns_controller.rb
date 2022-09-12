@@ -1,10 +1,5 @@
-class EmailCampaignsController < ApplicationController
+class EmailCampaignsController < AdminController
   before_filter :authenticate_radmin!, except: ['register_click_through_and_redirect']
-  skip_before_filter :find_cart
-  skip_before_filter :get_categories
-  skip_before_filter :set_users_referrer_code
-  skip_before_filter :set_locale
-  layout proc{ |controller| controller.request.xhr? ? false : "admin" }
 
   # GET /email_campaigns
   def index

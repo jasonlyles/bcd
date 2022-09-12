@@ -1,0 +1,92 @@
+<div class="card">
+  <div class="card-header">
+    Listing Parts Lists
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-10">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @parts_lists %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Parts List', new_parts_list_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th><%= sort_link(@q, :product_name, 'Product') %></th>
+              <th><%= sort_link(@q, :name) %></th>
+              <th><%= sort_link(@q, :approved) %></th>
+              <th>Parts Present?</th>
+              <th>Bricklink XML?</th>
+              <th>LDR Present?</th>
+              <th>Lots</th>
+              <th>Parts</th>
+              <th style="width: 8%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @parts_lists.each do |parts_list| %>
+              <tr>
+                <td>
+                  <%= link_to parts_list.product_name, parts_list.product %>
+                </td>
+                <td>
+                  <%= link_to parts_list.name, parts_list %>
+                </td>
+                <td>
+                  <%= parts_list.approved? %>
+                </td>
+                <td>
+                  <%= parts_list.elements.exists? %>
+                </td>
+                <td>
+                  <%= parts_list.bricklink_xml.present? %>
+                </td>
+                <td>
+                  <%= parts_list.ldr.present? %>
+                </td>
+                <td>
+                  <%= parts_list.lots.count %>
+                </td>
+                <td>
+                  <%= parts_list.parts_quantity %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_parts_list_path(parts_list) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), parts_list, data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @parts_lists %>
+      </div>
+      <div class="col-2">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :name_cont %>
+                <%= f.search_field :name_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :product_name_cont %>
+                <%= f.search_field :product_name_cont, class: "form-control" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

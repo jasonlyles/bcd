@@ -1,0 +1,94 @@
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= @color.name %></h1>
+  </div>
+  <div class="col-auto">
+    <%= link_to 'Edit', edit_color_path(@color), class: 'btn btn-primary' %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-3">
+    <div class="card">
+      <div class="card-header">
+        <b>Color</b>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Name:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @color.name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>LDraw ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @color.ldraw_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>BrickLink Name:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @color.bl_name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>BrickLink ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @color.bl_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Lego Name:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @color.lego_name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Lego ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @color.lego_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>LDraw RGB:</b>
+            </td>
+            <td class="px-4" style="background-color: #<%= @color.ldraw_rgb %>"></td>
+            <td class="pl-4">
+              <%= @color.ldraw_rgb %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>RGB:</b>
+            </td>
+            <td class="px-4" style="background-color: #<%= @color.rgb %>"></td>
+            <td class="pl-4">
+              <%= @color.rgb %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', colors_path %>
+  </div>
+</div>

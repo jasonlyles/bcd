@@ -1,0 +1,50 @@
+<%= nested_form_for parts_list, html: { multipart: true } do |form| %>
+  <div class="row">
+    <div class="col-3">
+      <div class="card">
+        <div class="card-header">
+          <b>Parts List</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= form.label :name, "Name", class: 'form-label' %>
+            <br/>
+            <%= form.text_field :name, placeholder: "Primary Parts List", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= form.label :name, "Product", class: 'form-label' %>
+            <br/>
+            <%= form.collection_select :product_id, Product.instructions.order(:name), :id, :name, { include_blank: true }, class: 'form-control' %>
+          </div>
+          <% if parts_list.persisted? %>
+            <div class="form-check">
+              <%= form.check_box :approved, {checked: parts_list.approved, class: 'form-check-input'},1,0 %>
+              <%= form.label :approved, "Approved", class: 'form-check-label' %>
+            </div>
+          <% end %>
+          <div class="form-group mt-4">
+            <%= form.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <% if parts_list.persisted? %>
+        <div class="card">
+          <div class="card-header">
+            Lots
+          </div>
+          <div class="card-body">
+            <%= form.fields_for :lots, form.object.lots.includes(:part, :color, element: :part).order("parts.name ASC, colors.bl_name ASC") %>
+            <%= form.link_to_add "Add Lot", :lots, class: "btn btn-primary mt-2" %>
+          </div>
+        </div>
+      <% else %>
+        <%= form.label :file, 'Upload an LDR or BrickLink XML', class: 'form-label' %>
+        <br />
+        <%= form.file_field :file %>
+        <%= form.hidden_field :file_cache %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

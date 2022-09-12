@@ -4,5 +4,6 @@ class AddFieldsToPartsLists < ActiveRecord::Migration
     add_column :parts_lists, :parts, :json
     add_column :parts_lists, :bricklink_xml, :text
     add_column :parts_lists, :ldr, :text
+    add_column :parts_lists, :original_filename, :string
   end
 end

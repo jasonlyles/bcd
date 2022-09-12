@@ -1,21 +1,15 @@
-class ProductsController < ApplicationController
-  before_filter :authenticate_radmin!
-  before_filter :get_categories_for_admin
+class ProductsController < AdminController
   before_filter :get_type, :only => [:new, :edit, :create, :update]
-  skip_before_filter :find_cart
-  skip_before_filter :get_categories
-  skip_before_filter :set_users_referrer_code
-  skip_before_filter :set_locale
-  layout proc{ |controller| controller.request.xhr? ? false : "admin" }
+  before_filter :find_product, only: [:show, :edit, :update, :destroy]
 
   # GET /products
   def index
-    @products = Product.order("product_code").page(params[:page]).per(20)
+    @q = Product.ransack(params[:q])
+    @products = @q.result.includes(:product_type, :category, :subcategory).order("product_code").page(params[:page]).per(20)
   end
 
   # GET /products/1
   def show
-    @product = Product.find(params[:id])
   end
 
   # GET /products/new
@@ -33,7 +27,6 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
-    @product = Product.find(params[:id])
   end
 
   # POST /products
@@ -43,27 +36,22 @@ class ProductsController < ApplicationController
       redirect_to(@product, :notice => 'Product was successfully created.')
     else
       flash[:alert] = "Product was NOT created"
-      render "new"
+      render 'new'
     end
   end
 
   # PUT /products/1
   def update
-    @product = Product.find(params[:id])
-    respond_to do |format|
-      if @product.update_attributes(params[:product])
-        format.html {redirect_to(@product, :notice => 'Product was successfully updated.')}
-        format.json {render json: true}
-      else
-        format.html {render 'edit', alert: "Product was NOT updated"}
-        format.json {render json: false}
-      end
+    if @product.update_attributes(params[:product])
+      redirect_to(@product, :notice => 'Product was successfully updated.')
+    else
+      flash[:alert] = 'Product was NOT updated'
+      render 'edit'
     end
   end
 
   # DELETE /products/1
   def destroy
-    @product = Product.find(params[:id])
     @product.destroy
     redirect_to(products_url)
   end
@@ -75,6 +63,10 @@ class ProductsController < ApplicationController
   end
 
   private
+
+  def find_product
+    @product = Product.find(params[:id])
+  end
 
   def get_type
     @product_types = ProductType.all.collect{|product_type| [product_type.name,product_type.id]}

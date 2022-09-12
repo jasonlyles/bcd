@@ -1,11 +1,5 @@
-class ImagesController < ApplicationController
-  before_filter :authenticate_radmin!
+class ImagesController < AdminController
   before_filter :get_products
-  skip_before_filter :find_cart
-  skip_before_filter :get_categories
-  skip_before_filter :set_users_referrer_code
-  skip_before_filter :set_locale
-  layout proc{ |controller| controller.request.xhr? ? false : "admin" }
 
   # GET /images
   def index

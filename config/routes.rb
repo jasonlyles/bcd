@@ -41,12 +41,23 @@ BrickCity::Application.routes.draw do
   get 'mobile/*path', to: proc { [404, {}, ['']] }
   get 'hspcellmon123zz/*path', to: proc { [404, {}, ['']] } # Not sure if this is coming in as a hack attempt or what
 
-  resources :advertising_campaigns
-  resources :product_types
-  resources :partners
-  resources :updates
-  resources :images
   resources :instant_payment_notifications, only: %i[index show create]
+
+  # namespace :admin do
+    resources :advertising_campaigns
+    resources :product_types
+    resources :partners
+    resources :updates
+    resources :images
+    resources :colors
+    resources :parts
+    resources :elements do
+      collection do
+        post :find_or_create
+      end
+    end
+    resources :parts_lists
+  # end
 
   if Rails.env.development?
     # MailPreview routes

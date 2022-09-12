@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210112034057) do
+ActiveRecord::Schema.define(version: 20220910144035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -208,11 +208,11 @@ ActiveRecord::Schema.define(version: 20210112034057) do
     t.string   "name"
     t.boolean  "check_bricklink",              default: true
     t.boolean  "check_rebrickable",            default: true
-    t.json     "alternate_nos"
+    t.jsonb    "alternate_nos"
     t.boolean  "is_obsolete",                  default: false
     t.string   "year_from",         limit: 4
     t.string   "year_to",           limit: 4
-    t.json     "brickowl_ids"
+    t.jsonb    "brickowl_ids"
     t.boolean  "is_lsynth",                    default: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -224,11 +224,13 @@ ActiveRecord::Schema.define(version: 20210112034057) do
     t.integer  "product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "name_processing", default: false
-    t.boolean  "approved",        default: false
+    t.boolean  "name_processing",   default: false
+    t.boolean  "approved",          default: false
     t.json     "parts"
     t.text     "bricklink_xml"
     t.text     "ldr"
+    t.string   "original_filename"
+    t.string   "file"
   end
 
   add_index "parts_lists", ["product_id"], name: "index_parts_lists_on_product_id", using: :btree

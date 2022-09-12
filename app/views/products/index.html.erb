@@ -1,70 +1,125 @@
-<h1>Listing products</h1>
-<br/>
-<%= paginate @products %>
-<table class="admin_table">
-  <tr>
-    <th>Product</th>
-    <th>Type</th>
-    <th>Cat/Subcat</th>
-    <th>Qty</th>
-    <th>Imgs</th>
-    <th>Discount%</th>
-    <th>Price</th>
-    <th>Live?</th>
-    <th>Free?</th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% @products.each do |product| %>
-    <tr>
-      <td>
-        <%= link_to "#{product.product_code} #{product.name}", product %>
-      </td>
-      <td>
-        <%= product.product_type.name %>
-      </td>
-      <td>
-        <%= "#{product.category.name}/#{product.subcategory.name}" %>
-      </td>
-      <% if product.product_type.name == 'Instructions' %>
-        <td class="sad">N/A</td>
-      <% else %>
-        <td>
-          <%= product.quantity %>
-        </td>
-      <% end %>
-      <td>
-        <%= product.images.count %>
-      </td>
-      <td>
-        <%= product.discount_percentage %>
-      </td>
-      <td>
-        <%= number_to_currency(product.price) %>
-      </td>
-      <% if product.ready_for_public == true %>
-        <td class="happy">
-          <%= product.ready_for_public %>
-        </td>
-      <% else %>
-        <td class="sad">
-          <%= product.ready_for_public %>
-        </td>
-      <% end %>
-      <% if product.free? %>
-        <td class="sad">FREE</td>
-      <% else %>
-        <td>$$$</td>
-      <% end %>
-      <td>
-        <%= link_to 'Edit', edit_product_path(product) %>
-      </td>
-      <td>
-        <%= link_to 'Destroy', product, data: {confirm: 'Are you sure?'}, :method => :delete %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<%= paginate @products %>
-<br/>
-<%= link_to 'New Product', new_product_path %>
+<div class="card">
+  <div class="card-header">
+    Listing products
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-10">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @products %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Product', new_product_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th><%= sort_link(@q, :product_code, 'Product') %></th>
+              <th><%= sort_link(@q, :product_type_name, 'Type') %></th>
+              <th><%= sort_link(@q, :subcategory_name, 'Cat/Subcat') %></th>
+              <th>Qty</th>
+              <th>Imgs</th>
+              <th>Discount%</th>
+              <th><%= sort_link(@q, :price) %></th>
+              <th><%= sort_link(@q, :ready_for_public, 'Live?') %></th>
+              <th><%= sort_link(@q, :free, 'Free?') %></th>
+              <th colspan='2'>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @products.each do |product| %>
+              <tr>
+                <td>
+                  <%= link_to "#{product.product_code} #{product.name}", product %>
+                </td>
+                <td>
+                  <%= product.product_type.name %>
+                </td>
+                <td>
+                  <%= "#{product.category.name}/#{product.subcategory.name}" %>
+                </td>
+                <% if product.product_type.name == 'Instructions' %>
+                  <td class="sad">N/A</td>
+                <% else %>
+                  <td>
+                    <%= product.quantity %>
+                  </td>
+                <% end %>
+                <td>
+                  <%= product.images.count %>
+                </td>
+                <td>
+                  <%= product.discount_percentage %>
+                </td>
+                <td>
+                  <%= number_to_currency(product.price) %>
+                </td>
+                <% if product.ready_for_public == true %>
+                  <td class="happy">
+                    <%= product.ready_for_public %>
+                  </td>
+                <% else %>
+                  <td class="sad">
+                    <%= product.ready_for_public %>
+                  </td>
+                <% end %>
+                <% if product.free? %>
+                  <td class="sad">FREE</td>
+                <% else %>
+                  <td>$$$</td>
+                <% end %>
+                <td>
+                  <%= link_to 'Edit', edit_product_path(product) %>
+                </td>
+                <td>
+                  <%= link_to 'Destroy', product, data: {confirm: 'Are you sure?'}, :method => :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @products %>
+      </div>
+      <div class="col-2">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :product_code_or_name_cont %>
+                <%= f.search_field :product_code_or_name_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :subcategory_id_eq, 'Category/Subcategory' %>
+                <%= f.collection_select :subcategory_id_eq, Subcategory.all, "id", "name_and_category_name", { include_blank: true }, class: 'form-control' %>
+              </div>
+              <div class="form-group">
+                <%= f.label :product_type_id_eq, 'Product Type' %><br />
+                <%= f.collection_select :product_type_id_eq, ProductType.all, :id, :name, { include_blank: true }, class: 'form-control' %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:discount_percentage_gt, { class: "form-check-input", checked: params['q'] && params['q']['discount_percentage_gt'] == '0' }, '0', '') %>
+                <%= f.label :discount_percentage_gt, 'Discounted', class: "form-check-label" %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:ready_for_public_true, { class: "form-check-input", checked: params['q'].blank? || (params['q'] && params['q']['ready_for_public_true'] == '1') }) %>
+                <%= f.label :ready_for_public_true, 'Live', class: "form-check-label" %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:free_true, { class: "form-check-input", checked: params['q'] && params['q']['free_true'] == '1' }) %>
+                <%= f.label :free_true, 'Free', class: "form-check-label" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

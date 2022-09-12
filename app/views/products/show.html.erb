@@ -1,108 +1,230 @@
-<p>
-  <b>Name:</b>
-  <%= @product.name %>
-</p>
-<p>
-  <b>Type:</b>
-  <%= @product.product_type.name %>
-</p>
-<p>
-  <b>Quantity:</b>
-  <%= @product.quantity %>
-</p>
-<p>
-  <b>Category:</b>
-  <%= @product.category.name %>
-</p>
-<p>
-  <b>Subcategory:</b>
-  <%= @product.subcategory.name %>
-</p>
-<p>
-  <b>Product code:</b>
-  <%= @product.product_code %>
-</p>
-<p>
-  <b>Description:</b>
-  <%= @product.description %>
-</p>
-<p>
-  <b>Images:</b>
-  <br/>
-  <% @product.images.each do |image| %>
-    <% if image.url_processing? %>
-      Image available soon...
-    <% else %>
-      <%= image_tag(image.url.thumb.url) %>
-    <% end %>
-  <% end %>
-</p>
-<p>
-  <b>Parts Lists:</b>
-  <br/>
-  <% @product.parts_lists.each do |pl| %>
-    <%= pl.name.path %>
-    <br/>
-  <% end %>
-</p>
-<p>
-  <b>Discount percentage:</b>
-  <%= "#{@product.discount_percentage.to_i}%" %>
-</p>
-<p>
-  <b>Price:</b>
-  <%= number_to_currency(@product.price) %>
-</p>
-<% if @product.free? %>
-  <p class="happy">
-    <b>Free for all!</b>
-  </p>
-<% end %>
-<% if @product.ready_for_public == true %>
-  <p class="happy">
-    <b>Ready for Public!</b>
-  </p>
-<% else %>
-  <p class="sad">
-    <b>NOT Ready for Public!</b>
-  </p>
-<% end %>
-<p>
-  <b>Alternative build?</b>
-  <%= @product.alternative_build? %>
-</p>
-<p>
-  <b>Featured?</b>
-  <%= @product.featured? %>
-</p>
-<p>
-  <b>Youtube Url:</b>
-  <% if @product.youtube_url && !@product.youtube_url.blank? %>
-    <%= @product.youtube_url %>
-    <br/>
-    <iframe frameborder="0" height="315" src="https://www.youtube.com/embed/<%= @product.youtube_url %>?rel=0" width="420"></iframe>
-  <% end %>
-</p>
-<p>
-  <b>Designer:</b>
-  <%= @product.designer %>
-</p>
-<br/>
-<%= link_to "Add Image", new_image_path(:product_id => @product.id) %>
-\|
-<%= link_to 'Edit', edit_product_path(@product) %>
-\|
-<%= link_to 'Back', products_path %>
-\|
-<%= link_to 'Add Derivative Product', new_product_path(:product_code => @product.product_code) %>
-<br/>
-<br/>
-<%= form_for(:product, :url => {:action => :retire_product}) do |f| %>
-<%= f.hidden_field :id, :value => @product.id %>
-<div class="actions">
-  <%= f.submit 'Retire Product' %>
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= @product.code_and_name %></h1>
+  </div>
+  <div class="col-auto">
+    <%= link_to "Add Image", new_image_path(:product_id => @product.id), class: 'btn btn-primary' %>
+    <%= link_to 'Edit', edit_product_path(@product), class: 'btn btn-primary' %>
+    <%= link_to 'Add Derivative Product', new_product_path(:product_code => @product.product_code), class: 'btn btn-primary' %>
+  </div>
 </div>
-<% end %>
-* Retiring a product will set 'ready for public' to false and the category and subcategory to the "Retired" cat/subcats.
-This leaves it around for reporting, but takes it out of public view. To un-retire a product, edit it, and see notes
-about un-retiring the product.
+
+<div class="row">
+  <div class="col-9 d-flex align-items-stretch">
+    <div class="card">
+      <div class="card-header">
+        <b>Basics</b>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Type:</b>
+            </td>
+            <td></td>
+            <td>
+              <%= @product.product_type.name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Cat/Subcat:</b>
+            </td>
+            <td></td>
+            <td>
+              <%= "#{@product.category.name}/#{@product.subcategory.name}" %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Description:</b>
+            </td>
+            <td></td>
+            <td>
+              <%= @product.description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Designer:</b>
+            </td>
+            <td></td>
+            <td>
+              <%= @product.designer %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Featured:</b>
+            </td>
+            <td></td>
+            <td>
+              <%= @product.featured? %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Alternative Build:</b>
+            </td>
+            <td></td>
+            <td>
+              <%= @product.alternative_build? %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Ready for Public:</b>
+            </td>
+            <td></td>
+            <td>
+              <% if @product.ready_for_public? %>
+                <b class="happy">Ready for Public!</b>
+              <% else %>
+                <b class="sad">NOT Ready for Public!</b>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>YouTube Url:</b>
+            </td>
+            <td></td>
+            <td>
+              <% if @product.youtube_url && !@product.youtube_url.blank? %>
+                <%= @product.youtube_url %>
+                <br/>
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe class="embed-responsive-item" height="315" width="420" frameborder="0" src="https://www.youtube.com/embed/<%= @product.youtube_url %>?rel=0"></iframe>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-3">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <b>PDF / Parts List</b>
+          </div>
+          <div class="card-body">
+            <table>
+              <tr>
+                <td>
+                  <b>PDF:</b>
+                </td>
+                <td></td>
+                <td>
+                  <% if @product.pdf? && !@product.pdf.blank? %>
+                    <b class="happy">Present</b>
+                  <% else %>
+                    <b class="sad">Missing</b>
+                  <% end %>
+                </td>
+              </tr>
+              <tr style="line-height: 10px; min-height: 10px; height: 10px;"></tr>
+              <tr>
+                <td>
+                  <b>Parts List(s):</b>
+                </td>
+                <td></td>
+                <td>
+                  <% @product.parts_lists.each do |parts_list| %>
+                    <%= link_to parts_list.name, parts_list_path(parts_list) %>
+                  <% end %>
+                  <%= link_to 'Add Parts List', new_parts_list_path, class: 'btn btn-success mt-2' %>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <b>Pricing / Quantity</b>
+          </div>
+          <div class="card-body">
+            <table>
+              <% if @product.free? %>
+                <tr>
+                  <td>
+                    <b>Price:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <b class="happy">Free!</b>
+                  </td>
+                </tr>
+              <% else %>
+                <tr>
+                  <td>
+                    <b>Price:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= number_to_currency(@product.price) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Discount %:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= "#{@product.discount_percentage.to_i}%" %>
+                  </td>
+                </tr>
+                <% if @product.is_physical_product? %>
+                <tr>
+                  <td>
+                    <b>Quantity:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= @product.quantity %>
+                  </td>
+                </tr>
+                <% end %>
+              <% end %>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        <b>Images</b>
+      </div>
+      <div class="card-body">
+        <% @product.images.each do |image| %>
+          <% if image.url_processing? %>
+            Image available soon...
+          <% else %>
+            <%= image_tag(image.url.thumb.url) %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt-4">
+  <%= form_for(:product, :url => {:action => :retire_product}, style: 'display: inline-block;') do |f| %>
+    <%= f.hidden_field :id, :value => @product.id %>
+    <div class="actions">
+      <%= f.submit 'Retire Product', class: 'btn btn-primary' %>
+      <a tabindex="0" role="button" class="btn-lg" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Retiring a product" data-content="Retiring a product will set 'ready for public' to false and the category and subcategory to the 'Retired' cat/subcats. This leaves it around for reporting, but takes it out of public view. To un-retire a product, edit it, and see notes about un-retiring the product!">
+        <i class="fa fa-question-circle"></i>
+      </a>
+    </div>
+  <% end %>
+</div>

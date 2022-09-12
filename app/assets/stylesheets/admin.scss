@@ -1,0 +1,123 @@
+// Custom bootstrap variables must be set or imported *before* bootstrap.
+@import "variables";
+@import "bootstrap";
+@import "navigation";
+@media (min-width: 1200px) {
+  .container {
+    max-width: 80%;
+  }
+}
+
+.pagination a,
+.pagination span.current,
+.pagination span.gap {
+  float: left;
+  padding: 0 14px;
+  line-height: 38px;
+  text-decoration: none;
+  background-color: white;
+  border: 1px solid #DDD;
+  border-left-width: 0;
+}
+
+.pagination {
+  margin-bottom: 1rem;
+  border-left: 1px solid #ddd;
+
+  .first {
+    padding: 0;
+    float: none;
+    border: none;
+  }
+
+  .prev {
+    padding: 0;
+    float: none;
+    border: none;
+  }
+
+  .page {
+    padding: 0;
+    float: none;
+    border: none;
+  }
+
+  .next {
+    padding: 0;
+    float: none;
+    border: none;
+  }
+
+  .last {
+    padding: 0;
+    float: none;
+    border: none;
+  }
+}
+
+#notice {
+  color: green;
+  background-color: #f0fff4;
+  border: 0.1rem solid green;
+}
+
+#alert {
+  color: red;
+  background-color: #fff5f5;
+  border: 0.1rem solid red;
+}
+
+.form-control-inline {
+  min-width: 0;
+  width: auto;
+  display: inline;
+}
+
+ul.ui-autocomplete {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  float: left;
+  display: none;
+  min-width: 160px;
+  width: 160px;
+  padding: 4px 0;
+  margin: 2px 0 0;
+  list-style: none;
+  background-color: #ffffff;
+  border-color: #ccc;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+
+  li {
+    background-color: #FFF;
+    border-top: solid 1px #DDD;
+    margin: 0;
+    padding: 0;
+
+    a {
+      color: #000;
+      display: block;
+      padding: 3px;
+    }
+
+    .ui-state-active,
+    .ui-state-hover {
+      color: #ffffff;
+      background-color: #0088cc;
+    }
+  }
+}
