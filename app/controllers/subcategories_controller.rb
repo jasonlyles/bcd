@@ -3,7 +3,8 @@ class SubcategoriesController < AdminController
 
   # GET /subcategories
   def index
-    @subcategories = Subcategory.all
+    @q = Subcategory.ransack(params[:q])
+    @subcategories = @q.result.includes(:category).page(params[:page]).per(20)
   end
 
   # GET /subcategories/1

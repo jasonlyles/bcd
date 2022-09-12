@@ -3,7 +3,8 @@ class ProductTypesController < AdminController
 
   # GET /product_types
   def index
-    @product_types = ProductType.all
+    @q = ProductType.ransack(params[:q])
+    @product_types = @q.result.page(params[:page]).per(20)
   end
 
   # GET /product_types/1

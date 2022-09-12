@@ -2,7 +2,8 @@ class CategoriesController < AdminController
 
   # GET /categories
   def index
-    @categories = Category.all
+    @q = Category.ransack(params[:q])
+    @categories = @q.result.page(params[:page]).per(20)
   end
 
   def subcategories

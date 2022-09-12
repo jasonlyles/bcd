@@ -4,7 +4,7 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-10">
+      <div class="col-9">
         <div class="row">
           <div class="col-auto mr-auto">
             <%= paginate @products %>
@@ -16,65 +16,44 @@
         <table class="table table-bordered table-hover">
           <thead>
             <tr class="table-secondary">
-              <th><%= sort_link(@q, :product_code, 'Product') %></th>
-              <th><%= sort_link(@q, :product_type_name, 'Type') %></th>
-              <th><%= sort_link(@q, :subcategory_name, 'Cat/Subcat') %></th>
-              <th>Qty</th>
-              <th>Imgs</th>
-              <th>Discount%</th>
-              <th><%= sort_link(@q, :price) %></th>
-              <th><%= sort_link(@q, :ready_for_public, 'Live?') %></th>
-              <th><%= sort_link(@q, :free, 'Free?') %></th>
-              <th colspan='2'>Actions</th>
+              <th class="align-middle text-center"><%= sort_link(@q, :product_code, 'Product') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :product_type_name, 'Type') %></th>
+              <th class="align-middle text-center">Qty</th>
+              <th class="align-middle text-center">Imgs</th>
+              <th class="align-middle text-center">Discount%</th>
+              <th class="align-middle text-center"><%= sort_link(@q, :price) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :ready_for_public, 'Live?') %></th>
+              <th style="width: 10%;"></th>
             </tr>
           </thead>
           <tbody>
             <% @products.each do |product| %>
               <tr>
-                <td>
+                <td class="align-middle text-center">
                   <%= link_to "#{product.product_code} #{product.name}", product %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= product.product_type.name %>
                 </td>
-                <td>
-                  <%= "#{product.category.name}/#{product.subcategory.name}" %>
+                <td class="align-middle text-center">
+                  <%= product.product_type.name == 'Instructions' ? 'N/A' : product.quantity %>
                 </td>
-                <% if product.product_type.name == 'Instructions' %>
-                  <td class="sad">N/A</td>
-                <% else %>
-                  <td>
-                    <%= product.quantity %>
-                  </td>
-                <% end %>
-                <td>
+                <td class="align-middle text-center">
                   <%= product.images.count %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= product.discount_percentage %>
                 </td>
-                <td>
+                <td class="align-middle text-center">
                   <%= number_to_currency(product.price) %>
                 </td>
-                <% if product.ready_for_public == true %>
-                  <td class="happy">
-                    <%= product.ready_for_public %>
-                  </td>
-                <% else %>
-                  <td class="sad">
-                    <%= product.ready_for_public %>
-                  </td>
-                <% end %>
-                <% if product.free? %>
-                  <td class="sad">FREE</td>
-                <% else %>
-                  <td>$$$</td>
-                <% end %>
-                <td>
-                  <%= link_to 'Edit', edit_product_path(product) %>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(product.ready_for_public?) %>
                 </td>
-                <td>
-                  <%= link_to 'Destroy', product, data: {confirm: 'Are you sure?'}, :method => :delete %>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_product_path(product) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), product, data: {confirm: 'Are you sure?'}, method: :delete %>
                 </td>
               </tr>
             <% end %>
@@ -82,7 +61,7 @@
         </table>
         <%= paginate @products %>
       </div>
-      <div class="col-2">
+      <div class="col-3">
         <div class="card">
           <div class="card-header">
             Search
@@ -95,7 +74,7 @@
               </div>
               <div class="form-group">
                 <%= f.label :subcategory_id_eq, 'Category/Subcategory' %>
-                <%= f.collection_select :subcategory_id_eq, Subcategory.all, "id", "name_and_category_name", { include_blank: true }, class: 'form-control' %>
+                <%= f.collection_select :subcategory_id_eq, Subcategory.all.includes(:category), "id", "name_and_category_name", { include_blank: true }, class: 'form-control' %>
               </div>
               <div class="form-group">
                 <%= f.label :product_type_id_eq, 'Product Type' %><br />
@@ -114,8 +93,8 @@
                 <%= f.label :free_true, 'Free', class: "form-check-label" %>
               </div>
               <br />
-              <%= f.submit 'Search', class: 'btn btn-primary' %>
-              <%= link_to "Clear Search", request.path, class:"btn btn-warning" %>
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
             <% end %>
           </div>
         </div>

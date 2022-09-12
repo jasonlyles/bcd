@@ -3,7 +3,8 @@ class EmailCampaignsController < AdminController
 
   # GET /email_campaigns
   def index
-    @email_campaigns = EmailCampaign.all
+    @q = EmailCampaign.ransack(params[:q])
+    @email_campaigns = @q.result.page(params[:page]).per(20)
   end
 
   # GET /email_campaigns/1

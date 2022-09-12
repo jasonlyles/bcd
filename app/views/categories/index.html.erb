@@ -1,42 +1,68 @@
-<h1>Listing categories</h1>
-<br/>
-<table class="admin_table">
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Live?</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% @categories.each do |category| %>
-    <tr>
-      <td>
-        <%= category.name %>
-      </td>
-      <td>
-        <%= snippet(category.description, :word_count => 10) %>
-      </td>
-      <% if category.ready_for_public == true %>
-        <td class="happy">
-          <%= category.ready_for_public %>
-        </td>
-      <% else %>
-        <td class="sad">
-          <%= category.ready_for_public %>
-        </td>
-      <% end %>
-      <td>
-        <%= link_to 'Show', category %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_category_path(category) %>
-      </td>
-      <td>
-        <%= link_to 'Destroy', category, data: {confirm: 'Are you sure?'}, :method => :delete %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<br/>
-<%= link_to 'New Category', new_category_path %>
+<div class="card">
+  <div class="card-header">
+    Listing categories
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @categories %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Category', new_category_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center"><%= sort_link(@q, :name) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :description) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :live, 'Live?') %></th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @categories.each do |category| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to category.name, category %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= snippet(category.description, :word_count => 10) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(category.ready_for_public?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_category_path(category) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), category, data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @categories %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :name_cont %>
+                <%= f.search_field :name_cont, class: "form-control" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

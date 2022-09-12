@@ -21,22 +21,18 @@ DONE 4. Add interface for uploading/editing parts lists.
   c. images
     i. new
   d. categories
-    i. index
     ii. show
     iii. edit
     iv. new
   e. subcategories
-    i. index
     ii. show
     iii. edit
     iv. new
   f. updates
-    i. index
     ii. show
     iii. edit
     iv. new
   g. product type
-    i. index
     ii. show
     iii. edit
     iv. new
@@ -46,18 +42,15 @@ DONE 4. Add interface for uploading/editing parts lists.
   k. notify users pdf/parts list update
   l. featured products tool
   m. partners
-    i. index
     ii. show
     iii. edit
     iv. new
   n. advertising campaigns
-    i. index
     ii. show
     iii. edit
     iv. new
   o. new product notification
   p. email campaigns
-    i. index
     ii. show
     iii. edit
     iv. new

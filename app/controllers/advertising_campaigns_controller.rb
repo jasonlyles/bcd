@@ -7,7 +7,8 @@ class AdvertisingCampaignsController < AdminController
   end
 
   def index
-    @advertising_campaigns = AdvertisingCampaign.all
+    @q = AdvertisingCampaign.ransack(params[:q])
+    @advertising_campaigns = @q.result.includes(:partner).page(params[:page]).per(20)
   end
 
   # GET /advertising_campaigns/1

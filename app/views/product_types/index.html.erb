@@ -1,47 +1,72 @@
-<h1>Listing Product Types</h1>
-<br/>
-<br/>
-<table class="admin_table">
-  <tr>
-    <th>Name</th>
-    <th>Image</th>
-    <th>Ready for public?</th>
-    <th>Digital?</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% @product_types.each do |product_type| %>
-    <tr>
-      <td>
-        <%= product_type.name %>
-      </td>
-      <td>
-        <%= product_type.image %>
-      </td>
-      <% if product_type.ready_for_public %>
-        <td class="happy">
-          <%= product_type.ready_for_public %>
-        </td>
-      <% else %>
-        <td class="sad">
-          <%= product_type.ready_for_public %>
-        </td>
-      <% end %>
-      <td>
-        <%= product_type.digital_product %>
-      </td>
-      <td>
-        <%= link_to 'Show', product_type %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_product_type_path(product_type) %>
-      </td>
-      <td>
-        <%= link_to 'Destroy', product_type, :method => :delete, :data => { :confirm => 'Are you sure?' } %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<br/>
-<%= link_to 'New Product type', new_product_type_path %>
+<div class="card">
+  <div class="card-header">
+    Listing product types
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @product_types %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Product Type', new_product_type_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center"><%= sort_link(@q, :name) %></th>
+              <th class="align-middle text-center">Image</th>
+              <th class="align-middle text-center"><%= sort_link(@q, :ready_for_public, 'Live?') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :digital_product, 'Digital?') %></th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @product_types.each do |product_type| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to product_type.name, product_type %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= product_type.image %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(product_type.ready_for_public?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(product_type.digital_product?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_product_type_path(product_type) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), product_type, data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @product_types %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :name_cont %>
+                <%= f.search_field :name_cont, class: "form-control" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

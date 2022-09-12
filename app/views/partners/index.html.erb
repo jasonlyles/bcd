@@ -1,37 +1,76 @@
-<h1>Listing partners</h1>
-<br/>
-<br/>
-<table class="admin_table">
-  <tr>
-    <th>Name</th>
-    <th>Url</th>
-    <th>Contact Email</th>
-    <th></th>
-    <th></th>
-    <th class="sad">ONLY DESTROY IF NO ADVERTISING CAMPAIGNS</th>
-  </tr>
-  <% @partners.each do |partner| %>
-    <tr>
-      <td>
-        <%= partner.name %>
-      </td>
-      <td>
-        <%= partner.url %>
-      </td>
-      <td>
-        <%= partner.contact %>
-      </td>
-      <td>
-        <%= link_to 'Show', partner %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_partner_path(partner) %>
-      </td>
-      <td>
-        <%= link_to 'Destroy', partner, data: {confirm: 'Are you sure?'}, :method => :delete %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<br/>
-<%= link_to 'New Partner', new_partner_path %>
+<div class="card">
+  <div class="card-header">
+    Listing partners
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @partners %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Partner', new_partner_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center"><%= sort_link(@q, :name) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :url) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :contact) %></th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @partners.each do |partner| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to partner.name, partner %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to partner.url, partner.url, target: "_blank" %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= partner.contact %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_partner_path(partner) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), partner, data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @partners %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :name_cont %>
+                <%= f.search_field :name_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :url_cont %>
+                <%= f.search_field :url_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :contact_cont %>
+                <%= f.search_field :contact_cont, class: "form-control" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

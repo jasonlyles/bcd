@@ -3,7 +3,8 @@ class ImagesController < AdminController
 
   # GET /images
   def index
-    @images = Image.order("product_id").page(params[:page]).per(20)
+    @q = Image.ransack(params[:q])
+    @images = @q.result.order("product_id").page(params[:page]).per(20)
   end
 
   # GET /images/1

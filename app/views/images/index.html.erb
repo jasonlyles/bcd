@@ -1,40 +1,64 @@
-<h1>Listing images</h1>
-<br/>
-<%= paginate @images %>
-<table class="admin_table">
-  <tr>
-    <th>Filename</th>
-    <th>Product</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% @images.each do |image| %>
-    <tr>
-      <td>
-        <%= image.url %>
-      </td>
-      <% if image.product %>
-        <td>
-          <%= "#{image.product.product_code} #{image.product.name}" %>
-        </td>
-      <% else %>
-        <td>
-          <%= image.url.to_s.split('.')[0].humanize %>
-        </td>
-      <% end %>
-      <td>
-        <%= link_to 'Show', image %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_image_path(image) %>
-      </td>
-      <td>
-        <%= link_to 'Destroy', image, data: {confirm: 'Are you sure?'}, :method => :delete %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<%= paginate @images %>
-<br/>
-<%= link_to 'New Image', new_image_path %>
+<div class="card">
+  <div class="card-header">
+    Listing images
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @images %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Image', new_image_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center">Image</th>
+              <th class="align-middle text-center">Product</th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @images.each do |image| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= image_tag(image.url.thumb.url) if image.url.present? %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= image.product ? link_to(image.product.name, image.product) : image.url.to_s.split('.')[0].humanize %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_image_path(image) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), image, data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @images %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :product_id_eq, 'Product' %>
+                <%= f.collection_select :product_id_eq, Product.all.order(:name), "id", "name", { include_blank: true }, class: 'form-control' %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

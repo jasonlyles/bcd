@@ -1,55 +1,80 @@
-<h1>Listing updates</h1>
-<br/>
-<%= paginate @updates %>
-<table class="admin_table">
-  <tr>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Body</th>
-    <th>Image</th>
-    <th>Link</th>
-    <th>Live?</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% @updates.each do |update| %>
-    <tr>
-      <td>
-        <%= update.title %>
-      </td>
-      <td>
-        <%= snippet(update.description) if update.description %>
-      </td>
-      <td>
-        <%= snippet(update.body) if update.body %>
-      </td>
-      <td>
-        <%= update.image %>
-      </td>
-      <td>
-        <%= update.link %>
-      </td>
-      <% if update.live? %>
-        <td class="happy">
-          <%= update.live %>
-        </td>
-      <% else %>
-        <td class="sad">
-          <%= update.live %>
-        </td>
-      <% end %>
-      <td>
-        <%= link_to 'Show', update %>
-      </td>
-      <td>
-        <%= link_to 'Edit', edit_update_path(update) %>
-      </td>
-      <td>
-        <%= link_to 'Destroy', update, data: {confirm: 'Are you sure?'}, :method => :delete %>
-      </td>
-    </tr>
-  <% end %>
-</table>
-<br/>
-<%= link_to 'New Update', new_update_path %>
+<div class="card">
+  <div class="card-header">
+    Listing updates
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @updates %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Update', new_update_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center">Title</th>
+              <th class="align-middle text-center">Description</th>
+              <th class="align-middle text-center">Body</th>
+              <th class="align-middle text-center">Image</th>
+              <th class="align-middle text-center">Link</th>
+              <th class="align-middle text-center">Live?</th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @updates.each do |update| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to update.title, update %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= snippet(update.description) if update.description %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= snippet(update.body) if update.body %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= update.image %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= update.link %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(update.live?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_update_path(update) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), update, data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @updates %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for @q do |f| %>
+              <div class="form-group">
+                <%= f.label :title_cont %>
+                <%= f.search_field :title_cont, class: "form-control" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

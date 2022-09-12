@@ -2,7 +2,8 @@ class PartnersController < AdminController
 
   # GET /partners
   def index
-    @partners = Partner.all
+    @q = Partner.ransack(params[:q])
+    @partners = @q.result.page(params[:page]).per(20)
   end
 
   # GET /partners/1

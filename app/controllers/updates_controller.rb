@@ -2,7 +2,8 @@ class UpdatesController < AdminController
 
   # GET /updates
   def index
-    @updates = Update.order('created_at desc').page(params[:page]).per(10)
+    @q = Update.ransack(params[:q])
+    @updates = @q.result.order('created_at desc').page(params[:page]).per(10)    
   end
 
   # GET /updates/1
