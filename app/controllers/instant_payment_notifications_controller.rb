@@ -6,7 +6,8 @@ class InstantPaymentNotificationsController < ApplicationController
 
   # GET /instant_payment_notifications
   def index
-    @instant_payment_notifications = InstantPaymentNotification.all.page(params[:page]).per(100)
+    @q = InstantPaymentNotification.ransack(params[:q])
+    @instant_payment_notifications = @q.result.page(params[:page]).per(100)
   end
 
   # GET /instant_payment_notifications/1

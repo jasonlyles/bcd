@@ -8,12 +8,10 @@
         <div class="card-body">
           <div class="form-group">
             <%= form.label :name, "Name", class: 'form-label' %>
-            <br/>
             <%= form.text_field :name, placeholder: "Primary Parts List", class: 'form-control' %>
           </div>
           <div class="form-group">
             <%= form.label :name, "Product", class: 'form-label' %>
-            <br/>
             <%= form.collection_select :product_id, Product.instructions.order(:name), :id, :name, { include_blank: true }, class: 'form-control' %>
           </div>
           <% if parts_list.persisted? %>

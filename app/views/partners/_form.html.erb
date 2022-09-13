@@ -1,20 +1,28 @@
-<%= form_for partner do |f| %>
-<div class="field">
-  <%= f.label :name %>
-  <br/>
-  <%= f.text_field :name, placeholder: "Brothers Brick" %>
-</div>
-<div class="field">
-  <%= f.label :url %>
-  <br/>
-  <%= f.text_field :url, placeholder: "www.brothers-brick.com" %>
-</div>
-<div class="field">
-  <%= f.label :contact, "Contact Email" %>
-  <br/>
-  <%= f.text_field :contact, placeholder: "ralph@brothers-brick.com" %>
-</div>
-<div class="actions">
-  <%= f.submit 'Save' %>
-</div>
+<%= nested_form_for partner do |f| %>
+  <div class="row">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-header">
+          <b>Partner</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :name, class: 'form-label' %>
+            <%= f.text_field :name, placeholder: "Brothers Brick", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :url, class: 'form-label' %>
+            <%= f.text_field :url, placeholder: "https://www.brothers-brick.com", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :contact, "Contact Email", class: 'form-label' %>
+            <%= f.text_field :contact, placeholder: "ralph@brothers-brick.com", class: 'form-control' %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>

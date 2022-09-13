@@ -1,24 +1,32 @@
-<%= form_for subcategory do |f| %>
-<div class="field">
-  <%= f.label :category_id %>
-  <br/>
-  <%= f.select :category_id, categories %>
-</div>
-<div class="field">
-  <%= f.label :name %>
-  <br/>
-  <%= f.text_field :name, placeholder: "Vehicles" %>
-</div>
-<div class="field">
-  <%= f.label :code %>
-  <br/>
-  <%= f.text_field :code, placeholder: "CV" %>
-  <div class="field"></div>
-  <%= f.label :description %>
-  <br/>
-  <%= f.text_area :description, placeholder: "Some marketing mumbo-jumbo about this subcategory.." %>
-</div>
-<div class="actions">
-  <%= f.submit 'Save' %>
-</div>
+<%= nested_form_for subcategory do |f| %>
+  <div class="row">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-header">
+          <b>SubCategory</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :category_id, class: 'form-label' %>
+            <%= f.select :category_id, categories, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :name, class: 'form-label' %>
+            <%= f.text_field :name, placeholder: "Vehicles", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :code, class: 'form-label' %>
+            <%= f.text_field :code, placeholder: "CV", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :description, class: 'form-label' %>
+            <%= f.text_area :description, placeholder: "Some marketing mumbo jumbo about this subcategory...", rows: 10, class: 'form-control' %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 <% end %>

@@ -18,47 +18,25 @@ DONE 4. Add interface for uploading/editing parts lists.
     ii. show
     iii. edit
     iv. new
-  c. images
-    i. new
-  d. categories
-    ii. show
-    iii. edit
-    iv. new
-  e. subcategories
-    ii. show
-    iii. edit
-    iv. new
-  f. updates
-    ii. show
-    iii. edit
-    iv. new
-  g. product type
-    ii. show
-    iii. edit
-    iv. new
+  d. categories#show
+  e. subcategories#show
+  f. updates#show
+  g. product type#show
   h. maintenance mode
   i. edit admin profile
   j. user lookup
   k. notify users pdf/parts list update
   l. featured products tool
-  m. partners
-    ii. show
-    iii. edit
-    iv. new
-  n. advertising campaigns
-    ii. show
-    iii. edit
-    iv. new
+  m. partners#show
+  n. advertising campaigns#show
   o. new product notification
-  p. email campaigns
-    ii. show
-    iii. edit
-    iv. new
+  p. email campaigns#show
   q. order lookup
   r. order fulfillment
   s. sales reporting
   t. admin login screen
   u. Maybe want to add something to the elements form to try to re-fetch images from BL/Rebrickable.
+  v. instant payment notifications#show
 6. Create user-facing parts list page.
 7. Move admin controllers under an admin namespace. Move actions around in controllers
   from "customer-facing" controllers to admin controllers and vice versa as necessary.
@@ -70,6 +48,7 @@ DONE 4. Add interface for uploading/editing parts lists.
   gets stripped out before finding by name. Doing this should help us distinguish
   between different generations when selecting parts.
 10. Add update from BL and update from rebrickable buttons to parts show and/or index pages.
+11. Take a look at file upload sections of forms. Might need to tweak logic if there is a file uploaded already.
 
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
 
