@@ -13,9 +13,9 @@ DONE 2. Build out services for calls to 3rd parties and restrict the calls
 DONE 3. Build out service for creating parts lists, moving it out of the job it's in currently.
 DONE 4. Add interface for uploading/editing parts lists.
 DONE 5. Re-style backend pages
-6. Create user-facing parts list page.
-7. Move admin controllers under an admin namespace. Move actions around in controllers
+6. Move admin controllers/views under an admin namespace. Move actions around in controllers
   from "customer-facing" controllers to admin controllers and vice versa as necessary.
+7. Create user-facing parts list page.
 8. Be 100% that:
   a. Parts can't be deleted if they belong to an element
   b. Colors can't be deleted if they belong to an element
@@ -37,6 +37,9 @@ Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::Cre
 
 RESKIN:
 
+* Maybe don't have so much in the way of updates on the front page, and maybe just display
+  the products for sale, in order of most popular. Idk that anyone wants to be going to all
+  the various store pages to see everything. We don't have enough products to justify that.
 * Need to set some validation to not let a user create more than the max number of authentications allowed.
 * need to style devise validation messages?
 * need to confirm password edit page looks good by getting an email sent for forgotten password
@@ -92,7 +95,7 @@ emails were sent.
 * Add Faker gem to generate a lot of orders and customers in the local database to see if I need to add any indexes to
 speed up page load times.
 
-* Try to get this app on Elastic Beanstalk or Digital Ocean
+* Try to get this app on Digital Ocean or Fly.io or something similar.
 
 * In order to get Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
 and verify it, maybe verify my FB and Twitter with google if possible.

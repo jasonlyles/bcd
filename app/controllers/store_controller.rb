@@ -23,7 +23,7 @@ class StoreController < ApplicationController
       if !params[:product_type_name].casecmp('instructions').zero?
         @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
       else
-        @top_categories = @categories.dup
+        @top_categories = Category.find_live_categories
       end
     end
   end
