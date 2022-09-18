@@ -1,21 +1,28 @@
 <h1>Featured Products Tool</h1>
 <br/>
-<p>
-  Select all products you want to show up in the lower right "Featured Item" box on the home page
-</p>
-<br/>
-<table>
-  <% @products.each_with_index do |product,index| %>
-    <% if index % 3 == 0 %>
-      <tr></tr>
-    <% end %>
-    <td style="padding:1px 3px 1px 3px;">
-      <%= check_box_tag("product_ids[]", product.id, product.featured, id: product.id, onchange: "updateProduct(#{product.id}, #{product.featured})") %>
-      &nbsp;
-      <%= product.code_and_name %>
-    </td>
-  <% end %>
-</table>
+<div class="card">
+  <div class="card-header">
+    Products
+  </div>
+  <div class="card-body">
+    <p>
+      Select all products you want to show up in the lower right "Featured Item" box on the home page
+    </p>
+    <table>
+      <% @products.each_with_index do |product, index| %>
+        <% if index % 3 == 0 %>
+          <tr></tr>
+        <% end %>
+        <td style="padding:1px 15px 1px 15px;">
+          <%= check_box_tag("product_ids[]", product.id, product.featured, id: product.id, onchange: "updateProduct(#{product.id}, #{product.featured})") %>
+          &nbsp;
+          <%= product.code_and_name %>
+        </td>
+      <% end %>
+    </table>
+  </div>
+</div>
+
 <script>
 
   function updateProduct(id, featured) {

@@ -58,6 +58,12 @@ class EmailCampaignsController < AdminController
 
   def send_marketing_emails
     @email_campaign = EmailCampaign.find(params[:email_campaign][:id])
+    if @email_campaign.emails_sent > 0
+      flash[:alert] = 'This email campaign has already been activated'
+      redirect_to controller: :email_campaigns, action: :show, id: @email_campaign.id
+      return
+    end
+
     queued = NewMarketingNotificationJob.create({email_campaign: @email_campaign.id})
     if queued.nil?
       flash[:alert] = "Couldn't queue email jobs. Check out /jobs and see what's wrong"

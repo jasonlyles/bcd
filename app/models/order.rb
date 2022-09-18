@@ -19,7 +19,7 @@ class Order < ActiveRecord::Base
   validates :address_zip, numericality: { only_integer: true }, if: "address_submission_method == 'form'"
 
   def has_physical_item?
-    line_items.each do |item|
+    line_items.includes(product: [:product_type]).each do |item|
       return true if item.product.is_physical_product?
     end
     false

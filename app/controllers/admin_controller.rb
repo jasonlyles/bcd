@@ -12,6 +12,11 @@ class AdminController < ApplicationController
   # comment until I'm certain commenting it out is ok.
   layout proc{ |controller| controller.request.xhr? ? false : "admin" }
 
+  # Quick fix until I fix namespacing controller/routing
+  def index
+    redirect_to products_path
+  end
+
   def gift_instructions
     user_id = params['gift']['user_id']
     product_id = params['gift']['product_id']

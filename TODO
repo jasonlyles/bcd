@@ -12,31 +12,7 @@ DONE 2. Build out services for calls to 3rd parties and restrict the calls
    b. BrickLink
 DONE 3. Build out service for creating parts lists, moving it out of the job it's in currently.
 DONE 4. Add interface for uploading/editing parts lists.
-5. Re-style these pages
-  a. admin home
-  b. products (still need to handle parts lists, which is why this is still in here)
-    ii. show
-    iii. edit
-    iv. new
-  d. categories#show
-  e. subcategories#show
-  f. updates#show
-  g. product type#show
-  h. maintenance mode
-  i. edit admin profile
-  j. user lookup
-  k. notify users pdf/parts list update
-  l. featured products tool
-  m. partners#show
-  n. advertising campaigns#show
-  o. new product notification
-  p. email campaigns#show
-  q. order lookup
-  r. order fulfillment
-  s. sales reporting
-  t. admin login screen
-  u. Maybe want to add something to the elements form to try to re-fetch images from BL/Rebrickable.
-  v. instant payment notifications#show
+DONE 5. Re-style backend pages
 6. Create user-facing parts list page.
 7. Move admin controllers under an admin namespace. Move actions around in controllers
   from "customer-facing" controllers to admin controllers and vice versa as necessary.
@@ -49,6 +25,13 @@ DONE 4. Add interface for uploading/editing parts lists.
   between different generations when selecting parts.
 10. Add update from BL and update from rebrickable buttons to parts show and/or index pages.
 11. Take a look at file upload sections of forms. Might need to tweak logic if there is a file uploaded already.
+12. Would be nice to have something that prompted the admin to update users about a PDF/parts_list update
+    whenever one of those things got updated. Might be nice to include this in a generic notifications center.
+13. Maybe want to add something to the elements form to try to re-fetch images from BL/Rebrickable. Maybe just having the image upload is good enough.
+14. Make sure all parts_lists can be generated based off of existing BL XML files, and
+    time it so I know what I can expect for downtime when I do this in prod. Probably want
+    to make it so I can upload all these new-style parts lists in prod before I switch users
+    over to using new-style parts lists.
 
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
 
@@ -80,9 +63,6 @@ RESKIN:
   https://support.dnsimple.com/articles/redirect-heroku/#redirect-https
   and here:
   https://stackoverflow.com/questions/22235977/ruby-on-rails-redirecting-www-to-non-www-version-of-site
-* Add a honeypot to the sign up/sign in flows and the contact page.
-    https://medium.com/@madeleinerose/what-s-a-honeypot-561dcca6d244
-    https://github.com/curtis/honeypot-captcha
 
 Nav:
 * Account link in mobile collapsed nav hasn't quite got the right selector yet in the css. I'm
@@ -92,6 +72,9 @@ Nav:
 TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
+
+* Instead of forcing Brian to come into the admin UI, maybe have a task that emails
+  him the monthly sales CSV at the end of the month.
 
 * Add functionality for Brian to be able to add downloads to someones account for a given product,
   in case they've had trouble downloading.

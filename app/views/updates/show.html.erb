@@ -1,63 +1,66 @@
-<p>
-  <b>Title:</b>
-  <%= @update.title %>
-</p>
-<br/>
-<p>
-  <b>Description:</b>
-  <%= @update.description %>
-</p>
-<br/>
-<p>
-  <b>Body:</b>
-  <%= @update.body %>
-</p>
-<br/>
-<p>
-  <b>Link:</b>
-  <%= @update.link %>
-</p>
-<br/>
-<p>
-  <b>Image: (This is basically a preview. If it doesn't look good here. It won't look good on the front page.)</b>
-</p>
-<div class="main_item_div" id="homepage_slideshow">
-  <div class="main_item">
-    <% if @update.image? %>
-      <% if @update.image_processing? %>
-        <br/>
-        <br/>
-        <br/>
-        <b>
-          Image is currently being processed. Check back in a few seconds.
-        </b>
-      <% else %>
-        <%= link_to(image_tag(@update.image), @update.link) %>
-      <% end %>
-    <% end %>
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= @update.title %></h1>
   </div>
 </div>
-<br/>
-<%= form_for @update do |f| %>
-<% if @update.live? %>
-  <div class="field">
-    <b class="happy">Update is live</b>
-    <%= f.check_box :live, {:checked => @update.live, :hidden => true},0,1 %>
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Update</b>
+        <%= link_to 'Edit', edit_update_path(@update), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Link:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @update.link %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Live?</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= decorate_boolean(@update.live) %>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <%= form_for @update do |f| %>
+          <div class="form-check">
+            <%= f.check_box :live, { checked: !@update.live?, hidden: true } %>
+          </div>
+          <%= f.submit @update.live? ? 'Disable Update' : 'Enable Update', class: @update.live? ? 'btn btn-danger' : 'btn btn-success' %>
+        <% end %>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', subcategories_path %>
   </div>
-  <div class="actions">
-    <%= f.submit 'Disable Update' %>
+  <div class="col-8">
+    <div class="card">
+      <div class="card-header">
+        <b class="mt-2">Image Preview (If it doesn't look good here. It won't look good on the front page.)</b>
+      </div>
+      <div class="card-body">
+        <% if @update.image? %>
+          <% if @update.image_processing? %>
+            <br/>
+            <br/>
+            <br/>
+            <b>
+              Image is currently being processed. Check back in a few seconds.
+            </b>
+          <% else %>
+            <%= link_to(image_tag(@update.image), @update.link) %>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
   </div>
-<% else %>
-  <div class="field">
-    <b class="sad">Update is disabled</b>
-    <%= f.check_box :live, {:checked => @update.live, :hidden => true},0,1 %>
-  </div>
-  <div class="actions">
-    <%= f.submit 'Enable Update' %>
-  </div>
-<% end %>
-<% end %>
-<br/>
-<%= link_to 'Edit', edit_update_path(@update) %>
-\|
-<%= link_to 'Back', updates_path %>
+</div>

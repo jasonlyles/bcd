@@ -1,35 +1,54 @@
-<h1>Subcategory Details</h1>
-<br/>
-<p>
-  <b>Name:</b>
-  <%= @subcategory.name %>
-</p>
-<br/>
-<p>
-  <b>Code:</b>
-  <%= @subcategory.code %>
-</p>
-<br/>
-<p>
-  <b>Category:</b>
-  <%= @subcategory.category.name %>
-</p>
-<br/>
-<p>
-  <b>Description:</b>
-  <%= @subcategory.description %>
-</p>
-<br/>
-<p>
-  <b>Products:</b>
-  <br/>
-  <% @subcategory.products.each do |product| %>
-    <br/>
-    <%= link_to "#{product.product_code} #{product.name}", :controller => :products, :action => :show, :id => product.id %>
-  <% end %>
-</p>
-<br/>
-<br/>
-<%= link_to 'Edit', edit_subcategory_path(@subcategory) %>
-\|
-<%= link_to 'Back', subcategories_path %>
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= "#{@subcategory.code} #{@subcategory.name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Subcategory</b>
+        <%= link_to 'Edit', edit_subcategory_path(@subcategory), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Category:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @subcategory.category.name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Description:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @subcategory.description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Products:</b>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <% @subcategory.products.each do |product| %>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="pl-4">
+                <%= link_to "#{product.product_code} #{product.name}", product_path(product) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', subcategories_path %>
+  </div>
+</div>

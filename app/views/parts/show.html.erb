@@ -2,15 +2,13 @@
   <div class="col-auto mr-auto">
     <h1><%= @part.name %></h1>
   </div>
-  <div class="col-auto">
-    <%= link_to 'Edit', edit_part_path(@part), class: 'btn btn-primary' %>
-  </div>
 </div>
 <div class="row">
   <div class="col-6">
     <div class="card">
-      <div class="card-header">
-        <b>Part</b>
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Part</b>
+        <%= link_to 'Edit', edit_part_path(@part), class: 'btn btn-primary' %>
       </div>
       <div class="card-body">
         <table>
@@ -56,7 +54,7 @@
             </td>
             <td class="px-4"></td>
             <td class="pl-4">
-              <%= !@part.check_rebrickable? %>
+              <%= decorate_boolean(!@part.check_rebrickable?) %>
             </td>
           </tr>
           <tr>
@@ -65,7 +63,7 @@
             </td>
             <td class="px-4"></td>
             <td class="pl-4">
-              <%= !@part.check_bricklink? %>
+              <%= decorate_boolean(!@part.check_bricklink?) %>
             </td>
           </tr>
           <tr>
@@ -101,7 +99,7 @@
             </td>
             <td class="px-4"></td>
             <td class="pl-4">
-              <%= @part.is_obsolete? %>
+              <%= decorate_boolean(@part.is_obsolete?) %>
             </td>
           </tr>
           <tr>
@@ -110,7 +108,7 @@
             </td>
             <td class="px-4"></td>
             <td class="pl-4">
-              <%= @part.is_lsynth? %>
+              <%= decorate_boolean(@part.is_lsynth?) %>
             </td>
           </tr>
         </table>

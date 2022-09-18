@@ -29,7 +29,7 @@
                   <%= link_to advertising_campaign.partner.name, advertising_campaign.partner %>
                 </td>
                 <td class="align-middle text-center">
-                  <%= advertising_campaign.reference_code %>
+                  <%= link_to advertising_campaign.reference_code, advertising_campaign %>
                 </td>
                 <td class="align-middle text-center">
                   <%= decorate_boolean(advertising_campaign.campaign_live?) %>

@@ -1,45 +1,119 @@
-<p>
-  <b>ID:</b>
-  <%= @instant_payment_notification.id %>
-</p>
-<p>
-  <b>Payment Status:</b>
-  <%= @instant_payment_notification.payment_status %>
-</p>
-<p>
-  <b>Notify Version:</b>
-  <%= @instant_payment_notification.notify_version %>
-</p>
-<p>
-  <b>Request ID:</b>
-  <%= @instant_payment_notification.request_id %>
-</p>
-<p>
-  <b>Verify Sign:</b>
-  <%= @instant_payment_notification.verify_sign %>
-</p>
-<p>
-  <b>Payer Email:</b>
-  <%= @instant_payment_notification.payer_email %>
-</p>
-<p>
-  <b>Order ID:</b>
-  <%= @instant_payment_notification.order_id %>
-</p>
-<p>
-  <b>Processed:</b>
-  <%= @instant_payment_notification.processed %>
-</p>
-<p>
-  <b>Transaction Date:</b>
-  <%= @instant_payment_notification.created_at %>
-</p>
-<p>
-  <b>Last Updated:</b>
-  <%= @instant_payment_notification.updated_at %>
-</p>
-<p>
-  <b>Params:</b>
-  <%= @instant_payment_notification.params %>
-</p>
-<%= link_to 'Back', instant_payment_notifications_path %>
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= @instant_payment_notification.payment_status %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Instant Payment Notification</b>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Payment Status:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.payment_status %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Notify Version:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.notify_version %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Request ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.request_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Transaction ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.txn_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Verify Sign:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.verify_sign %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Payer Email:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.payer_email %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Order ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.order_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Processed?</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= decorate_boolean(@instant_payment_notification.processed?) %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Transaction Date:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.created_at %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Last Updated:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @instant_payment_notification.updated_at %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', instant_payment_notifications_path %>
+  </div>
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        <b>IPN params</b>
+      </div>
+      <div class="card-body">
+        <% @instant_payment_notification.params %>
+      </div>
+    </div>
+  </div>
+</div>

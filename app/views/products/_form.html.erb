@@ -94,24 +94,41 @@
               <%= f.label :pdf, "PDF", class: "form-label" %>
               <br/>
               <% if product.pdf_cache %>
-                <%= f.text_field :pdf_cache, :disabled => true, class: "form-control" %>
+                <%= f.text_field :pdf_cache, disabled: true, class: "form-control" %>
               <% else %>
-                <%= f.text_field :pdf, :disabled => true, class: "form-control" %>
+                <%= f.text_field :pdf, disabled: true, class: "form-control" %>
               <% end %>
               <br/>
             <% end %>
-            <br/>
-            <%= f.label :pdf, "PDF", class: "form-label" %>
-            <br/>
-            <%= f.file_field :pdf, class: "form-control-file" %>
-            <%= f.hidden_field :pdf_cache %>
             <% if product.pdf? %>
-              <div class="form-check">
-                <%= f.label :delete_pdf, "Delete PDF", class: "form-check-label" %>
+              <div class="form-check mt-2">
                 <%= f.check_box :remove_pdf, class: "form-check-input" %>
+                <%= f.label :remove_pdf, "Delete PDF", class: "form-check-label" %>
               </div>
+            <% else %>
+              <%= f.label :pdf, "PDF", class: "form-label" %>
+              <br/>
+              <%= f.file_field :pdf, class: "form-control-file" %>
+              <%= f.hidden_field :pdf_cache %>
             <% end %>
           </div>
+          <% if product.persisted? %>
+            <hr />
+            <div>
+              Parts Lists:
+              <a tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Parts Lists" data-content="Green check mark means approved. Red X means not approved.">
+                <i class="fa fa-question-circle"></i>
+              </a>
+              <br />
+              <% product.parts_lists.each do |parts_list| %>
+                <%= decorate_boolean(parts_list.approved) %>
+                &nbsp;
+                <%= link_to parts_list.name, parts_list_path(parts_list), target: '_blank' %>
+                <br />
+              <% end %>
+              <%= link_to 'Add Parts List', new_parts_list_path, target: '_blank', class: 'btn btn-primary mt-2' %>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>

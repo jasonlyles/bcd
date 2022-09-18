@@ -20,7 +20,7 @@
               <th class="align-middle text-center"><%= sort_link(@q, :click_throughs) %></th>
               <th class="align-middle text-center"><%= sort_link(@q, :emails_sent) %></th>
               <th class="align-middle text-center">Effectiveness Ratio</th>
-              <th style="width: 10%;"></th>
+              <th style="width: 15%;"></th>
             </tr>
           </thead>
           <tbody>
@@ -39,6 +39,8 @@
                   <%= "#{email_campaign.effectiveness_ratio}%" %>
                 </td>
                 <td class="align-middle text-center">
+                  <%= link_to raw('<i class="fas fa-eye"></i>'), email_campaign_path(email_campaign) %>
+                  &nbsp;
                   <%= link_to raw('<i class="far fa-edit"></i>'), edit_email_campaign_path(email_campaign) %>
                   &nbsp;
                   <%= link_to raw('<i class="far fa-trash-alt"></i>'), email_campaign, data: {confirm: 'Are you sure?'}, method: :delete %>

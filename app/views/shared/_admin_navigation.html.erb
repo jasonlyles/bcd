@@ -1,13 +1,123 @@
-<%= link_to "Home", root_path %>
-|
-<%= link_to "Admin Home", admin_index_path %>
-|
-<%= link_to "Products", products_path %>
-|
-<%= link_to "Categories", categories_path %>
-|
-<%= link_to "Subcats", subcategories_path %>
-|
-<%= link_to "Updates", updates_path %>
-|
-<%= link_to "Prod Types", product_types_path %>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <%= link_to image_tag('logo140x89.png', alt: "BCD logo", title: "Brick City Depot", class: 'navbar-brand'), root_path %>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Products
+        </a>
+        <div class="dropdown-menu">
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Products', products_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_product_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Categories', categories_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_category_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Subcategories', subcategories_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_subcategory_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Product Types', product_types_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_product_type_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Images', images_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_image_path, class: 'link-unstyled' %>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Parts Lists
+        </a>
+        <div class="dropdown-menu">
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Parts Lists', parts_lists_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_parts_list_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Elements', elements_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_element_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Parts', parts_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_part_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Colors', colors_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_color_path, class: 'link-unstyled' %>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Marketing Tools
+        </a>
+        <div class="dropdown-menu">
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Updates', updates_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_update_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Partners', partners_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_partner_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Ad Campaigns', advertising_campaigns_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_advertising_campaign_path, class: 'link-unstyled' %>
+          </div>
+          <div class='dropdown-item d-flex justify-content-between'>
+            <%= link_to 'Marketing Emails', email_campaigns_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_email_campaign_path, class: 'link-unstyled' %>
+          </div>
+          <div class="dropdown-divider"></div>
+          <%= link_to 'New Product Notification', new_product_notification_path, class: 'dropdown-item' %>
+          <%= link_to 'Featured Products Tool', featured_products_path, class: 'dropdown-item' %>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          User Tools
+        </a>
+        <div class="dropdown-menu">
+          <%= link_to 'User Lookup', account_info_path, class: 'dropdown-item' %>
+          <%= link_to 'PDF/Parts List Fix Notification', update_users_download_counts_path, class: 'dropdown-item' %>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Order Info
+        </a>
+        <div class="dropdown-menu">
+          <%= link_to 'Order Lookup', order_info_path, class: 'dropdown-item' %>
+          <%= link_to 'Order Fulfillment', order_fulfillment_path, class: 'dropdown-item' %>
+          <div class="dropdown-divider"></div>
+          <%= link_to 'Sales Reporting', sales_report_path, class: 'dropdown-item' %>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+          Admin Stuff
+        </a>
+        <div class="dropdown-menu">
+          <%= link_to 'Maintenance Mode', maintenance_mode_path, class: 'dropdown-item' %>
+          <%= link_to 'Edit Admin profile', admin_profile_admin_path(current_radmin.id), class: 'dropdown-item' %>
+          <%= link_to 'Sign out', destroy_radmin_session_path, class: 'dropdown-item' %>
+          <div class="dropdown-divider"></div>
+          <%= link_to 'Resque Dashboard', jobs_path, class: 'dropdown-item' %>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

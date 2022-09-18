@@ -2,22 +2,20 @@
   <div class="col-auto mr-auto">
     <h1><%= "#{@parts_list.product_name} - #{@parts_list.name}" %></h1>
   </div>
-  <div class="col-auto">
-    <%= link_to 'Edit', edit_parts_list_path(@parts_list), class: 'btn btn-primary' %>
-  </div>
 </div>
 <div class="row">
   <div class="col-7">
     <div class="card">
-      <div class="card-header">
-        <p class='font-weight-bold'>
-          Parts List -
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">
+          Parts List
           <% if @parts_list.approved? %>
-            <span class='happy'>APPROVED</span>
+            <span class='text-success'>APPROVED</span>
           <% else %>
-            <span class='sad'>NOT APPROVED</span>
+            <span class='text-danger'>NOT APPROVED</span>
           <% end %>
-        </p>
+        </b>
+        <%= link_to 'Edit', edit_parts_list_path(@parts_list), class: 'btn btn-primary' %>
       </div>
       <div class="card-body">
         <% if @parts_list.bricklink_xml.present? %>

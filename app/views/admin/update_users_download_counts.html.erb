@@ -7,19 +7,17 @@
   users know what has changed.
 </p>
 <br/>
-<br/>
-<%= form_for(:user, :url => {:action => :update_downloads_for_user}) do |f| %>
-<div class="field">
-  <%= f.label :model %>
-  <br/>
-  <%= f.select :model, @products, :prompt => true %>
-</div>
-<div class="field">
-  <%= f.label :message %>
-  <br/>
-  <%= f.text_area :message, rows: 15, cols:35 ,placeholder: "This model was updated because..." %>
-</div>
-<div class="actions">
-  <%= f.submit 'Update Count', :id => 'update_users_download_count_user_search_submit' %>
-</div>
+<%= form_for(:user, url: { action: :update_downloads_for_user }) do |f| %>
+  <div class="form-group">
+    <%= f.label :model %>
+    <br />
+    <%= f.select :model, @products, { prompt: true }, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :message %>
+    <%= f.text_area :message, rows: 5, placeholder: "This model was updated because...", class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.submit 'Update Count', id: 'update_users_download_count_user_search_submit', class: 'btn btn-primary' %>
+  </div>
 <% end %>

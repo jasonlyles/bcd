@@ -8,6 +8,21 @@
   }
 }
 
+body {
+  padding-top: 40px;
+}
+
+nav .navbar-nav li a {
+  font-size: 20px;
+}
+
+.link-unstyled,
+.link-unstyled:hover,
+.link-unstyled:link {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 .pagination a,
 .pagination span.current,
 .pagination span.gap {

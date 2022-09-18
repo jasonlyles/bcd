@@ -1,13 +1,19 @@
 <h1>Order Fulfillment</h1>
 <br/>
-<br/>
-ALL INCOMPLETE ORDERS
-<br/>
-<br/>
-<%= render 'order_fulfillment_table', orders: @incomplete_orders, paginate_it: true, shipping_statuses: @shipping_statuses %>
-<br/>
-<br/>
-LAST 10 COMPLETED ORDERS
-<br/>
-<br/>
-<%= render 'order_fulfillment_table', orders: @completed_orders, paginate_it: false, shipping_statuses: @shipping_statuses %>
+<div class="card">
+  <div class="card-header">
+    ALL INCOMPLETE ORDERS
+  </div>
+  <div class="card-body">
+    <%= render 'order_fulfillment_table', orders: @incomplete_orders, paginate_it: true, shipping_statuses: @shipping_statuses %>
+  </div>
+</div>
+<br />
+<div class="card">
+  <div class="card-header">
+    LAST 10 COMPLETED ORDERS
+  </div>
+  <div class="card-body">
+    <%= render 'order_fulfillment_table', orders: @completed_orders, paginate_it: false, shipping_statuses: @shipping_statuses %>
+  </div>
+</div>

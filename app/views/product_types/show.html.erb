@@ -1,31 +1,75 @@
-<p>
-  <b>Name:</b>
-  <%= @product_type.name %>
-</p>
-<p>
-  <b>Description:</b>
-  <%= @product_type.description %>
-</p>
-<p>
-  <b>Image:</b>
-  <%= @product_type.image %>
-</p>
-<p>
-  <b>Ready for public:</b>
-  <%= @product_type.ready_for_public %>
-</p>
-<p>
-  <b>Comes with title:</b>
-  <%= @product_type.comes_with_title %>
-</p>
-<p>
-  <b>Comes with description:</b>
-  <%= @product_type.comes_with_description %>
-</p>
-<p>
-  <b>Digital product:</b>
-  <%= @product_type.digital_product %>
-</p>
-<%= link_to 'Edit', edit_product_type_path(@product_type) %>
-\|
-<%= link_to 'Back', product_types_path %>
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= "Product Type: #{@product_type.name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-7">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Product Type</b>
+        <%= link_to 'Edit', edit_product_type_path(@product_type), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Description:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @product_type.description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Comes with Title:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @product_type.comes_with_title %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Comes with Description:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @product_type.comes_with_description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Digital Product?</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= decorate_boolean(@product_type.digital_product?) %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Ready for Public?</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= decorate_boolean(@product_type.ready_for_public?) %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', product_types_path %>
+  </div>
+  <div class="col-5">
+    <div class="card">
+      <div class="card-header">
+        <b class="mt-2">Image</b>
+      </div>
+      <div class="card-body">
+        <%= image_tag(@product_type.image.medium.url) %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -17,8 +17,6 @@
           <thead>
             <tr class="table-secondary">
               <th class="align-middle text-center">Title</th>
-              <th class="align-middle text-center">Description</th>
-              <th class="align-middle text-center">Body</th>
               <th class="align-middle text-center">Image</th>
               <th class="align-middle text-center">Link</th>
               <th class="align-middle text-center">Live?</th>
@@ -32,13 +30,7 @@
                   <%= link_to update.title, update %>
                 </td>
                 <td class="align-middle text-center">
-                  <%= snippet(update.description) if update.description %>
-                </td>
-                <td class="align-middle text-center">
-                  <%= snippet(update.body) if update.body %>
-                </td>
-                <td class="align-middle text-center">
-                  <%= update.image %>
+                  <%= update&.image&.file&.filename %>
                 </td>
                 <td class="align-middle text-center">
                   <%= update.link %>

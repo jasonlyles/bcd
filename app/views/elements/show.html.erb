@@ -2,15 +2,13 @@
   <div class="col-auto mr-auto">
     <h1><%= "#{@element.color_name} #{@element.part_name}" %></h1>
   </div>
-  <div class="col-auto">
-    <%= link_to 'Edit', edit_element_path(@element), class: 'btn btn-primary' %>
-  </div>
 </div>
 <div class="row">
   <div class="col-6">
     <div class="card">
-      <div class="card-header">
-        <b>Element</b>
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Element</b>
+        <%= link_to 'Edit', edit_element_path(@element), class: 'btn btn-primary' %>
       </div>
       <div class="card-body">
         <table>
@@ -20,7 +18,7 @@
             </td>
             <td></td>
             <td class="pl-4">
-              <%= @element.original_image_url %>
+              <%= link_to @element.original_image_url, @element.original_image_url, target: 'blank' %>
             </td>
           </tr>
           <tr>

@@ -133,7 +133,9 @@
                 <td></td>
                 <td>
                   <% @product.parts_lists.each do |parts_list| %>
+                    <%= decorate_boolean(parts_list.approved) %>
                     <%= link_to parts_list.name, parts_list_path(parts_list) %>
+                    <br />
                   <% end %>
                   <%= link_to 'Add Parts List', new_parts_list_path, class: 'btn btn-success mt-2' %>
                 </td>

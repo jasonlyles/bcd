@@ -1,33 +1,49 @@
-<%= form_for(@radmin, :url => update_admin_profile_admin_path, :html => { :method => :patch }) do |f| %>
-<p>
-  <%= f.label :email %>
-  <br/>
-  <%= f.text_field :email %>
-</p>
-<p>
-  <%= f.submit "Update Email" %>
-</p>
-<% end %>
+<h1>Edit Admin Profile</h1>
 <br/>
-<br/>
-<p></p>
-<%= form_for(@radmin, :url => update_admin_profile_admin_path, :html => { :method => :patch }) do |f| %>
-<p>
-<%= f.label :current_password %>
-<br/>
-<%= f.password_field :current_password %>
-</p>
-<p>
-<%= f.label :password, "New password" %>
-<br/>
-<%= f.password_field :password %>
-</p>
-<p>
-<%= f.label :password_confirmation, "Confirm new password" %>
-<br/>
-<%= f.password_field :password_confirmation %>
-</p>
-<p>
-<%= f.submit "Update Password" %>
-</p>
-<% end %>
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        <b>Email</b>
+      </div>
+      <div class="card-body">
+        <%= form_for(@radmin, url: update_admin_profile_admin_path, html: { method: :patch }) do |f| %>
+          <div class="form-group">
+            <%= f.label :email, class: 'form-label' %>
+            <%= f.text_field :email, class: 'form-control' %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Update Email', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        <b>Password</b>
+      </div>
+      <div class="card-body">
+        <%= form_for(@radmin, url: update_admin_profile_admin_path, html: { method: :patch }) do |f| %>
+          <div class="form-group">
+            <%= f.label :current_password, class: 'form-label' %>
+            <%= f.password_field :current_password, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :password, 'New password', class: 'form-label' %>
+            <%= f.password_field :password, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :password_confirmation, 'Confirm new password', class: 'form-label' %>
+            <%= f.password_field :password_confirmation, class: 'form-control' %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Update Password', class: 'btn btn-primary' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

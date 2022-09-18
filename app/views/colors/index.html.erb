@@ -30,7 +30,7 @@
             <% @colors.each do |color| %>
               <tr>
                 <td class="align-middle text-center">
-                  <%= color.name %>
+                  <%= link_to color.name, color %>
                 </td>
                 <td class="align-middle text-center">
                   <%= color.ldraw_id %>

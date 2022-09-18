@@ -19,36 +19,40 @@
 <% end %>
 <% total_revenue, total_quantity = 0,0 %>
   <br/>
-  <table class="sales_report_table">
-    <tr>
-      <td>Model</td>
-      <td>Quantity</td>
-      <td>Revenue</td>
-    </tr>
-    <% unless summaries.blank? %>
-      <% summaries.each do |item| %>
-        <% total_revenue += item[1]['revenue'] %>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="table-secondary">
+        <th class="align-middle text-center">Model</th>
+        <th class="align-middle text-center">Quantity</th>
+        <th class="align-middle text-center">Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless summaries.blank? %>
+        <% summaries.each do |item| %>
+          <% total_revenue += item[1]['revenue'] %>
           <% total_quantity += item[1]['qty'] %>
-            <% product = Product.find item[0] %>
-              <tr>
-                <td>
-                  <%= "#{product.product_code} #{product.name}" %>
-                </td>
-                <td>
-                  <%= item[1]['qty'] %>
-                </td>
-                <td>
-                  <%= number_to_currency(item[1]['revenue']) %>
-                </td>
-              </tr>
-            <% end %>
-          <% end %>
-        </table>
-        <br/>
-        <h2>Summary</h2>
-        <br/>
-        <b>Total Revenue:</b>
-        <%= number_to_currency(total_revenue) %>
-        <br/>
-        <b>Instructions Sold:</b>
-        <%= total_quantity %>
+          <% product = Product.find item[0] %>
+          <tr>
+            <td>
+              <%= "#{product.product_code} #{product.name}" %>
+            </td>
+            <td>
+              <%= item[1]['qty'] %>
+            </td>
+            <td>
+              <%= number_to_currency(item[1]['revenue']) %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <br/>
+  <h2>Summary</h2>
+  <br/>
+  <b>Total Revenue:</b>
+  <%= number_to_currency(total_revenue) %>
+  <br/>
+  <b>Instructions Sold:</b>
+  <%= total_quantity %>
