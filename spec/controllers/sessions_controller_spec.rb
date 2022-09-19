@@ -3,7 +3,7 @@ require 'spec_helper'
 describe SessionsController do
   describe "destroy" do
     it "should destroy the cart_id in session" do
-      @user = User.create!(:email => "charles@mcwoofay.net", :password => 'password', :tos_accepted => true)
+      @user = User.create!(email: "charles@mcwoofay.net", password: 'password', tos_accepted: true)
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
       @cart = FactoryGirl.create(:cart)

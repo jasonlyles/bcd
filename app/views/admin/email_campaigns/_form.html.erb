@@ -1,0 +1,54 @@
+<%= nested_form_for [:admin, email_campaign] do |f| %>
+  <div class="row">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-header">
+          <b>Email Campaign</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :description, 'Short description of the email. Ex. Email about new book', class: 'form-label' %>
+            <%= f.text_area :description, placeholder: "Brief description...", rows: 5, autofocus: true, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :subject, 'Email Subject Line', class: 'form-label' %>
+            <%= f.text_field :subject, placeholder: 'Check out the new book...', class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :message, class: 'form-label' %>
+            <%= f.text_area :message, placeholder: "Your message...", rows: 10, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :redirect_link, class: 'form-label' %>
+            <%= f.text_field :redirect_link, placeholder: '/CB002/colonial_revival_house', class: 'form-control' %>
+          </div>
+          <br />
+          <div class="form-group">
+            <% if email_campaign.image? && !email_campaign.image.blank? %>
+              <%= f.label :image, "Image", class: "form-label" %>
+              <br/>
+              <% if email_campaign.image_cache %>
+                <%= f.text_field :image_cache, :disabled => true, class: "form-control" %>
+              <% else %>
+                <%= f.text_field :image, :disabled => true, class: "form-control" %>
+              <% end %>
+            <% end %>
+
+            <%= f.label :image, "Image", class: "form-label" %>
+            <%= f.file_field :image, class: "form-control-file mt-2" %>
+            <%= f.hidden_field :image_cache %>
+            <% if email_campaign.image? %>
+              <div class="form-check mt-2">
+                <%= f.check_box :remove_image, class: "form-check-input" %>
+                <%= f.label :remove_image, "Delete Image", class: "form-check-label" %>
+              </div>
+            <% end %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

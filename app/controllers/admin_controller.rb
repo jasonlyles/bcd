@@ -14,7 +14,7 @@ class AdminController < ApplicationController
 
   # Quick fix until I fix namespacing controller/routing
   def index
-    redirect_to products_path
+    redirect_to admin_products_path
   end
 
   def gift_instructions

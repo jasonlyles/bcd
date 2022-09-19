@@ -41,23 +41,38 @@ BrickCity::Application.routes.draw do
   get 'mobile/*path', to: proc { [404, {}, ['']] }
   get 'hspcellmon123zz/*path', to: proc { [404, {}, ['']] } # Not sure if this is coming in as a hack attempt or what
 
-  resources :instant_payment_notifications, only: %i[index show create]
+  # For PayPal to send to us, sits outside the admin namespace
+  resources :instant_payment_notifications, only: %i[create]
 
-  # namespace :admin do
+  namespace :admin do
     resources :advertising_campaigns
-    resources :product_types
-    resources :partners
-    resources :updates
-    resources :images
+    resources :categories do
+      member do
+        get :subcategories
+      end
+    end
     resources :colors
-    resources :parts
     resources :elements do
       collection do
         post :find_or_create
       end
     end
+    resources :email_campaigns
+    resources :images
+    resources :instant_payment_notifications, only: %i[index show]
+    resources :partners
+    resources :parts
     resources :parts_lists
-  # end
+    resources :product_types
+    resources :products
+    resources :subcategories do
+      member do
+        get :model_code
+      end
+    end
+    resources :updates
+  end
+
 
   if Rails.env.development?
     # MailPreview routes
@@ -84,25 +99,6 @@ BrickCity::Application.routes.draw do
   get '/auth/:provider/callback' => 'authentications#create'
   get '/auth/failure' => 'authentications#failure'
 
-  resources :subcategories do
-    member do
-      get :model_code
-    end
-  end
-  resources :email_campaigns
-  patch '/send_marketing_emails' => 'email_campaigns#send_marketing_emails'
-  patch '/send_marketing_email_preview' => 'email_campaigns#send_marketing_email_preview'
-  get '/campaign/:guid' => 'email_campaigns#register_click_through_and_redirect'
-
-  resources :categories do
-    member do
-      get :subcategories
-    end
-  end
-  resources :products do
-    collection do
-    end
-  end
   resources :authentications, only: %i[create destroy] do
     collection do
       post :clear_authentications, as: :clear
@@ -119,6 +115,7 @@ BrickCity::Application.routes.draw do
     end
   end
 
+  # TODO: Some of these routes/actions probably belong in different controllers. Re-work them.
   get '/featured_products' => 'admin#featured_products'
   post '/gift_instructions' => 'admin#gift_instructions'
   post '/woofay/switch_maintenance_mode' => 'admin#switch_maintenance_mode'
@@ -139,7 +136,10 @@ BrickCity::Application.routes.draw do
   post 'sales_report_monthly_stats' => 'admin#sales_report_monthly_stats', :as => :sales_report_monthly_stats
   get '/order/:id', to: 'admin#order'
   get '/transactions_by_month', to: 'admin#transactions_by_month'
-  post '/retire_product', to: 'products#retire_product'
+
+  post '/retire_product', to: 'admin/products#retire_product'
+  patch '/send_marketing_emails' => 'admin/email_campaigns#send_marketing_emails'
+  patch '/send_marketing_email_preview' => 'admin/email_campaigns#send_marketing_email_preview'
 
   # Static routes
   get 'maintenance', to: 'static#maintenance'
@@ -189,6 +189,9 @@ BrickCity::Application.routes.draw do
   post 'save_order', to: 'store#save_order'
   post 'submit_order', to: 'store#submit_order'
   post 'validate_street_address', to: 'store#validate_street_address'
+
+  # misc routes
+  get '/campaign/:guid' => 'email_campaigns#register_click_through_and_redirect'
 
   get 'product_details/:product_code/:product_name', to: 'store#product_details', path: ':product_code/:product_name'
 

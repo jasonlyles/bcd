@@ -1,0 +1,104 @@
+<div class="card">
+  <div class="card-header">
+    Listing products
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @products %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Product', new_admin_product_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center"><%= sort_link(@q, :product_code, 'Product') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :product_type_name, 'Type') %></th>
+              <th class="align-middle text-center">Qty</th>
+              <th class="align-middle text-center">Imgs</th>
+              <th class="align-middle text-center">Discount%</th>
+              <th class="align-middle text-center"><%= sort_link(@q, :price) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :ready_for_public, 'Live?') %></th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @products.each do |product| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to "#{product.product_code} #{product.name}", admin_product_path(product) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= product.product_type.name %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= product.product_type.name == 'Instructions' ? 'N/A' : product.quantity %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= product.images.count %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= product.discount_percentage %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= number_to_currency(product.price) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(product.ready_for_public?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_admin_product_path(product) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), [:admin, product], data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @products %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for(@q, url: 'products') do |f| %>
+              <div class="form-group">
+                <%= f.label :product_code_or_name_cont %>
+                <%= f.search_field :product_code_or_name_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :subcategory_id_eq, 'Category/Subcategory' %>
+                <%= f.collection_select :subcategory_id_eq, Subcategory.all.includes(:category), "id", "name_and_category_name", { include_blank: true }, class: 'form-control' %>
+              </div>
+              <div class="form-group">
+                <%= f.label :product_type_id_eq, 'Product Type' %><br />
+                <%= f.collection_select :product_type_id_eq, ProductType.all, :id, :name, { include_blank: true }, class: 'form-control' %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:discount_percentage_gt, { class: "form-check-input", checked: params['q'] && params['q']['discount_percentage_gt'] == '0' }, '0', '') %>
+                <%= f.label :discount_percentage_gt, 'Discounted', class: "form-check-label" %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:ready_for_public_true, { class: "form-check-input", checked: params['q'].blank? || (params['q'] && params['q']['ready_for_public_true'] == '1') }) %>
+                <%= f.label :ready_for_public_true, 'Live', class: "form-check-label" %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:free_true, { class: "form-check-input", checked: params['q'] && params['q']['free_true'] == '1' }) %>
+                <%= f.label :free_true, 'Free', class: "form-check-label" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

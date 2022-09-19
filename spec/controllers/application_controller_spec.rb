@@ -109,15 +109,6 @@ describe ApplicationController do
     end
   end
 
-  describe "get_categories" do
-    it "should get live categories" do
-      FactoryGirl.create(:category)
-      controller.send(:get_categories)
-
-      expect(assigns(:categories)).to_not be_nil
-    end
-  end
-
   describe 'get_categories_for_admin' do
     it "should populate @categories" do
       FactoryGirl.create(:category)

@@ -12,24 +12,24 @@
         </a>
         <div class="dropdown-menu">
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Products', products_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_product_path, class: 'link-unstyled' %>
+            <%= link_to 'Products', admin_products_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_product_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Categories', categories_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_category_path, class: 'link-unstyled' %>
+            <%= link_to 'Categories', admin_categories_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_category_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Subcategories', subcategories_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_subcategory_path, class: 'link-unstyled' %>
+            <%= link_to 'Subcategories', admin_subcategories_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_subcategory_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Product Types', product_types_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_product_type_path, class: 'link-unstyled' %>
+            <%= link_to 'Product Types', admin_product_types_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_product_type_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Images', images_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_image_path, class: 'link-unstyled' %>
+            <%= link_to 'Images', admin_images_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_image_path, class: 'link-unstyled' %>
           </div>
         </div>
       </li>
@@ -40,20 +40,20 @@
         </a>
         <div class="dropdown-menu">
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Parts Lists', parts_lists_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_parts_list_path, class: 'link-unstyled' %>
+            <%= link_to 'Parts Lists', admin_parts_lists_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_parts_list_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Elements', elements_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_element_path, class: 'link-unstyled' %>
+            <%= link_to 'Elements', admin_elements_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_element_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Parts', parts_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_part_path, class: 'link-unstyled' %>
+            <%= link_to 'Parts', admin_parts_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_part_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Colors', colors_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_color_path, class: 'link-unstyled' %>
+            <%= link_to 'Colors', admin_colors_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_color_path, class: 'link-unstyled' %>
           </div>
         </div>
       </li>
@@ -64,20 +64,20 @@
         </a>
         <div class="dropdown-menu">
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Updates', updates_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_update_path, class: 'link-unstyled' %>
+            <%= link_to 'Updates', admin_updates_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_update_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Partners', partners_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_partner_path, class: 'link-unstyled' %>
+            <%= link_to 'Partners', admin_partners_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_partner_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Ad Campaigns', advertising_campaigns_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_advertising_campaign_path, class: 'link-unstyled' %>
+            <%= link_to 'Ad Campaigns', admin_advertising_campaigns_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_advertising_campaign_path, class: 'link-unstyled' %>
           </div>
           <div class='dropdown-item d-flex justify-content-between'>
-            <%= link_to 'Marketing Emails', email_campaigns_path, class: 'dropdown-item' %>
-            <%= link_to '+', new_email_campaign_path, class: 'link-unstyled' %>
+            <%= link_to 'Marketing Emails', admin_email_campaigns_path, class: 'dropdown-item' %>
+            <%= link_to '+', new_admin_email_campaign_path, class: 'link-unstyled' %>
           </div>
           <div class="dropdown-divider"></div>
           <%= link_to 'New Product Notification', new_product_notification_path, class: 'dropdown-item' %>
@@ -102,6 +102,7 @@
         <div class="dropdown-menu">
           <%= link_to 'Order Lookup', order_info_path, class: 'dropdown-item' %>
           <%= link_to 'Order Fulfillment', order_fulfillment_path, class: 'dropdown-item' %>
+          <%= link_to 'PayPal IPNs', admin_instant_payment_notifications_path, class: 'dropdown-item' %>
           <div class="dropdown-divider"></div>
           <%= link_to 'Sales Reporting', sales_report_path, class: 'dropdown-item' %>
         </div>

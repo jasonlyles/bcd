@@ -19,10 +19,10 @@ describe Order do
       @product_type = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
       @category = FactoryGirl.create(:category)
       @subcategory = FactoryGirl.create(:subcategory)
-      FactoryGirl.create(:product)
+      FactoryGirl.create(:product) # create a base model for physical product
       product2 = FactoryGirl.create(:physical_product, :product_type_id => @product_type.id)
-      li1 = LineItem.new :product_id => product2.id, :quantity => 1, :total_price => 5
-      order = Order.new
+      li1 = LineItem.create :product_id => product2.id, :quantity => 1, :total_price => 5
+      order = Order.create
       order.line_items << li1
 
       expect(order.has_physical_item?).to eq(true)

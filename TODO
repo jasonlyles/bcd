@@ -13,8 +13,8 @@ DONE 2. Build out services for calls to 3rd parties and restrict the calls
 DONE 3. Build out service for creating parts lists, moving it out of the job it's in currently.
 DONE 4. Add interface for uploading/editing parts lists.
 DONE 5. Re-style backend pages
-6. Move admin controllers/views under an admin namespace. Move actions around in controllers
-  from "customer-facing" controllers to admin controllers and vice versa as necessary.
+DONE 6. Move admin controllers/views under an admin namespace. Move actions around in controllers
+    from "customer-facing" controllers to admin controllers and vice versa as necessary.
 7. Create user-facing parts list page.
 8. Be 100% that:
   a. Parts can't be deleted if they belong to an element

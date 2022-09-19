@@ -1,0 +1,54 @@
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= "#{@subcategory.code} #{@subcategory.name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Subcategory</b>
+        <%= link_to 'Edit', edit_admin_subcategory_path(@subcategory), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Category:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @subcategory.category.name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Description:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @subcategory.description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Products:</b>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <% @subcategory.products.each do |product| %>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="pl-4">
+                <%= link_to "#{product.product_code} #{product.name}", admin_product_path(product) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', admin_subcategories_path %>
+  </div>
+</div>
