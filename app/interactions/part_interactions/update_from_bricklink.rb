@@ -16,7 +16,7 @@ module PartInteractions
         @part.save!
         Rails.logger.info("PartInteractions::UpdateFromBricklink::#{@part.id} updated")
       else
-        Rails.logger.error("PartInteractions::UpdateFromBricklink::#{@part.id} Bricklink called - Could not find Bricklink data")
+        self.error = "PartInteractions::UpdateFromBricklink::#{@part.id} Bricklink called - Could not find Bricklink data"
       end
     rescue StandardError => e
       self.error = "Bricklink Update Failure. LDraw ID: #{@part.ldraw_id} ERROR: #{e.message}"

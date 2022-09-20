@@ -26,7 +26,7 @@ module PartInteractions
         @part.save!
         Rails.logger.info("PartInteractions::UpdateFromRebrickable::#{@part.id} updated")
       else
-        Rails.logger.error("PartInteractions::UpdateFromRebrickable::#{@part.id} Rebrickable called - Could not find Rebrickable data")
+        self.error = "PartInteractions::UpdateFromRebrickable::#{@part.id} Rebrickable called - Could not find Rebrickable data"
       end
     rescue StandardError => e
       self.error = "Rebrickable Update Failure. LDraw ID: #{@part.ldraw_id} ERROR: #{e.message}"

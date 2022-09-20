@@ -42,6 +42,12 @@ class Admin::ColorsController < AdminController
   # DELETE /colors/1
   def destroy
     @color.destroy
+    if @color.errors.present?
+      flash[:alert] = @color.errors[:base]&.join(', ')
+    else
+      flash[:notice] = "#{@color.name} deleted"
+    end
+
     redirect_to(admin_colors_url)
   end
 

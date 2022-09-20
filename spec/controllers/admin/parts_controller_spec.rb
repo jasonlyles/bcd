@@ -168,4 +168,60 @@ describe Admin::PartsController do
       expect(response).to redirect_to('/radmins/sign_in')
     end
   end
+
+  describe "PUT update_via_bricklink" do
+    context "update from bricklink succeeded" do
+      it 'should flash a nice message and redirect back' do
+        request.env['HTTP_REFERER'] = '/'
+        part = FactoryGirl.create(:part)
+        interactor = Struct.new(:error, :succeeded?)
+        expect(PartInteractions::UpdateFromBricklink).to receive(:run).and_return(interactor.new(nil, true))
+        put :update_via_bricklink, id: part.id
+
+        expect(flash[:notice]).to eq('Successfully updated part via BrickLink')
+        expect(response).to redirect_to('/')
+      end
+    end
+
+    context "update from bricklink failed" do
+      it 'should flash the error to the user and redirect back' do
+        request.env['HTTP_REFERER'] = '/'
+        part = FactoryGirl.create(:part)
+        interactor = Struct.new(:error, :succeeded?)
+        expect(PartInteractions::UpdateFromBricklink).to receive(:run).and_return(interactor.new('BrickLink is down', false))
+        put :update_via_bricklink, id: part.id
+
+        expect(flash[:alert]).to eq('BrickLink is down')
+        expect(response).to redirect_to('/')
+      end
+    end
+  end
+
+  describe "PUT update_via_rebrickable" do
+    context "update from rebrickable succeeded" do
+      it 'should flash a nice message and redirect back' do
+        request.env['HTTP_REFERER'] = '/'
+        part = FactoryGirl.create(:part)
+        interactor = Struct.new(:error, :succeeded?)
+        expect(PartInteractions::UpdateFromRebrickable).to receive(:run).and_return(interactor.new(nil, true))
+        put :update_via_rebrickable, id: part.id
+
+        expect(flash[:notice]).to eq('Successfully updated part via Rebrickable')
+        expect(response).to redirect_to('/')
+      end
+    end
+
+    context "update from rebrickable failed" do
+      it 'should flash the error to the user and redirect back' do
+        request.env['HTTP_REFERER'] = '/'
+        part = FactoryGirl.create(:part)
+        interactor = Struct.new(:error, :succeeded?)
+        expect(PartInteractions::UpdateFromRebrickable).to receive(:run).and_return(interactor.new('Rebrickable is down', false))
+        put :update_via_rebrickable, id: part.id
+
+        expect(flash[:alert]).to eq('Rebrickable is down')
+        expect(response).to redirect_to('/')
+      end
+    end
+  end
 end

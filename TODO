@@ -15,20 +15,22 @@ DONE 4. Add interface for uploading/editing parts lists.
 DONE 5. Re-style backend pages
 DONE 6. Move admin controllers/views under an admin namespace. Move actions around in controllers
     from "customer-facing" controllers to admin controllers and vice versa as necessary.
-7. Create user-facing parts list page.
-8. Be 100% that:
+DONE 7. Be 100% that:
   a. Parts can't be deleted if they belong to an element
   b. Colors can't be deleted if they belong to an element
   c. Elements can't be deleted if they belong to a lot
-9. Parts autocomplete in element form should have ldraw id in params at the end that
+DONE 8. When creating/updating a part via the new/edit form, need to check BL and Rebrickable for info.
+DONE 9. Add update from BL and update from rebrickable buttons to parts show page.
+10. Create user-facing parts list page.
+11. Parts autocomplete in element form should have ldraw id in params at the end that
   gets stripped out before finding by name. Doing this should help us distinguish
   between different generations when selecting parts.
-10. Add update from BL and update from rebrickable buttons to parts show and/or index pages.
-11. Take a look at file upload sections of forms. Might need to tweak logic if there is a file uploaded already.
-12. Would be nice to have something that prompted the admin to update users about a PDF/parts_list update
+12. Take a look at file upload sections of forms. Might need to tweak logic if there is a file uploaded already.
+13. Would be nice to have something that prompted the admin to update users about a PDF/parts_list update
     whenever one of those things got updated. Might be nice to include this in a generic notifications center.
-13. Maybe want to add something to the elements form to try to re-fetch images from BL/Rebrickable. Maybe just having the image upload is good enough.
-14. Make sure all parts_lists can be generated based off of existing BL XML files, and
+14. Maybe want to add something to the elements form to try to re-fetch images from BL/Rebrickable.
+    Maybe just having the image upload is good enough.
+15. Make sure all parts_lists can be generated based off of existing BL XML files, and
     time it so I know what I can expect for downtime when I do this in prod. Probably want
     to make it so I can upload all these new-style parts lists in prod before I switch users
     over to using new-style parts lists.

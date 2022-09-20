@@ -149,17 +149,24 @@ describe Admin::ElementsController do
 
   describe "DELETE #destroy" do
     it "destroys the requested element" do
+      FactoryGirl.create(:part, id: 1, name: 'Fake Part')
+      FactoryGirl.create(:color, id: 2, bl_name: 'Fake Color')
       element = Element.create! valid_attributes
       expect {
         delete :destroy, id: element.to_param
       }.to change(Element, :count).by(-1)
+
+      expect(flash[:notice]).to eq('Fake Color Fake Part deleted')
     end
 
     it "redirects to the elements list" do
+      FactoryGirl.create(:part, id: 1, name: 'Fake Part')
+      FactoryGirl.create(:color, id: 2, bl_name: 'Fake Color')
       element = Element.create! valid_attributes
       delete :destroy, id: element.to_param
 
       expect(response).to redirect_to(admin_elements_url)
+      expect(flash[:notice]).to eq('Fake Color Fake Part deleted')
     end
   end
 

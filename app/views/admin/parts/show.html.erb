@@ -4,7 +4,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-6">
+  <div class="col-7">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
         <b class="mt-2">Part</b>
@@ -113,10 +113,14 @@
           </tr>
         </table>
       </div>
+      <div class="mb-3 ml-3">
+        <%= link_to 'Update via BrickLink', update_via_bricklink_admin_part_path(@part), method: :put, class: 'btn btn-primary' %>
+        <%= link_to 'Update via Rebrickable', update_via_rebrickable_admin_part_path(@part), method: :put, class: 'btn btn-primary' %>
+      </div>
     </div>
     <%= link_to 'Back to Index', admin_parts_path %>
   </div>
-  <div class="col-6">
+  <div class="col-5">
     <div class="card">
       <div class="card-header">
         <b>Images</b>

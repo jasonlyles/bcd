@@ -47,6 +47,11 @@ class Admin::ElementsController < AdminController
   # DELETE /elements/1
   def destroy
     @element.destroy
+    if @element.errors.present?
+      flash[:alert] = @element.errors[:base]&.join(', ')
+    else
+      flash[:notice] = "#{@element.color.bl_name} #{@element.part.name} deleted"
+    end
     redirect_to(admin_elements_url)
   end
 

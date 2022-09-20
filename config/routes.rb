@@ -61,7 +61,12 @@ BrickCity::Application.routes.draw do
     resources :images
     resources :instant_payment_notifications, only: %i[index show]
     resources :partners
-    resources :parts
+    resources :parts do
+      member do
+        put :update_via_bricklink
+        put :update_via_rebrickable
+      end
+    end
     resources :parts_lists
     resources :product_types
     resources :products
