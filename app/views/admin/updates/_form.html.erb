@@ -20,20 +20,28 @@
               <%= f.label :image, "Image", class: "form-label" %>
               <br/>
               <% if update.image_cache %>
-                <%= f.text_field :image_cache, :disabled => true, class: "form-control" %>
+                <%= f.text_field :image_cache, disabled: true, class: "form-control" %>
               <% else %>
-                <%= f.text_field :image, :disabled => true, class: "form-control" %>
+                <%= f.text_field :image, disabled: true, class: "form-control" %>
+              <% end %>
+              <br />
+              <% if update.image_processing? %>
+                Image is currently being processed. Check back in a few seconds.
+              <% else %>
+                <%= image_tag(update.image.medium.url) %>
               <% end %>
             <% end %>
 
-            <%= f.label :image, "Image", class: "form-label" %>
-            <%= f.file_field :image, class: "form-control-file mt-2" %>
-            <%= f.hidden_field :image_cache %>
             <% if update.image? %>
               <div class="form-check mt-2">
                 <%= f.check_box :remove_image, class: "form-check-input" %>
                 <%= f.label :remove_image, "Delete Image", class: "form-check-label" %>
               </div>
+            <% else %>
+              <%= f.label :image, "Image", class: "form-label" %>
+              <br />
+              <%= f.file_field :image, class: "form-control-file" %>
+              <%= f.hidden_field :image_cache %>
             <% end %>
           </div>
           <div class="form-group mt-4">

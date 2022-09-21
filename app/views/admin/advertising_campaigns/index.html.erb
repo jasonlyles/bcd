@@ -26,7 +26,7 @@
             <% @advertising_campaigns.each do |advertising_campaign| %>
               <tr>
                 <td class="align-middle text-center">
-                  <%= link_to advertising_campaign.partner.name, advertising_campaign.partner %>
+                  <%= link_to advertising_campaign.partner.name, [:admin, advertising_campaign.partner] %>
                 </td>
                 <td class="align-middle text-center">
                   <%= link_to advertising_campaign.reference_code, admin_advertising_campaign_path(advertising_campaign) %>

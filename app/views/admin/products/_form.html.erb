@@ -123,9 +123,10 @@
               <% product.parts_lists.each do |parts_list| %>
                 <%= decorate_boolean(parts_list.approved) %>
                 &nbsp;
-                <%= link_to parts_list.name, parts_list_path(parts_list), target: '_blank' %>
+                <%= link_to parts_list.name, admin_parts_list_path(parts_list), target: '_blank' %>
                 <br />
               <% end %>
+              <br />
               <%= link_to 'Add Parts List', new_admin_parts_list_path, target: '_blank', class: 'btn btn-primary mt-2' %>
             </div>
           <% end %>
