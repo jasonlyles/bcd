@@ -107,6 +107,13 @@
           <%= link_to 'Sales Reporting', sales_report_path, class: 'dropdown-item' %>
         </div>
       </li>
+      <li class="nav-item">
+          <% if BackendNotification.active_notifications.count > 0 %>
+            <%= link_to raw('Notifications <i class="fas fa-exclamation-circle text-danger"></i>'), admin_backend_notifications_path, class: "nav-link border-1 shadow" %>
+          <% else %>
+            <%= link_to 'Notifications', admin_backend_notifications_path, class: "nav-link" %>
+          <% end %>
+      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
           Admin Stuff

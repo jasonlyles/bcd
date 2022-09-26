@@ -3,7 +3,7 @@
     <h1><%= @product.code_and_name %></h1>
   </div>
   <div class="col-auto">
-    <%= link_to "Add Image", new_image_path(product_id: @product.id), class: 'btn btn-primary' %>
+    <%= link_to "Add Image", new_admin_image_path(product_id: @product.id), class: 'btn btn-primary' %>
     <%= link_to 'Edit', edit_admin_product_path(@product), class: 'btn btn-primary' %>
     <%= link_to 'Add Derivative Product', new_admin_product_path(:product_code => @product.product_code), class: 'btn btn-primary' %>
   </div>

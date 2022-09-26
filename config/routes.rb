@@ -46,6 +46,11 @@ BrickCity::Application.routes.draw do
 
   namespace :admin do
     resources :advertising_campaigns
+    resources :backend_notifications, only: %i[index], path: 'notifications' do
+      member do
+        put :dismiss
+      end
+    end
     resources :categories do
       member do
         get :subcategories
