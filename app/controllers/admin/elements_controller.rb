@@ -56,7 +56,10 @@ class Admin::ElementsController < AdminController
   end
 
   def find_or_create
-    part_id = Part.find_by(name: params[:part_name]).ldraw_id
+    # Strip the BL ID/ Ldraw ID in parens off the end that are used to help the
+    # user decide if this is the generation of the part they want.
+    part_name = params[:part_name].gsub(/\(\w+\/\w+\)$/, '').strip
+    part_id = Part.find_by(name: part_name).ldraw_id
     color_id = Color.find(params[:color_id]).ldraw_id
 
     element_key = "#{part_id}_#{color_id}"

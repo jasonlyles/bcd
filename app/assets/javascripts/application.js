@@ -135,7 +135,7 @@ function populateElementData(selectElement, partName, colorId) {
     },
     cache: false,
     type: 'POST',
-    url: '/elements/find_or_create.json',
+    url: '/admin/elements/find_or_create.json',
     context: selectElement,
     error: function(XMLHttpRequest, errorTextStatus, error) {
       alert("Failed to Update : " + errorTextStatus + " ; " + error);
@@ -200,7 +200,7 @@ $(function() {
       $.ajax({
         dataType: "json",
         cache: false,
-        url: '/categories/' + id_value_string + '/subcategories.json',
+        url: '/admin/categories/' + id_value_string + '/subcategories.json',
         timeout: 2000,
         error: function(XMLHttpRequest, errorTextStatus, error) {
           alert("Failed to submit : " + errorTextStatus + " ;" + error);

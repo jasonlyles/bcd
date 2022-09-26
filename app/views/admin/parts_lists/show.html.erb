@@ -22,13 +22,13 @@
           <div class="card">
             <div class="card-header">
               <p>
-                <span class='font-weight-bold'>Initial BrickLink XML</span> (for troubleshooting)
+                <span class='font-weight-bold'>Initial BL XML</span> (for troubleshooting) NOT THE FINAL XML!!!
                 <a data-toggle="collapse" href="#bricklink_xml" role="button" aria-expanded="false" aria-controls="bricklink_xml">
                   Toggle
                 </a>
               </p>
             </div>
-            <div id="bricklink_xml" class="card-body collapse show">
+            <div id="bricklink_xml" class="card-body collapse hide">
               <pre>
                 <%= Nokogiri::XML(@parts_list.bricklink_xml).root %>
               </pre>
@@ -47,7 +47,7 @@
                 </a>
               </p>
             </div>
-            <div id="ldr" class="card-body collapse show">
+            <div id="ldr" class="card-body collapse hide">
               <%= simple_format(@parts_list.ldr) %>
             </div>
           </div>
@@ -57,13 +57,13 @@
           <div class="card">
             <div class="card-header">
               <p>
-                <span class='font-weight-bold'>Initial Parts Hash</span> (for troubleshooting)
+                <span class='font-weight-bold'>Initial Parts Hash</span> (for troubleshooting) NOT FINAL!!!
                 <a data-toggle="collapse" href="#parts" role="button" aria-expanded="false" aria-controls="parts">
                   Toggle
                 </a>
               </p>
             </div>
-            <div id="parts" class="card-body collapse show">
+            <div id="parts" class="card-body collapse hide">
               <%== ap(@parts_list.parts, indent: -2, plain: true) %>
             </div>
           </div>

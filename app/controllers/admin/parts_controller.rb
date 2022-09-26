@@ -6,6 +6,7 @@ class Admin::PartsController < AdminController
                # If search term is a number, look for ldraw or bl or lego id or alternate_nos
                # If it's letters/a word, use the name_cont
                # First, check for an integer
+               # This is used by the autocomplete so I can search by name or Ldraw/BL/Lego ID
                if params[:term].to_i.to_s == params[:term]
                  {
                   "ldraw_id_or_bl_id_or_lego_id_or_alternate_nos_cont" => params[:term]
@@ -22,7 +23,7 @@ class Admin::PartsController < AdminController
     @parts = @q.result.order("name").page(params[:page]).per(20)
     respond_to do |format|
       format.html
-      format.json { render json: @parts.map { |p| p['name'] } }
+      format.json { render json: @parts.map { |p| p.name_and_ids } }
     end
   end
 

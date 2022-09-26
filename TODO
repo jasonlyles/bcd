@@ -24,10 +24,10 @@ DONE 9. Add update from BL and update from rebrickable buttons to parts show pag
 DONE 10. Take a look at file upload sections of forms. Might need to tweak logic if there is a file uploaded already.
 DONE 11. Would be nice to have something that prompted the admin to update users about a PDF/parts_list update
     whenever one of those things got updated. Might be nice to include this in a generic notifications center.
-12. Create user-facing parts list page.
-13. Parts autocomplete in element form should have ldraw id in params at the end that
-  gets stripped out before finding by name. Doing this should help us distinguish
-  between different generations when selecting parts.
+DONE 12. Parts autocomplete in element form should have ldraw id in params at the end that
+      gets stripped out before finding by name. Doing this should help us distinguish
+      between different generations when selecting parts.
+13. Create user-facing parts list page.
 14. Maybe want to add something to the elements form to try to re-fetch images from BL/Rebrickable.
     Maybe just having the image upload is good enough.
 15. Make sure all parts_lists can be generated based off of existing BL XML files, and
