@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220925200835) do
+ActiveRecord::Schema.define(version: 20221002153104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -364,6 +364,18 @@ ActiveRecord::Schema.define(version: 20220925200835) do
     t.datetime "updated_at"
     t.boolean  "image_processing", default: false
   end
+
+  create_table "user_parts_lists", force: :cascade do |t|
+    t.integer  "parts_list_id"
+    t.integer  "user_id"
+    t.text     "values"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_parts_lists", ["parts_list_id", "user_id"], name: "index_user_parts_lists_on_parts_list_id_and_user_id", unique: true, using: :btree
+  add_index "user_parts_lists", ["parts_list_id"], name: "index_user_parts_lists_on_parts_list_id", using: :btree
+  add_index "user_parts_lists", ["user_id"], name: "index_user_parts_lists_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                             default: "",    null: false

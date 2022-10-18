@@ -44,7 +44,7 @@
                 <td class="align-middle text-center">
                   <% if !product_info.parts_list_ids.blank? %>
                     <% product_info.parts_list_ids.each_with_index do |parts_list_id, index| %>
-                      <%= link_to "Parts List #{index+1}", root_path %>
+                      <%= link_to "Parts List #{index+1}", parts_list_path(parts_list_id) %>
                     <% end %>
                   <% end %>
                 </td>

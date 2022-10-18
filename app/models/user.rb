@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   has_many :authentications, :dependent => :destroy
   has_many :downloads
   has_one :cart
+  has_many :user_parts_lists
+  has_many :parts_lists, through: :user_parts_lists
 
   validates :tos_accepted, :acceptance => {:accept => true}
 
@@ -108,5 +110,10 @@ class User < ActiveRecord::Base
 
   def self.who_get_important_emails
     User.where("email_preference in ('1','2') and account_status <> 'C'").pluck(:email, :guid, :unsubscribe_token)
+  end
+
+  def has_access_to_parts_list?(parts_list_id)
+    product_id = PartsList.find(parts_list_id)&.product_id
+    product_id.blank? ? false : owns_product?(product_id)
   end
 end

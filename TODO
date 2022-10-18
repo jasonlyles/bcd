@@ -27,17 +27,30 @@ DONE 11. Would be nice to have something that prompted the admin to update users
 DONE 12. Parts autocomplete in element form should have ldraw id in params at the end that
       gets stripped out before finding by name. Doing this should help us distinguish
       between different generations when selecting parts.
-13. Create user-facing parts list page.
-14. Maybe want to add something to the elements form to try to re-fetch images from BL/Rebrickable.
-    Maybe just having the image upload is good enough.
-15. Make sure all parts_lists can be generated based off of existing BL XML files, and
+13. Make sure all parts_lists can be generated based off of existing BL XML files, and
     time it so I know what I can expect for downtime when I do this in prod. Probably want
     to make it so I can upload all these new-style parts lists in prod before I switch users
     over to using new-style parts lists.
+14. Add ability to add notes to a lot. See the flex hoses on
+    file:///Users/jasonlyles/Dropbox/BCD/final_model_files/city/buildings/cb030_commercial_pack_2/commercial_pack_2.html
+    to see why.
 
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
 
 RESKIN:
+
+* Phase 2 of new parts list:
+  a. Maybe have a recommended part condition and an option for the "assemble xml"
+     form in addition to "new" and "new or used" to "recommended condition". That will
+     recommend new for some and used for others. We would want to recommend used on those
+     elements that have gotten rare and are easier/much cheaper to find used. This would of
+     course require getting some data from Bricklink and analyzing it to automate
+     recommendation of a condition. N for new, U for used, nothing for no specified condition.
+     Could maybe use the BrickLink.get_price_guide method and call it on each element
+     via some regularly scheduled task to update prices. Not sure if this returns
+     number of elements for sale though.
+  b. Add a copy to clipboard button for the textarea (Might need access to a later version of javascript to accomplish this.)
+  c. Maybe I can use the REMARKS field of the BL xml for any notes about the lot? idk
 
 * Maybe don't have so much in the way of updates on the front page, and maybe just display
   the products for sale, in order of most popular. Idk that anyone wants to be going to all
@@ -50,6 +63,9 @@ RESKIN:
 * On the Order History page, orders with 'Gift' status are showing red, and orders with no status are showing red,
   but there is no 'email us about the issue' button
 * use css clip-path to make some images Lego-shaped? https://bennettfeely.com/clippy/
+  Figured out a lego-ish clip-path:
+  <div class='p-0' style='<%= "background-color: #605C5B;width: 151px;height: 151px;clip-path: polygon(0% 100%, 100% 100%, 100% 67%, 95% 67%, 95% 60%, 80% 60%, 80% 67%, 70% 67%, 70% 60%, 55% 60%, 55% 67%, 45% 67%, 45% 60%, 30% 60%, 30% 67%, 20% 67%, 20% 60%, 5% 60%, 5% 67%, 0% 67%);"%>'>
+    <div class='p-0' style='<%= "background-color: ##{color.ldraw_rgb};width: 150px;height: 150px;clip-path: polygon(0% 100%, 100% 100%, 100% 67%, 95% 67%, 95% 60%, 80% 60%, 80% 67%, 70% 67%, 70% 60%, 55% 60%, 55% 67%, 45% 67%, 45% 60%, 30% 60%, 30% 67%, 20% 67%, 20% 60%, 5% 60%, 5% 67%, 0% 67%);"%>'>
 * Maybe replace some logo jpgs with svgs: https://worldvectorlogo.com/
 
 * On index page, free instructions image needs to scale better. At medium?, it gets too small.

@@ -3,6 +3,7 @@ class PartsList < ActiveRecord::Base
   belongs_to :product
   has_many :lots
   has_many :elements, through: :lots
+  has_many :user_parts_lists
   accepts_nested_attributes_for :lots, allow_destroy: true
 
   validates :name, presence: true

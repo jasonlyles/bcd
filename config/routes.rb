@@ -125,6 +125,9 @@ BrickCity::Application.routes.draw do
     end
   end
 
+  resources :parts_lists, only: %i[show]
+  resources :user_parts_lists, only: %i[update]
+
   # TODO: Some of these routes/actions probably belong in different controllers. Re-work them.
   get '/featured_products' => 'admin#featured_products'
   post '/gift_instructions' => 'admin#gift_instructions'
