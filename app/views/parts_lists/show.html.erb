@@ -44,6 +44,10 @@
               </td>
               <td class="align-middle text-center kaffee">
                 <%= part.name %>
+                <% if lot.note.present? %>
+                  <br />
+                  <%= lot.note %>
+                <% end %>
               </td>
               <td class="align-middle text-center kaffee">
                 <%= lot.quantity %>

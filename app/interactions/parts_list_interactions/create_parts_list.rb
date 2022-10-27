@@ -38,7 +38,10 @@
 
 module PartsListInteractions
   class CreatePartsList < BasePartsListInteraction
+    attr_accessor :errors
+
     def run
+      self.errors = []
       parts_list = PartsList.find(@parts_list_id)
       parts = if parts_list.bricklink_xml.present?
                 BricklinkXmlParser.new(parts_list.bricklink_xml).parse
@@ -54,26 +57,33 @@ module PartsListInteractions
         # generated will reference image by filename, so it will be pulling the guid,
         # which conveniently is already being stored for the element.
         # Not sure I'm going to do the spritesheet
-        part = Part.find_or_create_via_external(key) # TODO: Pass along whether this is an LSynth part or not.
-        element = Element.find_or_create_via_external(key)
-        color = Color.find(element.color_id)
+        begin
+          part = Part.find_or_create_via_external(key) # TODO: Pass along whether this is an LSynth part or not.
+          element = Element.find_or_create_via_external(key)
+          color = Color.find(element.color_id)
 
-        parts[key]['color_name'] = color.bl_name
-        parts[key]['part_name'] = part.name
-        parts[key]['bl_part_num'] = part.bl_id
-        parts[key]['guid'] = element.guid
-        parts[key]['image_url'] = element.image.url
+          parts[key]['color_name'] = color.bl_name
+          parts[key]['part_name'] = part.name
+          parts[key]['bl_part_num'] = part.bl_id
+          parts[key]['guid'] = element.guid
+          parts[key]['image_url'] = element.image.url
 
-        Lot.create(parts_list_id: parts_list.id, element_id: element.id, quantity: values['quantity'])
+          Lot.create(parts_list_id: parts_list.id, element_id: element.id, quantity: values['quantity'])
+        rescue => e
+          self.error = e
+          self.errors << e
+          Rails.logger.error("PartsList::CreatePartsList::Part::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
+        end
       end
 
       # TODO: By the time I get here, I should have completely assembled the parts
       # hash with all the desired keys, including names, image links, sprite sheet positions, etc.
-      parts_list.parts = parts
-      parts_list.save!
-    rescue StandardError => e
-      self.error = e
-      Rails.logger.error("PartsList::CreatePartsList::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
+      begin
+        parts_list.parts = parts
+        parts_list.save!
+      rescue => e
+        Rails.logger.error("PartsList::CreatePartsList::Save::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
+      end
     end
   end
 end

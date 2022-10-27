@@ -16,6 +16,7 @@ class Admin::ElementsController < AdminController
   end
 
   def show
+    @parts_list_count = @element.lots.count
   end
 
   # POST /elements

@@ -12,7 +12,7 @@
           </div>
           <div class="form-group">
             <%= form.label :name, "Product", class: 'form-label' %>
-            <%= form.collection_select :product_id, Product.instructions.order(:name), :id, :name, { include_blank: true }, class: 'form-control' %>
+            <%= form.collection_select :product_id, Product.instructions.order(:product_code), :id, :code_and_name, { include_blank: true }, class: 'form-control' %>
           </div>
           <% if parts_list.persisted? %>
             <div class="form-check">
@@ -28,6 +28,17 @@
     </div>
     <div class="col-9">
       <% if parts_list.persisted? %>
+        <% if parts_list.errors.present? %>
+          <% parts_list.lots.each do |lot| %>
+            <% if lot.errors.present? %>
+              <li>
+                <span class="text-danger">
+                  <%= "#{lot.part_name} #{lot.errors.full_messages[0]}" %>
+                </span>
+              </li>
+            <% end %>
+          <% end %>
+        <% end %>
         <div class="card">
           <div class="card-header">
             Lots

@@ -83,6 +83,9 @@ class Element < ActiveRecord::Base
 
     color = Color.find_by_ldraw_id(color_id)
 
+    raise "Missing Part LDraw ID: #{part_id}" if part.blank?
+    raise "Missing Color LDraw ID: #{color_id}" if color.blank?
+
     [part, color]
   end
 

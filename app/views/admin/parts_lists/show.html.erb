@@ -1,6 +1,9 @@
 <div class="row mt-4 mb-2">
   <div class="col-auto mr-auto">
-    <h1><%= "#{@parts_list.product_name} - #{@parts_list.name}" %></h1>
+    <h1><%= "#{@parts_list.product.product_code} #{@parts_list.product_name} - #{@parts_list.name}" %></h1>
+    <% if @lots.select{|lot| lot.part.is_obsolete?}.present? %>
+      <h2 class='text-danger'>There are obsolete parts in this parts list. Please update the parts!</h2>
+    <% end %>
   </div>
 </div>
 <div class="row">
@@ -79,22 +82,28 @@
           If "Source" and "Parsed" numbers don't match, there's a problem and you shouldn't approve this parts list yet.
         </p>
         <p>
-          <span class='font-weight-bold'>Total Lots (Source/Parsed): </span> <%= "(#{@source_lot_count}/#{@parts_list.lots.count})" %><br />
-          <span class='font-weight-bold'>Total Parts (Source/Parsed): </span> <%= "(#{@source_total_quantity}/#{@parts_list.parts_quantity})" %>
+          <span class='font-weight-bold<%= ' text-danger' if @source_lot_count != @parts_list.lots.count %>'>Total Lots (Source/Parsed): <%= "(#{@source_lot_count}/#{@parts_list.lots.count})" %></span><br />
+          <span class='font-weight-bold<%= ' text-danger' if @source_total_quantity != @parts_list.parts_quantity %>'>Total Parts (Source/Parsed): <%= "(#{@source_total_quantity}/#{@parts_list.parts_quantity})" %></span>
         </p>
       </div>
       <div class="card-body">
         <% @lots.each do |lot| %>
-          <div class="card mt-2 p-2">
+          <div class="card mt-2 p-2 <%= 'border-danger border-2' if lot.part_obsolete? %>">
               <div class="row no-gutters">
                 <div class="col-3">
                   <%= image_tag(lot.thumb_image, class: 'image-fluid') %>
                 </div>
                 <div class="col-9 px-2">
                   <div class="card-block px-2">
+                    <% if lot.part_obsolete? %>
+                      <h4 class="card-title text-danger">OBSOLETE</h4>
+                    <% end %>
                     <h4 class="card-title"><%= "#{lot.part_ldraw_id} :: #{lot.part_name}" %></h4>
                     <p class="card-text"><span class="font-weight-bold">Color:</span> <%= "#{lot.color_ldraw_id} :: #{lot.color_bl_name}" %></p>
                     <p class="card-text"><span class="font-weight-bold">Quantity:</span> <%= lot.quantity %></p>
+                    <% if lot.note.present? %>
+                      <p class="card-text"><span class="font-weight-bold">Note:</span> <%= lot.note %></p>
+                    <% end %>
                   </div>
                 </div>
               </div>

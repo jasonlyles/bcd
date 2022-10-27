@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header">
-    Listing Parts Lists
+    Listing Parts Lists (rows highlighted in red have obsolete parts, please fix them)
   </div>
   <div class="card-body">
     <div class="row">
@@ -29,7 +29,7 @@
           </thead>
           <tbody>
             <% @parts_lists.each do |parts_list| %>
-              <tr>
+              <tr class='<%= 'table-danger' if parts_list.has_obsolete_part? %>'>
                 <td class="align-middle text-center">
                   <%= link_to parts_list.product_name, admin_product_path(parts_list.product) %>
                 </td>

@@ -1,3 +1,6 @@
+LDRAW color reference: https://www.ldraw.org/article/547.html
+
+
 PARTS LIST REBUILD:
 Steps:
 DONE 1. Build out models/relationships
@@ -27,14 +30,22 @@ DONE 11. Would be nice to have something that prompted the admin to update users
 DONE 12. Parts autocomplete in element form should have ldraw id in params at the end that
       gets stripped out before finding by name. Doing this should help us distinguish
       between different generations when selecting parts.
-13. Make sure all parts_lists can be generated based off of existing BL XML files, and
-    time it so I know what I can expect for downtime when I do this in prod. Probably want
-    to make it so I can upload all these new-style parts lists in prod before I switch users
-    over to using new-style parts lists.
-14. Add ability to add notes to a lot. See the flex hoses on
+DONE 13. Make sure all parts_lists can be generated based off of existing BL XML files, and
+    time it so I know what I can expect for downtime when I do this in prod.
+DONE 14. Need to grab errors in xml parser and bubble them up to the user so they can
+    see what they need to change, and if it's an error with a missing color or part,
+    move past the error and keep parsing, if possible.
+DONE 15. Add ability to add notes to a lot. See the flex hoses on
     file:///Users/jasonlyles/Dropbox/BCD/final_model_files/city/buildings/cb030_commercial_pack_2/commercial_pack_2.html
     to see why.
-
+16. Add a feature flag so I can upload all these new-style parts lists in
+     prod before I switch users to use the new style.
+17. Should have a job that checks parts that are not marked obsolete and see if
+    that status has changed. If it has, send a notification to the notification center.
+    This doesn't have to run very often. Monthly maybe?
+18. Add tool to be able to update all lots at once for a given part. For example,
+    there were a lot of parts lists with 4599 that needed to be changed to 4599b.
+    It would be awesome to be able to do that substitution for all parts lists at once.
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
 
 RESKIN:

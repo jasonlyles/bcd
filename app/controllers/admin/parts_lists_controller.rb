@@ -43,8 +43,13 @@ class Admin::PartsListsController < AdminController
   def create
     @parts_list = PartsList.new(params[:parts_list].except(:file))
     if @parts_list.save
-      PartsListInteractions::CreatePartsList.run(parts_list_id: @parts_list.id)
-      redirect_to([:admin, @parts_list], notice: 'Parts List was successfully created.')
+      interaction = PartsListInteractions::CreatePartsList.run(parts_list_id: @parts_list.id)
+
+      if interaction.succeeded?
+        redirect_to([:admin, @parts_list], notice: 'Parts List was successfully created.')
+      else
+        redirect_to([:admin, @parts_list], alert: interaction.errors.present? ? interaction.errors.join('<br/>') : interaction.error.to_s)
+      end
     else
       flash[:alert] = "Parts List was NOT created"
       render "new"

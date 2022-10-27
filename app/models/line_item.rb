@@ -3,6 +3,7 @@ class LineItem < ActiveRecord::Base
   belongs_to :product
 
   attr_accessible :order_id, :product_id, :quantity, :total_price
+  validates :product_id, presence: true
 
   def self.from_cart_item(cart_item)
     li = self.new
