@@ -69,12 +69,14 @@ describe Admin::PartsListsController do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new PartsList" do
+        allow_any_instance_of(BricklinkXmlParser).to receive(:parse).and_return({})
         expect {
           post :create, parts_list: valid_attributes
         }.to change(PartsList, :count).by(1)
       end
 
       it "assigns a newly created parts_list as @parts_list" do
+        allow_any_instance_of(BricklinkXmlParser).to receive(:parse).and_return({})
         post :create, parts_list: valid_attributes
 
         expect(assigns(:parts_list)).to be_a(PartsList)
@@ -82,6 +84,7 @@ describe Admin::PartsListsController do
       end
 
       it "redirects to the created parts_list" do
+        allow_any_instance_of(BricklinkXmlParser).to receive(:parse).and_return({})
         post :create, parts_list: valid_attributes
 
         expect(response).to redirect_to([:admin, PartsList.last])
