@@ -38,14 +38,15 @@ DONE 14. Need to grab errors in xml parser and bubble them up to the user so the
 DONE 15. Add ability to add notes to a lot. See the flex hoses on
     file:///Users/jasonlyles/Dropbox/BCD/final_model_files/city/buildings/cb030_commercial_pack_2/commercial_pack_2.html
     to see why.
-16. Add a feature flag so I can upload all these new-style parts lists in
-     prod before I switch users to use the new style.
-17. Should have a job that checks parts that are not marked obsolete and see if
+DONE 16. Should have a job that checks parts that are not marked obsolete and see if
     that status has changed. If it has, send a notification to the notification center.
     This doesn't have to run very often. Monthly maybe?
+17. Add a feature flag so I can upload all these new-style parts lists in
+     prod before I switch users to use the new style.
 18. Add tool to be able to update all lots at once for a given part. For example,
     there were a lot of parts lists with 4599 that needed to be changed to 4599b.
     It would be awesome to be able to do that substitution for all parts lists at once.
+19. Set up the ObsoletePartsCheck job in Heroku
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
 
 RESKIN:
