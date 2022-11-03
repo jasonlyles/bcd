@@ -85,6 +85,8 @@ class User < ActiveRecord::Base
   end
 
   def owns_product?(product_id)
+    return true if Product.freebies.map(&:id).include?(product_id)
+
     li = self.line_items
     ownership = false
     li.each do |item|

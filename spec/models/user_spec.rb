@@ -1,6 +1,20 @@
 require 'spec_helper'
 
 describe User do
+  describe 'owns_product?' do
+    it 'should include freebies as a product that the user owns' do
+      # No connecting line_item from an order here, just a free product that any
+      # user who signs up can access.
+      product_type = FactoryGirl.create(:product_type, :digital_product => true)
+      category = FactoryGirl.create(:category)
+      subcategory = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:free_product)
+      user = FactoryGirl.create(:user)
+
+      expect(user.owns_product?(product.id)).to eq(true)
+    end
+  end
+
   it "should not save if tos is not accepted" do
     @user = User.new(:email => 'test@test.com')
 

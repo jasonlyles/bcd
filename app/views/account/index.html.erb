@@ -42,10 +42,12 @@
               </td>
               <% if product_info.product.includes_instructions? %>
                 <td class="align-middle text-center">
-                  <% if !product_info.parts_list_ids.blank? %>
+                  <% if product_info.parts_list_ids.present? %>
                     <% product_info.parts_list_ids.each_with_index do |parts_list_id, index| %>
                       <%= link_to "Parts List #{index+1}", parts_list_path(parts_list_id) %>
                     <% end %>
+                  <% else %>
+                    This parts list temporarily unavailable during maintenance. Sorry for the inconvenience. Please check again shortly.
                   <% end %>
                 </td>
                 <td class="align-middle text-center">
