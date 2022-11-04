@@ -44,15 +44,16 @@ DONE 16. Should have a job that checks parts that are not marked obsolete and se
 DONE 17. I'm not sure the has_access_to_parts_list? method takes into account free instructions.
 DONE 18. Show user a maintenance message for any parts lists that are missing during
      the time period we're uploading new parts lists.
-19. Add tool to be able to update all lots at once for a given part. For example,
+DONE 19. Dismissing notifications should be ajax-y.
+20. Add tool to be able to update all lots at once for a given part. For example,
     there were a lot of parts lists with 4599 that needed to be changed to 4599b.
     It would be awesome to be able to do that substitution for all parts lists at once.
-20. Set up the ObsoletePartsCheck job in Heroku
-21. Do I need to do anything different/special for new-style parts lists for guests?
+21. Set up the ObsoletePartsCheck job in Heroku
+22. Do I need to do anything different/special for new-style parts lists for guests?
     Also, be sure that old-style parts lists downloads are still working for guests and users.
-22. Sort through TODOs I've added and see which ones need to be done before this code goes live.
-23. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
-24. Seems to be some performance issues loading the parts lists. Figure out what's going on.
+23. Sort through TODOs I've added and see which ones need to be done before this code goes live.
+24. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
+
 
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
 

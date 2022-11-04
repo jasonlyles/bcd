@@ -109,7 +109,7 @@
       </li>
       <li class="nav-item">
           <% if BackendNotification.active_notifications.count > 0 %>
-            <%= link_to raw('Notifications <i class="fas fa-exclamation-circle text-danger"></i>'), admin_backend_notifications_path, class: "nav-link border-1 shadow" %>
+            <%= link_to raw('Notifications <i class="fas fa-exclamation-circle text-danger"></i>'), admin_backend_notifications_path, class: "nav-link text-danger" %>
           <% else %>
             <%= link_to 'Notifications', admin_backend_notifications_path, class: "nav-link" %>
           <% end %>

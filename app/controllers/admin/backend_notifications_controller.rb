@@ -6,12 +6,10 @@ class Admin::BackendNotificationsController < AdminController
   def dismiss
     @backend_notification = BackendNotification.find(params[:id])
     @backend_notification.dismissed_by = current_radmin
-    if @backend_notification.save
-      flash[:notice] = 'Notification dismissed'
-    else
-      flash[:alert] = 'Notification could not be dismissed'
-    end
+    @backend_notification.save
 
-    redirect_to admin_backend_notifications_path
+    respond_to do |format|
+      format.js
+    end
   end
 end
