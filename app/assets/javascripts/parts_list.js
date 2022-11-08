@@ -148,7 +148,10 @@ function saveForm() {
     type: 'PUT',
     url: '/user_parts_lists/' + partsListId,
     error: function(XMLHttpRequest, errorTextStatus, error) {
-      location.reload();
+      // populate the flash notice and scroll to it.
+      var element = $("#flash_messages")[0];
+      element.innerHTML = "<div id=\"alert\" class=\"alert alert-danger\" role=\"alert\">" + XMLHttpRequest.responseText + "</div>"
+      element.scrollIntoView({behavior: "smooth", block: 'end'});
     },
     success: function(data) {
       location.reload();
@@ -169,7 +172,10 @@ function clearStorageAndReloadPage() {
       type: 'PUT',
       url: '/user_parts_lists/' + partsListId,
       error: function(XMLHttpRequest, errorTextStatus, error) {
-        location.reload();
+        // populate the flash notice and scroll to it.
+        var element = $("#flash_messages")[0];
+        element.innerHTML = "<div id=\"alert\" class=\"alert alert-danger\" role=\"alert\">" + XMLHttpRequest.responseText + "</div>"
+        element.scrollIntoView({behavior: "smooth", block: 'end'});
       },
       success: function(data) {
         location.reload();

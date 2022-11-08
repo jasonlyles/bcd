@@ -28,7 +28,7 @@ describe UserPartsListsController do
         @user_parts_list.reload
 
         expect(@user_parts_list.values).to be_nil
-        expect(response.body).to eq('{}')
+        expect(response.body).to eq('Sorry. There was a problem saving your parts list. We are looking into it.')
         expect(response.code).to eq('422')
       end
 
@@ -38,7 +38,7 @@ describe UserPartsListsController do
         put :update, id: @parts_list.id, values: "{\"4592c02_86\":\"0\",\"4095_86\":\"2\",\"2436_86\":\"3\"}"
         @user_parts_list.reload
 
-        expect(flash[:alert]).to eq('Sorry. There was a problem saving your parts list. We are looking into it.')
+        expect(response.body).to eq('Sorry. There was a problem saving your parts list. We are looking into it.')
       end
     end
   end

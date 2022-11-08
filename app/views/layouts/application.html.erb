@@ -31,7 +31,7 @@
     <main>
       <% unless current_page?(root_path) %>
         <div class="header-spacer"></div>
-        <div class="container">
+        <div id='flash_messages' class="container">
           <%= render partial: 'shared/notifications' %>
         </div>
         <div class="container">
