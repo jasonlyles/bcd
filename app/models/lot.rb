@@ -1,4 +1,6 @@
 class Lot < ActiveRecord::Base
+  audited except: [:created_at, :updated_at]
+
   belongs_to :parts_list
   belongs_to :element
   has_one :color, through: :element

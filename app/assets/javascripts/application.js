@@ -116,7 +116,6 @@ $(document).on('change', "[data-element-select='true']", function() {
     colorId = $('#' + colorSelectId).val();
   }
   if (partName && colorId) {
-    console.log('both populated!');
     var selectElement = this;
     populateElementData(selectElement, partName, colorId);
   }

@@ -30,6 +30,7 @@ gem "rack-protection", ">= 1.5.5"
 gem "ffi", ">= 1.9.24"
 gem "ransack"
 gem 'awesome_print', require: 'ap'
+gem 'audited', '4.10.0'
 
 gem 'resque'
 gem 'resque_mailer'

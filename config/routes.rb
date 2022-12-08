@@ -72,7 +72,14 @@ BrickCity::Application.routes.draw do
         put :update_via_rebrickable
       end
     end
-    resources :parts_lists
+    resources :parts_lists do
+      collection do
+        get :part_swap
+        post :create_new_elements
+        post :swap_parts
+        post :notify_customers_of_parts_list_update
+      end
+    end
     resources :product_types
     resources :products
     resources :subcategories do

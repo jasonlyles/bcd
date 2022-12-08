@@ -75,6 +75,65 @@ class Admin::PartsListsController < AdminController
     redirect_to(admin_parts_lists_url)
   end
 
+  # GET /admin/parts_lists/part_swap
+  def part_swap
+  end
+
+  # POST /admin/parts_lists/create_new_elements
+  def create_new_elements
+    old_part_name = params.dig(:parts_lists, :old_part)
+    new_part_name = params.dig(:parts_lists, :new_part)
+
+    interaction = PartsListInteractions::CreateElementsForPartsSwap.run(old_part_name: old_part_name, new_part_name: new_part_name)
+
+    if interaction.succeeded?
+      @old_part_name = interaction.old_part_name
+      @new_part_name = interaction.new_part_name
+      @elements = interaction.elements
+      @parts_lists = interaction.affected_parts_lists
+    else
+      @error = interaction.error
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # POST /admin/parts_lists/swap_parts
+  def swap_parts
+    @old_part_name = params['parts_lists']['old_part']
+    @new_part_name = params['parts_lists']['new_part']
+
+    interaction = PartsListInteractions::SwapParts.run(old_part_name: @old_part_name, new_part_name: @new_part_name)
+
+    if interaction.succeeded?      
+      @parts_lists_ids = interaction.affected_parts_lists_ids
+    else
+      @error = interaction.error
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # POST /admin/parts_lists/notify_customers_of_parts_list_update
+  def notify_customers_of_parts_list_update
+    parts_list_ids = params[:parts_lists][:parts_list_ids].split(' ')
+    product_ids = PartsList.where(id: parts_list_ids).pluck(:product_id)
+    queued = PartsListUpdateNotificationJob.create({ product_ids: product_ids, message: params[:parts_lists][:message] })
+    @message = if queued.nil?
+                 "Couldn't queue mail jobs. Check out /jobs and see what's wrong"
+               else
+                 "Sending parts list update emails"
+               end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
   def cleanup_uploaded_file_params

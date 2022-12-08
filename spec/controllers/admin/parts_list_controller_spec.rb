@@ -177,4 +177,96 @@ describe Admin::PartsListsController do
       expect(response).to redirect_to('/radmins/sign_in')
     end
   end
+
+  describe 'create_new_elements' do
+    context 'interaction succeeded' do
+      it 'should set appropriate values' do
+        FactoryGirl.create(:part, name: 'Brick 1 x 1')
+        FactoryGirl.create(:part, name: 'Brick 1 x 2')
+
+        post :create_new_elements, parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' }, format: :js
+
+        expect(assigns(:old_part_name)).not_to be_nil
+        expect(assigns(:new_part_name)).not_to be_nil
+        expect(assigns(:elements)).not_to be_nil
+        expect(assigns(:parts_lists)).not_to be_nil
+        expect(assigns(:error)).to be_nil
+      end
+    end
+
+    context 'interaction failed' do
+      it 'should set a value for @error' do
+        post :create_new_elements, parts_lists: {}, format: :js
+
+        expect(assigns(:old_part_name)).to be_nil
+        expect(assigns(:new_part_name)).to be_nil
+        expect(assigns(:elements)).to be_nil
+        expect(assigns(:parts_lists)).to be_nil
+        expect(assigns(:error)).not_to be_nil
+      end
+    end
+  end
+
+  describe 'swap_parts' do
+    context 'interaction succeeded' do
+      it 'should set appropriate values' do
+        FactoryGirl.create(:part, name: 'Brick 1 x 1')
+        FactoryGirl.create(:part, name: 'Brick 1 x 2')
+
+        post :swap_parts, parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' }, format: :js
+
+        expect(assigns(:parts_lists_ids)).not_to be_nil
+        expect(assigns(:error)).to be_nil
+      end
+    end
+
+    context 'interaction failed' do
+      it 'should set a value for @error' do
+        post :swap_parts, parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' }, format: :js
+
+        expect(assigns(:parts_lists_ids)).to be_nil
+        expect(assigns(:error)).not_to be_nil
+      end
+    end
+  end
+
+  describe 'notify_customers_of_parts_list_update' do
+    context 'PartsListUpdateNotificationJob queued' do
+      it 'should return a happy message' do
+        parts_list = FactoryGirl.create(:xml_parts_list)
+        allow(PartsListUpdateNotificationJob).to receive(:create).and_return(123)
+
+        post :notify_customers_of_parts_list_update, parts_lists: { parts_list_ids: [parts_list.id], message: 'Test' }, format: :js
+
+        expect(assigns(:message)).to eq('Sending parts list update emails')
+      end
+    end
+
+    context 'PartsListUpdateNotificationJob not queued' do
+      it 'should return a message letting us know' do
+        parts_list = FactoryGirl.create(:xml_parts_list)
+        allow(PartsListUpdateNotificationJob).to receive(:create).and_return(nil)
+
+        post :notify_customers_of_parts_list_update, parts_lists: { parts_list_ids: [parts_list.id], message: 'Test' }, format: :js
+
+        expect(assigns(:message)).to eq("Couldn't queue mail jobs. Check out /jobs and see what's wrong")
+      end
+    end
+  end
 end
+
+# # POST /admin/parts_lists/notify_customers_of_parts_list_update
+# def notify_customers_of_parts_list_update
+#   parts_list_ids = params[:parts_lists][:parts_list_ids].split(' ')
+#   product_ids = PartsList.where(id: parts_list_ids).pluck(:product_id)
+#   queued = PartsListUpdateNotificationJob.create({ product_ids: product_ids, message: params[:parts_lists][:message] })
+#   @message = if queued.nil?
+#                "Couldn't queue mail jobs. Check out /jobs and see what's wrong"
+#              else
+#                "Sending parts list update emails"
+#              end
+#
+#   respond_to do |format|
+#     format.js
+#   end
+# end

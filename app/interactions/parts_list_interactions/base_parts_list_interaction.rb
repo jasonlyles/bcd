@@ -4,7 +4,8 @@ module PartsListInteractions
     attr_accessor :error
 
     def initialize(options)
-      @parts_list_id = options[:parts_list_id]
+      @options = options
+      @parts_list_id = @options[:parts_list_id]
     end
 
     def succeeded?

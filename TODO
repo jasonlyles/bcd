@@ -45,14 +45,14 @@ DONE 17. I'm not sure the has_access_to_parts_list? method takes into account fr
 DONE 18. Show user a maintenance message for any parts lists that are missing during
      the time period we're uploading new parts lists.
 DONE 19. Dismissing notifications should be ajax-y.
-20. Add tool to be able to update all lots at once for a given part. For example,
+DONE 20. If users parts list doesn't save, the page reloads, wiping out their selected values. Fix!
+DONE 21. Add tool to be able to update all lots at once for a given part. For example,
     there were a lot of parts lists with 4599 that needed to be changed to 4599b.
     It would be awesome to be able to do that substitution for all parts lists at once.
-21. Set up the ObsoletePartsCheck job in Heroku
-22. Do I need to do anything different/special for new-style parts lists for guests?
-    Also, be sure that old-style parts lists downloads are still working for guests and users.
-23. Sort through TODOs I've added and see which ones need to be done before this code goes live.
-24. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
+22. Set up the ObsoletePartsCheck job in Heroku
+23. Make sure that the guest flow works completely and is easy to follow.
+24. Sort through TODOs I've added and see which ones need to be done before this code goes live.
+25. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
 
 
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
@@ -71,6 +71,8 @@ RESKIN:
      number of elements for sale though.
   b. Add a copy to clipboard button for the textarea (Might need access to a later version of javascript to accomplish this.)
   c. Maybe I can use the REMARKS field of the BL xml for any notes about the lot? idk
+  d. Revisit how pdf/parts list update emails get sent out. I think that process
+     could be more robust.
 
 * Maybe don't have so much in the way of updates on the front page, and maybe just display
   the products for sale, in order of most popular. Idk that anyone wants to be going to all

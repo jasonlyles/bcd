@@ -101,6 +101,22 @@ class User < ActiveRecord::Base
     account_status == 'G'
   end
 
+  def active?
+    account_status == 'A'
+  end
+
+  def cancelled?
+    account_status == 'C'
+  end
+
+  def gets_important_emails?
+    [1,2].include?(email_preference)
+  end
+
+  def gets_all_emails?
+    email_preference == 2
+  end
+
   def set_up_guids
     self.guid = SecureRandom.hex(20)
     self.unsubscribe_token = SecureRandom.hex(20)
