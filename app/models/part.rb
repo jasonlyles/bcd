@@ -1,5 +1,4 @@
 class Part < ActiveRecord::Base
-  # TODO: Don't allow part to be destroyed if it belongs to an element.
   has_many :elements, dependent: :restrict_with_error
   has_many :colors, through: :elements
 

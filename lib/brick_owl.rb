@@ -1,5 +1,5 @@
 # TODO: This is a work in progress that I'll get back to once the backend is
-# functional and I'm working on the new parts list.
+# functional and the new parts list v1 is deployed.
 class BrickOwl
   BRICKOWL_URL = 'https://api.brickowl.com'.freeze
 

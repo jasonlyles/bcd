@@ -49,9 +49,9 @@ DONE 20. If users parts list doesn't save, the page reloads, wiping out their se
 DONE 21. Add tool to be able to update all lots at once for a given part. For example,
     there were a lot of parts lists with 4599 that needed to be changed to 4599b.
     It would be awesome to be able to do that substitution for all parts lists at once.
-22. Set up the ObsoletePartsCheck job in Heroku
-23. Make sure that the guest flow works completely and is easy to follow.
-24. Sort through TODOs I've added and see which ones need to be done before this code goes live.
+DONE 22. Sort through TODOs I've added and see which ones need to be done before this code goes live.
+DONE 23. Make sure that the guest flow works completely and is easy to follow.
+24. Set up the ObsoletePartsCheck job in Heroku
 25. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
 
 

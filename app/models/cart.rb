@@ -55,7 +55,7 @@ class Cart < ActiveRecord::Base
   end
 
   def has_physical_item?
-    self.cart_items.each do |item|
+    self.cart_items.includes(product: :product_type).each do |item|
       if item.product.is_physical_product?
         return true
       end
