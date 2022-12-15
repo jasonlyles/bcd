@@ -254,19 +254,3 @@ describe Admin::PartsListsController do
     end
   end
 end
-
-# # POST /admin/parts_lists/notify_customers_of_parts_list_update
-# def notify_customers_of_parts_list_update
-#   parts_list_ids = params[:parts_lists][:parts_list_ids].split(' ')
-#   product_ids = PartsList.where(id: parts_list_ids).pluck(:product_id)
-#   queued = PartsListUpdateNotificationJob.create({ product_ids: product_ids, message: params[:parts_lists][:message] })
-#   @message = if queued.nil?
-#                "Couldn't queue mail jobs. Check out /jobs and see what's wrong"
-#              else
-#                "Sending parts list update emails"
-#              end
-#
-#   respond_to do |format|
-#     format.js
-#   end
-# end
