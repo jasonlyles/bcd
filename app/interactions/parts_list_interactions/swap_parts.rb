@@ -1,6 +1,5 @@
 module PartsListInteractions
   class SwapParts < BasePartsListInteraction
-    class CustomErrorBelongingToThisClass < StandardError; end
     attr_accessor :affected_parts_lists_ids
     # This run method should be the only public method
     def run

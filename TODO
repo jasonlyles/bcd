@@ -77,13 +77,13 @@ RESKIN:
 * Maybe don't have so much in the way of updates on the front page, and maybe just display
   the products for sale, in order of most popular. Idk that anyone wants to be going to all
   the various store pages to see everything. We don't have enough products to justify that.
+  This could maybe be in order of popularity, but be sure to account for showing the newest models also.
+  This might be a good opportunity for infinite scroll.
 * Need to set some validation to not let a user create more than the max number of authentications allowed.
 * need to style devise validation messages?
 * need to confirm password edit page looks good by getting an email sent for forgotten password
 * Category images need to be scaled down once I figure out which images I'm using.
 * Some plain pages like Privacy Policy, COPPA Policy and FAQ have plain bullets. Maybe dress them up a touch
-* On the Order History page, orders with 'Gift' status are showing red, and orders with no status are showing red,
-  but there is no 'email us about the issue' button
 * use css clip-path to make some images Lego-shaped? https://bennettfeely.com/clippy/
   Figured out a lego-ish clip-path:
   <div class='p-0' style='<%= "background-color: #605C5B;width: 151px;height: 151px;clip-path: polygon(0% 100%, 100% 100%, 100% 67%, 95% 67%, 95% 60%, 80% 60%, 80% 67%, 70% 67%, 70% 60%, 55% 60%, 55% 67%, 45% 67%, 45% 60%, 30% 60%, 30% 67%, 20% 67%, 20% 60%, 5% 60%, 5% 67%, 0% 67%);"%>'>
@@ -95,10 +95,8 @@ RESKIN:
 * At roughly 564px wide, something is having over to the right, causing the screen to be scrollable to the right.
 * Work on narrower than 480px
 * Make sure it looks good on your phone
-
+* Determine what the various statuses can be in the orders table and document it somewhere.
 * I think total_price is not getting set correctly for some line_items: LineItem.where("total_price = '0.0'").count is higher than I'm expecting.
-
-* I've broken the guest_registration flow (maybe. I might have fixed this)
 
 * I have a few things to clean up that I found here: https://www.webpagetest.org/result/180716_JE_1b44040e7869b3e871c5154eeb6bec12/
   Clean those things up and the pages should load faster.

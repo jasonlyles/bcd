@@ -4,10 +4,10 @@
     <br/>
     <% @orders.each do |order| %>
       <div class="card mb-4 mt-4">
-        <% header_style = order.status && order.status.upcase == "COMPLETED" ? 'bg-success text-white' : 'bg-danger text-white' %>
+        <% header_style = order.status && ['COMPLETED', 'GIFT'].include?(order.status.upcase) ? 'bg-success text-white' : 'bg-danger text-white' %>
           <div class="card-header <%= header_style %>">
             <%= order.status %>
-            <% if order.status && order.status.upcase != "COMPLETED" %>
+            <% if (order.status && !['COMPLETED', 'GIFT'].include?(order.status.upcase)) || order.status.blank? %>
               <a
                 tabindex="0"
                 role="button"
