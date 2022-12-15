@@ -92,6 +92,11 @@ nav .navbar-nav li a {
   display: inline;
 }
 
+.form-control::placeholder {
+  color: light-grey;
+  opacity: 0.5;
+}
+
 ul.ui-autocomplete {
   position: absolute;
   top: 100%;
