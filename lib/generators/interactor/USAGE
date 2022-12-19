@@ -1,0 +1,13 @@
+Description:
+    This is a simple generator for creating the basic interactor structure.
+    Call it using your model name followed by interactors you want to create.
+
+Example:
+    rails generate interactor Part UpdatePartViaBricklink UpdatePartViaRebrickable
+
+    This will create:
+      app/interactions/part_interactions/base_part_interaction.rb
+      app/interactions/part_interactions/update_part_via_bricklink.rb
+      spec/interactions/part_interactions/update_part_via_bricklink_spec.rb
+      app/interactions/part_interactions/update_part_via_rebrickable.rb
+      spec/interactions/part_interactions/update_part_via_rebrickable_spec.rb

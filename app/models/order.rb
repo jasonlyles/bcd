@@ -19,7 +19,7 @@ class Order < ActiveRecord::Base
   validates :address_zip, numericality: { only_integer: true }, if: "address_submission_method == 'form'"
 
   def has_physical_item?
-    line_items.each do |item|
+    line_items.includes(product: [:product_type]).each do |item|
       return true if item.product.is_physical_product?
     end
     false
@@ -97,15 +97,13 @@ class Order < ActiveRecord::Base
       line_items.each do |line_item|
         product = Product.find(line_item.product_id)
         next unless product.includes_instructions?
-        product_name = product.code_and_name
-        html_lists = PartsList.get_list(product.parts_lists, 'html')
-        xml_lists = PartsList.get_list(product.parts_lists, 'xml')
-        html_lists.each { |hl| links << ["#{product_name} HTML Parts List", "/guest_download_parts_list/#{hl.id}/#{id}"] } if html_lists
-        xml_lists.each { |xl| links << ["#{product_name} XML Parts List for Bricklink Wanted List Feature", "/guest_download_parts_list/#{xl.id}/#{id}"] } if xml_lists
 
+        product_name = product.code_and_name
+        guid = user.guid
         download = Download.where(['user_id=? and product_id=?', user_id, product.id])
                            .first_or_create(download_token: SecureRandom.hex(20), product_id: product.id, user_id: user_id)
-        guid = user.guid
+        product.parts_lists.each { |pl| links << ["#{product_name} Parts List", "/parts_lists/#{pl.id}?user_guid=#{guid}&token=#{download.download_token}"] }
+
         links << ["#{product_name} PDF", "/guest_download?id=#{guid}&token=#{download.download_token}"]
       end
       links

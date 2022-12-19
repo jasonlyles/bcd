@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   #Need to find a way to not call these before_filters on certain controllers, or maybe these should just be on the controllers with urls a customer might hit.
   before_filter :check_admin_mode, :except => [:maintenance]
   before_filter :find_cart
-  before_filter :get_categories
   before_filter :set_users_referrer_code
   before_filter :prepare_exception_notifier
   #before_filter :set_locale #Don't need this yet
@@ -113,12 +112,6 @@ class ApplicationController < ActionController::Base
       @cart.save
     end
     session[:cart_id] = @cart.id
-  end
-
-  def get_categories
-    @categories = Category.find_live_categories
-    @alternatives = Product.alternative_builds
-    @price_groups = Product.sort_by_price
   end
 
   def set_users_referrer_code

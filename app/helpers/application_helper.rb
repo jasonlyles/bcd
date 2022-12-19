@@ -40,4 +40,8 @@ module ApplicationHelper
   def host_url
     "#{request.protocol}#{request.env['HTTP_HOST']}"
   end
+
+  def decorate_boolean(value)
+    value ? raw('<i class="text-success fas fa-check"></i>') : raw('<i class="text-danger fas fa-times"></i>')
+  end
 end

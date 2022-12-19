@@ -1,5 +1,5 @@
 class SessionsController < Devise::SessionsController
-  after_filter :kill_guest_checkout_flag, :only => [:register_guest]
+  after_filter :kill_guest_checkout_flag, only: [:register_guest]
 
   def guest_registration
     if @cart.nil?

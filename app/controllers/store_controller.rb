@@ -23,7 +23,7 @@ class StoreController < ApplicationController
       if !params[:product_type_name].casecmp('instructions').zero?
         @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
       else
-        @top_categories = @categories.dup
+        @top_categories = Category.find_live_categories
       end
     end
   end
@@ -246,7 +246,7 @@ class StoreController < ApplicationController
     session.delete :errant_cart_items
     errant_cart_items = []
     item_list = nil
-    @cart.cart_items.each do |item|
+    @cart.cart_items.includes(product: :product_type).each do |item|
       next unless item.product.is_physical_product?
       unless item.product.quantity_available?(item.quantity)
         errant_cart_items << [item.product.product_code, item.product.name]

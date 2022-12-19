@@ -1,0 +1,51 @@
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= "#{@element.color_name} #{@element.part_name}" %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-8">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Element</b>
+        <%= link_to 'Edit', edit_admin_element_path(@element), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Appears in:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= "#{@parts_list_count} parts lists" %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Original Image Url:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= link_to @element.original_image_url, @element.original_image_url, target: 'blank' %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Image:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <% if @element.image_processing? %>
+                Image available soon...
+              <% else %>
+                <%= image_tag(@element.image.thumb.url) %>
+              <% end %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', admin_elements_path %>
+  </div>
+</div>

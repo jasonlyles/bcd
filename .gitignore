@@ -18,3 +18,4 @@ dump.rdb
 .env
 gemsurance_report.html
 pem/
+test_xml_files/*

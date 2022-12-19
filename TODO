@@ -1,13 +1,93 @@
+LDRAW color reference: https://www.ldraw.org/article/547.html
+
+
+PARTS LIST REBUILD:
+Steps:
+DONE 1. Build out models/relationships
+   a. color
+   b. element
+   c. lot
+   d. part
+   e. parts_list
+DONE 2. Build out services for calls to 3rd parties and restrict the calls
+   available to only what I need for now.
+   a. Rebrickable
+   b. BrickLink
+DONE 3. Build out service for creating parts lists, moving it out of the job it's in currently.
+DONE 4. Add interface for uploading/editing parts lists.
+DONE 5. Re-style backend pages
+DONE 6. Move admin controllers/views under an admin namespace. Move actions around in controllers
+    from "customer-facing" controllers to admin controllers and vice versa as necessary.
+DONE 7. Be 100% that:
+  a. Parts can't be deleted if they belong to an element
+  b. Colors can't be deleted if they belong to an element
+  c. Elements can't be deleted if they belong to a lot
+DONE 8. When creating/updating a part via the new/edit form, need to check BL and Rebrickable for info.
+DONE 9. Add update from BL and update from rebrickable buttons to parts show page.
+DONE 10. Take a look at file upload sections of forms. Might need to tweak logic if there is a file uploaded already.
+DONE 11. Would be nice to have something that prompted the admin to update users about a PDF/parts_list update
+    whenever one of those things got updated. Might be nice to include this in a generic notifications center.
+DONE 12. Parts autocomplete in element form should have ldraw id in params at the end that
+      gets stripped out before finding by name. Doing this should help us distinguish
+      between different generations when selecting parts.
+DONE 13. Make sure all parts_lists can be generated based off of existing BL XML files, and
+    time it so I know what I can expect for downtime when I do this in prod.
+DONE 14. Need to grab errors in xml parser and bubble them up to the user so they can
+    see what they need to change, and if it's an error with a missing color or part,
+    move past the error and keep parsing, if possible.
+DONE 15. Add ability to add notes to a lot. See the flex hoses on
+    file:///Users/jasonlyles/Dropbox/BCD/final_model_files/city/buildings/cb030_commercial_pack_2/commercial_pack_2.html
+    to see why.
+DONE 16. Should have a job that checks parts that are not marked obsolete and see if
+    that status has changed. If it has, send a notification to the notification center.
+    This doesn't have to run very often. Monthly maybe?
+DONE 17. I'm not sure the has_access_to_parts_list? method takes into account free instructions.
+DONE 18. Show user a maintenance message for any parts lists that are missing during
+     the time period we're uploading new parts lists.
+DONE 19. Dismissing notifications should be ajax-y.
+DONE 20. If users parts list doesn't save, the page reloads, wiping out their selected values. Fix!
+DONE 21. Add tool to be able to update all lots at once for a given part. For example,
+    there were a lot of parts lists with 4599 that needed to be changed to 4599b.
+    It would be awesome to be able to do that substitution for all parts lists at once.
+DONE 22. Sort through TODOs I've added and see which ones need to be done before this code goes live.
+DONE 23. Make sure that the guest flow works completely and is easy to follow.
+24. Set up the ObsoletePartsCheck job in Heroku
+25. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
+
+
+Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
+
 RESKIN:
 
+* Phase 2 of new parts list:
+  a. Maybe have a recommended part condition and an option for the "assemble xml"
+     form in addition to "new" and "new or used" to "recommended condition". That will
+     recommend new for some and used for others. We would want to recommend used on those
+     elements that have gotten rare and are easier/much cheaper to find used. This would of
+     course require getting some data from Bricklink and analyzing it to automate
+     recommendation of a condition. N for new, U for used, nothing for no specified condition.
+     Could maybe use the BrickLink.get_price_guide method and call it on each element
+     via some regularly scheduled task to update prices. Not sure if this returns
+     number of elements for sale though.
+  b. Add a copy to clipboard button for the textarea (Might need access to a later version of javascript to accomplish this.)
+  c. Maybe I can use the REMARKS field of the BL xml for any notes about the lot? idk
+  d. Revisit how pdf/parts list update emails get sent out. I think that process
+     could be more robust.
+
+* Maybe don't have so much in the way of updates on the front page, and maybe just display
+  the products for sale, in order of most popular. Idk that anyone wants to be going to all
+  the various store pages to see everything. We don't have enough products to justify that.
+  This could maybe be in order of popularity, but be sure to account for showing the newest models also.
+  This might be a good opportunity for infinite scroll.
 * Need to set some validation to not let a user create more than the max number of authentications allowed.
 * need to style devise validation messages?
 * need to confirm password edit page looks good by getting an email sent for forgotten password
 * Category images need to be scaled down once I figure out which images I'm using.
 * Some plain pages like Privacy Policy, COPPA Policy and FAQ have plain bullets. Maybe dress them up a touch
-* On the Order History page, orders with 'Gift' status are showing red, and orders with no status are showing red,
-  but there is no 'email us about the issue' button
 * use css clip-path to make some images Lego-shaped? https://bennettfeely.com/clippy/
+  Figured out a lego-ish clip-path:
+  <div class='p-0' style='<%= "background-color: #605C5B;width: 151px;height: 151px;clip-path: polygon(0% 100%, 100% 100%, 100% 67%, 95% 67%, 95% 60%, 80% 60%, 80% 67%, 70% 67%, 70% 60%, 55% 60%, 55% 67%, 45% 67%, 45% 60%, 30% 60%, 30% 67%, 20% 67%, 20% 60%, 5% 60%, 5% 67%, 0% 67%);"%>'>
+    <div class='p-0' style='<%= "background-color: ##{color.ldraw_rgb};width: 150px;height: 150px;clip-path: polygon(0% 100%, 100% 100%, 100% 67%, 95% 67%, 95% 60%, 80% 60%, 80% 67%, 70% 67%, 70% 60%, 55% 60%, 55% 67%, 45% 67%, 45% 60%, 30% 60%, 30% 67%, 20% 67%, 20% 60%, 5% 60%, 5% 67%, 0% 67%);"%>'>
 * Maybe replace some logo jpgs with svgs: https://worldvectorlogo.com/
 
 * On index page, free instructions image needs to scale better. At medium?, it gets too small.
@@ -15,8 +95,8 @@ RESKIN:
 * At roughly 564px wide, something is having over to the right, causing the screen to be scrollable to the right.
 * Work on narrower than 480px
 * Make sure it looks good on your phone
-
-* I've broken the guest_registration flow (maybe. I might have fixed this)
+* Determine what the various statuses can be in the orders table and document it somewhere.
+* I think total_price is not getting set correctly for some line_items: LineItem.where("total_price = '0.0'").count is higher than I'm expecting.
 
 * I have a few things to clean up that I found here: https://www.webpagetest.org/result/180716_JE_1b44040e7869b3e871c5154eeb6bec12/
   Clean those things up and the pages should load faster.
@@ -26,9 +106,6 @@ RESKIN:
   https://support.dnsimple.com/articles/redirect-heroku/#redirect-https
   and here:
   https://stackoverflow.com/questions/22235977/ruby-on-rails-redirecting-www-to-non-www-version-of-site
-* Add a honeypot to the sign up/sign in flows and the contact page.
-    https://medium.com/@madeleinerose/what-s-a-honeypot-561dcca6d244
-    https://github.com/curtis/honeypot-captcha
 
 Nav:
 * Account link in mobile collapsed nav hasn't quite got the right selector yet in the css. I'm
@@ -38,6 +115,9 @@ Nav:
 TODO:  List of the things left to do, in no particular order
 
 HAVE TO GET DONE FOR V1:
+
+* Instead of forcing Brian to come into the admin UI, maybe have a task that emails
+  him the monthly sales CSV at the end of the month.
 
 * Add functionality for Brian to be able to add downloads to someones account for a given product,
   in case they've had trouble downloading.
@@ -55,7 +135,7 @@ emails were sent.
 * Add Faker gem to generate a lot of orders and customers in the local database to see if I need to add any indexes to
 speed up page load times.
 
-* Try to get this app on Elastic Beanstalk or Digital Ocean
+* Try to get this app on Digital Ocean or Fly.io or something similar.
 
 * In order to get Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
 and verify it, maybe verify my FB and Twitter with google if possible.
@@ -275,9 +355,6 @@ display categories.
 * Add a main flag for image model. Going forward, I can grab the image flagged main for a given product instead of
 just the first image uploaded.
 
-* Change font color or style for Admin placeholders to set them apart a bit from entered text. The gray and
-black aren't distinct enough from each other.
-
 * I need some tagging to be able to group products, such as the buildings in the Amsterdam series, SanFran series,
 Richmond series, City Res, ComPaks, Alternatives etc. https://github.com/mbleigh/acts-as-taggable-on
 
@@ -302,10 +379,6 @@ V1.2 AND BEYOND:
 Maybe I could just have something that spit out a csv with all users created_at dates for a given campaign, and then we can
 import that data into some graphing something-or-other offline.
 
-* For errors I don't know I need to rescue, I set up exception_notification. I might want to set up exception_logger
-    like I had for the reportal. https://github.com/undees/jchunky-exception_logger I think I'll see how exception_notification
-    does first and if I feel I need to be logging to the database also, then I can maybe set up exception_logger also.
-
 * Make it so ALL of my styled buttons give some indication they've been hovered over and clicked
 
 * I might want to re-do the 422 and 500 pages a little bit. They seem... meh. Maybe freshen up the 404 page too.
@@ -327,16 +400,6 @@ at public/maintenance_mode.html
 stays in a non-shipped status for a couple of days, send a reminder email to let us know to deal with it. (Update May 2014.
 The order fulfillment screen is done, but I don't yet have the reminder email set up.)
 
-* Be able to 'gift' instructions. This tool will allow us to give a user free instructions, for whatever reason. There should be 2
-forms on the page. The first will allow us to look up a user by email, and then display the items they've already purchased from us.
-The 2nd form should only be displayed after the first one has been used, and will include a hidden field with the users email address
-in it. It will also list out every model we have instructions for and have a checkbox next to each for easily selecting multiple
-instructions. There can also be a 'select all' checkbox that will select all the instructions for gifting. This can come in handy when
-the time comes to start getting the site translated, and then I can offer to give the translators all the instructions for free. Maybe
-that doesn't make sense. For those users, it might make more sense if there was a tool that allowed us to just give a user access to
-all instructions, always. We would want a tool like that for Brian and I and anybody else that helps us out greatly anyways. So then,
-the gifting tool really just needs a combobox to allow us to gift a user 1 set of instructions.
-
 * Set up a way to create codes that we can send to buyers from Ebay. Then, as part of the checkout process on ebay, we can send them a
 link to BCD, along with a code that allows them to download from us. This will give us more control over the process, end
 our relationship with yousendit, force the user to learn about our website (which will hopefully lead to future purchases on our website instead of ebay).
@@ -357,8 +420,6 @@ present the information after some processing. This would probably be a really e
 but may be fun to try. This could possibly work using the get_set_match API, if we could pay him to upload our models as sets.
 
 * Figure out some way to have codes that can be redeemed for x numbers of dollars.
-
-* Admin products page could benefit from a live search feature.
 
 * Figure out how to accommodate Lisa's letters. This would be the first product with options. Options for this particular
 product would include the letter of the alphabet and a style. On the admin side, I could have a product_options table, with

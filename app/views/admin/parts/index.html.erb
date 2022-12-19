@@ -1,0 +1,118 @@
+<div class="card">
+  <div class="card-header">
+    Listing parts
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @parts %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Part', new_admin_part_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center"><%= sort_link(@q, :name) %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :ldraw_id, 'LDraw ID') %></th>
+              <th class="align-middle text-center"><%= sort_link(@q, :bl_id, 'Bricklink ID') %></th>
+              <th class="align-middle text-center">Range</th>
+              <th class="align-middle text-center">Alternate #s</th>
+              <th class="align-middle text-center">
+                Re?
+                <a
+                  tabindex="0"
+                  role="button"
+                  class="btn-lg text-white"
+                  data-toggle="popover"
+                  data-trigger="focus"
+                  data-placement="bottom"
+                  title="What does Re? mean?"
+                  data-content="This is showing whether Rebrickable has been checked for data for this part or not.">
+                  <i class="fa fa-question-circle"></i>
+                </a>
+              </th>
+              <th class="align-middle text-center">
+                BL?
+                <a
+                  tabindex="0"
+                  role="button"
+                  class="btn-lg text-white"
+                  data-toggle="popover"
+                  data-trigger="focus"
+                  data-placement="bottom"
+                  title="What does BL? mean?"
+                  data-content="This is showing whether BrickLink has been checked for data for this part or not.">
+                  <i class="fa fa-question-circle"></i>
+                </a>
+              </th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @parts.each do |part| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to part.name, admin_part_path(part) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= part.ldraw_id %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= part.bl_id %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= part.year_from.present? || part.year_to.present? ? "#{part.year_from} - #{part.year_to}" : '' %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= part.alternate_nos['alternates'].to_sentence if part.alternate_nos.present? %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(!part.check_rebrickable?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(!part.check_bricklink?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_admin_part_path(part) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), [:admin, part], data: { confirm: 'Are you sure?' }, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @parts %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for(@q, url: 'parts') do |f| %>
+              <div class="form-group">
+                <%= f.label :name_cont %>
+                <%= f.search_field :name_cont, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :ldraw_id_or_bl_id_or_lego_id_eq, 'LDraw/Bricklink/Lego ID equals' %>
+                <%= f.search_field :ldraw_id_or_bl_id_or_lego_id_eq, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :alternate_nos_cont, 'Alternate #s contains' %>
+                <%= f.search_field :alternate_nos_cont, class: "form-control" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

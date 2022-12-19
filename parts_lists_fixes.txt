@@ -1,0 +1,53 @@
+Parts List fixes:
+* CA001: change 30350 to 30350b, change 4489 to 4489b, change x8 to 6255
+* CB001:
+  police car: change 4599 to 4599b
+  station: change 4599 to 4599b, pink 4073 should change to bright pink
+* CB002: change 3049 to 3049c, change 3048 to 15571, change 4599 to 4599b
+* CB003: change 4599 to 4599b
+* CB004: change 51011 to 42611
+* CB005: change 4599 to 4599b
+* CB007: change 4599 to 4599b, change 30350 to 30350b, break hinge brick complete out to individual parts: 3830c01 to 3830 and 3831, pink 4073 should change to bright pink
+* CB008:
+  file 1: change 4599 to 4599b
+  file 2: change 4599 to 4599b, change 3940 to 3940b
+* CB009: change 30151 to 30151b, 4599 to 4599b
+* CB010: change 4599 to 4599b, change 30350 to 30350b
+* CB012: change both 3048 to 15571, change 4599 to 4599b, change 3940 to 3940b
+* CB013: change 3049 to 3049c, both 3048 to 15571, 3044 to 3044c, change all 4599 to 4599b
+* CB014: change 3846pb33 to 3846pb033, 3069bpb030 to 3069bpb0030
+* CB015: change x59 to 30224, 4599 to 4599b
+* CB016: change 3040pb10 to 3040pb010, 3048 to 15571, 4599 to 4599b
+* CB017: change 4599 to 4599b
+* CB018: change 4599 to 4599b, 3069bpb132 to 3069bpb0132, 3048 to 15571
+* CB019: change 3048 to 15571
+* CB020: change 4599 to 4599b
+* CB021: change 3048 to 15571
+* CB022: change 30151 to 30151b
+* CB023: change 4496 to 95345
+* CB025: change 30151 to 30151b
+* CB026: change x71 to 70902, change 30151 to 30151b, change 3069bpb030 to 3069bpb0030
+* CB027: change 3069bpb030 to 3069bpb0030, change 30151 to 30151b
+* CB028: change 3069bpb030 to 3069bpb0030, change 3048 to 15571
+* CB030: change x59 to 30224, change x71 to 70902, change 3069bpb030 to 3069bpb0030, change 87079pb006 to 87079pb0006, change 87079pb018 to 87079pb0018
+* CV003: change 4599 to 4599b
+* CV008: change 4599 to 4599b
+* CV010: change 4599 to 4599b
+* CV011:
+  base: change 4599 to 4599b
+  convertible black: change 4599 to 4599b
+  convertible: change 4599 to 4599b
+  hard top black: change 4070a to 4070, change 4599 to 4599b
+* MM002: change 4599 to 4599b
+* MW001: change 4599 to 4599b
+* MW002: change 3044 to 3044c
+* TB001: change 3044 to 3044c, change 3048 to 15571, change 4599 to 4599b
+* TB002: change 3044 to 3044c
+* WV001: change 3044 to 3044c
+* WV003: change 4599 to 4599b
+* WV004: change 48729 to 48729b, change 4599 to 4599b, change 3048 to 15571
+* WW001: change 4599 to 4599b
+* WW002: change 4599 to 4599b
+* WW004: change 4489 to 4489b
+* WW006: break hinge brick complete out to individual parts: 3830c01 to 3830 and 3831
+* WW007: change 4599 to 4599b

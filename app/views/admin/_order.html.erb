@@ -1,107 +1,197 @@
-<h3>Order Info</h3>
-<br/>
-<p>Order ID:
-  <%= order.id %></p>
-<% if order.status && (order.status.upcase == 'COMPLETED' || order.status == 'GIFT') %>
-  <p class="happy">Order Status:
-    <%= order.status %></p>
-<% else %>
-  <p class="sad">Order Status:
-    <%= order.status %></p>
-<% end %>
-<p>Request ID:
-  <%= order.request_id %></p>
-<% if order.status == 'GIFT' %>
-  <p>Transaction ID:
-    <%= order.transaction_id %></p>
-<% else %>
-  <p>Paypal Transaction ID:
-    <%= order.transaction_id %></p>
-<% end %>
-<p>Transaction Date:
-  <%= order.created_at.to_s(:date_time12) %></p>
-<p>Updated Date:
-  <%= order.updated_at.to_s(:date_time12) %></p>
-<p>User:
-  <%= order.user.email %></p>
-<br/>
-<% if order.has_physical_item? %>
-  <p>Street Address:</p>
-  <br/>
-  <p>
-    <%= order.address_name %>
-    <br/>
-    <%= "#{order.first_name} #{order.last_name}" %>
-    <br/>
-    <%= order.address_street_1 %>
-    <br/>
-    <%= "#{order.address_city}, #{order.address_state} #{order.address_zip}" %>
-    <br/>
-    <%= order.address_country %>
-  </p>
-<% end %>
-<br/>
-<table class="admin_table">
-  <tr>
-    <td class="bold">Product ID</td>
-    <td class="bold">Model</td>
-    <td class="bold">Qty.</td>
-    <td class="bold">Paid</td>
-    <td class="bold">Downloaded/Remaining</td>
-    <td class="bold">DL Link</td>
-    <td class="bold">Created</td>
-    <td class="bold">Updated</td>
-  </tr>
-  <% order.line_items.each do |line_item| %>
-    <% product = Product.find(line_item.product_id) %>
-      <% download = Download.where("product_id = ? and user_id = ?", line_item.product_id, order.user_id).first %>
-        <tr>
-          <td>
-            <%= line_item.product_id %>
-          </td>
-          <td>
-            <%= product.code_and_name %>
-          </td>
-          <td>
-            <%= line_item.quantity %>
-          </td>
-          <td>
-            <%= number_to_currency(line_item.total_price) %>
-          </td>
-          <% if download %>
-            <td>
-              <%= "#{download.count} / #{download.remaining}" %>
-            </td>
-          <% else %>
-            <td>N/A</td>
-          <% end %>
-          <% if order.user.guest? %>
-            <td>
-              <%= link_to 'DL link', order.get_link_to_downloads %>
-            </td>
-          <% else %>
-            <td>N/A</td>
-          <% end %>
-          <td>
-            <%= line_item.created_at.to_s(:date_time12) %>
-          </td>
-          <td>
-            <%= line_item.updated_at.to_s(:date_time12) %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-    <% if order.status && !['COMPLETED','GIFT'].include?(order.status.upcase) %>
-      <br/>
-      <br/>
-      <p>
-        If this order is ok in Paypal, and just didn't complete on our side for whatever reason, if you click the "Complete Order" button, the user will be able to access their downloads.
-      </p>
-      <br/>
-      <%= form_for(:order, :url => {:action => :complete_order}) do |f| %>
-      <%= f.hidden_field :id, :value => order.id %>
-      <div class="actions">
-        <%= f.submit 'Complete Order', data: {disable_with: 'Completing...'} %>
+<h1>Order Details</h1>
+<div class="row">
+  <div class="col-7">
+    <div class="card">
+      <div class="card-header">
+        Order Info
       </div>
-    <% end %>
-  <% end %>
+      <div class="card-body">
+        <% if order.status && !['COMPLETED','GIFT'].include?(order.status.upcase) %>
+          <p>
+            If this order is ok in Paypal, and just didn't complete on our side for whatever reason, if you click the "Complete Order" button, the user will be able to access their downloads.
+          </p>
+          <%= form_for(:order, url: { action: :complete_order }) do |f| %>
+            <%= f.hidden_field :id, value: order.id %>
+            <%= f.submit 'Complete Order', data: { disable_with: 'Completing...' }, class: 'btn btn-primary' %>
+          <% end %>
+        <% end %>
+        <br />
+        <table>
+          <tr>
+            <td>
+              <b>User:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @order.user.email %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Order ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @order.id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Order Status:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <% if order.status && (order.status.upcase == 'COMPLETED' || order.status.upcase == 'GIFT') %>
+                <span class="text-success">
+              <% else %>
+                <span class="text-danger">
+              <% end %>
+                <%= @order.status %>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Request ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @order.request_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b><%= order.status == 'GIFT' ? '' : 'Paypal' %> Transaction ID:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @order.transaction_id %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Transaction Date:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @order.created_at.to_s(:date_time12) %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Updated At:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @order.updated_at.to_s(:date_time12) %>
+            </td>
+          </tr>
+
+          <% if order.has_physical_item? %>
+            <tr>
+              <td>Street Address:</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="pl-4">
+                <%= @order.address_name %>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="pl-4">
+                <%= "#{order.first_name} #{order.last_name}" %>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="pl-4">
+                <%= @order.address_street_1 %>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="pl-4">
+                <%= "#{order.address_city}, #{order.address_state} #{order.address_zip}" %>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td class="pl-4">
+                <%= @order.address_country %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        Items Ordered
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center">Product</th>
+              <th class="align-middle text-center">Qty.</th>
+              <th class="align-middle text-center">Paid</th>
+              <th class="align-middle text-center">Downloaded/Remaining</th>
+              <th class="align-middle text-center">DL Link</th>
+              <th class="align-middle text-center">Created</th>
+              <th class="align-middle text-center">Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% order.line_items.includes(:product).each do |line_item| %>
+              <% download = Download.where("product_id = ? and user_id = ?", line_item.product_id, order.user_id).first %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= line_item.product.code_and_name %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= line_item.quantity %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= number_to_currency(line_item.total_price) %>
+                </td>
+                <td class="align-middle text-center">
+                  <% if download %>
+                    <%= "#{download.count} / #{download.remaining}" %>
+                  <% else %>
+                    N/A
+                  <% end %>
+                </td>
+                <td class="align-middle text-center">
+                  <% if order.user.guest? %>
+                    <%= link_to 'DL link', order.get_link_to_downloads %>
+                  <% else %>
+                    N/A
+                  <% end %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= line_item.created_at.to_s(:date_time12) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= line_item.updated_at.to_s(:date_time12) %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

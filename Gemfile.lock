@@ -75,6 +75,8 @@ GEM
       mime-types
       unf
     ast (2.3.0)
+    audited (4.10.0)
+      activerecord (>= 4.2, < 6.2)
     autoprefixer-rails (9.4.2)
       execjs
     awesome_print (1.7.0)
@@ -166,6 +168,8 @@ GEM
     factory_girl_rails (4.8.0)
       factory_girl (~> 4.8.0)
       railties (>= 3.0.0)
+    faker (2.2.1)
+      i18n (>= 0.8)
     faraday (0.10.0)
       multipart-post (>= 1.2, < 3)
     fattr (2.3.0)
@@ -483,6 +487,11 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.2.1)
     rake (12.3.1)
+    ransack (1.8.10)
+      actionpack (>= 3.0, < 5.2)
+      activerecord (>= 3.0, < 5.2)
+      activesupport (>= 3.0, < 5.2)
+      i18n
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
@@ -629,6 +638,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-session_store
   asset_sync
+  audited (= 4.10.0)
   awesome_print
   aws-sdk
   aws-sdk-rails
@@ -644,6 +654,7 @@ DEPENDENCIES
   exception_notification
   factory_girl_generator
   factory_girl_rails
+  faker
   ffi (>= 1.9.24)
   fog
   foreman
@@ -674,6 +685,7 @@ DEPENDENCIES
   rails (= 4.2.11)
   rails_12factor
   rake
+  ransack
   responders (~> 2.0)
   resque
   resque-status

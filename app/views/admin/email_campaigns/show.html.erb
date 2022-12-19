@@ -1,0 +1,145 @@
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= @email_campaign.guid %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Email Campaign</b>
+        <%= link_to 'Edit', edit_admin_email_campaign_path(@email_campaign), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Description:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Subject Line:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.subject %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Email Message:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.message %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Redirect Link</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.redirect_link %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Reference ID</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.guid %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Click-throughs</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.click_throughs %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Total sent</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.emails_sent %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Effectiveness:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.effectiveness_ratio %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Created At:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.created_at.strftime("%D %r") %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Updated At:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @email_campaign.updated_at.strftime("%D %r") %>
+            </td>
+          </tr>
+        </table>
+        <br />
+        <div class="d-flex justify-content-around">
+        <% if @email_campaign.emails_sent == 0 %>
+          <%= form_for @email_campaign, url: { action: :send_marketing_email_preview } do |f| %>
+            <%= f.hidden_field :id %>
+            <%= f.submit 'Send Preview to Admins', data: { disable_with: 'Sending...' }, class: 'btn btn-primary' %>
+          <% end %>
+
+          <%= form_for @email_campaign, url: { action: :send_marketing_emails } do |f| %>
+            <%= f.hidden_field :id %>
+            <%= f.submit 'Send Emails', data: { disable_with: 'Sending...' }, class: 'btn btn-primary' %>
+            <a
+              tabindex="0"
+              role="button"
+              class="btn-lg text-black"
+              data-toggle="popover"
+              data-trigger="focus"
+              data-placement="bottom"
+              title="When should you click this button?"
+              data-content="Please only click the 'Send Emails' button once if you get a message about emails being sent.">
+              <i class="fa fa-question-circle"></i>
+            </a>
+          <% end %>
+        <% end %>
+        </div>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', admin_email_campaigns_path %>
+  </div>
+  <div class="col-6">
+    <div class="card">
+      <div class="card-header">
+        <b>Image</b>
+      </div>
+      <div class="card-body">
+        <%= image_tag(@email_campaign.image.medium) %>
+      </div>
+    </div>
+  </div>
+</div>

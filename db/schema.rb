@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180511202317) do
+ActiveRecord::Schema.define(version: 20221108131455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,29 @@ ActiveRecord::Schema.define(version: 20180511202317) do
 
   add_index "advertising_campaigns", ["partner_id"], name: "index_advertising_campaigns_on_partner_id", using: :btree
 
+  create_table "audits", force: :cascade do |t|
+    t.integer  "auditable_id"
+    t.string   "auditable_type"
+    t.integer  "associated_id"
+    t.string   "associated_type"
+    t.integer  "user_id"
+    t.string   "user_type"
+    t.string   "username"
+    t.string   "action"
+    t.text     "audited_changes"
+    t.integer  "version",         default: 0
+    t.string   "comment"
+    t.string   "remote_address"
+    t.string   "request_uuid"
+    t.datetime "created_at"
+  end
+
+  add_index "audits", ["associated_type", "associated_id"], name: "associated_index", using: :btree
+  add_index "audits", ["auditable_type", "auditable_id", "version"], name: "auditable_index", using: :btree
+  add_index "audits", ["created_at"], name: "index_audits_on_created_at", using: :btree
+  add_index "audits", ["request_uuid"], name: "index_audits_on_request_uuid", using: :btree
+  add_index "audits", ["user_id", "user_type"], name: "user_index", using: :btree
+
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "provider"
@@ -36,6 +59,15 @@ ActiveRecord::Schema.define(version: 20180511202317) do
   end
 
   add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
+
+  create_table "backend_notifications", force: :cascade do |t|
+    t.text     "message"
+    t.integer  "dismissed_by_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "backend_notifications", ["dismissed_by_id"], name: "index_backend_notifications_on_dismissed_by_id", using: :btree
 
   create_table "cart_items", force: :cascade do |t|
     t.integer  "cart_id"
@@ -66,6 +98,19 @@ ActiveRecord::Schema.define(version: 20180511202317) do
     t.boolean  "image_processing", default: false
   end
 
+  create_table "colors", force: :cascade do |t|
+    t.integer  "bl_id",      limit: 2
+    t.integer  "ldraw_id",   limit: 2
+    t.integer  "lego_id",    limit: 2
+    t.string   "name",       limit: 50
+    t.string   "bl_name",    limit: 50
+    t.string   "lego_name",  limit: 50
+    t.string   "ldraw_rgb",  limit: 6
+    t.string   "rgb",        limit: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "downloads", force: :cascade do |t|
     t.integer  "product_id"
     t.integer  "count",          default: 0
@@ -78,6 +123,21 @@ ActiveRecord::Schema.define(version: 20180511202317) do
 
   add_index "downloads", ["product_id"], name: "index_downloads_on_product_id", using: :btree
   add_index "downloads", ["user_id"], name: "index_downloads_on_user_id", using: :btree
+
+  create_table "elements", force: :cascade do |t|
+    t.integer  "part_id"
+    t.integer  "color_id"
+    t.string   "image"
+    t.string   "original_image_url"
+    t.string   "guid",               limit: 36
+    t.boolean  "image_processing",              default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "elements", ["color_id"], name: "index_elements_on_color_id", using: :btree
+  add_index "elements", ["part_id", "color_id"], name: "index_elements_on_part_id_and_color_id", unique: true, using: :btree
+  add_index "elements", ["part_id"], name: "index_elements_on_part_id", using: :btree
 
   create_table "email_campaigns", force: :cascade do |t|
     t.text     "description"
@@ -120,6 +180,8 @@ ActiveRecord::Schema.define(version: 20180511202317) do
     t.datetime "updated_at",                     null: false
   end
 
+  add_index "instant_payment_notifications", ["order_id"], name: "index_instant_payment_notifications_on_order_id", using: :btree
+
   create_table "line_items", force: :cascade do |t|
     t.integer  "order_id"
     t.integer  "product_id"
@@ -131,6 +193,19 @@ ActiveRecord::Schema.define(version: 20180511202317) do
 
   add_index "line_items", ["order_id"], name: "index_line_items_on_order_id", using: :btree
   add_index "line_items", ["product_id"], name: "index_line_items_on_product_id", using: :btree
+
+  create_table "lots", force: :cascade do |t|
+    t.integer  "parts_list_id"
+    t.integer  "element_id"
+    t.integer  "quantity"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "note",          default: ""
+  end
+
+  add_index "lots", ["element_id"], name: "index_lots_on_element_id", using: :btree
+  add_index "lots", ["parts_list_id", "element_id"], name: "index_lots_on_parts_list_id_and_element_id", unique: true, using: :btree
+  add_index "lots", ["parts_list_id"], name: "index_lots_on_parts_list_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
@@ -161,13 +236,36 @@ ActiveRecord::Schema.define(version: 20180511202317) do
     t.datetime "updated_at"
   end
 
+  create_table "parts", force: :cascade do |t|
+    t.string   "bl_id",             limit: 20
+    t.string   "ldraw_id",          limit: 20
+    t.string   "lego_id",           limit: 20
+    t.string   "name"
+    t.boolean  "check_bricklink",              default: true
+    t.boolean  "check_rebrickable",            default: true
+    t.jsonb    "alternate_nos"
+    t.boolean  "is_obsolete",                  default: false
+    t.string   "year_from",         limit: 4
+    t.string   "year_to",           limit: 4
+    t.jsonb    "brickowl_ids"
+    t.boolean  "is_lsynth",                    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "parts_lists", force: :cascade do |t|
     t.string   "parts_list_type"
     t.string   "name"
     t.integer  "product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "name_processing", default: false
+    t.boolean  "name_processing",   default: false
+    t.boolean  "approved",          default: false
+    t.json     "parts"
+    t.text     "bricklink_xml"
+    t.text     "ldr"
+    t.string   "original_filename"
+    t.string   "file"
   end
 
   add_index "parts_lists", ["product_id"], name: "index_parts_lists_on_product_id", using: :btree
@@ -292,6 +390,18 @@ ActiveRecord::Schema.define(version: 20180511202317) do
     t.datetime "updated_at"
     t.boolean  "image_processing", default: false
   end
+
+  create_table "user_parts_lists", force: :cascade do |t|
+    t.integer  "parts_list_id"
+    t.integer  "user_id"
+    t.text     "values"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_parts_lists", ["parts_list_id", "user_id"], name: "index_user_parts_lists_on_parts_list_id_and_user_id", unique: true, using: :btree
+  add_index "user_parts_lists", ["parts_list_id"], name: "index_user_parts_lists_on_parts_list_id", using: :btree
+  add_index "user_parts_lists", ["user_id"], name: "index_user_parts_lists_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                             default: "",    null: false

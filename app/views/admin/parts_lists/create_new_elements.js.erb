@@ -1,0 +1,1 @@
+$("#new_elements").html("<%= escape_javascript(render(partial: 'new_elements', locals: {elements: @elements, parts_lists_to_be_updated: @parts_lists, new_part_name: @new_part_name, old_part_name: @old_part_name, error: @error}))%>");

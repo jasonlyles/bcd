@@ -1,6 +1,20 @@
 require 'spec_helper'
 
 describe User do
+  describe 'owns_product?' do
+    it 'should include freebies as a product that the user owns' do
+      # No connecting line_item from an order here, just a free product that any
+      # user who signs up can access.
+      product_type = FactoryGirl.create(:product_type, :digital_product => true)
+      category = FactoryGirl.create(:category)
+      subcategory = FactoryGirl.create(:subcategory)
+      product = FactoryGirl.create(:free_product)
+      user = FactoryGirl.create(:user)
+
+      expect(user.owns_product?(product.id)).to eq(true)
+    end
+  end
+
   it "should not save if tos is not accepted" do
     @user = User.new(:email => 'test@test.com')
 
@@ -94,14 +108,10 @@ describe User do
       @image = FactoryGirl.create(:image)
       @user = FactoryGirl.create(:user)
       @download = FactoryGirl.create(:download)
-      @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
       product_info = @user.get_info_for_product(@product)
 
       expect(product_info.product).to be_a(Product)
       expect(product_info.download).to be_a(Download)
-      expect(product_info.html_list_ids).to eq([2])
-      expect(product_info.xml_list_ids).to eq([1])
       expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
     end
 
@@ -114,14 +124,10 @@ describe User do
       @product2 = FactoryGirl.create(:product, name: "Tower of Pisa Model", product_code: 'CB001M', product_type_id: @product_type2.id)
       @image = FactoryGirl.create(:image, product_id: @product2.id)
       @user = FactoryGirl.create(:user)
-      @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
       product_info = @user.get_info_for_product(@product2)
 
       expect(product_info.product).to be_a(Product)
       expect(product_info.download).to be_nil
-      expect(product_info.html_list_ids).to be_nil
-      expect(product_info.xml_list_ids).to be_nil
       expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
     end
   end
@@ -137,15 +143,11 @@ describe User do
       @image = FactoryGirl.create(:image)
       @user = FactoryGirl.create(:user)
       @download = FactoryGirl.create(:download)
-      @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
       product_info = @user.get_product_info_for_products_owned
 
       expect(product_info.length).to eq(2)
       expect(product_info[0].product).to be_a(Product)
       expect(product_info[0].download).to be_a(Download)
-      expect(product_info[0].html_list_ids).to eq([2])
-      expect(product_info[0].xml_list_ids).to eq([1])
       expect(product_info[0].image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
       expect(product_info[1].product).to be_a(Product)
     end
@@ -161,8 +163,6 @@ describe User do
       @image = FactoryGirl.create(:image)
       @user = FactoryGirl.create(:user)
       @download = FactoryGirl.create(:download)
-      @xml_list = FactoryGirl.create(:xml_parts_list)
-      @html_list = FactoryGirl.create(:html_parts_list)
       product_info = @user.get_product_info_for_products_owned
 
       expect(product_info.length).to eq(2)

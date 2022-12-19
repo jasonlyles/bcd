@@ -1,0 +1,78 @@
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= @partner.name %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-5">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Partner</b>
+        <%= link_to 'Edit', edit_admin_partner_path(@partner), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>URL:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @partner.url %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Contact Email:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @partner.contact %>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', admin_partners_path %>
+  </div>
+  <div class="col-7">
+    <div class="card">
+      <div class="card-header">
+        <b class="mt-2">Campaigns</b>
+      </div>
+      <div class="card-body">
+        <table>
+          <% @partner.advertising_campaigns.each do |ac| %>
+            <tr>
+              <td>
+                <b>Reference Code:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= link_to ac.reference_code, admin_advertising_campaign_path(ac) %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Live?</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= decorate_boolean(ac.campaign_live?) %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Desc:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= snippet(ac.description, word_count: 10) %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

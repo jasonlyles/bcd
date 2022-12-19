@@ -1,0 +1,16 @@
+<h1>Notifications</h1>
+<br />
+<% @backend_notifications.each do |backend_notification| %>
+  <div class="card" id="notification-<%= backend_notification.id %>">
+    <div class="card-body d-flex justify-content-between">
+      <span>
+        <%= backend_notification.created_at.strftime("%m/%d %I:%M %p") %>
+      </span>
+      <span>
+        <%= backend_notification.message %>
+      </span>
+      <%= link_to raw('<i class="fas fa-times text-danger"></i>'), dismiss_admin_backend_notification_path(backend_notification), method: :put, remote: true %>
+    </div>
+  </div>
+  <br />
+<% end %>

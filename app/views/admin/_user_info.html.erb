@@ -1,190 +1,226 @@
 <% if user %>
-  <b>
-    Account Status:
-  </b>
-  <% if user.account_status == "A" %>
-    <b class="happy">Active</b>
-    <%= form_for(:user, :url => {:action => :change_user_status, :email => /.*/},:remote => true) do |f| %>
-    <%= f.hidden_field :email, :value => user.email %>
-    <%= f.hidden_field :account_status, :value => "C" %>
-    <%= f.submit 'Cancel Account', :confirm => "Are you sure you want to CANCEL this account?" %>
-  <% end %>
-  <% elsif user.account_status == "C" %>
-    <b class="sad">Cancelled</b>
-    <%= form_for(:user, :url => {:action => :change_user_status, :email => /.*/},:remote => true) do |f| %>
-    <%= f.hidden_field :email, :value => user.email %>
-    <%= f.hidden_field :account_status, :value => "A" %>
-    <%= f.submit 'Activate Account', :confirm => "Are you sure you want to ACTIVATE this account?" %>
-  <% end %>
-  <% elsif user.account_status == 'G' %>
-    <b class="happy">Guest</b>
-  <% end %>
-  <br/>
-  <%= user.email %>
-  <%= link_to "I shall become #{user.email}!", become_admin_path(user.id) %>
-  <br/>
-  <br/>
-  <% unless user.account_status == 'G' %>
-    <b>
-      Login Info
-    </b>
-    <table class="admin_table">
-      <tr>
-        <th>Login Count</th>
-        <th>Current Login</th>
-        <th>Last Login</th>
-        <th>Current IP</th>
-        <th>Last IP</th>
-      </tr>
-      <tr>
-        <td>
-          <%= user.sign_in_count %>
-        </td>
-        <td>
-          <%= user.current_sign_in_at.to_s(:date_time12) if user.current_sign_in_at %>
-        </td>
-        <td>
-          <%= user.last_sign_in_at.to_s(:date_time12) if user.last_sign_in_at %>
-        </td>
-        <td>
-          <%= user.current_sign_in_ip %>
-        </td>
-        <td>
-          <%= user.last_sign_in_ip %>
-        </td>
-      </tr>
-    </table>
-    <br/>
-    <b>
-      Alternative Logins
-    </b>
-    <table class="admin_table">
-      <tr>
-        <th>Provider</th>
-        <th>User ID</th>
-        <th>Created</th>
-        <th>Updated</th>
-      </tr>
-      <% user.authentications.each do |auth| %>
-        <tr>
-          <td>
-            <%= auth.provider %>
-          </td>
-          <td>
-            <%= auth.uid %>
-          </td>
-          <td>
-            <%= auth.created_at.to_s(:date_time12) if auth.created_at %>
-          </td>
-          <td>
-            <%= auth.updated_at.to_s(:date_time12) if auth.updated_at %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-    <br/>
-    <b>
-      User Location
-    </b>
-    <p>Working on this. Until I can automate something based on our stored IPs, if you really need to know where a user is from, go to iplocationtools.com Was thinking I would use this to determine 1. Users country, 2. Users timezone. This may not be
-      super important, but it might end up helping me troubleshoot users issues.</p>
-    <br/>
-    <b>
-      Password Info
-    </b>
-    <table class="admin_table">
-      <tr>
-        <th>Reset Pswd Token</th>
-        <th>Rememember Token Created</th>
-      </tr>
-      <tr>
-        <td>
-          <%= user.reset_password_token %>
-        </td>
-        <td>
-          <%= user.remember_created_at.to_s(:date_time12) if user.remember_created_at %>
-        </td>
-      </tr>
-    </table>
-    <br/>
-  <% end %>
-  <b>
-    Account Info
-  </b>
-  <table class="admin_table">
-    <tr>
-      <th>Created</th>
-      <th>Info Last Updated</th>
-    </tr>
-    <tr>
-      <td>
-        <%= user.created_at.to_s(:date_time12) %>
-      </td>
-      <td>
-        <%= user.updated_at.to_s(:date_time12) %>
-      </td>
-    </tr>
-  </table>
-  <br/>
-  <b>
-    Order Info
-  </b>
-  <table class="admin_table">
-    <tr>
-      <th>Order ID</th>
-      <th>Request ID</th>
-      <th>Transaction ID</th>
-      <th>Status</th>
-      <th>Created At</th>
-      <th>Updated At</th>
-    </tr>
-    <% user.orders.each do |order| %>
-      <tr>
-        <td>
-          <%= link_to order.id, {:controller => :admin, :action => :order, :id => order.id} %>
-        </td>
-        <td>
-          <%= order.request_id %>
-        </td>
-        <td>
-          <%= order.transaction_id %>
-        </td>
-        <% if (!order.status.blank? && order.status.upcase == "COMPLETED") || order.status == 'GIFT' %>
-          <td class="happy">
-            <%= order.status %>
-          </td>
-        <% else %>
-          <td class="sad">
-            <%= order.status %>
-          </td>
-        <% end %>
-        <td>
-          <%= order.created_at.to_s(:date_time12) %>
-        </td>
-        <td>
-          <%= order.updated_at.to_s(:date_time12) %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
-  <br/>
-  <b>
-    Gift Instructions to User (User already owns checked off products)
-  </b>
-  <table>
-    <% products.each_with_index do |product,index| %>
-      <% if index % 3 == 0 %>
-        <tr></tr>
-      <% end %>
-      <td style="padding:1px 3px 1px 3px;">
-        <% owned = user.owns_product?(product.id) %>
-          <%= check_box_tag("product_ids[]", product.id, owned, id: product.id, onchange: "giftInstructions(#{user.id}, #{product.id})", disabled: owned) %>
-          &nbsp;
-          <%= product.code_and_name %>
-        </td>
-      <% end %>
-    </table>
-  <% else %>
-    <p>Could not find user with email:</p>
-    <%= params[:user][:email] %>
-  <% end %>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="account-info-tab" data-toggle="tab" href="#account-info" role="tab" aria-controls="account-info" aria-selected="true">Account Info</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="user-actions-tab" data-toggle="tab" href="#user-actions" role="tab" aria-controls="user-actions" aria-selected="false">User Actions</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="order-info-tab" data-toggle="tab" href="#order-info" role="tab" aria-controls="order-info" aria-selected="false">Order Info</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="gifting-tab" data-toggle="tab" href="#gifting" role="tab" aria-controls="gifting" aria-selected="false">Gifting Instructions</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="account-info" role="tabpanel" aria-labelledby="account-info-tab">
+      <div class="row">
+        <div class="col-10">
+          <div class="card">
+            <div class="card-body">
+              Account created: <%= user.created_at.to_s(:date_time12) %>
+              <br />
+              Last updated: <%= user.updated_at.to_s(:date_time12) %>
+              <% unless user.account_status == 'G' %>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr class="table-secondary">
+                      <th class="align-middle text-center">Login Count</th>
+                      <th class="align-middle text-center">Current Login</th>
+                      <th class="align-middle text-center">Last Login</th>
+                      <th class="align-middle text-center">Current IP</th>
+                      <th class="align-middle text-center">Last IP</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle text-center">
+                        <%= user.sign_in_count %>
+                      </td>
+                      <td class="align-middle text-center">
+                        <%= user.current_sign_in_at&.to_s(:date_time12) %>
+                      </td>
+                      <td class="align-middle text-center">
+                        <%= user.last_sign_in_at&.to_s(:date_time12) %>
+                      </td>
+                      <td class="align-middle text-center">
+                        <%= user.current_sign_in_ip %>
+                      </td>
+                      <td class="align-middle text-center">
+                        <%= user.last_sign_in_ip %>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br/>
+                <span class='font-weight-bold'>
+                  Alternative Logins
+                </span>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr class="table-secondary">
+                      <th class="align-middle text-center">Provider</th>
+                      <th class="align-middle text-center">User ID</th>
+                      <th class="align-middle text-center">Created</th>
+                      <th class="align-middle text-center">Updated</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% user.authentications.each do |auth| %>
+                      <tr>
+                        <td class="align-middle text-center">
+                          <%= auth.provider %>
+                        </td>
+                        <td class="align-middle text-center">
+                          <%= auth.uid %>
+                        </td>
+                        <td class="align-middle text-center">
+                          <%= auth.created_at&.to_s(:date_time12) %>
+                        </td>
+                        <td class="align-middle text-center">
+                          <%= auth.updated_at&.to_s(:date_time12) %>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+                <br/>
+                <b>
+                  Password Info
+                </b>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr class="table-secondary">
+                      <th class="align-middle text-center">Reset Pswd Token</th>
+                      <th class="align-middle text-center">Rememember Token Created</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-middle text-center">
+                        <%= user.reset_password_token %>
+                      </td>
+                      <td class="align-middle text-center">
+                        <%= user.remember_created_at&.to_s(:date_time12) %>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade show" id="user-actions" role="tabpanel" aria-labelledby="user-actions-tab">
+      <div class="row">
+        <div class="col-4">
+          <div class="card">
+            <div class="card-body">
+              <span class="font-weight-bold">Account Status:</span>
+              <% if user.account_status == 'A' %>
+                <b class="text-success">Active</b>
+                <%= form_for(:user, url: { action: :change_user_status, email: /.*/ }, remote: true) do |f| %>
+                  <%= f.hidden_field :email, value: user.email %>
+                  <%= f.hidden_field :account_status, value: 'C' %>
+                <%= f.submit 'Cancel Account', confirm: "Are you sure you want to CANCEL this account?", class: 'btn btn-danger' %>
+              <% end %>
+              <% elsif user.account_status == 'C' %>
+                <b class="text-danger">Cancelled</b>
+                <%= form_for(:user, :url => {:action => :change_user_status, :email => /.*/},:remote => true) do |f| %>
+                  <%= f.hidden_field :email, :value => user.email %>
+                  <%= f.hidden_field :account_status, :value => "A" %>
+                <%= f.submit 'Activate Account', confirm: "Are you sure you want to ACTIVATE this account?", class: 'btn btn-success' %>
+              <% end %>
+              <% elsif user.account_status == 'G' %>
+                <b class="text-success">Guest</b>
+              <% end %>
+              <br/>
+              <span class='font-weight-bold'>User email: </span><%= user.email %>
+              <br />
+              <%= link_to "Sign in as #{user.email}", become_admin_path(user.id), class: 'btn btn-primary' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade show" id="order-info" role="tabpanel" aria-labelledby="order-info-tab">
+      <table class="table table-bordered">
+        <thead>
+          <tr class="table-secondary">
+            <th class="align-middle text-center">Order ID</th>
+            <th class="align-middle text-center">Request ID</th>
+            <th class="align-middle text-center">Transaction ID</th>
+            <th class="align-middle text-center">Status</th>
+            <th class="align-middle text-center">Created</th>
+            <th class="align-middle text-center">Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% user.orders.each do |order| %>
+            <tr>
+              <td class="align-middle text-center">
+                <%= link_to order.id, { controller: :admin, action: :order, id: order.id} %>
+              </td>
+              <td class="align-middle text-center">
+                <%= order.request_id %>
+              </td>
+              <td class="align-middle text-center">
+                <%= order.transaction_id %>
+              </td>
+              <% if (!order.status.blank? && order.status.upcase == "COMPLETED") || order.status.upcase == 'GIFT' %>
+                <td class="align-middle text-center text-success">
+                  <%= order.status %>
+                </td>
+              <% else %>
+                <td class="align-middle text-center text-danger">
+                  <%= order.status %>
+                </td>
+              <% end %>
+              <td class="align-middle text-center">
+                <%= order.created_at.to_s(:date_time12) %>
+              </td>
+              <td class="align-middle text-center">
+                <%= order.updated_at.to_s(:date_time12) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tab-pane fade show" id="gifting" role="tabpanel" aria-labelledby="gifting-tab">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <p class="font-weight-bold">
+                Gift Instructions to User (User already owns checked off products)
+              </p>
+              <table>
+                <% products.each_with_index do |product, index| %>
+                  <% if index % 3 == 0 %>
+                    <tr></tr>
+                  <% end %>
+                  <td style="padding:1px 3px 1px 3px;">
+                    <% owned = user.owns_product?(product.id) %>
+                    <%= check_box_tag("product_ids[]", product.id, owned, id: product.id, onchange: "giftInstructions(#{user.id}, #{product.id})", disabled: owned) %>
+                    &nbsp;
+                    <%= product.code_and_name %>
+                  </td>
+                <% end %>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% else %>
+  <p>Could not find user with email:</p>
+  <%= params[:user][:email] %>
+<% end %>

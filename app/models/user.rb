@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   has_many :authentications, :dependent => :destroy
   has_many :downloads
   has_one :cart
+  has_many :user_parts_lists
+  has_many :parts_lists, through: :user_parts_lists
 
   validates :tos_accepted, :acceptance => {:accept => true}
 
@@ -50,7 +52,7 @@ class User < ActiveRecord::Base
     info_objects = []
     if orders.length > 0
       products = []
-      orders.each do |order|
+      orders.includes(:line_items).each do |order|
         order.line_items.each do |line_item|
           if products.include?(line_item.product_id)
             next
@@ -69,27 +71,22 @@ class User < ActiveRecord::Base
   end
 
   def get_info_for_product(product)
-    product_info = Struct.new(:product, :download, :xml_list_ids, :html_list_ids, :image_url)
+    product_info = Struct.new(:product, :download, :image_url, :parts_list_ids)
     image_url = product.main_image.thumb if product.main_image
     download = Download.find_by_user_id_and_product_id(self.id,product.id)
+
     if product.includes_instructions?
-      html_list_ids,xml_list_ids = [],[]
-
-      html_lists = PartsList.get_list(product.parts_lists, 'html')
-      html_lists.each{|hl| html_list_ids << hl.id} if html_lists
-      html_list_ids = nil if html_list_ids.blank?
-
-      xml_lists = PartsList.get_list(product.parts_lists, 'xml')
-      xml_lists.each{|xl| xml_list_ids << xl.id} if xml_lists
-      xml_list_ids = nil if xml_list_ids.blank?
+      parts_list_ids = product.parts_lists.map(&:id)
     else
-      html_list_ids,xml_list_ids = nil, nil
+      parts_list_ids = nil
     end
 
-    product_info.new(product, download, xml_list_ids, html_list_ids, image_url)
+    product_info.new(product, download, image_url, parts_list_ids)
   end
 
   def owns_product?(product_id)
+    return true if Product.freebies.map(&:id).include?(product_id)
+
     li = self.line_items
     ownership = false
     li.each do |item|
@@ -104,6 +101,22 @@ class User < ActiveRecord::Base
     account_status == 'G'
   end
 
+  def active?
+    account_status == 'A'
+  end
+
+  def cancelled?
+    account_status == 'C'
+  end
+
+  def gets_important_emails?
+    [1,2].include?(email_preference)
+  end
+
+  def gets_all_emails?
+    email_preference == 2
+  end
+
   def set_up_guids
     self.guid = SecureRandom.hex(20)
     self.unsubscribe_token = SecureRandom.hex(20)
@@ -115,5 +128,10 @@ class User < ActiveRecord::Base
 
   def self.who_get_important_emails
     User.where("email_preference in ('1','2') and account_status <> 'C'").pluck(:email, :guid, :unsubscribe_token)
+  end
+
+  def has_access_to_parts_list?(parts_list_id)
+    product_id = PartsList.find(parts_list_id)&.product_id
+    product_id.blank? ? false : owns_product?(product_id)
   end
 end

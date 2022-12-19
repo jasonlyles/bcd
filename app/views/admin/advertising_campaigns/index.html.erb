@@ -1,0 +1,72 @@
+<div class="card">
+  <div class="card-header">
+    Listing advertising campaigns
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @advertising_campaigns %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Advertising Campaign', new_admin_advertising_campaign_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center">Partner</th>
+              <th class="align-middle text-center">Reference Code</th>
+              <th class="align-middle text-center"><%= sort_link(@q, :campaign_live, 'Live?') %></th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @advertising_campaigns.each do |advertising_campaign| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to advertising_campaign.partner.name, [:admin, advertising_campaign.partner] %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to advertising_campaign.reference_code, admin_advertising_campaign_path(advertising_campaign) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(advertising_campaign.campaign_live?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_admin_advertising_campaign_path(advertising_campaign) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), [:admin, advertising_campaign], data: {confirm: 'Are you sure?'}, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @advertising_campaigns %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for(@q, url: 'advertising_campaigns') do |f| %>
+              <div class="form-group">
+                <%= f.label :reference_code_eq %>
+                <%= f.search_field :reference_code_eq, class: "form-control" %>
+              </div>
+              <div class="form-group">
+                <%= f.label :partner_id_eq, 'Partner' %>
+                <%= f.collection_select :partner_id_eq, Partner.all, "id", "name", { include_blank: true }, class: 'form-control' %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

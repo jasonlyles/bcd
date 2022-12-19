@@ -1,0 +1,48 @@
+<%= nested_form_for [:admin, color] do |f| %>
+  <div class="row">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-header">
+          <b>Color</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :name, "Name", class: 'form-label' %>
+            <%= f.text_field :name, placeholder: "LDraw's color name", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :ldraw_id, "LDraw ID", class: 'form-label' %>
+            <%= f.text_field :ldraw_id, placeholder: "LDraw's color ID", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :bl_name, "Bricklink Name", class: 'form-label' %>
+            <%= f.text_field :bl_name, placeholder: "BrickLink's color name", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :bl_id, "Bricklink ID", class: 'form-label' %>
+            <%= f.text_field :bl_id, placeholder: "BrickLink's color ID", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :lego_name, "Lego Name", class: 'form-label' %>
+            <%= f.text_field :lego_name, placeholder: "Lego's color name", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :lego_id, "Lego ID", class: 'form-label' %>
+            <%= f.text_field :lego_id, placeholder: "Lego's color ID", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :ldraw_rgb, "LDraw RGB (for rendering LDraw elements)", class: 'form-label' %>
+            <%= f.text_field :ldraw_rgb, placeholder: "Hex code like FFF001", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :rgb, "RGB", class: 'form-label' %>
+            <%= f.text_field :rgb, placeholder: "Hex code like FFF001", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

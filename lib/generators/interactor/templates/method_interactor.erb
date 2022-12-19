@@ -1,0 +1,24 @@
+# TODO: Add logging about what this interactor is doing
+# TODO: Define interactor-specific errors, if relevant
+# TODO: Make sure this interactor has 100% test coverage
+# TODO: Remove these comments after you've addressed them :)
+
+# Sample Logging formats:
+# Rails.logger.error("ModelName::InteractorName::ModelId This error happened")
+# Rails.logger.info("ModelName::InteractorName::ModelId Successfully did #{number_of_things} things")
+
+module <%= "#{plural_name.singularize.titleize}Interactions" %>
+  class <%= @method %> < Base<%= class_name %>Interaction
+    class CustomErrorBelongingToThisClass < StandardError; end
+    # This run method should be the only public method
+    def run
+      # Do the thing
+    rescue CustomErrorBelongingToThisClass => e
+      self.error = 'Add some error info here'
+      Rails.logger.info("Add some error info here")
+    rescue StandardError => e
+      self.error = 'Add some error info here'
+      Rails.logger.info("Add some error info here")
+    end
+  end
+end

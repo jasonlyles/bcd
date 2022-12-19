@@ -1,25 +1,30 @@
 class PartsList < ActiveRecord::Base
+  mount_uploader :file, PartsListUploader
   belongs_to :product
-  mount_uploader :name, PartsListUploader
-  process_in_background :name
+  has_many :lots
+  has_many :elements, through: :lots
+  has_many :user_parts_lists
+  accepts_nested_attributes_for :lots, allow_destroy: true
+  validates_associated :lots
 
-  attr_accessible :name, :product_id, :parts_list_type, :name_cache, :remove_name
+  validates :name, presence: true
+  validates :name, uniqueness: { scope: :product_id, message: "Don't name more than one parts list the same thing for this product" }
+  validates :product_id, presence: true
+  validates :bricklink_xml, presence: { if: -> { ldr.blank? } }
+  validates :ldr, presence: { if: -> { bricklink_xml.blank? } }
+  validates :original_filename, presence: true
 
-  validates :parts_list_type, :presence => true, :inclusion => {:in => ['HTML','html','XML','xml']}
-  validates :product_id, :presence => true
-  validates :name, :presence => true
+  attr_accessible :name, :product_id, :approved, :lots_attributes, :file, :file_cache, :remove_file, :original_filename, :bricklink_xml, :ldr
 
-  def filename
-    Pathname(self.name.to_s).basename.to_s
+  def product_name
+    product.name
   end
 
-  def self.get_list(parts_lists, list_type)
-    list = []
-    parts_lists.each do |pl|
-      if pl.parts_list_type && (pl.parts_list_type.upcase == list_type.upcase)
-        list << pl
-      end
-    end
-    list
+  def parts_quantity
+    lots.inject(0) { |sum, p| sum + p.quantity }
+  end
+
+  def has_obsolete_part?
+    lots.includes(:part).map(&:part).select { |part| part.is_obsolete? }.present?
   end
 end

@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="card">
+        <div class="card-header">
+          <h2 class="text-center"><%= "Parts List for #{@parts_list.product.code_and_name} (#{@parts_list.parts_quantity} parts)" %></h2>
+          <br/>
+          <div class="d-flex justify-content-end">
+          <button id='visibility-toggle' class='btn btn-primary' onclick='toggleCompletedVisibility(this)'><i class="far fa-eye-slash"></i> Hide Completed Rows</button>
+          <button id='visibility-toggle' class='btn btn-primary' onclick='clearStorageAndReloadPage()'><i class="fas fa-undo"></i> Reset Form Values</button>
+          <button id='visibility-toggle' class='btn btn-primary' onclick='saveForm()'><i class="fas fa-save"></i> Save Form Values</button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+      <table class="table table-bordered mb-0">
+        <thead style="z-index: 100;position: sticky; top: 79px;">
+          <tr class="table-secondary">
+            <th class="align-middle text-center">Part</th>
+            <th class="align-middle text-center">Color</th>
+            <th class="align-middle text-center">Description</th>
+            <th class="align-middle text-center">Quantity</th>
+            <th class="align-middle text-center">I need</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @lots.each do |lot| %>
+            <% part = lot.element.part %>
+            <% color = lot.element.color %>
+            <tr id="<%= "#{part.bl_id}_#{color.bl_id}" %>">
+              <td class="align-middle text-center">
+                <div class="d-flex justify-content-around">
+                  <% if lot.element&.image&.thumb&.url %>
+                    <%= link_to image_tag(lot.element.image.thumb.url, alt: 'View on BrickLink.com', title: 'View on BrickLink.com', class: 'grow parts-list-image'), "https://www.bricklink.com/v2/catalog/catalogitem.page?P=#{part.bl_id}", target: '_blank' %>
+                  <% else %>
+                    <%= link_to 'View on BrickLink.com', "https://www.bricklink.com/v2/catalog/catalogitem.page?P=#{part.bl_id}", target: '_blank' %>
+                  <% end %>
+                  <div class="kaffee">
+                    <%= part.bl_id %>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle text-center" style='<%= "background-color: ##{color.ldraw_rgb};" %>'>
+                <div class="kaffee" style='color: <%= set_text_color(color.ldraw_rgb) %>;'>
+                  <%= color.bl_name %>
+                </div>
+              </td>
+              <td class="align-middle text-center kaffee">
+                <%= part.name %>
+                <% if lot.note.present? %>
+                  <br />
+                  <%= lot.note %>
+                <% end %>
+              </td>
+              <td class="align-middle text-center kaffee">
+                <%= lot.quantity %>
+              </td>
+              <td class="align-middle text-center">
+                <input class='form-control part-quantity' type='number' step='1' id='<%= "#{@parts_list.id}_#{part.bl_id}_#{color.bl_id}" %>' min='0' max='<%= lot.quantity %>' value='<%= lot.quantity %>' onblur='toggleRowHighlighting(this)'/>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-end">
+        <button id='visibility-toggle' class='btn btn-primary' onclick='toggleCompletedVisibility(this)'><i class="far fa-eye-slash"></i> Hide Completed Rows</button>
+        <button id='visibility-toggle' class='btn btn-primary' onclick='clearStorageAndReloadPage()'><i class="fas fa-undo"></i> Reset Form Values</button>
+        <button id='visibility-toggle' class='btn btn-primary' onclick='saveForm()'><i class="fas fa-save"></i> Save Form Values</button>
+        </div>
+      </div>
+      <div id='wanted_list_target'></div>
+      <br />
+      <div class="row pb-4">
+        <div class="col-6 offset-md-3">
+          <div class="card">
+            <div class='card-header h4 align-middle text-center'>
+    					Custom Bricklink Wanted List Generator
+    				</div>
+            <div class='card-body' id='bricklink_form'>
+              <div id='form-wrapper'>
+      					<div id ='bad_wanted_list_id' class='d-none'>
+      						<p id='bad_wanted_list_text' class='text-danger'>Sorry, that's not a valid Wanted List ID</p>
+      						<p>Please go to the following page and select the Wanted List you want to send to: <a href='https://www.bricklink.com/v2/wanted/list.page' target='_blank'>https://www.bricklink.com/v2/wanted/list.page</a></p>
+                  <%= image_tag('select_wanted_list.png', class: 'img-fluid mb-4 mt-4') %>
+                  <p>After you have clicked the wanted list you want to use, get the value for wantedMoreID in the url:</p>
+                  <%= image_tag('wanted_list_id_in_url.png', class: 'img-fluid mb-4 mt-4') %>
+      					</div>
+      					<label for='custom_wanted_list' class='form-label'>ID # of your BrickLink Wanted List (If not using your Main Wanted List)</label>
+      					<br />
+      					<input type='text' id='custom_wanted_list' class='form-control'>
+      					<br />
+      					<p>Part Condition</p>
+                <div class="form-check">
+      					  <input type='radio' name='part_condition' id='part_condition_new' value='New' checked='true' class='form-check-input'>
+      					  <label for='part_condition_new' class='form-check-label'>New</label>
+                </div>
+                <div class="form-check">
+      					  <input type='radio' name='part_condition' id='part_condition_either' value='Either' class='form-check-input'>
+      					  <label for='part_condition_either' class='form-check-label'>New or Used</label>
+                </div>
+                <br />
+      					<button class="btn btn-primary" onclick="findNeededParts()">Assemble BrickLink XML</button>
+              </div>
+              <br />
+              <div id='bricklink_target'></div>
+    					<div id='bricklinkXmlDiv' class='d-none'>
+    						<p>Just copy the selected text and paste it to BrickLink on the "Upload BrickLink XML format" tab: <a href="https://www.bricklink.com/v2/wanted/upload.page"  target="_blank">https://www.bricklink.com/v2/wanted/upload.page</a></p>
+    						<textarea id='bricklinkXml' rows='10' cols='40' onclick='select_all_text(this)' class='form-control'></textarea>
+    					</div>
+    				</div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div id='user-parts' class='d-none'>
+  <%= @user_parts_list %>
+</div>
+
+<script>
+  var values = JSON.parse($('#user-parts').text().trim());
+  var partsListId = <%= @parts_list.id %>;
+  for (var key in values) {
+    var inputId = partsListId + '_' + key;
+    // only try to set a value if I can find the element in the DOM
+    if (document.getElementById(inputId) != null) {
+      // get the input by its ID, and then set the value to the max value minus
+      // the stored (user has) value to get the quantity needed
+      if(document.getElementById(inputId).max - values[key] < 0) {
+        var qtyNeeded = 0;
+      } else {
+        var qtyNeeded = document.getElementById(inputId).max - values[key];
+      }
+      document.getElementById(inputId).value = qtyNeeded;
+      if (document.getElementById(inputId).value == 0) {
+        document.getElementById(key).classList.add('lot-quantity-zero');
+      }
+    }
+  }
+</script>

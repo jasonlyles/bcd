@@ -28,6 +28,9 @@ gem 'jquery-ui-rails'
 gem 'rake'
 gem "rack-protection", ">= 1.5.5"
 gem "ffi", ">= 1.9.24"
+gem "ransack"
+gem 'awesome_print', require: 'ap'
+gem 'audited', '4.10.0'
 
 gem 'resque'
 gem 'resque_mailer'
@@ -61,11 +64,11 @@ group :development, :test do
   gem 'metric_fu', git: 'https://github.com/bergholdt/metric_fu.git'
   gem 'mail_view', "~> 2.0.4"
   gem 'foreman'
-  gem 'awesome_print', require: 'ap'
   gem 'pry-byebug'
   gem 'bullet'
   gem 'gemsurance'
   gem 'pry'
+  gem 'faker'
 end
 
 group :development do

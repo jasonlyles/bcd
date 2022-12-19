@@ -1,0 +1,72 @@
+<div class="row mt-4 mb-2">
+  <div class="col-auto mr-auto">
+    <h1><%= @category.name %></h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-8">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between">
+        <b class="mt-2">Category</b>
+        <%= link_to 'Edit', edit_admin_category_path(@category), class: 'btn btn-primary' %>
+      </div>
+      <div class="card-body">
+        <table>
+          <tr>
+            <td>
+              <b>Name:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @category.name %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Description:</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= @category.description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Image?</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= decorate_boolean(@category.image?) %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Ready for Public?</b>
+            </td>
+            <td></td>
+            <td class="pl-4">
+              <%= decorate_boolean(@category.ready_for_public?) %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Subcategories:</b>
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+          <% @category.subcategories.each do |subcat| %>
+            <tr>
+              <td></td>
+              <td class="px-4"></td>
+              <td class="pl-4">
+                <%= link_to "#{subcat.code} #{subcat.name}", subcat %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+    <%= link_to 'Back to Index', admin_categories_path %>
+  </div>
+</div>

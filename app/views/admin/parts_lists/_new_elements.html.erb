@@ -1,0 +1,55 @@
+<% if @error.present? %>
+  <p class="text-danger">
+    <%= @error %>
+  </p>
+<% else %>
+  <div class="card">
+    <div class="card-header">
+      <h2>Element Images</h2>
+    </div>
+    <div class="card-body">
+      <p>If the new element image is missing, wait a few seconds and click the "Create New Elements" button again.
+         The image should appear. If it doesn't, click the "Missing image" text to go to the elements page
+         and try to fix the image there. If all images appear correctly, then proceed and click the "Swap Parts"
+         button at the bottom of the page.
+      </p>
+      <br />
+      <div class="row">
+        <% elements.each do |_k, v| %>
+          <div class="col-2 mb-4">
+            <%= link_to image_tag(v['old_element'].image.thumb.url), admin_element_path(v['old_element'].id), target: 'blank' %>
+            <br />
+            <div class="pt-4 pl-4">
+              <i class="fas fa-2x fa-arrow-down"></i>
+            </div>
+            <br />
+            <%= link_to image_tag(v['new_element'].image.thumb.url, alt: 'Missing image'), admin_element_path(v['new_element'].id), target: 'blank' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="card">
+    <div class="card-header">
+      <h2>The following <%= parts_lists_to_be_updated.count %> parts lists will be updated</h2>
+    </div>
+    <div class="card-body">
+      <ul class="list-group">
+        <% parts_lists_to_be_updated.each do |parts_list| %>
+          <li class="list-group-item">
+            <%= link_to "#{parts_list[1]} #{parts_list[2]}", admin_parts_list_path(parts_list[0]) %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <br />
+  <%= form_for(:parts_lists, url: { action: :swap_parts }, remote: true) do |f| %>
+    <%= f.hidden_field :old_part, class: 'form-control', value: old_part_name %>
+    <%= f.hidden_field :new_part, class: 'form-control', value: new_part_name %>
+    <div class="form-group d-inline-block">
+      <%= f.submit 'Swap Parts', data: { disable_with: 'Swapping...' }, class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% end %>

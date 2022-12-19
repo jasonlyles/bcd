@@ -1,0 +1,72 @@
+<div class="card">
+  <div class="card-header">
+    Listing updates
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-9">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <%= paginate @updates %>
+          </div>
+          <div class="col-auto">
+            <%= link_to 'New Update', new_admin_update_path, class: 'btn btn-primary mb-3' %>
+          </div>
+        </div>
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr class="table-secondary">
+              <th class="align-middle text-center">Title</th>
+              <th class="align-middle text-center">Image</th>
+              <th class="align-middle text-center">Link</th>
+              <th class="align-middle text-center">Live?</th>
+              <th style="width: 10%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @updates.each do |update| %>
+              <tr>
+                <td class="align-middle text-center">
+                  <%= link_to update.title, admin_update_path(update) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= update&.image&.file&.filename %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= update.link %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(update.live?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= link_to raw('<i class="far fa-edit"></i>'), edit_admin_update_path(update) %>
+                  &nbsp;
+                  <%= link_to raw('<i class="far fa-trash-alt"></i>'), [:admin, update], data: { confirm: 'Are you sure?' }, method: :delete %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= paginate @updates %>
+      </div>
+      <div class="col-3">
+        <div class="card">
+          <div class="card-header">
+            Search
+          </div>
+          <div class="card-body">
+            <%= search_form_for(@q, url: 'updates') do |f| %>
+              <div class="form-group">
+                <%= f.label :title_cont %>
+                <%= f.search_field :title_cont, class: "form-control" %>
+              </div>
+              <br />
+              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

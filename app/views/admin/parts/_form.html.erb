@@ -1,0 +1,64 @@
+<%= nested_form_for [:admin, part] do |f| %>
+  <div class="row">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-header">
+          <b>Part</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :name, "Name", class: 'form-label' %>
+            <%= f.text_field :name, placeholder: "1 x 1 Brick", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :ldraw_id, "LDraw ID", class: 'form-label' %>
+            <%= f.text_field :ldraw_id, placeholder: "LDraw's part ID", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :bl_id, "Bricklink ID", class: 'form-label' %>
+            <%= f.text_field :bl_id, placeholder: "BrickLink's part ID", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :lego_id, "Lego ID", class: 'form-label' %>
+            <%= f.text_field :lego_id, placeholder: "Lego's part ID", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :alternate_nos, "Alternate #s", class: 'form-label' %>
+            <%= f.text_field :alternate_nos, class: 'form-control readonly', disabled: true %>
+          </div>
+          <div class="form-group">
+            <%= f.label :brickowl_ids, "BrickOwl IDs", class: 'form-label' %>
+            <%= f.text_field :brickowl_ids, class: 'form-control readonly', disabled: true %>
+          </div>
+          <div class="form-group">
+            <%= f.label :year_from, class: 'form-label' %>
+            <%= f.text_field :year_from, class: 'form-control readonly', disabled: true %>
+          </div>
+          <div class="form-group">
+            <%= f.label :year_to, class: 'form-label' %>
+            <%= f.text_field :year_to, class: 'form-control readonly', disabled: true %>
+          </div>
+          <div class="form-check">
+            <%= f.check_box :check_bricklink, { checked: part.check_bricklink, class: 'form-check-input', disabled: action_name == 'new' },1,0 %>
+            <%= f.label :check_bricklink, "Check BrickLink", class: 'form-check-label' %>
+          </div>
+          <div class="form-check">
+            <%= f.check_box :check_rebrickable, { checked: part.check_rebrickable, class: 'form-check-input', disabled: action_name == 'new' },1,0 %>
+            <%= f.label :check_rebrickable, "Check Rebrickable", class: 'form-check-label' %>
+          </div>
+          <div class="form-check">
+            <%= f.check_box :is_lsynth, { checked: part.is_lsynth, class: 'form-check-input' },1,0 %>
+            <%= f.label :is_lsynth, "Is LSynth", class: 'form-check-label' %>
+          </div>
+          <div class="form-check">
+            <%= f.check_box :is_obsolete, { checked: part.is_obsolete, class: 'form-check-input' },1,0 %>
+            <%= f.label :is_obsolete, "Is Obsolete", class: 'form-check-label' %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

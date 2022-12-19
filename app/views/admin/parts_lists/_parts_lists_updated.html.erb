@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Swap Results</h2>
+  </div>
+  <div class="card-body">
+    <% if @error.present? %>
+      <p class="text-danger">
+        <%= @error %>
+      </p>
+    <% else %>
+      <p>
+        Swapped <span class="font-weight-bold emphasized"><%= old_part_name %></span> for <span class="font-weight-bold emphasized"><%= new_part_name %></span> and updated <span class="font-weight-bold emphasized"><%= parts_lists_ids.length %></span> parts lists.
+      </p>
+      <br />
+      <p>
+        If it makes sense to do so, notify the customers that have access to the changed parts
+        lists that their parts lists have been updated.
+      </p>
+      <%= form_for(:parts_lists, url: { action: :notify_customers_of_parts_list_update }, remote: true) do |f| %>
+        <%= f.hidden_field :parts_list_ids, class: 'form-control', value: parts_lists_ids %>
+
+        <%= f.label :message, class: 'form-label' %>
+        <%= f.text_area :message, class: 'form-control' %>
+        <br />
+        <div class="form-group d-inline-block">
+          <%= f.submit 'Notify Customers', data: { disable_with: 'Notifying...' }, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

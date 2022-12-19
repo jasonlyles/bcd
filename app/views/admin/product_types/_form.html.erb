@@ -1,0 +1,69 @@
+<%= nested_form_for [:admin, product_type] do |f| %>
+  <div class="row">
+    <div class="col-5">
+      <div class="card">
+        <div class="card-header">
+          <b>Product Type</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :name, class: 'form-label' %>
+            <%= f.text_field :name, placeholder: "Printed Tiles", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :comes_with_title, "'Comes with' title", class: 'form-label' %>
+            <%= f.text_field :comes_with_title, placeholder: "What do I get with a...", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :comes_with_description, "'Comes with' description (What does the product come with?)", class: 'form-label' %>
+            <%= f.text_area :comes_with_description, placeholder: "You get a bag of printed tiles...", rows: 10, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :description, class: 'form-label' %>
+            <%= f.text_area :description, placeholder: "Printed tiles are great for helping to decorate your...", rows: 10, class: 'form-control' %>
+          </div>
+          <div class="form-check">
+            <%= f.check_box :digital_product, {checked: product_type.digital_product, class: 'form-check-input'},1,0 %>
+            <%= f.label :digital_product, class: 'form-check-label' %>
+          </div>
+          <div class="form-check">
+            <%= f.check_box :ready_for_public, {checked: product_type.ready_for_public, class: 'form-check-input'},1,0 %>
+            <%= f.label :ready_for_public, class: 'form-check-label' %>
+          </div>
+          <br />
+          <div class="form-group">
+            <% if product_type.image? && !product_type.image.blank? %>
+              <%= f.label :image, "Image", class: "form-label" %>
+              <br/>
+              <% if product_type.image_cache %>
+                <%= f.text_field :image_cache, :disabled => true, class: "form-control" %>
+              <% else %>
+                <%= f.text_field :image, :disabled => true, class: "form-control" %>
+              <% end %>
+              <br />
+              <% if product_type.image_processing? %>
+                Image is currently being processed. Check back in a few seconds.
+              <% else %>
+                <%= image_tag(product_type.image.medium.url) %>
+              <% end %>
+            <% end %>
+            <% if product_type.image? %>
+              <div class="form-check mt-2">
+                <%= f.check_box :remove_image, class: "form-check-input" %>
+                <%= f.label :remove_image, "Delete Image", class: "form-check-label" %>
+              </div>
+            <% else %>
+              <%= f.label :image, "Image", class: "form-label" %>
+              <br />
+              <%= f.file_field :image, class: "form-control-file" %>
+              <%= f.hidden_field :image_cache %>
+            <% end %>
+          </div>
+          <div class="form-group mt-4">
+            <%= f.submit 'Save', class: 'btn btn-primary' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

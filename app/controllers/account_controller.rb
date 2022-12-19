@@ -10,7 +10,7 @@ class AccountController < ApplicationController
     # An order would be nil/null if BCD had not been able to get or parse the Paypal IPN, so it's worth showing that something
     # is messed up.
     # @orders = current_user.orders.where("status not null").order('orders.created_at DESC')
-    @orders = current_user.orders.order('orders.created_at DESC')
+    @orders = current_user.orders.includes(line_items: [product: [:images, :product_type]]).order('orders.created_at DESC')
   end
 
   def order_issue
