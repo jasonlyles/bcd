@@ -80,5 +80,7 @@ module BrickCity
     config.action_mailer.perform_caching = true
     # When using Ruby 2.4, you can preserve the timezone of the receiver when calling to_time.
     # ActiveSupport.to_time_preserves_timezone = false
+
+    config.action_controller.raise_on_unfiltered_parameters = true
   end
 end

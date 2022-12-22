@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  protect_from_forgery
+  protect_from_forgery with: :exception
   layout proc { |controller| controller.request.xhr? ? false : 'application' }
   # Need to find a way to not call these before_actions on certain controllers, or maybe these should just be on the controllers with urls a customer might hit.
   before_action :check_admin_mode, except: [:maintenance]

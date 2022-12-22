@@ -66,7 +66,12 @@ class AdminController < ApplicationController
   end
 
   def find_order
-    @order = Order.send("find_by_#{params[:order][:lookup_field]}", params[:order][:lookup_id])
+    find_by_method = if params[:order][:lookup_field] == 'request_id'
+                       :find_by_request_id
+                     else
+                       :find_by_transaction_id
+                     end
+    @order = Order.send(find_by_method, params[:order][:lookup_id])
     respond_to do |format|
       format.js
     end

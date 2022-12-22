@@ -137,16 +137,15 @@ class StoreController < ApplicationController
   end
 
   def validate_street_address
-    if params[:order] && params[:order][:address_submission_method] == 'form'
-      params.permit!
-      @order = Order.new(params[:order])
-    else
-      @order = Order.new
-    end
+    @order = if params[:order] && params[:order][:address_submission_method] == 'form'
+               Order.new(order_params)
+             else
+               Order.new
+             end
     return render :enter_address unless @order.valid?
 
     @order = nil
-    session[:address_submitted] = params[:order]
+    session[:address_submitted] = order_params
     redirect_to action: :checkout
   end
 
@@ -317,7 +316,7 @@ class StoreController < ApplicationController
 
     return redirect_to '/cart' if @cart.nil?
 
-    orders = current_user.orders
+    orders = current_user.orders.includes(line_items: [product: :product_type])
     @products_from_previous_orders = []
     orders.each do |order|
       order.line_items.each do |line_item|
