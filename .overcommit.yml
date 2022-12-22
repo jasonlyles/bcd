@@ -46,7 +46,7 @@ PreCommit:
    enabled:                    true
    on_warn:                    fail # Treat all warnings as failures
  RailsBestPractices:
-   enabled:                    false
+   enabled:                    true
    problem_on_unmodified_line: warn
  Reek:
    enabled:                    true
