@@ -2,8 +2,9 @@
 
 require 'active_support/configurable'
 
+# rubocop:disable all
 module PaypalConfig
-  def self.configure(&block)
+  def self.configure(*)
     yield @config ||= PaypalConfig::Configuration.new
   end
 
@@ -23,3 +24,4 @@ module PaypalConfig
     config_accessor :notify_url
   end
 end
+# rubocop:enable all

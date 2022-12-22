@@ -29,7 +29,7 @@
           </thead>
           <tbody>
             <% @parts_lists.each do |parts_list| %>
-              <tr class='<%= 'table-danger' if parts_list.has_obsolete_part? %>'>
+              <tr class='<%= 'table-danger' if parts_list.obsolete_part? %>'>
                 <td class="align-middle text-center">
                   <%= link_to parts_list.product_name, admin_product_path(parts_list.product) %>
                 </td>

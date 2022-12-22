@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20221221054744) do
+ActiveRecord::Schema.define(version: 20221222191529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,12 +192,12 @@ ActiveRecord::Schema.define(version: 20221221054744) do
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "transaction_id",   limit: 50
-    t.string   "request_id",       limit: 50
-    t.string   "status",           limit: 10
+    t.string   "transaction_id",  limit: 50
+    t.string   "request_id",      limit: 50
+    t.string   "status",          limit: 10
     t.string   "address_state"
-    t.string   "address_street_1"
-    t.string   "address_street_2"
+    t.string   "address_street1"
+    t.string   "address_street2"
     t.string   "address_country"
     t.string   "address_zip"
     t.string   "address_city"

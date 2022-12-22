@@ -108,32 +108,32 @@ describe Cart do
     end
   end
 
-  describe "has_digital_item?" do
+  describe "includes_digital_item?" do
     it 'should return true if one of the items in the cart is a digital item' do
       @cart = FactoryGirl.create(:cart)
       @cart_item = FactoryGirl.create(:cart_item)
-      expect(@cart.has_digital_item?).to eq(true)
+      expect(@cart.includes_digital_item?).to eq(true)
     end
 
     it 'should return false if no items in the cart are digital items' do
       @cart = FactoryGirl.create(:cart)
-      expect(@cart.has_digital_item?).to eq(false)
+      expect(@cart.includes_digital_item?).to eq(false)
     end
   end
 
-  describe "has_physical_item?" do
+  describe "includes_physical_item?" do
     it 'should return true if one of the items in the cart is a physical item' do
       @product_type2 = FactoryGirl.create(:product_type, name: 'Models', digital_product: false)
       @cart = FactoryGirl.create(:cart)
       product1 = FactoryGirl.create(:product, product_code: 'CV900', name: 'Winter Village Road Salt Dome')
       product2 = FactoryGirl.create(:product, product_type_id: @product_type2.id, product_code: 'CV900M', name: 'Winter Village Road Salt Dome Model')
       @cart_item = FactoryGirl.create(:cart_item, product_id: product2.id)
-      expect(@cart.has_physical_item?).to eq(true)
+      expect(@cart.includes_physical_item?).to eq(true)
     end
 
     it 'should return false if no items in the cart are physical items' do
       @cart = FactoryGirl.create(:cart_with_cart_items)
-      expect(@cart.has_physical_item?).to eq(false)
+      expect(@cart.includes_physical_item?).to eq(false)
     end
   end
 end

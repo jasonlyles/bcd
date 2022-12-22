@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :order_follow_up do
-  task :send_emails => :environment do
+  task send_emails: :environment do
     puts 'Sending order follow up emails'
     ipns = InstantPaymentNotification.where('DATE(updated_at)=? and processed=true', BCD_DAYS_TIL_ORDER_FOLLOW_UP.days.ago)
     # For testing locally:

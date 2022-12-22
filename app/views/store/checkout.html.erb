@@ -12,7 +12,7 @@
       <br/>
       <br/>
     <% end %>
-    <% if @cart.has_physical_item? %>
+    <% if @cart.includes_physical_item? %>
       <strong>
         Address:
         <br/>
@@ -22,10 +22,10 @@
       <% else %>
         <%= "#{@order.first_name} #{@order.last_name}" %>
         <br/>
-        <%= @order.address_street_1 %>
+        <%= @order.address_street1 %>
         <br/>
-        <% if @order.address_street_2? %>
-          <%= @order.address_street_2 %>
+        <% if @order.address_street2? %>
+          <%= @order.address_street2 %>
           <br/>
         <% end %>
         <%= "#{@order.address_city}, #{@order.address_state} #{@order.address_zip}" %>

@@ -19,12 +19,10 @@ class StoreController < ApplicationController
       # TODO: Figure out why favicon requests are coming here. But for now, just don't flash this confusing message for those requests
       flash[:notice] = "Sorry. We don't have any of those." unless params[:product_type_name] == 'favicon'
       redirect_to(root_path)
+    elsif params[:product_type_name].casecmp('instructions').positive?
+      @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
     else
-      unless params[:product_type_name].casecmp('instructions').zero?
-        @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
-      else
-        @top_categories = Category.find_live_categories
-      end
+      @top_categories = Category.find_live_categories
     end
   end
 
@@ -40,11 +38,13 @@ class StoreController < ApplicationController
     render :cart
   end
 
+  # rubocop:disable Metrics/AbcSize
   def categories
-    if params[:category_name] == 'Alternatives'
+    case params[:category_name]
+    when 'Alternatives'
       @category = Category.find_by_name('Alternative Builds')
       @products = Product.alternative_builds.page(params[:page]).per(12)
-    elsif params[:category_name] == 'group_on_price'
+    when 'group_on_price'
       @category = OpenStruct.new
       if params[:price] == 'free'
         @category.name = 'Completely FREE Instructions!'
@@ -64,7 +64,14 @@ class StoreController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
+  # TODO: Split this out into methods for regular adding to cart, and adding to
+  # cart via the new product email. Extract out the common code into a 3rd method
+  # they can both use.
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def add_to_cart
     # This method can be called via a link in a new product notification email, in which case, there won't be a
     # :back that I want to use, so set the redirect to take the user to the cart. Otherwise, return to :back, as
@@ -80,7 +87,7 @@ class StoreController < ApplicationController
 
       return redirect_to :cart
     end
-    if product.is_free?
+    if product.free?
       flash[:notice] = 'You don\'t need to add free instructions to your cart. Just go to your account page to download them.'
       return redirect_back(fallback_location: '/cart') if back_or_cart == :back
 
@@ -99,6 +106,9 @@ class StoreController < ApplicationController
       redirect_to :cart, only_path: true
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def remove_item_from_cart
     @cart.remove_product(params[:id])
@@ -159,6 +169,7 @@ class StoreController < ApplicationController
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
   def submit_order
     return redirect_to '/cart' if @cart.nil?
 
@@ -173,7 +184,7 @@ class StoreController < ApplicationController
       @cart.destroy
       session.delete(:cart_id)
       cookies[:show_thank_you] = true
-      redirect_to URI.encode("https://#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
+      redirect_to CGI.escape("https://#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
     else
       begin
         ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), env: request.env, data: { message: 'Failed trying to submit order.' })
@@ -182,9 +193,10 @@ class StoreController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def empty_cart
-    @cart.cart_items.destroy_all if @cart && @cart.cart_items
+    @cart.cart_items.destroy_all if @cart&.cart_items
     redirect_to root_path, notice: 'You have emptied your cart.'
   end
 
@@ -214,7 +226,7 @@ class StoreController < ApplicationController
 
   def thank_you_for_your_order
     cookies.delete :show_thank_you
-    return unless session[:guest] && session[:guest].is_a?(Integer)
+    return unless session[:guest].is_a?(Integer)
 
     @user = User.find session[:guest]
     @order = @user.orders.last
@@ -222,9 +234,10 @@ class StoreController < ApplicationController
     session.delete(:guest)
   end
 
+  # rubocop:disable Metrics/PerceivedComplexity
   def enter_address
     if current_user && !current_user.orders.blank? && !session[:address_submitted]
-      @order = current_user.orders.where("upper(status)='COMPLETED' and address_street_1 is not null").order('updated_at DESC').first
+      @order = current_user.orders.where("upper(status)='COMPLETED' and address_street1 is not null").order('updated_at DESC').first
       @order ||= Order.new
     elsif session[:address_submitted]
       @submission_method = session[:address_submitted][:address_submission_method]
@@ -237,12 +250,13 @@ class StoreController < ApplicationController
       @order = Order.new
     end
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 
   private
 
   # Only allow a trusted parameter "white list" through.
   def order_params
-    params.require(:order).permit(:request_id, :transaction_id, :user_id, :first_name, :last_name, :address_street_1, :address_street_2, :address_city, :address_state, :address_country, :address_zip, :address_submission_method)
+    params.require(:order).permit(:request_id, :transaction_id, :user_id, :first_name, :last_name, :address_street1, :address_street2, :address_city, :address_state, :address_country, :address_zip, :address_submission_method)
   end
 
   def set_return_to_checkout
@@ -262,7 +276,7 @@ class StoreController < ApplicationController
     errant_cart_items = []
     item_list = nil
     @cart.cart_items.includes(product: :product_type).each do |item|
-      next unless item.product.is_physical_product?
+      next unless item.product.physical_product?
 
       errant_cart_items << [item.product.product_code, item.product.name] unless item.product.quantity_available?(item.quantity)
     end
@@ -282,7 +296,7 @@ class StoreController < ApplicationController
     @order.transaction_id = SecureRandom.hex(20)
     @order.status = 'COMPLETED'
     @order.save
-    Download.restock_for_order(@order) if @order.has_digital_item?
+    Download.restock_for_order(@order) if @order.includes_digital_item?
     if @order.user.guest?
       link_to_downloads = @order.retrieve_link_to_downloads
       OrderMailer.guest_order_confirmation(@order.user_id, @order.id, link_to_downloads).deliver
@@ -295,6 +309,9 @@ class StoreController < ApplicationController
   # Making sure that the user hasn't previously purchased the same set of instructions.
   # Physical items can be purchased again.
   # Instructions with 0 downloads remaining can be purchased again.
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def check_users_previous_orders
     return if current_guest
 
@@ -304,7 +321,7 @@ class StoreController < ApplicationController
     @products_from_previous_orders = []
     orders.each do |order|
       order.line_items.each do |line_item|
-        @products_from_previous_orders << line_item.product_id if line_item.product.is_digital_product? && !order.transaction_id.blank?
+        @products_from_previous_orders << line_item.product_id if line_item.product.digital_product? && !order.transaction_id.blank?
       end
     end
     @products_in_cart = []
@@ -317,74 +334,23 @@ class StoreController < ApplicationController
     final_dups = []
     dups.each do |dup|
       dl = Download.find_by_user_id_and_product_id(current_user.id, dup)
-      final_dups << dup if (dl && dl.remaining.positive?) || dl.nil?
+      final_dups << dup if dl&.remaining&.positive? || dl.blank?
     end
     return if final_dups.blank?
 
     nice_string = final_dups.collect { |dup| Product.find(dup).name }.join(',')
     redirect_to :cart, notice: "You've already purchased the following products before, (#{nice_string}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.", only_path: true
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def assign_users_physical_address
-    redirect_to :enter_address if @cart && @cart.has_physical_item? && session[:address_submitted].blank?
+    redirect_to :enter_address if @cart&.includes_physical_item? && session[:address_submitted].blank?
   end
 
   def assign_address_form_data
-    @states = Array[%w[Alabama AL],
-                    %w[Alaska AK],
-                    ['American Samoa', 'AS'],
-                    %w[Arizona AZ],
-                    %w[Arkansas AR],
-                    %w[California CA],
-                    %w[Colorado CO],
-                    %w[Connecticut CT],
-                    ['District of Columbia', 'DC'],
-                    %w[Delaware DE],
-                    %w[Florida FL],
-                    %w[Georgia GA],
-                    %w[Guam GU],
-                    %w[Hawaii HI],
-                    %w[Idaho ID],
-                    %w[Illinois IL],
-                    %w[Indiana IN],
-                    %w[Iowa IA],
-                    %w[Kansas KS],
-                    %w[Kentucky KY],
-                    %w[Louisiana LA],
-                    %w[Maine ME],
-                    %w[Maryland MD],
-                    %w[Massachusetts MA],
-                    %w[Michigan MI],
-                    %w[Minnesota MN],
-                    %w[Mississippi MS],
-                    %w[Missouri MO],
-                    %w[Montana MT],
-                    %w[Nebraska NE],
-                    %w[Nevada NV],
-                    ['New Hampshire', 'NH'],
-                    ['New Jersey', 'NJ'],
-                    ['New Mexico', 'NM'],
-                    ['New York', 'NY'],
-                    ['North Carolina', 'NC'],
-                    ['North Dakota', 'ND'],
-                    %w[Ohio OH],
-                    %w[Oklahoma OK],
-                    %w[Oregon OR],
-                    %w[Pennsylvania PA],
-                    ['Puerto Rico', 'PR'],
-                    ['Rhode Island', 'RI'],
-                    ['South Carolina', 'SC'],
-                    ['South Dakota', 'SD'],
-                    %w[Tennessee TN],
-                    %w[Texas TX],
-                    %w[Utah UT],
-                    %w[Vermont VT],
-                    %w[Virginia VA],
-                    ['Virgin Islands', 'VI'],
-                    %w[Washington WA],
-                    ['West Virginia', 'WV'],
-                    %w[Wisconsin WI],
-                    %w[Wyoming WY]]
-    @countries = [['United States', 'US']]
+    @states = AddressHelpers.states
+    @countries = AddressHelpers.countries
   end
 end

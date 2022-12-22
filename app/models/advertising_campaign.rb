@@ -9,10 +9,11 @@ class AdvertisingCampaign < ApplicationRecord
   validates :description, presence: true
   validates :reference_code, presence: true, length: { minimum: 10, maximum: 10 }, uniqueness: true
 
+  # rubocop:disable Naming/PredicateName
   def has_users?
-    user = User.where(['referrer_code = ?', reference_code]).limit(1)
-    user.empty? ? false : true
+    User.where(['referrer_code = ?', reference_code]).exists?
   end
+  # rubocop:enable Naming/PredicateName
 
   def destroy
     if has_users?

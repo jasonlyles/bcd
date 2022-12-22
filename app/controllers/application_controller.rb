@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   layout proc { |controller| controller.request.xhr? ? false : 'application' }
   # Need to find a way to not call these before_actions on certain controllers, or maybe these should just be on the controllers with urls a customer might hit.
-  before_action :check_admin_mode, :except => [:maintenance]
+  before_action :check_admin_mode, except: [:maintenance]
   before_action :find_cart
   before_action :set_users_referrer_code
   before_action :prepare_exception_notifier
@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   private
 
   def prepare_exception_notifier
-    return unless current_user && current_user.guid
+    return unless current_user&.guid
 
     request.env['exception_notifier.exception_data'] = {
       current_user: current_user.guid
@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
   def current_guest
     guest_id = session[:guest]
     # meaning it's not true or false, and is the ID of the guest
-    return User.find(guest_id) if guest_id && guest_id.is_a?(Integer)
+    return User.find(guest_id) if guest_id.is_a?(Integer)
 
     nil
   end
@@ -104,7 +104,7 @@ class ApplicationController < ActionController::Base
     return unless cart
 
     # Delete the old cart so it doesn't end up abandoned by the code
-    @cart.destroy if @cart
+    @cart&.destroy
     @cart = cart
     session[:cart_id] = @cart.id
   end
@@ -125,6 +125,6 @@ class ApplicationController < ActionController::Base
 
   # for declaring 404s
   def not_found
-    render :file => "#{Rails.root}/public/404.html", status: :not_found, layout: false
+    render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false
   end
 end

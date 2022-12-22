@@ -12,7 +12,7 @@ class ProductUpdateNotificationJob < BaseJob
   end
 
   def self.email_users_about_updated_instructions(users, product_id, message)
-    users.each_with_index do |user, index|
+    users.each do |user|
       UpdateMailer.updated_instructions(user.id, product_id, message).deliver
       # Trying a simple throttle to make sure I'm not sending more than 5 emails/second so I don't run afoul
       # of my Amazon SES limits

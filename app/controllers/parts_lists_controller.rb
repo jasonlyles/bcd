@@ -3,10 +3,10 @@
 class PartsListsController < ApplicationController
   # find_parts_list needs to come before authenticate_user!
   before_action :find_parts_list
-  before_action :authenticate_user!, unless: -> { has_valid_guest_token? }
+  before_action :authenticate_user!, unless: -> { valid_guest_token? }
 
   def show
-    if has_access_to_parts_list?
+    if access_to_parts_list?
       # It's ok for user_parts_list to be nil.
       user_parts_list = UserPartsList.where(user_id: @user, parts_list_id: @parts_list.id).first
       @user_parts_list = if user_parts_list.present?
@@ -27,16 +27,16 @@ class PartsListsController < ApplicationController
     @parts_list = PartsList.find(params[:id])
   end
 
-  def has_access_to_parts_list?
+  def access_to_parts_list?
     if current_user
       @user = current_user
-      current_user.has_access_to_parts_list?(params[:id])
+      current_user.access_to_parts_list?(params[:id])
     else
-      has_valid_guest_token?
+      valid_guest_token?
     end
   end
 
-  def has_valid_guest_token?
+  def valid_guest_token?
     # Look up user by guid to get user.id. Return if it doesn't exist
     @user = User.where(guid: params[:user_guid]).first
     return false if @user.blank?

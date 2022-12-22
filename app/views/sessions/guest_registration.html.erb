@@ -8,13 +8,13 @@
           <h2>Update email info</h2>
         <% end %>
         <br/>
-        <% if @cart.has_physical_item? %>
+        <% if @cart.includes_physical_item? %>
           <br/>
           <div class="text-center">
             We'll need your email address to have a way to communicate with you.
           </div>
           <br/>
-          <% elsif @cart.has_digital_item? %>
+          <% elsif @cart.includes_digital_item? %>
             <br/>
             <div class="text-center">
               We'll need your email address to have somewhere to send download links to.

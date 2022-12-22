@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# TODO:
+# TODO: All the below stuff:
 #
 # For v2:
 # 1. Set up the tinypng API, and pass all images to it before uploading to S3. I'll have to pay for a
@@ -36,6 +36,8 @@ module PartsListInteractions
   class CreatePartsList < BasePartsListInteraction
     attr_accessor :errors
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def run
       self.errors = []
       parts_list = PartsList.find(@parts_list_id)
@@ -53,23 +55,21 @@ module PartsListInteractions
         # generated will reference image by filename, so it will be pulling the guid,
         # which conveniently is already being stored for the element.
         # Not sure I'm going to do the spritesheet
-        begin
-          part = Part.find_or_create_via_external(key) # TODO: Pass along whether this is an LSynth part or not.
-          element = Element.find_or_create_via_external(key)
-          color = Color.find(element.color_id)
+        part = Part.find_or_create_via_external(key) # TODO: Pass along whether this is an LSynth part or not.
+        element = Element.find_or_create_via_external(key)
+        color = Color.find(element.color_id)
 
-          parts[key]['color_name'] = color.bl_name
-          parts[key]['part_name'] = part.name
-          parts[key]['bl_part_num'] = part.bl_id
-          parts[key]['guid'] = element.guid
-          parts[key]['image_url'] = element.image.url
+        parts[key]['color_name'] = color.bl_name
+        parts[key]['part_name'] = part.name
+        parts[key]['bl_part_num'] = part.bl_id
+        parts[key]['guid'] = element.guid
+        parts[key]['image_url'] = element.image.url
 
-          Lot.create(parts_list_id: parts_list.id, element_id: element.id, quantity: values['quantity'])
-        rescue StandardError => e
-          self.error = e
-          errors << e
-          Rails.logger.error("PartsList::CreatePartsList::Part::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
-        end
+        Lot.create(parts_list_id: parts_list.id, element_id: element.id, quantity: values['quantity'])
+      rescue StandardError => e
+        self.error = e
+        errors << e
+        Rails.logger.error("PartsList::CreatePartsList::Part::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
       end
 
       # TODO: By the time I get here, I should have completely assembled the parts
@@ -81,5 +81,7 @@ module PartsListInteractions
         Rails.logger.error("PartsList::CreatePartsList::Save::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
       end
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
   end
 end

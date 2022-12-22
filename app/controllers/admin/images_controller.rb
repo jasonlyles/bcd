@@ -16,7 +16,7 @@ class Admin::ImagesController < AdminController
   # GET /images/new
   def new
     @image = if params[:product_id]
-               Image.new(:product_id => params[:product_id])
+               Image.new(product_id: params[:product_id])
              else
                Image.new
              end

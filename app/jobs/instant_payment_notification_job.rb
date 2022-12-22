@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
-class InvalidIPNException < StandardError;end
+class InvalidIPNException < StandardError; end
 
 class InstantPaymentNotificationJob < BaseJob
   @queue = :ipns
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity
   def self.perform(options)
     ipn = InstantPaymentNotification.find(options['ipn_id'])
     params = ipn.params
@@ -32,17 +36,17 @@ class InstantPaymentNotificationJob < BaseJob
     if ipn.valid_ipn?
       order.transaction_id = ipn.txn_id
       order.status = ipn.payment_status.upcase if ipn.payment_status
-      if order.has_physical_item?
+      if order.includes_physical_item?
         # Assuming that because the street address is blank, there is no other address info, and we can save address info
         # coming to us from paypal
-        unless order.address_street_1?
+        unless order.address_street1?
           order.first_name = params['first_name']
           order.last_name = params['last_name']
           order.address_city = params['address_city']
           order.address_country = params['address_country']
           order.address_name = params['address_name']
           order.address_state = params['address_state']
-          order.address_street_1 = params['address_street']
+          order.address_street1 = params['address_street']
           order.address_zip = params['address_zip']
         end
         order.shipping_status = 3 # 3 = pending
@@ -52,7 +56,7 @@ class InstantPaymentNotificationJob < BaseJob
       # Everything looks good, mark as processed.
       ipn.update(processed: true)
 
-      Download.restock_for_order(order) if order.has_digital_item?
+      Download.restock_for_order(order) if order.includes_digital_item?
 
       # Now that the order is validated and everything is saved, I'll email the user to let them know about it.
       begin
@@ -67,7 +71,7 @@ class InstantPaymentNotificationJob < BaseJob
         ExceptionNotifier.notify_exception(error, data: { message: "Failed trying to send order confirmation email for #{order.to_json}: #{e.message}" })
       end
 
-      handle_physical_items(order) if order.has_physical_item?
+      handle_physical_items(order) if order.includes_physical_item?
     else
       Rails.logger.debug('PAYPAL IPN is invalid')
       order.transaction_id = ipn.txn_id
@@ -75,15 +79,19 @@ class InstantPaymentNotificationJob < BaseJob
       order.save
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def self.handle_physical_items(order)
     physical_items = []
     order.line_items.each do |item|
-      if item.product.is_physical_product?
-        physical_items << item
-        product = Product.find(item.product.id)
-        product.decrement_quantity(item.quantity)
-      end
+      next unless item.product.physical_product?
+
+      physical_items << item
+      product = Product.find(item.product.id)
+      product.decrement_quantity(item.quantity)
     end
     return unless physical_items.length.positive?
 

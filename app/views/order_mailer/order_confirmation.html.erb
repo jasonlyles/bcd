@@ -25,7 +25,7 @@ To access instructions, go to
 <%= link_to 'New User Tutorial', "#{@host}/new_user_tutorial" %>
 to help you get started. Let's get building!
 <br/>
-<% if @order.has_physical_item? %>
+<% if @order.includes_physical_item? %>
   We will be packaging up and getting your order ready to ship within the next 1-2 days. The address we have for you is:
   <br/>
   <br/>
@@ -33,10 +33,10 @@ to help you get started. Let's get building!
   <br/>
   <%= "#{@order.first_name} #{@order.last_name}" %>
   <br/>
-  <%= @order.address_street_1 %>
+  <%= @order.address_street1 %>
   <br/>
-  <% if @order.address_street_2? %>
-    <%= @order.address_street_2 %>
+  <% if @order.address_street2? %>
+    <%= @order.address_street2 %>
     <br/>
   <% end %>
   <%= "#{@order.address_city}, #{@order.address_state} #{@order.address_zip}" %>

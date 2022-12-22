@@ -10,7 +10,7 @@ describe Order do
       li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
       order = Order.new
       order.line_items << li1
-      expect(order.has_physical_item?).to eq(false)
+      expect(order.includes_physical_item?).to eq(false)
     end
 
     it "should return true if the order includes a physical product" do
@@ -20,16 +20,16 @@ describe Order do
       order = Order.create
       order.line_items << li1
 
-      expect(order.has_physical_item?).to eq(true)
+      expect(order.includes_physical_item?).to eq(true)
     end
   end
 
-  describe "has_digital_item?" do
+  describe "includes_digital_item?" do
     it "should return true if the order has at least one digital product" do
       li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
       order = Order.new
       order.line_items << li1
-      expect(order.has_digital_item?).to eq(true)
+      expect(order.includes_digital_item?).to eq(true)
     end
 
     it "should return false if the order doesn't have at least one digital product" do
@@ -39,7 +39,7 @@ describe Order do
       order = Order.new
       order.line_items << li1
 
-      expect(order.has_digital_item?).to eq(false)
+      expect(order.includes_digital_item?).to eq(false)
     end
   end
 

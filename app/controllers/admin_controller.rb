@@ -47,7 +47,7 @@ class AdminController < ApplicationController
   def switch_maintenance_mode
     @mm_switch = Switch.maintenance_mode
     @mm_switch.on? ? @mm_switch.off : @mm_switch.on
-    redirect_to :action => :maintenance_mode
+    redirect_to action: :maintenance_mode
   end
 
   def become
@@ -78,14 +78,14 @@ class AdminController < ApplicationController
 
   def update_admin_profile
     @radmin = Radmin.find(params[:id])
-    if !params[:radmin][:email].blank? || @radmin.is_valid_password?(params[:radmin][:current_password])
+    if !params[:radmin][:email].blank? || @radmin.valid_password?(params[:radmin][:current_password])
       # Deleting the current_password from the params because it's protected from mass assignment, and doesn't get saved.
       params[:radmin].delete(:current_password)
       if @radmin.update_attributes(radmin_params)
-        # sign_in :radmin, @radmin, :bypass => true
+        # sign_in :radmin, @radmin, bypass: true
         bypass_sign_in(@radmin)
-        # respond_with resource, :location => after_update_path_for(resource)
-        redirect_to(admin_profile_admin_url, :notice => 'Profile was successfully updated.')
+        # respond_with resource, location: after_update_path_for(resource)
+        redirect_to(admin_profile_admin_url, notice: 'Profile was successfully updated.')
       else
         render 'admin_profile'
       end
@@ -99,7 +99,7 @@ class AdminController < ApplicationController
   def change_user_status
     user = params[:user]
     @user = User.find_by_email(user[:email].downcase)
-    @user.update_attributes(:account_status => user[:account_status])
+    @user.update_attributes(account_status: user[:account_status])
     @products = Product.ready_instructions.order('category_id').order('product_code')
     respond_to do |format|
       format.js
@@ -135,30 +135,33 @@ class AdminController < ApplicationController
     @order.shipping_status = params['shipping_status']
     @order.save
     flash[:notice] = 'Order updated'
-    redirect_to :action => :order_fulfillment
+    redirect_to action: :order_fulfillment
   end
 
   def sales_report
     @report = SalesReport.new
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity
   def sales_report_monthly_stats
     start_date = params[:start_date]
     start_month = start_date['month']
     start_year = start_date['year']
     end_date = params[:end_date]
-    @report = SalesReport.new(:start_date => start_date, :end_date => end_date)
+    @report = SalesReport.new(start_date: start_date, end_date: end_date)
     @report.report_date = "#{start_year}-#{start_month}-01"
 
     if @report.multiple_months?
       @summaries = SalesReport.get_sweet_stats(start_month, start_year, end_date['month'], end_date['year'])
     else
-      report = SalesReport.find_by_report_date("#{@report.report_date}")
+      report = SalesReport.find_by_report_date(@report.report_date.to_s)
       if params['commit'] == 'Force Regeneration'
-        report.destroy if report
+        report&.destroy
         report = nil
       end
-      unless report
+      if report.blank?
         # Can't find one, let's create one
         @report.save
         @summaries = @report.generate_sales_report
@@ -181,13 +184,16 @@ class AdminController < ApplicationController
       format.js
     end
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def transactions_by_month
     date = Date.parse(params[:date])
     @transactions = Order.all_transactions_for_month(date.month, date.year)
     respond_to do |format|
       format.html
-      format.csv { send_data Order.transaction_csv(@transactions), { filename: "#{date.strftime("%Y")}_#{date.strftime("%m")}_transactional_detail.csv" } }
+      format.csv { send_data Order.transaction_csv(@transactions), { filename: "#{date.strftime('%Y')}_#{date.strftime('%m')}_transactional_detail.csv" } }
     end
   end
 

@@ -32,8 +32,8 @@ class Admin::PartsListsController < AdminController
 
     if @parts_list.bricklink_xml?
       xml_doc = Nokogiri::XML(@parts_list.bricklink_xml)
-      @source_lot_count = xml_doc.xpath("//ITEM").count
-      @source_total_quantity = xml_doc.xpath("//ITEM//MINQTY").collect { |c| c.text.to_i }.sum
+      @source_lot_count = xml_doc.xpath('//ITEM').count
+      @source_total_quantity = xml_doc.xpath('//ITEM//MINQTY').collect { |c| c.text.to_i }.sum
     elsif @parts_list.ldr?
       # TODO: Get this figured out for LDRs after done with LdrParser class
       @source_lot_count = 0
@@ -121,7 +121,7 @@ class Admin::PartsListsController < AdminController
 
   # POST /admin/parts_lists/notify_customers_of_parts_list_update
   def notify_customers_of_parts_list_update
-    parts_list_ids = params[:parts_lists][:parts_list_ids].split(' ')
+    parts_list_ids = params[:parts_lists][:parts_list_ids].split
     product_ids = PartsList.where(id: parts_list_ids).pluck(:product_id)
     PartsListUpdateNotificationJob.perform_later(product_ids: product_ids, message: params[:parts_lists][:message])
     @message = 'Sending parts list update emails'

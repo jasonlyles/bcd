@@ -12,7 +12,7 @@ describe InstantPaymentNotificationJob do
       ipn = FactoryGirl.create(:instant_payment_notification, params: {'address_city' => 'Richmond'})
       expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
       expect_any_instance_of(InstantPaymentNotification).to receive(:valid_ipn?).and_return(true)
-      expect(order).to receive(:has_physical_item?).at_least(:once).and_return(true)
+      expect(order).to receive(:includes_physical_item?).at_least(:once).and_return(true)
       expect(order).to receive(:save).at_least(1).times
 
       InstantPaymentNotificationJob.perform('ipn_id' => ipn.id)
@@ -26,7 +26,7 @@ describe InstantPaymentNotificationJob do
       ipn = FactoryGirl.create(:instant_payment_notification, params: {'address_city' => 'Richmond'})
       expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
       expect_any_instance_of(InstantPaymentNotification).to receive(:valid_ipn?).and_return(true)
-      expect(order).to receive(:has_physical_item?).at_least(:once).and_return(false)
+      expect(order).to receive(:includes_physical_item?).at_least(:once).and_return(false)
       expect(order).to receive(:save).at_least(1).times
 
       InstantPaymentNotificationJob.perform('ipn_id' => ipn.id)

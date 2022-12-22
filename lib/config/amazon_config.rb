@@ -2,8 +2,9 @@
 
 require 'active_support/configurable'
 
+# rubocop:disable all
 module AmazonConfig
-  def self.configure(&block)
+  def self.configure(*)
     yield @config ||= AmazonConfig::Configuration.new
   end
 
@@ -24,3 +25,4 @@ module AmazonConfig
     config_accessor :secret
   end
 end
+# rubocop:enable all

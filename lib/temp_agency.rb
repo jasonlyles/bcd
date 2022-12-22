@@ -8,7 +8,7 @@ module TempAgency
     attr_accessor :ps_name, :queue_name
 
     def initialize(args)
-      args.each { |key, value| eval("@#{key}=value") }
+      @queue_name = args[:queue_name]
       @ps_name = @queue_name
       @heroku = PlatformAPI.connect_oauth(HerokuOauthToken.retrieve_token)
     end
@@ -30,7 +30,7 @@ module TempAgency
     end
   end
 
-  def after_perform_scale_down(*args)
+  def after_perform_scale_down(*)
     return if Rails.env == 'development'
 
     Rails.logger.debug('SCALING DOWN')
@@ -42,7 +42,7 @@ module TempAgency
     @scaler.workers = 0 if @scaler.job_count.zero?
   end
 
-  def after_enqueue_scale_up(*args)
+  def after_enqueue_scale_up(*)
     return if Rails.env == 'development'
 
     Rails.logger.debug("SCALING UP, QUEUE NAME CLASS: #{queue_name.class}")

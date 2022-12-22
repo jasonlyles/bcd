@@ -13,6 +13,7 @@ class Admin::InstantPaymentNotificationsController < AdminController
   def show; end
 
   private
+
   # Use callbacks to share common setup or constraints between actions.
   def set_instant_payment_notification
     @instant_payment_notification = InstantPaymentNotification.find(params[:id])

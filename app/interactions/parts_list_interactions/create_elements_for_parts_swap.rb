@@ -4,6 +4,10 @@ module PartsListInteractions
   class CreateElementsForPartsSwap < BasePartsListInteraction
     attr_accessor :old_part_name, :new_part_name, :elements, :affected_parts_lists
 
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/PerceivedComplexity
     def run
       old_part_name = @options[:old_part_name]
       new_part_name = @options[:new_part_name]
@@ -50,5 +54,9 @@ module PartsListInteractions
       self.error = 'Unexpected Error'
       Rails.logger.error("PartsListInteractions::CreateElementsForPartsSwap Old Name: #{self.old_part_name} New Name: #{self.new_part_name} Some unexpected error: #{e.message}")
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/PerceivedComplexity
   end
 end

@@ -25,7 +25,7 @@ class Admin::PartsController < AdminController
     @parts = @q.result.order('name').page(params[:page]).per(20)
     respond_to do |format|
       format.html
-      format.json { render json: @parts.map { |p| p.name_and_ids } }
+      format.json { render json: @parts.map(&:name_and_ids) }
     end
   end
 

@@ -7,7 +7,7 @@ class Order < ApplicationRecord
   has_many :instant_payment_notifications
 
   # attr_accessible :request_id, :status, :transaction_id, :user_id, :first_name, :last_name,
-  # :address_street_1, :address_street_2, :address_city, :address_state, :address_country,
+  # :address_street1, :address_street2, :address_city, :address_state, :address_country,
   # :address_zip, :address_submission_method
   attr_accessor :address_submission_method
 
@@ -15,19 +15,19 @@ class Order < ApplicationRecord
   # Rails way anyway. Don't want to show these errors to the user.
   # validates :user_id, :presence => true
   # validates :confirmation_number => true
-  validates :first_name, :last_name, :address_street_1, :address_city, :address_state, :address_country,
+  validates :first_name, :last_name, :address_street1, :address_city, :address_state, :address_country,
             :address_zip, presence: true, if: "address_submission_method == 'form'"
   validates :address_zip, length: { is: 5 }, if: "address_submission_method == 'form'"
   validates :address_zip, numericality: { only_integer: true }, if: "address_submission_method == 'form'"
 
-  def has_physical_item?
+  def includes_physical_item?
     line_items.includes(product: [:product_type]).each do |item|
-      return true if item.product.is_physical_product?
+      return true if item.product.physical_product?
     end
     false
   end
 
-  def has_digital_item?
+  def includes_digital_item?
     items = retrieve_digital_items
     items.blank? ? false : true
   end
@@ -35,7 +35,7 @@ class Order < ApplicationRecord
   def retrieve_digital_items
     items = []
     line_items.each do |item|
-      items << item if item.product.is_digital_product?
+      items << item if item.product.digital_product?
     end
     items
   end
@@ -61,6 +61,7 @@ class Order < ApplicationRecord
     total
   end
 
+  # rubocop:disable Metrics/AbcSize
   def self.all_transactions_for_month(month, year)
     report_date = Date.parse("#{month}/#{year}").strftime('%Y-%m-%d')
     orders = Order.where('created_at >= ? AND created_at < ?', report_date.to_s, Date.parse(report_date.to_s).next_month.strftime('%Y-%m-01').to_s)
@@ -81,6 +82,7 @@ class Order < ApplicationRecord
     end
     transactions
   end
+  # rubocop:enable Metrics/AbcSize
 
   def self.transaction_csv(transactions)
     CSV.generate do |csv|

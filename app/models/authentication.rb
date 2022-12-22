@@ -5,6 +5,6 @@ class Authentication < ApplicationRecord
 
   # attr_accessible :user_id, :provider, :uid
 
-  validates :provider, :presence => true
-  validates :uid, :presence => true
+  validates :provider, presence: true
+  validates :uid, presence: true
 end

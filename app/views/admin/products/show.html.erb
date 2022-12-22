@@ -178,7 +178,7 @@
                     <%= "#{@product.discount_percentage.to_i}%" %>
                   </td>
                 </tr>
-                <% if @product.is_physical_product? %>
+                <% if @product.physical_product? %>
                 <tr>
                   <td>
                     <b>Quantity:</b>

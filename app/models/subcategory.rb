@@ -6,9 +6,9 @@ class Subcategory < ApplicationRecord
 
   # attr_accessible :category_id, :code, :description, :name, :ready_for_public
 
-  validates :name, :presence => true
-  validates :code, :presence => true
-  validates :code, :uniqueness => true
+  validates :name, presence: true
+  validates :code, presence: true
+  validates :code, uniqueness: true
 
   def self.find_live_subcategories
     Subcategory.where("ready_for_public = 't'").order('name')

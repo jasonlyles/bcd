@@ -6,7 +6,7 @@ class Download < ApplicationRecord
 
   # attr_accessible :product_id, :user_id, :count, :remaining, :download_token
 
-  def self.update_download_counts(current_user, product_id, token=nil)
+  def self.update_download_counts(current_user, product_id, token = nil)
     download = if token.blank?
                  Download.find_or_create_by(user_id: current_user.id, product_id: product_id)
                else

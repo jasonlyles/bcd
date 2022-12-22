@@ -27,10 +27,9 @@ class Rebrickable
     req_options = {
       use_ssl: uri.scheme == 'https'
     }
-    response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+    Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
       http.request(request)
     end
-    response
   end
 
   def self.get_element_combo(part_id:, color_id:)

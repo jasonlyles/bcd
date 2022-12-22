@@ -19,7 +19,7 @@ User email:
 Physical Items:
 <ul>
   <% @order.line_items.each do |line_item| %>
-    <% if line_item.product.is_physical_product? %>
+    <% if line_item.product.physical_product? %>
       <li><%= "#{line_item.product.product_code} #{line_item.product.name}" %></li>
     <% end %>
   <% end %>
@@ -34,10 +34,10 @@ Send to:
 <br/>
 <%= "#{@order.first_name} #{@order.last_name}" %>
 <br/>
-<%= @order.address_street_1 %>
-<% if @order.address_street_2? %>
+<%= @order.address_street1 %>
+<% if @order.address_street2? %>
   <br/>
-  <%= @order.address_street_2 %>
+  <%= @order.address_street2 %>
 <% end %>
 <br/>
 <%= "#{@order.address_city}, #{@order.address_state} #{@order.address_zip}" %>

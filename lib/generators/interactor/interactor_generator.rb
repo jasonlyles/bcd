@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class InteractorGenerator < Rails::Generators::NamedBase
-  source_root File.expand_path('../templates', __FILE__)
+  source_root File.expand_path('templates', __dir__)
 
   def copy_interactor_files
     # First create the base interactor

@@ -4,7 +4,7 @@ class MarketingMailer < ActionMailer::Base
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
   layout 'base_email'
 
-  def new_product_notification(product, product_type, image_url, user, message=nil)
+  def new_product_notification(product, product_type, image_url, user, message = nil)
     @host = Rails.application.config.web_host
     @product = product
     @product_type = product_type
@@ -20,6 +20,7 @@ class MarketingMailer < ActionMailer::Base
     @user = user
     mail(to: @user.email, subject: @email_campaign.subject)
   end
+
   # :nocov
   def queue_name
     'batchmailer'

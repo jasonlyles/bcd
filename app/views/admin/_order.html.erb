@@ -87,7 +87,7 @@
             </td>
           </tr>
 
-          <% if order.has_physical_item? %>
+          <% if order.includes_physical_item? %>
             <tr>
               <td>Street Address:</td>
               <td></td>
@@ -111,7 +111,7 @@
               <td></td>
               <td></td>
               <td class="pl-4">
-                <%= @order.address_street_1 %>
+                <%= @order.address_street1 %>
               </td>
             </tr>
             <tr>

@@ -11,7 +11,7 @@ class NewProductNotificationJob < BaseJob
     product_type = product.product_type.name
     image_url = product.main_image.medium
     recipient = Struct.new(:email, :guid, :unsubscribe_token)
-    users.each_with_index do |user, index|
+    users.each do |user|
       MarketingMailer.new_product_notification(product, product_type, image_url, recipient.new(user[0], user[1], user[2]), message).deliver
       # Trying a simple throttle to make sure I'm not sending more than 5 emails/second so I don't run afoul
       # of my Amazon SES limits

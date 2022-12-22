@@ -9,17 +9,17 @@ class Cart < ApplicationRecord
   def add_product(product)
     # first, see if I already have the item in my cart
     current_item = cart_items.find_by_product_id(product.id)
-    if current_item && current_item.product.is_digital_product?
-      # Do nothing? Maybe notify the user they can only add 1 of a set of instructions?
-    elsif current_item
+    if current_item&.product&.physical_product?
+      # If the item is already in the cart and is a physical product, increment...
       current_item.increment_quantity
-      save
     else
+      # ... else, add to the cart.
       current_item = CartItem.new(product_id: product.id, quantity: 1)
       current_item.save
       cart_items << current_item
-      save
     end
+
+    save
   end
 
   def total_price
@@ -56,17 +56,17 @@ class Cart < ApplicationRecord
     Cart.where(user_id: user_id).order('created_at desc').limit(1)[0]
   end
 
-  def has_physical_item?
+  def includes_physical_item?
     cart_items.includes(product: :product_type).each do |item|
-      return true if item.product.is_physical_product?
+      return true if item.product.physical_product?
     end
 
     false
   end
 
-  def has_digital_item?
+  def includes_digital_item?
     cart_items.each do |item|
-      return true if item.product.is_digital_product?
+      return true if item.product.digital_product?
     end
 
     false

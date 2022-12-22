@@ -11,8 +11,9 @@ class ContactMailer < AsyncMailer
     @name = name
     @body = body
 
-    mail(:reply_to => @email, :subject => 'New Contact Form')
+    mail(reply_to: @email, subject: 'New Contact Form')
   end
+
   # :nocov
   def queue_name
     'mailer'

@@ -31,6 +31,7 @@ class OrderMailer < AsyncMailer
     mail(to: EmailConfig.config.physical_order, subject: 'Physical Item Purchased')
   end
 
+  # rubocop:disable Metrics/AbcSize
   def follow_up(order_id)
     number_of_products = 3
     @host = Rails.application.config.web_host
@@ -47,6 +48,7 @@ class OrderMailer < AsyncMailer
 
     mail(to: @user.email, subject: 'Thanks for your recent order') unless @products_to_recommend.blank?
   end
+  # rubocop:enable Metrics/AbcSize
 
   def issue(order_id, comment, name)
     @order = Order.where(['id=?', order_id]).first

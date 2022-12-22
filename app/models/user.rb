@@ -10,15 +10,15 @@ class User < ApplicationRecord
   # attr_accessible :email, :password, :password_confirmation, :remember_me, :email_preference, :account_status, :tos_accepted, :referrer_code
 
   has_many :orders
-  has_many :line_items, :through => :orders
-  has_many :products, :through => :line_items
-  has_many :authentications, :dependent => :destroy
+  has_many :line_items, through: :orders
+  has_many :products, through: :line_items
+  has_many :authentications, dependent: :destroy
   has_many :downloads
   has_one :cart
   has_many :user_parts_lists
   has_many :parts_lists, through: :user_parts_lists
 
-  validates :tos_accepted, :acceptance => { :accept => true }
+  validates :tos_accepted, acceptance: { accept: true }
 
   before_create :set_up_guids
   before_save do
@@ -27,7 +27,7 @@ class User < ApplicationRecord
 
   def apply_omniauth(omniauth)
     self.email = omniauth['info']['email'] if omniauth['info'] && omniauth['info']['email']
-    authentications.build(:provider => omniauth['provider'], :uid => omniauth['uid'])
+    authentications.build(provider: omniauth['provider'], uid: omniauth['uid'])
   end
 
   def password_required?
@@ -73,11 +73,8 @@ class User < ApplicationRecord
     image_url = product.main_image.thumb if product.main_image
     download = Download.find_by_user_id_and_product_id(id, product.id)
 
-    parts_list_ids = if product.includes_instructions?
-                       product.parts_lists.map(&:id)
-                     else
-                       nil
-                     end
+    parts_list_ids = nil
+    parts_list_ids = product.parts_lists.map(&:id) if product.includes_instructions?
 
     product_info.new(product, download, image_url, parts_list_ids)
   end
@@ -121,7 +118,7 @@ class User < ApplicationRecord
     User.where("email_preference in ('1','2') and account_status <> 'C'").pluck(:email, :guid, :unsubscribe_token)
   end
 
-  def has_access_to_parts_list?(parts_list_id)
+  def access_to_parts_list?(parts_list_id)
     product_id = PartsList.find(parts_list_id)&.product_id
     product_id.blank? ? false : owns_product?(product_id)
   end

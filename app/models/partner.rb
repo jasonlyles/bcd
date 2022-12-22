@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Partner < ApplicationRecord
-  has_many :advertising_campaigns, :dependent => :destroy
+  has_many :advertising_campaigns, dependent: :destroy
 
   # attr_accessible :contact, :name, :url
 
@@ -9,7 +9,7 @@ class Partner < ApplicationRecord
   # deleted. This record should be held on to for historical value, and also because there is a user with a referrer_code
   # that references an advertising campaign that belongs to this partner. Allowing deletion of that partner would leave
   # broken relationships
-  def has_advert_campaign_thats_been_used?
+  def advert_campaign_thats_been_used?
     has_been_used = false
     if advertising_campaigns.count.positive?
       advertising_campaigns.each do |ac|
@@ -25,7 +25,7 @@ class Partner < ApplicationRecord
   end
 
   def destroy
-    return nil if has_advert_campaign_thats_been_used?
+    return nil if advert_campaign_thats_been_used?
 
     super
   end

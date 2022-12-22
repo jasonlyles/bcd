@@ -99,7 +99,7 @@ Style/HashExcept:
 Style/HashLikeCase:
   Enabled:                                 true
 Style/HashSyntax:
-  Enabled:                                 false
+  Enabled:                                 true
 Style/HashTransformKeys:
   Enabled:                                 true
 Style/HashTransformValues:

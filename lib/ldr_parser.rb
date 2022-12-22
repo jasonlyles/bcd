@@ -13,6 +13,9 @@ class LdrParser
     @lsynthed_parts = []
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def parse
     # TODO: Try to convert lsynth parts, maybe flag parts that are troublesome for manual editing,
     # look up to see if I've stored a conversion from ldraw ID to Bricklink ID,
@@ -25,7 +28,7 @@ class LdrParser
       break if line.match(/0 FILE/) && i > 15
 
       @submodels << line.match(/\w+\.ldr/).to_s.downcase if line.match(/^1/) && line.match(/\.ldr$/)
-      @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split(' ') if line =~ /^0 SYNTH BEGIN/
+      @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split if line =~ /^0 SYNTH BEGIN/
       next unless line.match(/^1/) && line.match(/.dat$/)
 
       part = line.match(/\w+\.dat/).to_s.gsub!('.dat', '')
@@ -54,6 +57,9 @@ class LdrParser
 
     parts
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   private
 
@@ -70,6 +76,9 @@ class LdrParser
     Part.find_by_ldraw_id(part)&.bl_id || part
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def handle_submodels(temp_parts)
     @submodels.each do |submodel|
       count = 0
@@ -80,7 +89,7 @@ class LdrParser
         next unless store_lines == true
 
         @submodels << line.match(/\w+\.ldr/).to_s.downcase if line.match(/^1/) && (line.match(/\.ldr#{@line_break}$/) || line.match(/\.ldr$/))
-        @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split(' ') if line =~ /^0 SYNTH BEGIN/
+        @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split if line =~ /^0 SYNTH BEGIN/
         break if line.match(/0 FILE/) && i > 5	&& (line.downcase != "0 file #{submodel.downcase}#{@line_break}" && line.downcase != "0 file #{submodel.downcase}")
         next unless line.match(/^1/) && (line.match(/.dat#{@line_break}$/) || line.match(/.dat$/))
 
@@ -97,6 +106,9 @@ class LdrParser
 
     temp_parts
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # TODO
   # def handle_lsynthed_parts(temp_parts)

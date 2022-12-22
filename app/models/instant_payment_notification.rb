@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InvalidIPNException < StandardError;end
+class InvalidIPNException < StandardError; end
 
 class InstantPaymentNotification < ApplicationRecord
   belongs_to :order, optional: true
@@ -16,8 +16,8 @@ class InstantPaymentNotification < ApplicationRecord
   end
 
   def valid_amount?
-    Rails.logger.debug("PAYMENT AMOUNT: #{params['mc_gross'].to_f} and #{order.total_price} and #{params['mc_gross'].to_f == order.total_price}")
-    params['mc_gross'].to_f == order.total_price
+    Rails.logger.debug("PAYMENT AMOUNT: #{params['mc_gross'].to_f} and #{order.total_price} and #{params['mc_gross'].to_d == order.total_price.to_d}")
+    params['mc_gross'].to_d == order.total_price.to_d
   end
 
   def valid_payment_status?
@@ -44,7 +44,7 @@ class InstantPaymentNotification < ApplicationRecord
       true
     else
       Rails.logger.debug("INVALID IPN: BODY: #{response.body} AND CODE: #{response.code}")
-      ExceptionNotifier.notify_exception(InvalidIPNException.new, :data => { :message => "INVALID IPN ##{id}: BODY: #{response.body} AND CODE: #{response.code}" })
+      ExceptionNotifier.notify_exception(InvalidIPNException.new, data: { message: "INVALID IPN ##{id}: BODY: #{response.body} AND CODE: #{response.code}" })
       false
     end
   end

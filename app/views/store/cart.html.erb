@@ -32,7 +32,7 @@
               <td class="align-middle"><%= item.product.product_type.name %></td>
               <td class="align-middle"><%= number_to_currency(item.price) %></td>
               <td class="align-middle">
-                <% if item.product.is_physical_product? %>
+                <% if item.product.physical_product? %>
                   <%= form_for(:cart, url: { action: :update_item_in_cart }) do |f| %>
                     <%= f.hidden_field :item_id, value: item.id %>
                     <div class="form-group">

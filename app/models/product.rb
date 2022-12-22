@@ -86,13 +86,12 @@ class Product < ApplicationRecord
     Product.ready.where(["free != 't' and quantity >= 1 and category_id = ? and id <> ?", category_id, id]).limit(4)
   end
 
-  def has_orders?
-    line_item = LineItem.where(['product_id = ?', id]).limit(1)
-    line_item.empty? ? false : true
+  def orders?
+    LineItem.where(['product_id = ?', p.id]).exists?
   end
 
   def destroy
-    if has_orders?
+    if orders?
       # switch ready_for_public flag to 'f', effectively taking the product off the market, but leaving it in the
       # database for reporting purposes
       self.ready_for_public = 'f'
@@ -109,11 +108,11 @@ class Product < ApplicationRecord
     save
   end
 
-  def is_physical_product?
-    !is_digital_product?
+  def physical_product?
+    !digital_product?
   end
 
-  def is_digital_product?
+  def digital_product?
     if product_type
       product_type.digital_product?
     else
@@ -143,12 +142,7 @@ class Product < ApplicationRecord
 
   def self.find_by_base_product_code(product_code)
     product = Product.new
-    product = find_by_product_code(product.base_product_code(product_code.upcase))
-    product
-  end
-
-  def is_free?
-    free
+    find_by_product_code(product.base_product_code(product_code.upcase))
   end
 
   def main_image

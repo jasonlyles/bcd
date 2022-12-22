@@ -53,7 +53,7 @@ class Admin::SubcategoriesController < AdminController
   def model_code
     @model_code = Subcategory.model_code(params[:id])
     respond_to do |format|
-      format.json { render :json => @model_code.to_json }
+      format.json { render json: @model_code.to_json }
     end
   end
 

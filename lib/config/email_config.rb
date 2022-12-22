@@ -2,8 +2,9 @@
 
 require 'active_support/configurable'
 
+# rubocop:disable all
 module EmailConfig
-  def self.configure(&block)
+  def self.configure(*)
     yield @config ||= EmailConfig::Configuration.new
   end
 
@@ -22,3 +23,4 @@ module EmailConfig
     config_accessor :contact
   end
 end
+# rubocop:enable all

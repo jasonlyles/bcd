@@ -328,45 +328,45 @@ describe Product do
     end
   end
 
-  describe "is_physical_product?" do
+  describe "physical_product?" do
     it "should return true if product type is not blank and is != Instructions" do
       @product1 = FactoryGirl.create(:product)
       @product2 = FactoryGirl.create(:physical_product)
 
-      expect(@product2.is_physical_product?).to eq(true)
+      expect(@product2.physical_product?).to eq(true)
     end
 
     it "should return false if product type is Instructions or product type is blank" do
       @product1 = FactoryGirl.create(:product)
 
-      expect(@product1.is_physical_product?).to eq(false)
+      expect(@product1.physical_product?).to eq(false)
 
       #This represents the case where a product is brand new (via the new action) and doesn't have a type yet
       @product2 = FactoryGirl.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
 
-      expect(@product2.is_physical_product?).to eq(false)
+      expect(@product2.physical_product?).to eq(false)
     end
   end
 
-  describe "is_digital_product?" do
+  describe "digital_product?" do
     it "should return true if product type is not blank and is == Instructions" do
       @product1 = FactoryGirl.create(:product)
       @product2 = FactoryGirl.create(:physical_product)
 
-      expect(@product1.is_digital_product?).to eq(true)
+      expect(@product1.digital_product?).to eq(true)
     end
 
     it "should return false if product type is not Instructions or product type is blank" do
       @product1 = FactoryGirl.create(:product)
       @product2 = FactoryGirl.create(:physical_product, :product_type_id => @product_type2.id)
 
-      expect(@product2.is_digital_product?).to eq(false)
+      expect(@product2.digital_product?).to eq(false)
 
       #This represents the case where a product is brand new (via the new action) and doesn't have a type yet.
       #It gets set to true so that all fields are displayed on the product form
       @product3 = FactoryGirl.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
 
-      expect(@product3.is_digital_product?).to eq(true)
+      expect(@product3.digital_product?).to eq(true)
     end
   end
 

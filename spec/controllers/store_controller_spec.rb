@@ -412,7 +412,7 @@ describe StoreController do
       it 'should look at an existing order to get the address used on a previous order' do
         @user = FactoryGirl.create(:user)
         FactoryGirl.create(:product)
-        FactoryGirl.create(:order, address_street_1: '123 Fake St.', address_state: 'VA')
+        FactoryGirl.create(:order, address_street1: '123 Fake St.', address_state: 'VA')
         expect(controller).to receive(:current_user).at_least(1).times.and_return(@user)
         get :enter_address
 

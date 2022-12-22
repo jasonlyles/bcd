@@ -22,10 +22,10 @@ class PasswordsController < Devise::PasswordsController
       # sign_in current_user, bypass: true
       bypass_sign_in(current_user)
       flash[:notice] = 'Profile was successfully updated.'
-      redirect_to(controller: :registrations, action: :edit)
     else
       flash[:alert] = 'Password not updated. Password may have been too short, or password confirmation may not have matched. Try again.'
-      redirect_to controller: :registrations, action: :edit
     end
+
+    redirect_to(controller: :registrations, action: :edit)
   end
 end

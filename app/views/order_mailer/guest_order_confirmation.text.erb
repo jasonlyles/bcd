@@ -15,16 +15,16 @@ Hello
 <%= "#{@host}/new_user_tutorial" %>
 to help you get started. Let's get building! \
 
-<% if @order.has_physical_item? %>
+<% if @order.includes_physical_item? %>
   We will be packaging up and getting your order ready to ship within the next 1-2 days. The address we have for you is: \ \
   <%= @order.address_name %>
   \
   <%= "#{@order.first_name} #{@order.last_name}" %>
   \
-  <%= @order.address_street_1 %>
+  <%= @order.address_street1 %>
   \
-  <% if @order.address_street_2? %>
-    <%= @order.address_street_2 %>
+  <% if @order.address_street2? %>
+    <%= @order.address_street2 %>
     \
   <% end %>
   <%= "#{@order.address_city}, #{@order.address_state} #{@order.address_zip}" %>

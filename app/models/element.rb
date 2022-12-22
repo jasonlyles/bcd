@@ -40,6 +40,7 @@ class Element < ApplicationRecord
     color.bl_name
   end
 
+  # rubocop:disable Naming/PredicateName
   def self.has_image?(boolean)
     if boolean == 'true'
       where('image IS NOT NULL')
@@ -47,6 +48,7 @@ class Element < ApplicationRecord
       where('image IS NULL')
     end
   end
+  # rubocop:enable Naming/PredicateName
 
   # TODO: Maybe expand this to update other attributes as well, not just the image.
   # year_from and year_to are also available.
@@ -121,7 +123,7 @@ class Element < ApplicationRecord
     file = "#{parts_image_dir}/#{guid}#{extension}"
     begin
       File.open(file, 'wb') do |fo|
-        fo.write open(original_image_url).read
+        fo.write File.open(original_image_url).read
       end
     rescue StandardError => e
       logger.error "There was a problem getting an image for #{original_image_url}: #{e.message}"

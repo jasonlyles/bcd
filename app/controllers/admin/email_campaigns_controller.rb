@@ -43,13 +43,13 @@ class Admin::EmailCampaignsController < AdminController
 
   # DELETE /email_campaigns/1
   def destroy
-    if @email_campaign.destroy
-      redirect_to(admin_email_campaigns_url)
-    else
-      flash[:alert] = 'Did not destroy this marketing campaign due to emails having been sent for it. Destroying it now
-          would lose valuable reporting data.'
-      redirect_to(admin_email_campaigns_url)
-    end
+    flash[:alert] = if @email_campaign.destroy
+                      'Email Campaign destroyed'
+                    else
+                      'Did not destroy this marketing campaign due to emails having been sent for it. Destroying it now would lose valuable reporting data.'
+                    end
+
+    redirect_to(admin_email_campaigns_url)
   end
 
   def send_marketing_emails

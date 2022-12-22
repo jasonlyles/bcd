@@ -2,6 +2,7 @@
 
 module PartInteractions
   class UpdateFromBricklink < BasePartInteraction
+    # rubocop:disable Metrics/AbcSize
     def run
       bricklink_part = Bricklink.get_part(@part.ldraw_id)
       Rails.logger.info("PartInteractions::UpdateFromBricklink::#{@part.id} Bricklink called")
@@ -24,5 +25,6 @@ module PartInteractions
       self.error = "Bricklink Update Failure. LDraw ID: #{@part.ldraw_id} ERROR: #{e.message}"
       Rails.logger.error("PartInteractions::UpdateFromBricklink::#{@part.id} failed.\nERROR: #{e}\n#{e.backtrace}")
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end
