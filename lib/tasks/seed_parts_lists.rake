@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :db do
   task seed_colors: :environment do
     require 'csv'

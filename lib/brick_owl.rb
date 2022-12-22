@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 # TODO: This is a work in progress that I'll get back to once the backend is
 # functional and the new parts list v1 is deployed.
 class BrickOwl
-  BRICKOWL_URL = 'https://api.brickowl.com'.freeze
+  BRICKOWL_URL = 'https://api.brickowl.com'
 
   # For GETs
   # Pass in args as: '&thing=1&other_thing=2'
@@ -46,7 +48,7 @@ class BrickOwl
   end
 
   # Not sure I need this, but it works to prove I can hit the API
-  def self.get_wishlists
+  def self.retrieve_wishlists
     response = get_request('wishlist/lists')
     JSON.parse(response.body)
   end
@@ -78,7 +80,7 @@ class BrickOwl
       # json['error']['status']
     end
     if json.keys.include?('status') && json['status'].casecmp('success').zero?
-      lot_id = json['lot_id']
+      # TODO: Do something with this: lot_id = json['lot_id']
     else
       # TODO: bubble up some error to the user
     end

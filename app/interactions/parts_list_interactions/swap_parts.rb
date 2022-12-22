@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PartsListInteractions
   class SwapParts < BasePartsListInteraction
     attr_accessor :affected_parts_lists_ids

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PartInteractions
   class UpdateFromRebrickable < BasePartInteraction
     def run

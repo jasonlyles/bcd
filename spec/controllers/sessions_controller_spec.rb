@@ -18,7 +18,7 @@ describe SessionsController do
     it "should create a new session" do
       @user = User.create!(:email => "charles@mcwoofay.net", :password => 'password', :tos_accepted => true)
       request.env['devise.mapping'] = Devise.mappings[:user]
-      post :create, :user => {:email => "charles@mcwoofay.net", :password => 'password'}
+      post :create, params: { user: { email: 'charles@mcwoofay.net', password: 'password' } }
 
       expect(response).to redirect_to('/')
       expect(flash[:notice]).to eq('Signed in successfully.')
@@ -28,7 +28,7 @@ describe SessionsController do
     it "should not create a new session if user is cancelled" do
       @user = User.create!(:email => "charles@mcwoofay.net", :password => 'password', :account_status => 'C', :tos_accepted => true)
       request.env['devise.mapping'] = Devise.mappings[:user]
-      post :create, :user => {:email => "charles@mcwoofay.net", :password => 'password'}
+      post :create, params: { user: { email: 'charles@mcwoofay.net', password: 'password' } }
 
       expect(response).to redirect_to('/users/sign_out')
     end
@@ -76,7 +76,7 @@ describe SessionsController do
           user = FactoryGirl.create(:user, :email => 'fake@fake.fake')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(user)
           request.env['devise.mapping'] = Devise.mappings[:user]
-          post :register_guest, :guest => {:email => user.email, :email_preference => 0}
+          post :register_guest, params: { guest: { email: user.email, email_preference: 0 } }
 
           user.reload
           expect(user.email_preference).to eq(0)
@@ -90,7 +90,7 @@ describe SessionsController do
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(user)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).and_return(false)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 0}
+          post :register_guest, params: { guest: { email: user.email, email_preference: 0 } }
 
           expect(response).to render_template(:guest_registration)
         end
@@ -103,7 +103,7 @@ describe SessionsController do
         request.env['devise.mapping'] = Devise.mappings[:user]
         expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
 
-        expect( lambda{ post :register_guest, :guest => {:email => 'blar2@blar.blar', :email_preference => 2}}).to change(User, :count).by(1)
+        expect( lambda{ post :register_guest, params: { guest: { email: 'blar2@blar.blar', email_preference: 2 } } }).to change(User, :count).by(1)
       end
 
       it 'should not create a new guest record if a guest record could be found by email' do
@@ -113,7 +113,7 @@ describe SessionsController do
         expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
         expect(Guest).to receive(:find_by_email).and_return(user)
 
-        expect(lambda{post :register_guest, :guest => {:email => user.email, :email_preference => 2}}).to_not change(User, :count)
+        expect(lambda{post :register_guest, params: { guest: { email: user.email, email_preference: 2 } } }).to_not change(User, :count)
       end
 
       context 'and user record is valid' do
@@ -122,7 +122,7 @@ describe SessionsController do
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, params: { guest: { email: user.email, email_preference: 2 } }
 
           user.reload
           expect(user.account_status).to eq('G')
@@ -133,7 +133,7 @@ describe SessionsController do
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, params: { guest: { email: user.email, email_preference: 2 } }
 
           expect(session[:guest]).to eq(user.id)
         end
@@ -143,7 +143,7 @@ describe SessionsController do
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, params: { guest: { email: user.email, email_preference: 2 } }
 
           expect(response).to redirect_to('/checkout')
         end
@@ -155,7 +155,7 @@ describe SessionsController do
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(false)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, params: { guest: { email: user.email, email_preference: 2 } }
 
           expect(flash[:alert]).to eq('You must enter a valid email and accept the terms of service before you can proceed.')
         end
@@ -165,7 +165,7 @@ describe SessionsController do
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(false)
-          post :register_guest, :guest => {:email => user.email, :email_preference => 2}
+          post :register_guest, params: { guest: { email: user.email, email_preference: 2 } }
 
           expect(response).to render_template(:guest_registration)
         end

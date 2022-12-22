@@ -5,6 +5,7 @@ describe Admin::SubcategoriesController do
   before do
     @radmin ||= FactoryGirl.create(:radmin)
     @product_type = FactoryGirl.create(:product_type)
+    @category = FactoryGirl.create(:category)
   end
 
   before(:each) do |example|
@@ -19,7 +20,8 @@ describe Admin::SubcategoriesController do
   let(:valid_attributes) {
     {
         name: 'Vehicles',
-        code: 'CV'
+        code: 'CV',
+        category_id: @category.id
     }
   }
 
@@ -42,7 +44,7 @@ describe Admin::SubcategoriesController do
   describe "GET #show" do
     it "assigns the requested subcategory as @subcategory" do
       subcategory = Subcategory.create! valid_attributes
-      get :show, id: subcategory.to_param
+      get :show, params: { id: subcategory.to_param }
 
       expect(assigns(:subcategory)).to eq(subcategory)
     end
@@ -59,7 +61,7 @@ describe Admin::SubcategoriesController do
   describe "GET #edit" do
     it "assigns the requested subcategory as @subcategory" do
       subcategory = Subcategory.create! valid_attributes
-      get :edit, id: subcategory.to_param
+      get :edit, params: { id: subcategory.to_param }
 
       expect(assigns(:subcategory)).to eq(subcategory)
     end
@@ -69,19 +71,19 @@ describe Admin::SubcategoriesController do
     context "with valid params" do
       it "creates a new Subcategory" do
         expect {
-          post :create, subcategory: valid_attributes
+          post :create, params: { subcategory: valid_attributes }
         }.to change(Subcategory, :count).by(1)
       end
 
       it "assigns a newly created subcategory as @subcategory" do
-        post :create, subcategory: valid_attributes
+        post :create, params: { subcategory: valid_attributes }
 
         expect(assigns(:subcategory)).to be_a(Subcategory)
         expect(assigns(:subcategory)).to be_persisted
       end
 
       it "redirects to the created subcategory" do
-        post :create, subcategory: valid_attributes
+        post :create, params: { subcategory: valid_attributes }
 
         expect(response).to redirect_to([:admin, Subcategory.last])
       end
@@ -89,13 +91,13 @@ describe Admin::SubcategoriesController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved subcategory as @subcategory" do
-        post :create, subcategory: invalid_attributes
+        post :create, params: { subcategory: invalid_attributes }
 
         expect(assigns(:subcategory)).to be_a_new(Subcategory)
       end
 
       it "re-renders the 'new' template" do
-        post :create, subcategory: invalid_attributes
+        post :create, params: { subcategory: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -113,7 +115,7 @@ describe Admin::SubcategoriesController do
 
       it "updates the requested subcategory" do
         subcategory = Subcategory.create! valid_attributes
-        put :update, id: subcategory.to_param, subcategory: new_attributes
+        put :update, params: { id: subcategory.to_param, subcategory: new_attributes }
         subcategory.reload
 
         expect(assigns(:subcategory)[:name]).to eq('Buildings')
@@ -122,14 +124,14 @@ describe Admin::SubcategoriesController do
 
       it "assigns the requested subcategory as @subcategory" do
         subcategory = Subcategory.create! valid_attributes
-        put :update, id: subcategory.to_param, subcategory: valid_attributes
+        put :update, params: { id: subcategory.to_param, subcategory: valid_attributes }
 
         expect(assigns(:subcategory)).to eq(subcategory)
       end
 
       it "redirects to the subcategory" do
         subcategory = Subcategory.create! valid_attributes
-        put :update, id: subcategory.to_param, subcategory: valid_attributes
+        put :update, params: { id: subcategory.to_param, subcategory: valid_attributes }
 
         expect(response).to redirect_to([:admin, subcategory])
       end
@@ -138,14 +140,14 @@ describe Admin::SubcategoriesController do
     context "with invalid params" do
       it "assigns the subcategory as @subcategory" do
         subcategory = Subcategory.create! valid_attributes
-        put :update, id: subcategory.to_param, subcategory: invalid_attributes
+        put :update, params: { id: subcategory.to_param, subcategory: invalid_attributes }
 
         expect(assigns(:subcategory)).to eq(subcategory)
       end
 
       it "re-renders the 'edit' template" do
         subcategory = Subcategory.create! valid_attributes
-        put :update, id: subcategory.to_param, subcategory: invalid_attributes
+        put :update, params: { id: subcategory.to_param, subcategory: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -156,22 +158,21 @@ describe Admin::SubcategoriesController do
     it "destroys the requested subcategory" do
       subcategory = Subcategory.create! valid_attributes
       expect {
-        delete :destroy, id: subcategory.to_param
+        delete :destroy, params: { id: subcategory.to_param }
       }.to change(Subcategory, :count).by(-1)
     end
 
     it "redirects to the subcategories list" do
       subcategory = Subcategory.create! valid_attributes
-      delete :destroy, id: subcategory.to_param
+      delete :destroy, params: { id: subcategory.to_param }
 
       expect(response).to redirect_to(admin_subcategories_url)
     end
 
     it "should not destroy a subcategory that has products" do
-      @category = FactoryGirl.create(:category)
       @subcat = FactoryGirl.create(:subcategory_with_products)
       sign_in @radmin
-      delete :destroy, :id => @subcat.id
+      delete :destroy, params: { id: @subcat.id }
       expect(response).to redirect_to(admin_subcategories_url)
       expect(flash[:alert]).to eq("You can't delete this subcategory while it has products. Delete or reassign the products and try again.")
     end
@@ -179,11 +180,10 @@ describe Admin::SubcategoriesController do
 
   describe "model_code" do
     it "should get a suggested model_code" do
-      @category = FactoryGirl.create(:category)
       @subcategory = FactoryGirl.create(:subcategory)
       @product = FactoryGirl.create(:product)
       sign_in @radmin
-      get :model_code, :id => @subcategory.id, format: :json
+      get :model_code, params: { id: @subcategory.id }, format: :json
 
       #really I think I need to figure out some way to test that this is getting rendered in json, but I don't know how to test for that yet.
       expect(assigns(:model_code)).to eq("#{@subcategory.code}002")

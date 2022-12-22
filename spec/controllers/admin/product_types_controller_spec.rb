@@ -33,15 +33,10 @@ describe Admin::ProductTypesController do
   # adjust the attributes here as well.
   let(:valid_attributes) { { "name" => "Instructions" } }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # ProductTypesController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
-
   describe "GET index" do
     it "assigns all product_types as @product_types" do
       product_type = ProductType.create! valid_attributes
-      get :index, {}, valid_session
+      get :index
 
       expect(assigns(:product_types)).to eq([product_type])
     end
@@ -50,7 +45,7 @@ describe Admin::ProductTypesController do
   describe "GET show" do
     it "assigns the requested product_type as @product_type" do
       product_type = ProductType.create! valid_attributes
-      get :show, {:id => product_type.to_param}, valid_session
+      get :show, params: { id: product_type.to_param }
 
       expect(assigns(:product_type)).to eq(product_type)
     end
@@ -58,7 +53,7 @@ describe Admin::ProductTypesController do
 
   describe "GET new" do
     it "assigns a new product_type as @product_type" do
-      get :new, {}, valid_session
+      get :new
 
       expect(assigns(:product_type)).to be_a_new(ProductType)
     end
@@ -67,7 +62,7 @@ describe Admin::ProductTypesController do
   describe "GET edit" do
     it "assigns the requested product_type as @product_type" do
       product_type = ProductType.create! valid_attributes
-      get :edit, {:id => product_type.to_param}, valid_session
+      get :edit, params: { id: product_type.to_param }
 
       expect(assigns(:product_type)).to eq(product_type)
     end
@@ -77,19 +72,19 @@ describe Admin::ProductTypesController do
     describe "with valid params" do
       it "creates a new ProductType" do
         expect {
-          post :create, {:product_type => valid_attributes}, valid_session
+          post :create, params: { product_type: valid_attributes }
         }.to change(ProductType, :count).by(1)
       end
 
       it "assigns a newly created product_type as @product_type" do
-        post :create, {:product_type => valid_attributes}, valid_session
+        post :create, params: { product_type: valid_attributes }
 
         expect(assigns(:product_type)).to be_a(ProductType)
         expect(assigns(:product_type)).to be_persisted
       end
 
       it "redirects to the created product_type" do
-        post :create, {:product_type => valid_attributes}, valid_session
+        post :create, params: { product_type: valid_attributes }
 
         expect(response).to redirect_to([:admin, ProductType.last])
       end
@@ -99,7 +94,7 @@ describe Admin::ProductTypesController do
       it "assigns a newly created but unsaved product_type as @product_type" do
         # Trigger the behavior that occurs when invalid params are submitted
         expect_any_instance_of(ProductType).to receive(:save).and_return(false)
-        post :create, {:product_type => { "name" => "invalid value" }}, valid_session
+        post :create, params: { product_type: { "name" => "invalid value" } }
 
         expect(assigns(:product_type)).to be_a_new(ProductType)
       end
@@ -107,7 +102,7 @@ describe Admin::ProductTypesController do
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         expect_any_instance_of(ProductType).to receive(:save).and_return(false)
-        post :create, {:product_type => { "name" => "invalid value" }}, valid_session
+        post :create, params: { product_type: { "name" => "invalid value" } }
 
         expect(response).to render_template("new")
       end
@@ -122,20 +117,21 @@ describe Admin::ProductTypesController do
         # specifies that the ProductType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        expect_any_instance_of(ProductType).to receive(:update).with({ "name" => "" })
-        put :update, {:id => product_type.to_param, :product_type => { "name" => "" }}, valid_session
+        put :update, params: { id: product_type.to_param, product_type: { "name" => "Fake" } }
+
+        expect(assigns(:product_type).name).to eq('Fake')
       end
 
       it "assigns the requested product_type as @product_type" do
         product_type = ProductType.create! valid_attributes
-        put :update, {:id => product_type.to_param, :product_type => valid_attributes}, valid_session
+        put :update, params: { id: product_type.to_param, product_type: valid_attributes }
 
         expect(assigns(:product_type)).to eq(product_type)
       end
 
       it "redirects to the product_type" do
         product_type = ProductType.create! valid_attributes
-        put :update, {:id => product_type.to_param, :product_type => valid_attributes}, valid_session
+        put :update, params: { id: product_type.to_param, product_type: valid_attributes }
 
         expect(response).to redirect_to([:admin, product_type])
       end
@@ -146,7 +142,7 @@ describe Admin::ProductTypesController do
         product_type = ProductType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         expect_any_instance_of(ProductType).to receive(:save).and_return(false)
-        put :update, {:id => product_type.to_param, :product_type => { "name" => "invalid value" }}, valid_session
+        put :update, params: { id: product_type.to_param, product_type: { "name" => "invalid value" } }
 
         expect(assigns(:product_type)).to eq(product_type)
       end
@@ -155,7 +151,7 @@ describe Admin::ProductTypesController do
         product_type = ProductType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         expect_any_instance_of(ProductType).to receive(:save).and_return(false)
-        put :update, {:id => product_type.to_param, :product_type => { "name" => "invalid value" }}, valid_session
+        put :update, params: { id: product_type.to_param, product_type: { "name" => "invalid value" } }
 
         expect(response).to render_template("edit")
       end
@@ -166,13 +162,13 @@ describe Admin::ProductTypesController do
     it "destroys the requested product_type" do
       product_type = ProductType.create! valid_attributes
       expect {
-        delete :destroy, {:id => product_type.to_param}, valid_session
+        delete :destroy, params: { id: product_type.to_param }
       }.to change(ProductType, :count).by(-1)
     end
 
     it "redirects to the product_types list" do
       product_type = ProductType.create! valid_attributes
-      delete :destroy, {:id => product_type.to_param}, valid_session
+      delete :destroy, params: { id: product_type.to_param }
       expect(response).to redirect_to(admin_product_types_url)
     end
   end

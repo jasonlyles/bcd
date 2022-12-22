@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::PartnersController < AdminController
-  before_filter :get_partner, only: [:show, :edit, :update, :destroy]
+  before_action :assign_partner, only: %i[show edit update destroy]
 
   # GET /partners
   def index
@@ -8,8 +10,7 @@ class Admin::PartnersController < AdminController
   end
 
   # GET /partners/1
-  def show
-  end
+  def show; end
 
   # GET /partners/new
   def new
@@ -17,27 +18,26 @@ class Admin::PartnersController < AdminController
   end
 
   # GET /partners/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /partners
   def create
-    @partner = Partner.new(params[:partner])
+    @partner = Partner.new(partner_params)
     if @partner.save
       redirect_to([:admin, @partner], notice: 'Partner was successfully created.')
     else
-      flash[:alert] = "Partner was NOT created"
-      render "new"
+      flash[:alert] = 'Partner was NOT created'
+      render 'new'
     end
   end
 
   # PUT /partners/1
   def update
-    if @partner.update_attributes(params[:partner])
+    if @partner.update_attributes(partner_params)
       redirect_to([:admin, @partner], notice: 'Partner was successfully updated.')
     else
-      flash[:alert] = "Partner was NOT updated"
-      render "edit"
+      flash[:alert] = 'Partner was NOT updated'
+      render 'edit'
     end
   end
 
@@ -45,7 +45,7 @@ class Admin::PartnersController < AdminController
   def destroy
     deleted = @partner.destroy
     unless deleted
-      flash[:alert] = "Sorry. You can't delete a partner that has advertising campaigns that have been used."
+      flash[:alert] = 'Sorry. You can\'t delete a partner that has advertising campaigns that have been used.'
       return redirect_to(admin_partners_url)
     end
     redirect_to(admin_partners_url)
@@ -53,7 +53,12 @@ class Admin::PartnersController < AdminController
 
   private
 
-  def get_partner
+  def assign_partner
     @partner = Partner.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def partner_params
+    params.require(:partner).permit(:contact, :name, :url)
   end
 end

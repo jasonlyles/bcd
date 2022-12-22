@@ -144,9 +144,7 @@ function populateElementData(selectElement, partName, colorId) {
       elementImageWrapper.innerHTML = '';
       elementImageWrapper.classList.add('shadow-sm');
       elementImageWrapper.classList.add('p-2');
-      if (data['image_processing'] === true) {
-        elementImageWrapper.innerHTML = '<p>Image not ready</p>';
-      } else if (data['image']['url'] == null) {
+      if (data['image']['url'] == null) {
         elementImageWrapper.innerHTML = '<p>Image not available</p>';
       } else if (data['image']['thumb']['url'] == null) {
         var imageUrl = data['image']['url']

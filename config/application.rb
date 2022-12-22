@@ -58,6 +58,27 @@ module BrickCity
 
     config.assets.precompile += ['ie.css', 'admin.css']
 
-    config.active_record.raise_in_transactional_callbacks = true
+    # New config values for Rails 5:
+    # Once whatever deprecation warnings are gone, set this to false
+    ActiveSupport.halt_callback_chains_on_return_false = true
+    # Probably don't need this, but if the app needs some autoloading in prod for
+    # things that work in dev, set:
+    # Rails.application.config.enable_dependency_loading = true
+    # belongs_to will now trigger a validation error by default if the association
+    # is not present. This can be turned off per-association with optional: true.
+    config.active_record.belongs_to_required_by_default = true
+    # forms in your application will each have their own CSRF token that is specific
+    # to the action and method for that form.
+    config.action_controller.per_form_csrf_tokens = true
+    # You can now configure your application to check if the HTTP Origin header
+    # should be checked against the site's origin as an additional CSRF defense.
+    config.action_controller.forgery_protection_origin_check = true
+    # The default mailer queue name is mailers. This configuration option allows
+    # you to globally change the queue name.
+    # config.action_mailer.deliver_later_queue_name = :new_queue_name
+    # determine whether your Action Mailer views should support caching.
+    config.action_mailer.perform_caching = true
+    # When using Ruby 2.4, you can preserve the timezone of the receiver when calling to_time.
+    # ActiveSupport.to_time_preserves_timezone = false
   end
 end

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::CategoriesController < AdminController
-  before_filter :get_category, only: [:show, :edit, :update, :destroy]
+  before_action :assign_category, only: %i[show edit update destroy]
 
   # GET /categories
   def index
@@ -10,13 +12,12 @@ class Admin::CategoriesController < AdminController
   def subcategories
     @category = Category.find(params[:id])
     respond_to do |format|
-      format.json  { render json: @category.subcategories }
+      format.json { render json: @category.subcategories }
     end
   end
 
   # GET /categories/1
-  def show
-  end
+  def show; end
 
   # GET /categories/new
   def new
@@ -24,43 +25,45 @@ class Admin::CategoriesController < AdminController
   end
 
   # GET /categories/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /categories
   def create
-    @category = Category.new(params[:category])
+    @category = Category.new(category_params)
     if @category.save
       redirect_to([:admin, @category], notice: 'Category was successfully created.')
     else
-      flash[:alert] = "Category was NOT created"
-      render "new"
+      flash[:alert] = 'Category was NOT created'
+      render 'new'
     end
   end
 
   # PUT /categories/1
   def update
-    if @category.update_attributes(params[:category])
+    if @category.update_attributes(category_params)
       redirect_to([:admin, @category], notice: 'Category was successfully updated.')
     else
-      flash[:alert] = "Category was NOT updated"
-      render "edit"
+      flash[:alert] = 'Category was NOT updated'
+      render 'edit'
     end
   end
 
   # DELETE /categories/1
   def destroy
-    if @category.subcategories.empty?
-      @category.destroy
-    else
-      return redirect_to admin_categories_url, alert: "You can't delete this category while it has subcategories. Delete or reassign the subcategories and try again."
-    end
+    return redirect_to admin_categories_url, alert: 'You can\'t delete this category while it has subcategories. Delete or reassign the subcategories and try again.' unless @category.subcategories.empty?
+
+    @category.destroy
     redirect_to(admin_categories_url)
   end
 
   private
 
-  def get_category
+  def assign_category
     @category = Category.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def category_params
+    params.require(:category).permit(:name, :description, :ready_for_public, :image, :image_cache, :remove_image)
   end
 end

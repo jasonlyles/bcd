@@ -1,17 +1,17 @@
-class StoreController < ApplicationController
-  before_filter :set_return_to_checkout, only: [:checkout]
-  before_filter :set_guest_checkout_flag, only: [:checkout]
-  before_filter :authenticate_user!, only: %i[checkout submit_order], unless: :user_is_guest? # May need to ditch this for guest checkout flow
-  before_filter :check_users_previous_orders, only: [:checkout], unless: :user_is_guest?
-  before_filter :get_users_physical_address, only: [:checkout]
-  before_filter :get_address_form_data, only: %i[enter_address validate_street_address]
-  skip_before_filter :find_cart, only: [:thank_you_for_your_order]
+# frozen_string_literal: true
 
-  #:nocov:
-  if Rails.env.development?
-    after_filter :mock_paypal_call_to_listener, only: [:submit_order]
-  end
-  #:nocov:
+class StoreController < ApplicationController
+  before_action :set_return_to_checkout, only: [:checkout]
+  before_action :set_guest_checkout_flag, only: [:checkout]
+  before_action :authenticate_user!, only: %i[checkout submit_order], unless: :user_is_guest? # May need to ditch this for guest checkout flow
+  before_action :check_users_previous_orders, only: [:checkout], unless: :user_is_guest?
+  before_action :assign_users_physical_address, only: [:checkout]
+  before_action :assign_address_form_data, only: %i[enter_address validate_street_address]
+  skip_before_action :find_cart, only: [:thank_you_for_your_order]
+
+  # :nocov:
+  after_action :mock_paypal_call_to_listener, only: [:submit_order] if Rails.env.development?
+  # :nocov:
 
   def products
     @product_type = ProductType.where('name=?', params[:product_type_name])[0]
@@ -20,7 +20,7 @@ class StoreController < ApplicationController
       flash[:notice] = "Sorry. We don't have any of those." unless params[:product_type_name] == 'favicon'
       redirect_to(root_path)
     else
-      if !params[:product_type_name].casecmp('instructions').zero?
+      unless params[:product_type_name].casecmp('instructions').zero?
         @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
       else
         @top_categories = Category.find_live_categories
@@ -34,10 +34,10 @@ class StoreController < ApplicationController
 
   def cart
     item_list = check_for_errant_items if @cart
-    if item_list
-      flash[:notice] = "The following item(s) are not available in the quantities you have in your cart: #{item_list.to_sentence}. Please reduce quantities or remove the item(s) from your cart."
-      render :cart
-    end
+    return unless item_list
+
+    flash[:notice] = "The following item(s) are not available in the quantities you have in your cart: #{item_list.to_sentence}. Please reduce quantities or remove the item(s) from your cart."
+    render :cart
   end
 
   def categories
@@ -60,7 +60,7 @@ class StoreController < ApplicationController
         @products = @category.products.find_instructions_for_sale.order('product_code ASC').page(params[:page]).per(12)
       else
         flash[:notice] = 'Sorry. That product category does not exist.'
-        return redirect_to action: :index
+        redirect_to action: :index
       end
     end
   end
@@ -75,24 +75,38 @@ class StoreController < ApplicationController
     product = Product.find_by_product_code(params[:product_code].upcase) # Doing this just to make sure a valid product is being used.
     if product.blank?
       logger.error("Attempt to access invalid product: #{params[:product_code]}")
-      return redirect_to back_or_cart, notice: 'Invalid Product'
+      flash[:notice] = 'Invalid Product'
+      return redirect_back(fallback_location: '/cart') if back_or_cart == :back
+
+      return redirect_to :cart
     end
     if product.is_free?
-      return redirect_to back_or_cart, notice: "You don't need to add free instructions to your cart. Just go to your account page to download them."
+      flash[:notice] = 'You don\'t need to add free instructions to your cart. Just go to your account page to download them.'
+      return redirect_back(fallback_location: '/cart') if back_or_cart == :back
+
+      return redirect_to :cart
     end
     @current_item = @cart.add_product(product)
     if @current_item
-      return redirect_to back_or_cart, notice: 'Item added to cart.'
+      flash[:notice] = 'Item added to cart.'
+      return redirect_back(fallback_location: '/cart') if back_or_cart == :back
+
+      redirect_to :cart
     else
-      return redirect_to back_or_cart, notice: "You already have #{product.name} in your cart. You don't need to purchase more than 1 set of the same instructions.", only_path: true
+      flash[:notice] = "You already have #{product.name} in your cart. You don't need to purchase more than 1 set of the same instructions."
+      return redirect_back(fallback_location: '/cart', only_path: true) if back_or_cart == :back
+
+      redirect_to :cart, only_path: true
     end
   end
 
   def remove_item_from_cart
     @cart.remove_product(params[:id])
-    return redirect_to :back, notice: 'Item removed from cart'
+    flash[:notice] = 'Item removed from cart'
+    redirect_back(fallback_location: '/cart', only_path: true)
   rescue StandardError
-    return redirect_to :back, notice: 'Item could not be removed from cart. We have been notified of this issue so it can be resolved. We apologize for the inconvenience. If you need to remove this item, you may try emptying your cart. I... am so embarrassed.', only_path: true
+    flash[:notice] = 'Item could not be removed from cart. We have been notified of this issue so it can be resolved. We apologize for the inconvenience. If you need to remove this item, you may try emptying your cart.'
+    redirect_back(fallback_location: '/cart', only_path: true)
   end
 
   def update_item_in_cart
@@ -104,55 +118,51 @@ class StoreController < ApplicationController
     product = CartItem.find(params[:cart][:item_id]).product
     if product.quantity_available?(params[:cart][:quantity].to_i)
       @cart.update_product_quantity(params[:cart][:item_id], params[:cart][:quantity])
-      return redirect_to :cart, notice: 'Cart Updated'
+      redirect_to :cart, notice: 'Cart Updated'
     else
       var = product.quantity == 1 ? 'is' : 'are'
       message = "Sorry. There #{var} only #{product.quantity} available for #{product.code_and_name}. Please reduce quantities or remove the item(s) from you cart."
-      return redirect_to :cart, notice: message
+      redirect_to :cart, notice: message
     end
   end
 
   def validate_street_address
     if params[:order] && params[:order][:address_submission_method] == 'form'
+      params.permit!
       @order = Order.new(params[:order])
     else
       @order = Order.new
     end
-    if @order.valid?
-      @order = nil
-      session[:address_submitted] = params[:order]
-      return redirect_to action: :checkout
-    else
-      return render :enter_address
-    end
+    return render :enter_address unless @order.valid?
+
+    @order = nil
+    session[:address_submitted] = params[:order]
+    redirect_to action: :checkout
   end
 
   def checkout
     return redirect_to '/cart' if @cart.nil?
+
     session.delete(:return_to_checkout)
     @user = current_customer
-    unless @user
-      return redirect_to controller: :sessions, action: :guest_registration
-    end
+    return redirect_to controller: :sessions, action: :guest_registration unless @user
+
     if session[:address_submitted]
       @submission_method = session[:address_submitted][:address_submission_method]
-      if @submission_method == 'form'
-        @order = Order.new(session[:address_submitted])
-      end
+      @order = Order.new(session[:address_submitted]) if @submission_method == 'form'
     end
     if @cart.cart_items.empty?
       redirect_to '/', notice: 'Your cart is empty.'
     else
       item_list = check_for_errant_items
-      if item_list
-        return redirect_to :cart, notice: "The following item(s) are not available in the quantities you have in your cart: #{item_list.to_sentence}. Please reduce quantities or remove the item(s) from our cart."
-      end
+      redirect_to :cart, notice: "The following item(s) are not available in the quantities you have in your cart: #{item_list.to_sentence}. Please reduce quantities or remove the item(s) from our cart." if item_list
     end
   end
 
   def submit_order
     return redirect_to '/cart' if @cart.nil?
-    @order = Order.new(params[:order])
+
+    @order = Order.new(order_params)
     @order.add_line_items_from_cart(@cart)
     item_amount_string = ''
     @order.line_items.each_with_index do |item, index|
@@ -187,29 +197,29 @@ class StoreController < ApplicationController
     end
   end
 
-  #:nocov:
+  # :nocov:
   def order_confirmation_email_test
     @order = Order.find_by_user_id 5 # Jason
-    download_links = @order.get_link_to_downloads
+    download_links = @order.retrieve_link_to_downloads
     OrderMailer.guest_order_confirmation(@order.user_id, @order.id, download_links).deliver
   end
-  #:nocov:
+  # :nocov:
 
-  #:nocov:
+  # :nocov:
   def physical_order_email_test
     @order = Order.find 9
     OrderMailer.physical_item_purchased(@order.user_id, @order.id).deliver
   end
-  #:nocov:
+  # :nocov:
 
   def thank_you_for_your_order
     cookies.delete :show_thank_you
-    if session[:guest] && session[:guest].is_a?(Integer)
-      @user = User.find session[:guest]
-      @order = @user.orders.last
-      @download_link = @order.get_link_to_downloads
-      session.delete(:guest)
-    end
+    return unless session[:guest] && session[:guest].is_a?(Integer)
+
+    @user = User.find session[:guest]
+    @order = @user.orders.last
+    @download_link = @order.retrieve_link_to_downloads
+    session.delete(:guest)
   end
 
   def enter_address
@@ -230,6 +240,11 @@ class StoreController < ApplicationController
 
   private
 
+  # Only allow a trusted parameter "white list" through.
+  def order_params
+    params.require(:order).permit(:request_id, :transaction_id, :user_id, :first_name, :last_name, :address_street_1, :address_street_2, :address_city, :address_state, :address_country, :address_zip, :address_submission_method)
+  end
+
   def set_return_to_checkout
     session[:return_to_checkout] = true
   end
@@ -248,9 +263,8 @@ class StoreController < ApplicationController
     item_list = nil
     @cart.cart_items.includes(product: :product_type).each do |item|
       next unless item.product.is_physical_product?
-      unless item.product.quantity_available?(item.quantity)
-        errant_cart_items << [item.product.product_code, item.product.name]
-      end
+
+      errant_cart_items << [item.product.product_code, item.product.name] unless item.product.quantity_available?(item.quantity)
     end
     unless errant_cart_items.blank?
       session[:errant_cart_items] = errant_cart_items
@@ -262,7 +276,7 @@ class StoreController < ApplicationController
     item_list
   end
 
-  #:nocov:
+  # :nocov:
   # This action is used in dev to mock a call from paypal to the app to confirm the order was ok
   def mock_paypal_call_to_listener
     @order.transaction_id = SecureRandom.hex(20)
@@ -270,55 +284,52 @@ class StoreController < ApplicationController
     @order.save
     Download.restock_for_order(@order) if @order.has_digital_item?
     if @order.user.guest?
-      link_to_downloads = @order.get_link_to_downloads
+      link_to_downloads = @order.retrieve_link_to_downloads
       OrderMailer.guest_order_confirmation(@order.user_id, @order.id, link_to_downloads).deliver
     else
       OrderMailer.order_confirmation(@order.user_id, @order.id).deliver
     end
   end
-  #:nocov:
+  # :nocov:
 
   # Making sure that the user hasn't previously purchased the same set of instructions.
   # Physical items can be purchased again.
   # Instructions with 0 downloads remaining can be purchased again.
   def check_users_previous_orders
-    unless current_guest
-      return redirect_to '/cart' if @cart.nil?
-      orders = current_user.orders
-      @products_from_previous_orders = []
-      orders.each do |order|
-        order.line_items.each do |line_item|
-          if line_item.product.is_digital_product? && !order.transaction_id.blank?
-            @products_from_previous_orders << line_item.product_id
-          end
-        end
-      end
-      @products_in_cart = []
-      @cart.cart_items.each do |cart_item|
-        @products_in_cart << cart_item.product_id
-      end
-      dups = @products_from_previous_orders & @products_in_cart
-      unless dups.empty?
-        final_dups = []
-        dups.each do |dup|
-          dl = Download.find_by_user_id_and_product_id(current_user.id, dup)
-          final_dups << dup if (dl && dl.remaining > 0) || dl.nil?
-        end
-        unless final_dups.blank?
-          nice_string = final_dups.collect { |dup| Product.find(dup).name }.join(',')
-          redirect_to :cart, notice: "You've already purchased the following products before, (#{nice_string}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.", only_path: true
-        end
+    return if current_guest
+
+    return redirect_to '/cart' if @cart.nil?
+
+    orders = current_user.orders
+    @products_from_previous_orders = []
+    orders.each do |order|
+      order.line_items.each do |line_item|
+        @products_from_previous_orders << line_item.product_id if line_item.product.is_digital_product? && !order.transaction_id.blank?
       end
     end
-  end
-
-  def get_users_physical_address
-    if @cart && @cart.has_physical_item? && session[:address_submitted].blank?
-      redirect_to :enter_address
+    @products_in_cart = []
+    @cart.cart_items.each do |cart_item|
+      @products_in_cart << cart_item.product_id
     end
+    dups = @products_from_previous_orders & @products_in_cart
+    return if dups.empty?
+
+    final_dups = []
+    dups.each do |dup|
+      dl = Download.find_by_user_id_and_product_id(current_user.id, dup)
+      final_dups << dup if (dl && dl.remaining.positive?) || dl.nil?
+    end
+    return if final_dups.blank?
+
+    nice_string = final_dups.collect { |dup| Product.find(dup).name }.join(',')
+    redirect_to :cart, notice: "You've already purchased the following products before, (#{nice_string}) and you don't need to do it again. Purchasing instructions once allows you to download the files #{MAX_DOWNLOADS} times.", only_path: true
   end
 
-  def get_address_form_data
+  def assign_users_physical_address
+    redirect_to :enter_address if @cart && @cart.has_physical_item? && session[:address_submitted].blank?
+  end
+
+  def assign_address_form_data
     @states = Array[%w[Alabama AL],
                     %w[Alaska AK],
                     ['American Samoa', 'AS'],

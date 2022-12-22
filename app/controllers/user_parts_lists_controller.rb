@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class UserPartsListsController < ApplicationController
-  before_filter :authenticate_user!, unless: -> { is_valid_guest? }
-  skip_before_filter :find_cart
+  before_action :authenticate_user!, unless: -> { is_valid_guest? }
+  skip_before_action :find_cart
 
   def update
     user = find_user

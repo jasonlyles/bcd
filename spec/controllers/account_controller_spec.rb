@@ -32,10 +32,7 @@ describe AccountController do
     end
 
     it 'should get only completed orders for display' do
-      product_type = FactoryGirl.create(:product_type)
-      category = FactoryGirl.create(:category)
-      subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product)
+      FactoryGirl.create(:product_with_associations)
       order1 = FactoryGirl.create(:order_with_line_items)
       order2 = FactoryGirl.create(:order, status: 'INVALID')
       sign_in @user
@@ -48,7 +45,7 @@ describe AccountController do
   describe 'unsubscribe_from_emails' do
     context 'cannot find user based on guid and unsubscribe_token passed in' do
       it 'should render still_subscribed' do
-        get :unsubscribe_from_emails, id: 'fake', unsubscribe_token: 'also_fake'
+        get :unsubscribe_from_emails, params: { id: 'fake', unsubscribe_token: 'also_fake' }
 
         expect(response).to render_template(:still_subscribed)
       end
@@ -59,7 +56,7 @@ describe AccountController do
         it 'should render still_subscribed' do
           @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'ralph@mil.mil', guid: 'guid')
           allow_any_instance_of(User).to receive(:save).and_return(false)
-          get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
+          get :unsubscribe_from_emails, params: { id: @user.guid, token: @user.unsubscribe_token }
 
           @user.reload
           expect(@user.email_preference).to eq(2)
@@ -70,7 +67,7 @@ describe AccountController do
       context 'and user can be saved' do
         it 'should render unsubscribed' do
           @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'mil@ralph.ralph', guid: 'guid')
-          get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
+          get :unsubscribe_from_emails, params: { id: @user.guid, token: @user.unsubscribe_token }
 
           @user.reload
           expect(@user.email_preference).to eq(0)

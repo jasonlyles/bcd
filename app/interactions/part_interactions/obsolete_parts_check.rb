@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # For ~750 parts, this takes a couple of minutes to run locally.
 module PartInteractions
   class ObsoletePartsCheck < BasePartInteraction

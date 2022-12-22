@@ -17,13 +17,13 @@
       <div class="row">
         <% elements.each do |_k, v| %>
           <div class="col-2 mb-4">
-            <%= link_to image_tag(v['old_element'].image.thumb.url), admin_element_path(v['old_element'].id), target: 'blank' %>
+            <%= link_to image_tag(v['old_element'].image.thumb.url), admin_element_path(v['old_element'].id), target: 'blank' unless v['old_element'].image.thumb.url.blank? %>
             <br />
             <div class="pt-4 pl-4">
               <i class="fas fa-2x fa-arrow-down"></i>
             </div>
             <br />
-            <%= link_to image_tag(v['new_element'].image.thumb.url, alt: 'Missing image'), admin_element_path(v['new_element'].id), target: 'blank' %>
+            <%= link_to image_tag(v['new_element'].image.thumb.url, alt: 'Missing image'), admin_element_path(v['new_element'].id), target: 'blank' unless v['new_element'].image.thumb.url.blank? %>
           </div>
         <% end %>
       </div>

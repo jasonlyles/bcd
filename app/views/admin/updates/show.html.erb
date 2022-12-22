@@ -49,16 +49,7 @@
       </div>
       <div class="card-body">
         <% if @update.image? %>
-          <% if @update.image_processing? %>
-            <br/>
-            <br/>
-            <br/>
-            <b>
-              Image is currently being processed. Check back in a few seconds.
-            </b>
-          <% else %>
-            <%= link_to(image_tag(@update.image), @update.link) %>
-          <% end %>
+          <%= link_to(image_tag(@update.image), @update.link) unless @update.image.blank? %>
         <% end %>
       </div>
     </div>

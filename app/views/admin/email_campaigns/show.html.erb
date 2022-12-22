@@ -138,7 +138,7 @@
         <b>Image</b>
       </div>
       <div class="card-body">
-        <%= image_tag(@email_campaign.image.medium) %>
+        <%= image_tag(@email_campaign.image.medium) unless @email_campaign.image.medium.blank? %>
       </div>
     </div>
   </div>

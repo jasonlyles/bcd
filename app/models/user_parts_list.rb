@@ -1,4 +1,6 @@
-class UserPartsList < ActiveRecord::Base
+# frozen_string_literal: true
+
+class UserPartsList < ApplicationRecord
   belongs_to :parts_list
   belongs_to :user
 

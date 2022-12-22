@@ -3,7 +3,8 @@ require 'spec_helper'
 describe InstantPaymentNotificationsController do
 
   before do
-    # @product_type = FactoryGirl.create(:product_type)
+    @user = FactoryGirl.create(:user)
+    @order = FactoryGirl.create(:order, user_id: @user.id)
   end
 
   # This should return the minimal set of attributes required to create a valid
@@ -11,7 +12,7 @@ describe InstantPaymentNotificationsController do
   # adjust the attributes here as well.
   let(:valid_attributes) {
     {
-        payer_email: 'test@test.com',
+        payer_email: @user.email,
         notify_version: '3.8'
     }
   }
@@ -19,14 +20,16 @@ describe InstantPaymentNotificationsController do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new InstantPaymentNotification", :skip_before do
+        allow(InstantPaymentNotificationJob).to receive(:perform_later)
         expect {
-          post :create, params: {instant_payment_notification: valid_attributes}
+          post :create, params: { instant_payment_notification: valid_attributes }
         }.to change(InstantPaymentNotification, :count).by(1)
       end
 
-      it "returns a 200", :skip_before do
-        post :create, params: {instant_payment_notification: valid_attributes}
-        expect(response.status).to eq(200)
+      it "returns a 204", :skip_before do
+        allow(InstantPaymentNotificationJob).to receive(:perform_later)
+        post :create, params: { instant_payment_notification: valid_attributes }
+        expect(response.status).to eq(204)
       end
     end
   end

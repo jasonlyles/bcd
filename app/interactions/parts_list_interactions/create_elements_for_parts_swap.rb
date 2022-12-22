@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PartsListInteractions
   class CreateElementsForPartsSwap < BasePartsListInteraction
     attr_accessor :old_part_name, :new_part_name, :elements, :affected_parts_lists

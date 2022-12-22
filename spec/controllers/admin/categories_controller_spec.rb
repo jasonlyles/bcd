@@ -40,7 +40,7 @@ describe Admin::CategoriesController do
   describe "GET #show" do
     it "assigns the requested category as @category" do
       category = Category.create! valid_attributes
-      get :show, id: category.to_param
+      get :show, params: { id: category.to_param }
 
       expect(assigns(:category)).to eq(category)
     end
@@ -57,7 +57,7 @@ describe Admin::CategoriesController do
   describe "GET #edit" do
     it "assigns the requested category as @category" do
       category = Category.create! valid_attributes
-      get :edit, id: category.to_param
+      get :edit, params: { id: category.to_param }
 
       expect(assigns(:category)).to eq(category)
     end
@@ -67,19 +67,19 @@ describe Admin::CategoriesController do
     context "with valid params" do
       it "creates a new Category" do
         expect {
-          post :create, category: valid_attributes
+          post :create, params: { category: valid_attributes }
         }.to change(Category, :count).by(1)
       end
 
       it "assigns a newly created category as @category" do
-        post :create, category: valid_attributes
+        post :create, params: { category: valid_attributes }
 
         expect(assigns(:category)).to be_a(Category)
         expect(assigns(:category)).to be_persisted
       end
 
       it "redirects to the created category" do
-        post :create, category: valid_attributes
+        post :create, params: { category: valid_attributes }
 
         expect(response).to redirect_to([:admin, Category.last])
       end
@@ -87,13 +87,13 @@ describe Admin::CategoriesController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved category as @category" do
-        post :create, category: invalid_attributes
+        post :create, params: { category: invalid_attributes }
 
         expect(assigns(:category)).to be_a_new(Category)
       end
 
       it "re-renders the 'new' template" do
-        post :create, category: invalid_attributes
+        post :create, params: { category: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -111,7 +111,7 @@ describe Admin::CategoriesController do
 
       it "updates the requested category" do
         category = Category.create! valid_attributes
-        put :update, id: category.to_param, category: new_attributes
+        put :update, params: { id: category.to_param, category: new_attributes }
         category.reload
 
         expect(assigns(:category)[:name]).to eq('Category 2')
@@ -120,14 +120,14 @@ describe Admin::CategoriesController do
 
       it "assigns the requested category as @category" do
         category = Category.create! valid_attributes
-        put :update, id: category.to_param, category: valid_attributes
+        put :update, params: { id: category.to_param, category: valid_attributes }
 
         expect(assigns(:category)).to eq(category)
       end
 
       it "redirects to the category" do
         category = Category.create! valid_attributes
-        put :update, id: category.to_param, category: valid_attributes
+        put :update, params: { id: category.to_param, category: valid_attributes }
 
         expect(response).to redirect_to([:admin, category])
       end
@@ -136,14 +136,14 @@ describe Admin::CategoriesController do
     context "with invalid params" do
       it "assigns the category as @category" do
         category = Category.create! valid_attributes
-        put :update, id: category.to_param, category: invalid_attributes
+        put :update, params: { id: category.to_param, category: invalid_attributes }
 
         expect(assigns(:category)).to eq(category)
       end
 
       it "re-renders the 'edit' template" do
         category = Category.create! valid_attributes
-        put :update, id: category.to_param, category: invalid_attributes
+        put :update, params: { id: category.to_param, category: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -154,20 +154,20 @@ describe Admin::CategoriesController do
     it "destroys the requested category" do
       category = Category.create! valid_attributes
       expect {
-        delete :destroy, id: category.to_param
+        delete :destroy, params: { id: category.to_param }
       }.to change(Category, :count).by(-1)
     end
 
     it "redirects to the categories list" do
       category = Category.create! valid_attributes
-      delete :destroy, id: category.to_param
+      delete :destroy, params: { id: category.to_param }
 
       expect(response).to redirect_to(admin_categories_url)
     end
 
     it "should not destroy a category that has subcategories" do
       @category = FactoryGirl.create(:category_with_subcategories)
-      delete :destroy, :id => @category.id
+      delete :destroy, params: { id: @category.id }
 
       expect(response).to redirect_to(admin_categories_url)
       expect(flash[:alert]).to eq("You can't delete this category while it has subcategories. Delete or reassign the subcategories and try again.")
@@ -185,7 +185,7 @@ describe Admin::CategoriesController do
   describe "requesting a categories subcategories" do
     it "should fetch some subcategories" do
       @category = FactoryGirl.create(:category_with_subcategories)
-      get :subcategories, id: 1, format: :json
+      get :subcategories, params: { id: 1 }, format: :json
 
       expect(JSON.parse(response.body)[0]['description']).to eq('City Vehicles are awesome')
     end

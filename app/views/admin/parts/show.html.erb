@@ -127,7 +127,7 @@
       </div>
       <div class="card-body">
         <% @part.images.each do |image| %>
-          <%= image_tag(image.thumb.url) %>
+          <%= image_tag(image.thumb.url) unless image.thumb.url.blank? %>
         <% end %>
       </div>
     </div>

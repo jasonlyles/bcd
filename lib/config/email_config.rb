@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/configurable'
 
 module EmailConfig
@@ -10,7 +12,7 @@ module EmailConfig
   end
 
   def self.config=(hash)
-    @config=hash
+    @config = hash
   end
 
   class Configuration

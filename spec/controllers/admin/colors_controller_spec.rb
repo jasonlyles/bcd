@@ -37,7 +37,7 @@ describe Admin::ColorsController do
   describe "GET #show" do
     it "assigns the requested color as @color" do
       color = Color.create! valid_attributes
-      get :show, id: color.to_param
+      get :show, params: { id: color.to_param }
 
       expect(assigns(:color)).to eq(color)
     end
@@ -54,7 +54,7 @@ describe Admin::ColorsController do
   describe "GET #edit" do
     it "assigns the requested color as @color" do
       color = Color.create! valid_attributes
-      get :edit, id: color.to_param
+      get :edit, params: { id: color.to_param }
 
       expect(assigns(:color)).to eq(color)
     end
@@ -64,19 +64,19 @@ describe Admin::ColorsController do
     context "with valid params" do
       it "creates a new Color" do
         expect {
-          post :create, color: valid_attributes
+          post :create, params: { color: valid_attributes }
         }.to change(Color, :count).by(1)
       end
 
       it "assigns a newly created color as @color" do
-        post :create, color: valid_attributes
+        post :create, params: { color: valid_attributes }
 
         expect(assigns(:color)).to be_a(Color)
         expect(assigns(:color)).to be_persisted
       end
 
       it "redirects to the created color" do
-        post :create, color: valid_attributes
+        post :create, params: { color: valid_attributes }
 
         expect(response).to redirect_to([:admin, Color.last])
       end
@@ -84,13 +84,13 @@ describe Admin::ColorsController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved color as @color" do
-        post :create, color: invalid_attributes
+        post :create, params: { color: invalid_attributes }
 
         expect(assigns(:color)).to be_a_new(Color)
       end
 
       it "re-renders the 'new' template" do
-        post :create, color: invalid_attributes
+        post :create, params: { color: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -107,7 +107,7 @@ describe Admin::ColorsController do
 
       it "updates the requested color" do
         color = Color.create! valid_attributes
-        put :update, id: color.to_param, color: new_attributes
+        put :update, params: { id: color.to_param, color: new_attributes }
         color.reload
 
         expect(assigns(:color)[:name]).to eq('Black')
@@ -115,14 +115,14 @@ describe Admin::ColorsController do
 
       it "assigns the requested color as @color" do
         color = Color.create! valid_attributes
-        put :update, id: color.to_param, color: valid_attributes
+        put :update, params: { id: color.to_param, color: valid_attributes }
 
         expect(assigns(:color)).to eq(color)
       end
 
       it "redirects to the color" do
         color = Color.create! valid_attributes
-        put :update, id: color.to_param, color: valid_attributes
+        put :update, params: { id: color.to_param, color: valid_attributes }
 
         expect(response).to redirect_to([:admin, color])
       end
@@ -131,14 +131,14 @@ describe Admin::ColorsController do
     context "with invalid params" do
       it "assigns the color as @color" do
         color = Color.create! valid_attributes
-        put :update, id: color.to_param, color: invalid_attributes
+        put :update, params: { id: color.to_param, color: invalid_attributes }
 
         expect(assigns(:color)).to eq(color)
       end
 
       it "re-renders the 'edit' template" do
         color = Color.create! valid_attributes
-        put :update, id: color.to_param, color: invalid_attributes
+        put :update, params: { id: color.to_param, color: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -149,13 +149,13 @@ describe Admin::ColorsController do
     it "destroys the requested color" do
       color = Color.create! valid_attributes
       expect {
-        delete :destroy, id: color.to_param
+        delete :destroy, params: { id: color.to_param }
       }.to change(Color, :count).by(-1)
     end
 
     it "redirects to the colors list" do
       color = Color.create! valid_attributes
-      delete :destroy, id: color.to_param
+      delete :destroy, params: { id: color.to_param }
 
       expect(response).to redirect_to(admin_colors_url)
     end

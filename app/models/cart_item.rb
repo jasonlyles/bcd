@@ -1,26 +1,28 @@
-class CartItem < ActiveRecord::Base
+# frozen_string_literal: true
+
+class CartItem < ApplicationRecord
   belongs_to :cart
   belongs_to :product
 
-  attr_accessible :cart_id, :product_id, :quantity
+  # attr_accessible :cart_id, :product_id, :quantity
 
-  #attr_reader :product, :quantity
+  # attr_reader :product, :quantity
 
-  #def initialize(product)
+  # def initialize(product)
   #  @product = product
   #  @quantity = 1
-  #end
+  # end
 
   def increment_quantity
     self.quantity += 1
-    self.save
+    save
   end
 
-  #def title
+  # def title
   #  @product.title
-  #end
+  # end
 
   def price
-    self.product.price
+    product.price
   end
 end

@@ -176,7 +176,7 @@
                 </td>
                 <td class="align-middle text-center">
                   <% if order.user.guest? %>
-                    <%= link_to 'DL link', order.get_link_to_downloads %>
+                    <%= link_to 'DL link', order.retrieve_link_to_downloads %>
                   <% else %>
                     N/A
                   <% end %>

@@ -26,4 +26,12 @@ FactoryGirl.define do
       price "0"
     end
   end
-end  
+
+  factory :product_with_associations, parent: :product do |product|
+    product.before(:create){ |_|
+      FactoryGirl.create(:product_type)
+      FactoryGirl.create(:category, id: 1)
+      FactoryGirl.create(:subcategory, id: 1, category_id: 1)
+    }
+  end
+end

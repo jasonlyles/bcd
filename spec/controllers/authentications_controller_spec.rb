@@ -5,13 +5,13 @@ describe AuthenticationsController do
 
   describe "failure" do
     it "should return a helpful message about the failure" do
-      get :failure, strategy: 'twitter', message: 'invalid_credentials'
+      get :failure, params: { strategy: 'twitter', message: 'invalid_credentials' }
       expect(flash[:notice]).to eq("Sorry, the credentials you provided were rejected by Twitter. Please try again.")
 
-      get :failure, strategy: '', message: 'invalid_credentials'
+      get :failure, params: { strategy: '', message: 'invalid_credentials' }
       expect(flash[:notice]).to eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
 
-      get :failure, strategy: 'facebook', message: 'facebook_hates_me'
+      get :failure, params: { strategy: 'facebook', message: 'facebook_hates_me' }
       expect(flash[:notice]).to eq("Sorry, the authentication failed. Please try again. If it continues to fail, you can still check out as a guest.")
     end
 
@@ -137,9 +137,9 @@ describe AuthenticationsController do
   describe "destroy" do
     it "destroy action should destroy model and redirect to index action" do
       @user ||= FactoryGirl.create(:user)
-      sign_in :user, @user
+      sign_in(@user)
       @authentication = FactoryGirl.create(:authentication)
-      delete :destroy, :id => @authentication
+      delete :destroy, params: { id: @authentication }
 
       expect(response).to redirect_to("/account/edit")
       expect(Authentication.exists?(@authentication.id)).to be_falsey
@@ -151,7 +151,7 @@ describe AuthenticationsController do
       @user.save!
       @authentication = FactoryGirl.create(:authentication, :user_id => @user.id)
       sign_in @user
-      delete :destroy, :id => @authentication
+      delete :destroy, params: { id: @authentication }
 
       expect(flash[:notice]).to eq("If you delete your #{@authentication.provider} authentication, you are effectively deleting your account. If you really want to delete your account, please choose the 'Cancel my account' link at the bottom of the page.")
       expect(response).to redirect_to('/account/edit')

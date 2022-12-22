@@ -189,8 +189,8 @@ BrickCity::Application.routes.draw do
   get 'unsubscribe', to: 'account#unsubscribe_from_emails'
 
   # store routes
-  get 'store/products/:product_type_name', to: 'store#products', path: 'store/products/:product_type_name', as: :store_products
-  get 'store/products/:product_type_name/:category_name', to: 'store#categories', path: 'store/products/:product_type_name/:category_name', as: :store_categories
+  get 'store/products/:product_type_name', to: 'store#products', action: 'store/products/:product_type_name', as: :store_products
+  get 'store/products/:product_type_name/:category_name', to: 'store#categories', action: 'store/products/:product_type_name/:category_name', as: :store_categories
   get 'store/instructions', to: 'store#instructions'
   get 'store/kits', to: 'store#kits'
   get 'store/models', to: 'store#models'
@@ -213,7 +213,7 @@ BrickCity::Application.routes.draw do
   # misc routes
   get '/campaign/:guid' => 'email_campaigns#register_click_through_and_redirect'
 
-  get 'product_details/:product_code/:product_name', to: 'store#product_details', path: ':product_code/:product_name'
+  get ":product_code/:product_name", to: 'store#product_details'
 
   root to: 'static#index'
 end

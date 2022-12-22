@@ -33,7 +33,7 @@
           <% @products.each do |product_info| %>
             <tr>
               <td>
-                <%= image_tag(product_info.image_url) unless product_info.image_url.nil? %>
+                <%= image_tag(product_info.image_url) unless product_info.image_url.blank? %>
               </td>
               <td class="align-middle text-center">
                 <span class="d-none d-md-block">

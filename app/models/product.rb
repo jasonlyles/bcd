@@ -1,4 +1,6 @@
-class Product < ActiveRecord::Base
+# frozen_string_literal: true
+
+class Product < ApplicationRecord
   belongs_to :category
   belongs_to :subcategory
   belongs_to :product_type
@@ -6,14 +8,13 @@ class Product < ActiveRecord::Base
   has_many :images, dependent: :destroy
   has_many :parts_lists, dependent: :destroy
   mount_uploader :pdf, PdfUploader
-  process_in_background :pdf
   accepts_nested_attributes_for :images, allow_destroy: true
   accepts_nested_attributes_for :parts_lists, allow_destroy: true
 
-  attr_accessible :category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache,
-                  :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf,
-                  :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes,
-                  :parts_lists_attributes, :featured, :designer
+  # attr_accessible :category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache,
+  # :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf,
+  # :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes,
+  # :parts_lists_attributes, :featured, :designer
 
   validates :product_code, uniqueness: true, presence: true
   validates :product_type_id, presence: true
@@ -102,10 +103,10 @@ class Product < ActiveRecord::Base
   end
 
   def decrement_quantity(amount)
-    unless product_type.digital_product?
-      self.quantity -= amount
-      save
-    end
+    return if product_type.digital_product?
+
+    self.quantity -= amount
+    save
   end
 
   def is_physical_product?
@@ -129,7 +130,7 @@ class Product < ActiveRecord::Base
   end
 
   def out_of_stock?
-    self.quantity == 0
+    self.quantity.zero?
   end
 
   def base_product_code(code = nil)
@@ -152,6 +153,7 @@ class Product < ActiveRecord::Base
 
   def main_image
     return images[0].url unless images.blank?
+
     nil
   end
 

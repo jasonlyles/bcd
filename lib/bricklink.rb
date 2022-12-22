@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Bricklink
-  BRICKLINK_URL = 'https://api.bricklink.com'.freeze
+  BRICKLINK_URL = 'https://api.bricklink.com'
 
   # For GETs
   def self.request(path)
@@ -58,7 +60,7 @@ class Bricklink
   end
 
   # http://apidev.bricklink.com/redmine/projects/bricklink-api/wiki/ColorMethod#Get-Color-List
-  def self.get_colors
+  def self.retrieve_colors
     response = request('colors')
     JSON.parse(response.body)
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::BackendNotificationsController < AdminController
   def index
     @backend_notifications = BackendNotification.active_notifications

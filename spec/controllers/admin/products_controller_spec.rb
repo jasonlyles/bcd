@@ -4,6 +4,8 @@ describe Admin::ProductsController do
 
   before do
     @radmin ||= FactoryGirl.create(:radmin)
+    @category = FactoryGirl.create(:category)
+    @subcategory = FactoryGirl.create(:subcategory)
     @product_type = FactoryGirl.create(:product_type)
   end
 
@@ -16,30 +18,12 @@ describe Admin::ProductsController do
   # This should return the minimal set of attributes required to create a valid
   # Product. As you add validations to Product, be sure to
   # adjust the attributes here as well.
-=begin
-    validates :product_code, :uniqueness => true, :presence => true
-  validates :product_type_id, :presence => true
-  validates :subcategory_id, :presence => true
-  validates :category_id, :presence => true
-  validates :description, :presence => true, :length => {:minimum => 100, :maximum => 900}
-  validates :price, :presence => true, :numericality => true
-  validates :price, :price_greater_than_zero => true
-  validates :price, :price_is_zero_for_freebies => true
-  validates :product_code, :product_code_matches_pattern => true
-  validates :name, :presence => true, :uniqueness => true
-  validates :tweet, :length => {:maximum => 97}
-  validates :discount_percentage, :numericality => true, :allow_blank => true
-  validates :discount_percentage, :inclusion => {:in => 0..90, :message => "Percentage must be between 0 and 90"}, :allow_blank => true
-  #This line calls a custom validator that looks to make sure that there is a pdf attached to this object before
-  #letting this product be made available to the public
-  validates :ready_for_public, :pdf_exists => true
-=end
   let(:valid_attributes) {
     {
         product_code: 'CV001',
-        product_type_id: 1,
-        subcategory_id: 1,
-        category_id: 1,
+        product_type_id: @product_type.id,
+        subcategory_id: @subcategory.id,
+        category_id: @category.id,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sagittis vitae magna eget massa nunc.',
         price: 5,
         name: 'Awesome Product'
@@ -67,7 +51,7 @@ describe Admin::ProductsController do
   describe "GET #show" do
     it "assigns the requested product as @product" do
       product = Product.create! valid_attributes
-      get :show, id: product.to_param
+      get :show, params: { id: product.to_param }
 
       expect(assigns(:product)).to eq(product)
     end
@@ -76,7 +60,7 @@ describe Admin::ProductsController do
   describe "GET #edit" do
     it "assigns the requested product as @product" do
       product = Product.create! valid_attributes
-      get :edit, id: product.to_param
+      get :edit, params: { id: product.to_param }
 
       expect(assigns(:product)).to eq(product)
     end
@@ -90,10 +74,8 @@ describe Admin::ProductsController do
     end
 
     it "should pre-populate some product fields if a product_code is passed in params" do
-      category = FactoryGirl.create(:category)
-      subcategory = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product)
-      get :new, :product_code => product.product_code
+      product = FactoryGirl.create(:product, category: @category, subcategory: @subcategory)
+      get :new, params: { product_code: product.product_code }
 
       expect(assigns(:product).name).to eq(product.name)
     end
@@ -103,19 +85,19 @@ describe Admin::ProductsController do
     context "with valid params" do
       it "creates a new Product" do
         expect {
-          post :create, product: valid_attributes
+          post :create, params: { product: valid_attributes }
         }.to change(Product, :count).by(1)
       end
 
       it "assigns a newly created product as @product" do
-        post :create, product: valid_attributes
+        post :create, params: { product: valid_attributes }
 
         expect(assigns(:product)).to be_a(Product)
         expect(assigns(:product)).to be_persisted
       end
 
       it "redirects to the created product" do
-        post :create, product: valid_attributes
+        post :create, params: { product: valid_attributes }
 
         expect(response).to redirect_to([:admin, Product.last])
       end
@@ -123,13 +105,13 @@ describe Admin::ProductsController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved product as @product" do
-        post :create, product: invalid_attributes
+        post :create, params: { product: invalid_attributes }
 
         expect(assigns(:product)).to be_a_new(Product)
       end
 
       it "re-renders the 'new' template" do
-        post :create, product: invalid_attributes
+        post :create, params: { product: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -148,7 +130,7 @@ describe Admin::ProductsController do
 
       it "updates the requested product" do
         product = Product.create! valid_attributes
-        put :update, id: product.to_param, product: new_attributes
+        put :update, params: { id: product.to_param, product: new_attributes }
         product.reload
 
         expect(assigns(:product)[:product_code]).to eq('CV002')
@@ -158,14 +140,14 @@ describe Admin::ProductsController do
 
       it "assigns the requested product as @product" do
         product = Product.create! valid_attributes
-        put :update, id: product.to_param, product: valid_attributes
+        put :update, params: { id: product.to_param, product: valid_attributes }
 
         expect(assigns(:product)).to eq(product)
       end
 
       it "redirects to the product" do
         product = Product.create! valid_attributes
-        put :update, id: product.to_param, product: valid_attributes
+        put :update, params: { id: product.to_param, product: valid_attributes }
 
         expect(response).to redirect_to([:admin, product])
       end
@@ -174,14 +156,14 @@ describe Admin::ProductsController do
     context "with invalid params" do
       it "assigns the product as @product" do
         product = Product.create! valid_attributes
-        put :update, id: product.to_param, product: invalid_attributes
+        put :update, params: { id: product.to_param, product: invalid_attributes }
 
         expect(assigns(:product)).to eq(product)
       end
 
       it "re-renders the 'edit' template" do
         product = Product.create! valid_attributes
-        put :update, id: product.to_param, product: invalid_attributes
+        put :update, params: { id: product.to_param, product: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -192,13 +174,13 @@ describe Admin::ProductsController do
     it "destroys the requested product" do
       product = Product.create! valid_attributes
       expect {
-        delete :destroy, id: product.to_param
+        delete :destroy, params: { id: product.to_param }
       }.to change(Product, :count).by(-1)
     end
 
     it "redirects to the products list" do
       product = Product.create! valid_attributes
-      delete :destroy, id: product.to_param
+      delete :destroy, params: { id: product.to_param }
 
       expect(response).to redirect_to(admin_products_url)
     end
@@ -223,12 +205,10 @@ describe Admin::ProductsController do
   describe "retire_product" do
     it "should retire the product" do
       request.env["HTTP_REFERER"] = '/'
-      category = FactoryGirl.create(:category)
-      subcategory = FactoryGirl.create(:subcategory)
-      retired_category = FactoryGirl.create(:category, :name => 'Retired')
-      retired_subcategory = FactoryGirl.create(:subcategory, :name => 'Retired', :code => 'RT')
-      product = FactoryGirl.create(:product, :category_id => category.id, :subcategory_id => subcategory.id)
-      post :retire_product, :product => {:id => product.id}
+      retired_category = FactoryGirl.create(:category, name: 'Retired')
+      retired_subcategory = FactoryGirl.create(:subcategory, name: 'Retired', code: 'RT')
+      product = FactoryGirl.create(:product, category_id: @category.id, subcategory_id: @subcategory.id)
+      post :retire_product, params: { product: { id: product.id } }
 
       expect(assigns(:product)).to eq(product)
       expect(assigns(:product).category_id).to eq(retired_category.id)

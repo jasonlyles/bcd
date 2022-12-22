@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::ProductTypesController < AdminController
-  before_action :set_product_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_product_type, only: %i[show edit update destroy]
 
   # GET /product_types
   def index
@@ -8,8 +10,7 @@ class Admin::ProductTypesController < AdminController
   end
 
   # GET /product_types/1
-  def show
-  end
+  def show; end
 
   # GET /product_types/new
   def new
@@ -17,8 +18,7 @@ class Admin::ProductTypesController < AdminController
   end
 
   # GET /product_types/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /product_types
   def create
@@ -33,7 +33,7 @@ class Admin::ProductTypesController < AdminController
 
   # PATCH/PUT /product_types/1
   def update
-    if @product_type.update(product_type_params)
+    if @product_type.update_attributes(product_type_params)
       redirect_to [:admin, @product_type], notice: 'Product type was successfully updated.'
     else
       render 'edit'
@@ -47,14 +47,14 @@ class Admin::ProductTypesController < AdminController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product_type
-      @product_type = ProductType.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_product_type
+    @product_type = ProductType.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def product_type_params
-      params.require(:product_type).permit(:name, :description, :image, :image_cache, :remove_image, :ready_for_public,
-                                           :comes_with_description, :comes_with_title, :digital_product)
-    end
+  # Only allow a trusted parameter "white list" through.
+  def product_type_params
+    params.require(:product_type).permit(:name, :description, :image, :image_cache, :remove_image, :ready_for_public,
+                                         :comes_with_description, :comes_with_title, :digital_product)
+  end
 end

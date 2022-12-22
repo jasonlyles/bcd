@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class PartsListsController < ApplicationController
   # find_parts_list needs to come before authenticate_user!
-  before_filter :find_parts_list
-  before_filter :authenticate_user!, unless: -> { has_valid_guest_token? }
+  before_action :find_parts_list
+  before_action :authenticate_user!, unless: -> { has_valid_guest_token? }
 
   def show
     if has_access_to_parts_list?
@@ -12,9 +14,9 @@ class PartsListsController < ApplicationController
                          else
                            '{}'
                          end
-      @lots = @parts_list.lots.includes(element: [:color, :part]).order("parts.name ASC, colors.bl_name ASC")
+      @lots = @parts_list.lots.includes(element: %i[color part]).order('parts.name ASC, colors.bl_name ASC')
     else
-      flash[:alert] = "Sorry, you don't have access to this parts list. If you think this is an error, please contact us through the contact form."
+      flash[:alert] = 'Sorry, you don\'t have access to this parts list. If you think this is an error, please contact us through the contact form.'
       redirect_to :root
     end
   end

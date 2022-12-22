@@ -1,3 +1,19 @@
+7.11 ActionController::Parameters No Longer Inherits from HashWithIndifferentAccess
+Keep an eye out for this ^^^
+* Test everything via the website.
+* Update the images in the new user tutorial, and possibly some of the text to reflect
+  the changes with the new parts list.
+* Make sure the places in the code using `only_path: true` are doing what I think they're doing.
+* Honeybadger is trying to get me back as a customer. Apparently I can use it for
+  free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
+  that instead of ExceptionNotifier
+* Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
+  count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
+  RAILS_LOG_TO_STDOUT, which are set in the staging and production config files.
+  A note from the rails_12factor gem I'm removing for being on Rails 5+:
+  Make sure to add both the RAILS_SERVE_STATIC_FILES and RAILS_LOG_TO_STDOUT ENV
+  vars and set them to true. (This is done for you on Heroku)
+
 LDRAW color reference: https://www.ldraw.org/article/547.html
 
 
@@ -313,10 +329,6 @@ or just nice to have?
     and I don't have to give the impression that they need to check the TOS box again. Just a thought.
 
 * Maybe make a fun maintenance page, or image for maintenance mode. Probably want to redo my 404, 422 and 500 pages.
-
-* I just added the protected_attributes gem for trying to get on rails 4 quickly. Work on removing that by removing
-attr_accessible and setting up strong params. After I've done this, try to remove this line from
-config/initializers/session_store.rb: ActiveRecord::SessionStore::Session.attr_accessible :data, :session_id
 
 * Had to comment out brakeman in Gemfile. Try adding it back periodically to see if it will play nice with the version
 of tilt I have installed

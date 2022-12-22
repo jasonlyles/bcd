@@ -30,9 +30,10 @@ describe PartsListInteractions::SwapParts do
         element2 = FactoryGirl.create(:element, part_id: part2.id, color_id: color2.id)
         element3 = FactoryGirl.create(:element, part_id: part3.id, color_id: color3.id)
         element4 = FactoryGirl.create(:element, part_id: part2.id, color_id: color1.id)
-        parts_list1 = FactoryGirl.create(:parts_list, name: 'Test1', product_id: 1, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
-        parts_list2 = FactoryGirl.create(:parts_list, name: 'Test2', product_id: 1, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
-        parts_list3 = FactoryGirl.create(:parts_list, name: 'Test3', product_id: 1, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
+        product = FactoryGirl.create(:product_with_associations)
+        parts_list1 = FactoryGirl.create(:parts_list, name: 'Test1', product: product, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
+        parts_list2 = FactoryGirl.create(:parts_list, name: 'Test2', product: product, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
+        parts_list3 = FactoryGirl.create(:parts_list, name: 'Test3', product: product, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
         # Lots 1 and 2 are being associated with element1, which is an element for the old part being switched out
         lot1 = FactoryGirl.create(:lot, element_id: element1.id, parts_list_id: parts_list1.id)
         lot2 = FactoryGirl.create(:lot, element_id: element1.id, parts_list_id: parts_list2.id)

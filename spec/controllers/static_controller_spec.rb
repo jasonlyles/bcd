@@ -42,7 +42,7 @@ describe StaticController do
 
   describe 'POST send_contact_email' do
     it 'should send a contact email if email has valid params' do
-      post 'send_contact_email', email: { name: 'Charlie Brown', email_address: 'charlie_brown@peanuts.com', body: 'I have too much money. Please help.' }
+      post 'send_contact_email', params: { email: { name: 'Charlie Brown', email_address: 'charlie_brown@peanuts.com', body: 'I have too much money. Please help.' } }
 
       expect(assigns(:email)).to_not be_nil
       expect(response).to redirect_to('/contact')
@@ -50,14 +50,14 @@ describe StaticController do
     end
 
     it 'should not send a contact email if email has invalid params' do
-      post 'send_contact_email', email: { name: '', email_address: 'blah', body: 'I have too much money. Please help.' }
+      post 'send_contact_email', params: { email: { name: '', email_address: 'blah', body: 'I have too much money. Please help.' } }
 
       expect(flash[:alert]).to eq('Uh oh. Look below to see what you need to fix.')
       expect(response).to render_template('contact')
     end
 
     it 'should pretend to send a contact email if the honeypot is populated' do
-      post 'send_contact_email', email: { name: 'Charlie Brown', email_address: 'charlie_brown@peanuts.com', body: 'I have too much money. Please help.', contact_info: 'Gotcha' }
+      post 'send_contact_email', params: { email: { name: 'Charlie Brown', email_address: 'charlie_brown@peanuts.com', body: 'I have too much money. Please help.', contact_info: 'Gotcha' } }
 
       expect(assigns(:email)).to be_nil
       expect(response).to redirect_to('/contact')

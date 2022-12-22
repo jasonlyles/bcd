@@ -3,6 +3,10 @@ require 'spec_helper'
 describe DownloadsController do
   before do
     @product_type = FactoryGirl.create(:product_type)
+    @category = FactoryGirl.create(:category)
+    @subcategory = FactoryGirl.create(:subcategory, category: @category)
+    @product = FactoryGirl.create(:product, category: @category, subcategory: @subcategory)
+    @user = FactoryGirl.create(:user, email: 'charliebrown@peanuts.com')
   end
 
   describe "download_parts_list" do
@@ -173,11 +177,11 @@ describe DownloadsController do
   describe "guest_downloads" do
     context 'transaction ID and/or request ID  params are blank' do
       it 'should redirect to download_link_error' do
-        get :guest_downloads, :tx_id => '12344'
+        get :guest_downloads, params: { tx_id: '12344' }
 
         expect(response).to redirect_to('/download_link_error')
 
-        get :guest_downloads, :conf_id => '12344'
+        get :guest_downloads, params: { conf_id: '12344' }
 
         expect(response).to redirect_to('/download_link_error')
       end
@@ -185,7 +189,7 @@ describe DownloadsController do
 
     context 'cannot find order by transaction ID and request ID' do
       it 'should redirect to download_link_error' do
-        get :guest_downloads, :tx_id => '12344', :conf_id => '344124'
+        get :guest_downloads, params: { tx_id: '12344', conf_id: '344124' }
         expect(assigns(:order)).to be_nil
 
         expect(response).to redirect_to('/download_link_error')
@@ -194,8 +198,8 @@ describe DownloadsController do
 
     context 'everything is happy' do
       it 'should render guest_downloads' do
-        @order = FactoryGirl.create(:order, :transaction_id => '12345', :request_id => '67890')
-        get :guest_downloads, :tx_id => '12345', :conf_id => '67890'
+        @order = FactoryGirl.create(:order, transaction_id: '12345', request_id: '67890', user_id: @user.id)
+        get :guest_downloads, params: { tx_id: '12345', conf_id: '67890' }
 
         expect(assigns(:download_links)).to_not be_nil
         expect(response).to render_template(:guest_downloads)
@@ -206,11 +210,11 @@ describe DownloadsController do
   describe "guest_download" do
     context 'user guid and/or download token are blank' do
       it 'should redirect to download_error' do
-        get :guest_download, :id => '12345'
+        get :guest_download, params: { id: '12345' }
 
         expect(response).to redirect_to('/download/error')
 
-        get :guest_download, :token => '12345'
+        get :guest_download, params: { token: '12345' }
 
         expect(response).to redirect_to('/download/error')
       end
@@ -218,7 +222,7 @@ describe DownloadsController do
 
     context 'cannot find user by guid' do
       it 'should redirect to download_error' do
-        get :guest_download, :id => '234234', :token => '1234234'
+        get :guest_download, params: { id: '234234', token: '1234234' }
 
         expect(response).to redirect_to('/download/error')
       end
@@ -226,9 +230,9 @@ describe DownloadsController do
 
     context 'cannot find a download by user id and/or download token' do
       it 'should redirect to download_error' do
-        @user = FactoryGirl.create(:user, :guid => '12345')
-        @download = FactoryGirl.create(:download, :download_token => '6789')
-        get :guest_download, :id => '12345', :token => '67890'
+        @user = FactoryGirl.create(:user, guid: '12345')
+        @download = FactoryGirl.create(:download, download_token: '6789', product_id: @product.id, user_id: @user.id)
+        get :guest_download, params: { id: '12345', token: '67890' }
 
         expect(assigns(:download)).to be_nil
         expect(response).to redirect_to('/download/error')
@@ -238,13 +242,10 @@ describe DownloadsController do
     context 'finds a download record' do
       context 'but downloads_remaining == 0' do
         it 'should redirect to / and flash a message about having reached max downloads' do
-          @user = FactoryGirl.create(:user, :guid => '12345')
-          @category = FactoryGirl.create(:category)
-          @subcategory = FactoryGirl.create(:subcategory)
-          @product = FactoryGirl.create(:product)
-          @download = FactoryGirl.create(:download, :download_token => '67890', :remaining => 0)
+          @user = FactoryGirl.create(:user, guid: '12345')
+          @download = FactoryGirl.create(:download, download_token: '67890', remaining: 0, product_id: @product.id, user_id: @user.id)
           allow(User).to receive(:where).and_return([@user])
-          get :guest_download, :id => '12345', :token => '67890'
+          get :guest_download, params: { id: '12345', token: '67890' }
 
           expect(assigns(:download)).to_not be_nil
           expect(flash[:notice]).to eq('You have already reached your maximum allowed number of downloads for these instructions.')
@@ -254,16 +255,13 @@ describe DownloadsController do
 
       context 'everything is happy' do
         it 'should allow a download' do
-          @user = FactoryGirl.create(:user, :guid => '12345')
-          @category = FactoryGirl.create(:category)
-          @subcategory = FactoryGirl.create(:subcategory)
-          @product = FactoryGirl.create(:product)
-          @download = FactoryGirl.create(:download, :download_token => '67890', :remaining => 2)
+          @user = FactoryGirl.create(:user, guid: '12345')
+          @download = FactoryGirl.create(:download, download_token: '67890', remaining: 2, product_id: @product.id, user_id: @user.id)
           allow(User).to receive(:where).and_return([@user])
           allow_any_instance_of(Amazon::Storage).to receive(:connect)
           allow_any_instance_of(Amazon::Storage).to receive(:authenticated_url).and_return("http://s3.amazonaws.com/brickcitydepot-instructions-dev/Users/jasonlyles/src/rails_projects/brick-city/public/parts_lists/#{@product.id}/856f9442-8f75-11e2-9947-10ddb1fffe81-test.html?AWSAccessKeyId=AKIAIWLHNJ7QZL6PJIKA&Expires=1363574868&Signature=fxY32jifkkRbxxPyTfHILNjjOKc%3D")
           allow_any_instance_of(Amazon::Storage).to receive(:disconnect)
-          get :guest_download, :id => '12345', :token => '67890'
+          get :guest_download, params: { id: '12345', token: '67890' }
 
           expect(response.header["Location"]).to include "brickcitydepot-instructions-dev.s3.amazonaws.com"
           expect(response.header["Location"]).to include "response-content-disposition=attachment%3Bfilename%3D"
@@ -276,51 +274,39 @@ describe DownloadsController do
 
   describe "download" do
     it "should not let someone off the street download" do
-      get "download", :product_code => 'fake'
+      get "download", params: { product_code: 'fake' }
 
       expect(response).to redirect_to '/users/sign_in'
     end
 
-    it "should not let a user download instructions they haven't paid for" do
-      @user ||= FactoryGirl.create(:user)
+    it 'should not let a user download instructions they haven\'t paid for' do
       sign_in(@user)
-      @category = FactoryGirl.create(:category)
-      @subcategory = FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:product)
       @order = FactoryGirl.create(:order_with_line_items)
-      @product2 = FactoryGirl.create(:product, :product_code => 'GG001', :name => "Green Giant")
-      get "download", :product_code => @product2.product_code
+      @product2 = FactoryGirl.create(:product, product_code: 'GG001', name: 'Green Giant')
+      get 'download', params: { product_code: @product2.product_code }
 
-      expect(flash[:alert]).to eq("Nice try. You can buy instructions for this model on this page, and then you can download them.")
+      expect(flash[:alert]).to eq('Nice try. You can buy instructions for this model on this page, and then you can download them.')
       expect(response).to redirect_to '/GG001/green_giant'
     end
 
     it "should redirect back if user has used up their downloads" do
-      @user ||= FactoryGirl.create(:user)
       sign_in(@user)
-      @category = FactoryGirl.create(:category)
-      @subcategory = FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:product)
       @order = FactoryGirl.create(:order_with_line_items)
       allow_any_instance_of(DownloadsController).to receive(:get_users_downloads_remaining).and_return(0)
       request.env["HTTP_REFERER"] = '/account'
-      get "download", :product_code => @product.product_code
+      get 'download', params: { product_code: @product.product_code }
 
       expect(flash[:notice]).to include 'You have already reached your maximum allowed number of downloads'
       expect(response).to redirect_to '/account'
     end
 
     it "should redirect to an S3 url for a pdf" do
-      @user ||= FactoryGirl.create(:user)
       sign_in(@user)
-      @category = FactoryGirl.create(:category)
-      @subcategory = FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:product)
       @order = FactoryGirl.create(:order_with_line_items)
       allow_any_instance_of(Amazon::Storage).to receive(:connect)
       allow_any_instance_of(Amazon::Storage).to receive(:authenticated_url).and_return("http://s3.amazonaws.com/brickcitydepot-instructions-dev/Users/jasonlyles/src/rails_projects/brick-city/public/pdfs/City/Vehicles/#{@product.product_code}/856f9442-8f75-11e2-9947-10ddb1fffe81-test.pdf?AWSAccessKeyId=AKIAIWLHNJ7QZL6PJIKA&Expires=1363574868&Signature=fxY32jifkkRbxxPyTfHILNjjOKc%3D")
       allow_any_instance_of(Amazon::Storage).to receive(:disconnect)
-      get "download", :product_code => @product.product_code
+      get 'download', params: { product_code: @product.product_code }
 
       #Instead of trying to match where we get redirected to, I'm just matching against response.header["Location"],
       # which is where we're getting redirected to anyways
@@ -331,16 +317,12 @@ describe DownloadsController do
     end
 
     it "should increment the download count" do
-      @user ||= FactoryGirl.create(:user)
       sign_in(@user)
-      @category = FactoryGirl.create(:category)
-      @subcategory = FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:product)
       @order = FactoryGirl.create(:order_with_line_items)
       allow_any_instance_of(Amazon::Storage).to receive(:connect)
       allow_any_instance_of(Amazon::Storage).to receive(:authenticated_url)
       allow_any_instance_of(Amazon::Storage).to receive(:disconnect)
-      get "download", :product_code => @product.product_code
+      get 'download', params: { product_code: @product.product_code }
 
       download = Download.find_by_user_id_and_product_id(@user.id,@product.id)
       expect(download.count).to eq(1)
@@ -349,12 +331,8 @@ describe DownloadsController do
 
   describe "get_users_downloads_remaining" do
     it "should get the number of downloads remaining for the given user" do
-      @user = FactoryGirl.create(:user)
-      category1 = FactoryGirl.create(:category)
-      subcategory1 = FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:product)
       @order = FactoryGirl.create(:order_with_line_items)
-      @download = Download.new(:user_id => @user.id, :product_id => @product.id, :remaining => 3)
+      @download = Download.new(user_id: @user.id, product_id: @product.id, remaining: 3)
       @download.save!
       sign_in @user
 

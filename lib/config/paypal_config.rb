@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/configurable'
 
 module PaypalConfig
@@ -10,7 +12,7 @@ module PaypalConfig
   end
 
   def self.config=(hash)
-    @config=hash
+    @config = hash
   end
 
   class Configuration

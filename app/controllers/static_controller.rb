@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StaticController < ApplicationController
   def index
     # session.delete(:guest_has_arrived_for_downloads)
@@ -12,10 +14,9 @@ class StaticController < ApplicationController
   end
 
   def maintenance
-    if Switch.maintenance_mode.off?
-      flash[:notice] = 'Done with maintenance!'
-      redirect_to '/'
-    end
+    return unless Switch.maintenance_mode.off?
+
+    redirect_to '/', notice: 'Done with maintenance!'
   end
 
   # This exists only to confirm that my exception notification delivery is working. Would be nicer to perhaps hook
@@ -157,11 +158,11 @@ class StaticController < ApplicationController
 
   def legacy_product_redirect(product_code)
     product = Product.find_by_product_code(product_code)
-    return redirect_to controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case
+    redirect_to controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case
   rescue NoMethodError, ActiveRecord::RecordNotFound
     logger.error("Failed trying to get a legacy product page using product code: #{product_code}")
     flash[:notice] = 'Could not find that product. Please try navigating to the product through the store'
-    return redirect_to controller: :store, action: :instructions
+    redirect_to controller: :store, action: :instructions
   end
 
   def legacy_category_redirect(cat_name)

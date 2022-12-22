@@ -1,5 +1,7 @@
-class BackendNotification < ActiveRecord::Base
-  belongs_to :dismissed_by, class_name: 'Radmin'
+# frozen_string_literal: true
+
+class BackendNotification < ApplicationRecord
+  belongs_to :dismissed_by, class_name: 'Radmin', optional: true
 
   validates :message, presence: true
 

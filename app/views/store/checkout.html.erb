@@ -47,9 +47,9 @@
       <% @cart.cart_items.each do |item| %>
         <tr>
           <% image = item.product.images[0] %>
-            <% image_url = image.url.thumb if !image.blank? %>
+            <% image_url = image.url.thumb unless image.blank? %>
               <td>
-                <%= image_tag(image_url.url) if !image_url.blank? %>
+                <%= image_tag(image_url.url) unless image_url.blank? %>
               </td>
               <td class="align-middle">
                 <span class="d-none d-md-block">

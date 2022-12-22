@@ -1,5 +1,7 @@
-#This code was taken directly from the http_accept_language gem, but I couldn't get that gem to work in this app, so I just took
-#what I needed
+# frozen_string_literal: true
+
+# This code was taken directly from the http_accept_language gem, but I couldn't get that gem to work in this app, so I just took
+# what I needed
 
 module HttpAcceptLanguage
   class Parser
@@ -21,13 +23,14 @@ module HttpAcceptLanguage
       @user_preferred_languages ||= header.gsub(/\s+/, '').split(/,/).collect do |l|
         l += ';q=1.0' unless l =~ /;q=\d+\.\d+$/
         l.split(';q=')
-      end.sort do |x,y|
-        raise "Not correctly formatted" unless x.first =~ /^[a-z\-0-9]+$/i
+      end.sort do |x, y|
+        raise 'Not correctly formatted' unless x.first =~ /^[a-z\-0-9]+$/i
+
         y.last.to_f <=> x.last.to_f
       end.collect do |l|
         l.first.downcase.gsub(/-[a-z0-9]+$/i) { |x| x.upcase }
       end
-    rescue # Just rescue anything if the browser messed up badly.
+    rescue StandardError # Just rescue anything if the browser messed up badly.
       []
     end
 
@@ -56,7 +59,7 @@ module HttpAcceptLanguage
     #   request.compatible_language_from I18n.available_locales
     #
     def compatible_language_from(available_languages)
-      user_preferred_languages.map do |x| #en-US
+      user_preferred_languages.map do |x| # en-US
         available_languages.find do |y| # en
           y = y.to_s
           x == y || x.split('-', 2).first == y.split('-', 2).first
@@ -76,7 +79,7 @@ module HttpAcceptLanguage
 
         split_locale.map do |e|
           e unless e.match(/x|[0-9*]/)
-        end.compact.join("-")
+        end.compact.join('-')
       end
     end
 
@@ -91,12 +94,12 @@ module HttpAcceptLanguage
     #
     def language_region_compatible_from(available_languages)
       available_languages = sanitize_available_locales(available_languages)
-      user_preferred_languages.map do |x| #en-US
+      user_preferred_languages.map do |x| # en-US
         lang_group = available_languages.select do |y| # en
           y = y.to_s
           x.split('-', 2).first == y.split('-', 2).first
         end
-        lang_group.find{|l| l == x} || lang_group.first #en-US, en-UK
+        lang_group.find { |l| l == x } || lang_group.first # en-US, en-UK
       end.compact.first
     end
   end

@@ -40,7 +40,7 @@ describe Admin::EmailCampaignsController do
   describe "GET #show" do
     it "assigns the requested email_campaign as @email_campaign" do
       email_campaign = EmailCampaign.create! valid_attributes
-      get :show, id: email_campaign.to_param
+      get :show, params: { id: email_campaign.to_param }
 
       expect(assigns(:email_campaign)).to eq(email_campaign)
     end
@@ -57,7 +57,7 @@ describe Admin::EmailCampaignsController do
   describe "GET #edit" do
     it "assigns the requested email_campaign as @email_campaign" do
       email_campaign = EmailCampaign.create! valid_attributes
-      get :edit, id: email_campaign.to_param
+      get :edit, params: { id: email_campaign.to_param }
 
       expect(assigns(:email_campaign)).to eq(email_campaign)
     end
@@ -67,19 +67,19 @@ describe Admin::EmailCampaignsController do
     context "with valid params" do
       it "creates a new EmailCampaign" do
         expect {
-          post :create, email_campaign: valid_attributes
+          post :create, params: { email_campaign: valid_attributes }
         }.to change(EmailCampaign, :count).by(1)
       end
 
       it "assigns a newly created email_campaign as @email_campaign" do
-        post :create, email_campaign: valid_attributes
+        post :create, params: { email_campaign: valid_attributes }
 
         expect(assigns(:email_campaign)).to be_a(EmailCampaign)
         expect(assigns(:email_campaign)).to be_persisted
       end
 
       it "redirects to the created email_campaign" do
-        post :create, email_campaign: valid_attributes
+        post :create, params: { email_campaign: valid_attributes }
 
         expect(response).to redirect_to([:admin, EmailCampaign.last])
       end
@@ -87,13 +87,13 @@ describe Admin::EmailCampaignsController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved email_campaign as @email_campaign" do
-        post :create, email_campaign: invalid_attributes
+        post :create, params: { email_campaign: invalid_attributes }
 
         expect(assigns(:email_campaign)).to be_a_new(EmailCampaign)
       end
 
       it "re-renders the 'new' template" do
-        post :create, email_campaign: invalid_attributes
+        post :create, params: { email_campaign: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -111,7 +111,7 @@ describe Admin::EmailCampaignsController do
 
       it "updates the requested email_campaign" do
         email_campaign = EmailCampaign.create! valid_attributes
-        put :update, id: email_campaign.to_param, email_campaign: new_attributes
+        put :update, params: { id: email_campaign.to_param, email_campaign: new_attributes }
         email_campaign.reload
 
         expect(assigns(:email_campaign)[:description]).to eq('Description 2')
@@ -120,14 +120,14 @@ describe Admin::EmailCampaignsController do
 
       it "assigns the requested email_campaign as @email_campaign" do
         email_campaign = EmailCampaign.create! valid_attributes
-        put :update, id: email_campaign.to_param, email_campaign: valid_attributes
+        put :update, params: { id: email_campaign.to_param, email_campaign: valid_attributes }
 
         expect(assigns(:email_campaign)).to eq(email_campaign)
       end
 
       it "redirects to the email_campaign" do
         email_campaign = EmailCampaign.create! valid_attributes
-        put :update, id: email_campaign.to_param, email_campaign: valid_attributes
+        put :update, params: { id: email_campaign.to_param, email_campaign: valid_attributes }
 
         expect(response).to redirect_to([:admin, email_campaign])
       end
@@ -136,14 +136,14 @@ describe Admin::EmailCampaignsController do
     context "with invalid params" do
       it "assigns the email_campaign as @email_campaign" do
         email_campaign = EmailCampaign.create! valid_attributes
-        put :update, id: email_campaign.to_param, email_campaign: invalid_attributes
+        put :update, params: { id: email_campaign.to_param, email_campaign: invalid_attributes }
 
         expect(assigns(:email_campaign)).to eq(email_campaign)
       end
 
       it "re-renders the 'edit' template" do
         email_campaign = EmailCampaign.create! valid_attributes
-        put :update, id: email_campaign.to_param, email_campaign: invalid_attributes
+        put :update, params: { id: email_campaign.to_param, email_campaign: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -154,13 +154,13 @@ describe Admin::EmailCampaignsController do
     it "destroys the requested email_campaign" do
       email_campaign = EmailCampaign.create! valid_attributes
       expect {
-        delete :destroy, id: email_campaign.to_param
+        delete :destroy, params: { id: email_campaign.to_param }
       }.to change(EmailCampaign, :count).by(-1)
     end
 
     it "redirects to the email_campaigns list" do
       email_campaign = EmailCampaign.create! valid_attributes
-      delete :destroy, id: email_campaign.to_param
+      delete :destroy, params: { id: email_campaign.to_param }
 
       expect(response).to redirect_to(admin_email_campaigns_url)
     end
@@ -177,39 +177,21 @@ describe Admin::EmailCampaignsController do
   describe "send_marketing_emails" do
     it 'should queue up a resque job if all is well' do
       @email_campaign = FactoryGirl.create(:email_campaign)
-      expect(NewMarketingNotificationJob).to receive(:create).and_return('1234')
-      patch :send_marketing_emails, :email_campaign => {'id' => 1}
+      expect(NewMarketingNotificationJob).to receive(:perform_later)
+      patch :send_marketing_emails, params: { email_campaign: { 'id' => 1 } }
 
       expect(flash[:notice]).to eq("Sending marketing emails")
       expect(response).to redirect_to "/admin/email_campaigns"
-    end
-
-    it 'should redirect to show and flash a message if queue could not be created' do
-      @email_campaign = FactoryGirl.create(:email_campaign)
-      expect(NewMarketingNotificationJob).to receive(:create).and_return(nil)
-      patch :send_marketing_emails, :email_campaign => {'id' => 1}
-
-      expect(flash[:alert]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")
-      expect(response).to redirect_to "/admin/email_campaigns/#{@email_campaign.id}"
     end
   end
 
   describe "send_marketing_email_preview" do
     it 'should queue up a resque job if all is well' do
       @email_campaign = FactoryGirl.create(:email_campaign)
-      expect(NewMarketingNotificationJob).to receive(:create).and_return('1234')
-      patch :send_marketing_email_preview, :email_campaign => {'id' => 1}
+      expect(NewMarketingNotificationJob).to receive(:perform_later)
+      patch :send_marketing_email_preview, params: { email_campaign: { 'id' => 1 } }
 
       expect(flash[:notice]).to eq("Sending marketing email preview")
-      expect(response).to redirect_to "/admin/email_campaigns/#{@email_campaign.id}"
-    end
-
-    it 'should redirect to show and flash a message if queue could not be created' do
-      @email_campaign = FactoryGirl.create(:email_campaign)
-      expect(NewMarketingNotificationJob).to receive(:create).and_return(nil)
-      patch :send_marketing_emails, :email_campaign => {'id' => 1}
-
-      expect(flash[:alert]).to eq("Couldn't queue email jobs. Check out /jobs and see what's wrong")
       expect(response).to redirect_to "/admin/email_campaigns/#{@email_campaign.id}"
     end
   end

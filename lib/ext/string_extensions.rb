@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class String
   def despace
-    self.gsub(' ','')
+    gsub(' ', '')
   end
 
   def to_snake_case
-    self.downcase.gsub(' ','_')
+    downcase.gsub(' ', '_')
   end
 end

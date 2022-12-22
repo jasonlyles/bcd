@@ -1,29 +1,31 @@
+# frozen_string_literal: true
+
 class InvalidIPNException < StandardError;end
 
 class InstantPaymentNotificationJob < BaseJob
   @queue = :ipns
 
-  def perform
+  def self.perform(options)
     ipn = InstantPaymentNotification.find(options['ipn_id'])
     params = ipn.params
     order = Order.find_by_request_id(params['custom'])
     ipn.update(
-        payment_status: params['payment_status'],
-        notify_version: params['notify_version'],
-        request_id: params['custom'],
-        verify_sign: params['verify_sign'],
-        payer_email: params['payer_email'],
-        txn_id: params['txn_id'],
-        order_id: order.try(:id)
+      payment_status: params['payment_status'],
+      notify_version: params['notify_version'],
+      request_id: params['custom'],
+      verify_sign: params['verify_sign'],
+      payer_email: params['payer_email'],
+      txn_id: params['txn_id'],
+      order_id: order.try(:id)
     )
     if order.blank?
-      Rails.logger.debug("Order is blank")
-      ExceptionNotifier.notify_exception(InvalidIPNException.new, :data => {:message => "IPN #{ipn.id} cannot be associated with an Order"})
+      Rails.logger.debug('Order is blank')
+      ExceptionNotifier.notify_exception(InvalidIPNException.new, data: { message: "IPN #{ipn.id} cannot be associated with an Order" })
       return nil
     end
     if !order.status.blank? && order.status.upcase == 'COMPLETED'
-      Rails.logger.debug("Order status is already set to completed")
-      ExceptionNotifier.notify_exception(InvalidIPNException.new, :data => {:message => "IPN #{ipn.id} seems to have been sent more than once, as the Order was already marked completed."})
+      Rails.logger.debug('Order status is already set to completed')
+      ExceptionNotifier.notify_exception(InvalidIPNException.new, data: { message: "IPN #{ipn.id} seems to have been sent more than once, as the Order was already marked completed." })
       return nil
     end
 
@@ -31,8 +33,8 @@ class InstantPaymentNotificationJob < BaseJob
       order.transaction_id = ipn.txn_id
       order.status = ipn.payment_status.upcase if ipn.payment_status
       if order.has_physical_item?
-        #Assuming that because the street address is blank, there is no other address info, and we can save address info
-        #coming to us from paypal
+        # Assuming that because the street address is blank, there is no other address info, and we can save address info
+        # coming to us from paypal
         unless order.address_street_1?
           order.first_name = params['first_name']
           order.last_name = params['last_name']
@@ -52,29 +54,29 @@ class InstantPaymentNotificationJob < BaseJob
 
       Download.restock_for_order(order) if order.has_digital_item?
 
-      #Now that the order is validated and everything is saved, I'll email the user to let them know about it.
+      # Now that the order is validated and everything is saved, I'll email the user to let them know about it.
       begin
         if order.user.guest?
-          link_to_downloads = order.get_link_to_downloads
-          OrderMailer.guest_order_confirmation(order.user_id,order.id,link_to_downloads).deliver
+          link_to_downloads = order.retrieve_link_to_downloads
+          OrderMailer.guest_order_confirmation(order.user_id, order.id, link_to_downloads).deliver
         else
-          OrderMailer.order_confirmation(order.user_id,order.id).deliver
+          OrderMailer.order_confirmation(order.user_id, order.id).deliver
         end
-      rescue => error
+      rescue StandardError => e
         Rails.logger.debug('could not send order confirmation email')
-        ExceptionNotifier.notify_exception(error, :data => {:message => "Failed trying to send order confirmation email for #{order.to_json}."})
+        ExceptionNotifier.notify_exception(error, data: { message: "Failed trying to send order confirmation email for #{order.to_json}: #{e.message}" })
       end
 
       handle_physical_items(order) if order.has_physical_item?
     else
-      Rails.logger.debug("PAYPAL IPN is invalid")
+      Rails.logger.debug('PAYPAL IPN is invalid')
       order.transaction_id = ipn.txn_id
       order.status = ipn.payment_status
       order.save
     end
   end
 
-  def handle_physical_items(order)
+  def self.handle_physical_items(order)
     physical_items = []
     order.line_items.each do |item|
       if item.product.is_physical_product?
@@ -83,15 +85,16 @@ class InstantPaymentNotificationJob < BaseJob
         product.decrement_quantity(item.quantity)
       end
     end
-    if physical_items.length > 0
-      physical_items.each do |item|
-        #add to string that gets sent in email
-      end
-      begin
-        OrderMailer.physical_item_purchased(order.user_id, order.id).deliver
-      rescue
-        ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), :env => request.env, :data => {:message => "Failed trying to send physical product order email for #{order.to_yaml}."})
-      end
+    return unless physical_items.length.positive?
+
+    physical_items.each do |item|
+      # TODO: Actually do something in here... probably?
+      # add to string that gets sent in email
+    end
+    begin
+      OrderMailer.physical_item_purchased(order.user_id, order.id).deliver
+    rescue StandardError => e
+      ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), env: request.env, data: { message: "Failed trying to send physical product order email for #{order.to_yaml}: #{e.message}" })
     end
   end
 end

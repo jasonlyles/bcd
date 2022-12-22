@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LdrParser
   LSYNTH = YAML.load_file("#{Rails.root}/config/lsynth.yml")
 
@@ -93,24 +95,24 @@ class LdrParser
       # puts "#{submodel} has #{count} parts"
     end
 
-    return temp_parts
+    temp_parts
   end
 
   # TODO
   # def handle_lsynthed_parts(temp_parts)
-    # @lsynthed_parts.each do |lp|
-    #   puts "LSYNTHED PART: #{lp.inspect}"
-    #   tp = translate_lsynth_part(lp[0])
-    #   if tp.nil?
-    #     puts "Translated lsynth part coming back nil for #{lp[0]}. Trying to select from list."
-    #     # TODO: Mark the part as needing some help, which will show up after the upload, when
-    #     # the user has the chance to fix parts.
-    #     tp = select_part_from_list(lp[0], lp[1])
-    #     puts "Still can't find a match for #{lp[0]}. Abandoning all hope." if tp.nil?
-    #   end
-    #   temp_parts << [tp, lp[1], tp] unless tp.nil?
-    # end
-    # temp_parts
+  #  @lsynthed_parts.each do |lp|
+  #    puts "LSYNTHED PART: #{lp.inspect}"
+  #    tp = translate_lsynth_part(lp[0])
+  #    if tp.nil?
+  #      puts "Translated lsynth part coming back nil for #{lp[0]}. Trying to select from list."
+  #      # TODO: Mark the part as needing some help, which will show up after the upload, when
+  #      # the user has the chance to fix parts.
+  #      tp = select_part_from_list(lp[0], lp[1])
+  #      puts "Still can't find a match for #{lp[0]}. Abandoning all hope." if tp.nil?
+  #    end
+  #    temp_parts << [tp, lp[1], tp] unless tp.nil?
+  #  end
+  #  temp_parts
   # end
 
   # TODO

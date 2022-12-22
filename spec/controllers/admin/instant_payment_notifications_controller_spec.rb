@@ -4,7 +4,8 @@ describe Admin::InstantPaymentNotificationsController do
 
   before do
     @radmin ||= FactoryGirl.create(:radmin)
-    # @product_type = FactoryGirl.create(:product_type)
+    @user = FactoryGirl.create(:user)
+    @order = FactoryGirl.create(:order, user: @user)
   end
 
   before(:each) do |example|
@@ -19,7 +20,8 @@ describe Admin::InstantPaymentNotificationsController do
   let(:valid_attributes) {
     {
         payer_email: 'test@test.com',
-        notify_version: '3.8'
+        notify_version: '3.8',
+        order_id: @order.id
     }
   }
 
@@ -34,7 +36,7 @@ describe Admin::InstantPaymentNotificationsController do
   describe "GET #show" do
     it "assigns the requested instant_payment_notification as @instant_payment_notification" do
       instant_payment_notification = InstantPaymentNotification.create! valid_attributes
-      get :show, id: instant_payment_notification.id
+      get :show, params: { id: instant_payment_notification.id }
       expect(assigns(:instant_payment_notification)).to eq(instant_payment_notification)
     end
   end

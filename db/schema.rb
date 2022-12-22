@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20221108131455) do
+ActiveRecord::Schema.define(version: 20221221054744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,9 +22,8 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["partner_id"], name: "index_advertising_campaigns_on_partner_id", using: :btree
   end
-
-  add_index "advertising_campaigns", ["partner_id"], name: "index_advertising_campaigns_on_partner_id", using: :btree
 
   create_table "audits", force: :cascade do |t|
     t.integer  "auditable_id"
@@ -42,13 +40,12 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "remote_address"
     t.string   "request_uuid"
     t.datetime "created_at"
+    t.index ["associated_type", "associated_id"], name: "associated_index", using: :btree
+    t.index ["auditable_type", "auditable_id", "version"], name: "auditable_index", using: :btree
+    t.index ["created_at"], name: "index_audits_on_created_at", using: :btree
+    t.index ["request_uuid"], name: "index_audits_on_request_uuid", using: :btree
+    t.index ["user_id", "user_type"], name: "user_index", using: :btree
   end
-
-  add_index "audits", ["associated_type", "associated_id"], name: "associated_index", using: :btree
-  add_index "audits", ["auditable_type", "auditable_id", "version"], name: "auditable_index", using: :btree
-  add_index "audits", ["created_at"], name: "index_audits_on_created_at", using: :btree
-  add_index "audits", ["request_uuid"], name: "index_audits_on_request_uuid", using: :btree
-  add_index "audits", ["user_id", "user_type"], name: "user_index", using: :btree
 
   create_table "authentications", force: :cascade do |t|
     t.integer  "user_id"
@@ -56,18 +53,16 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "uid"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["user_id"], name: "index_authentications_on_user_id", using: :btree
   end
-
-  add_index "authentications", ["user_id"], name: "index_authentications_on_user_id", using: :btree
 
   create_table "backend_notifications", force: :cascade do |t|
     t.text     "message"
     t.integer  "dismissed_by_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["dismissed_by_id"], name: "index_backend_notifications_on_dismissed_by_id", using: :btree
   end
-
-  add_index "backend_notifications", ["dismissed_by_id"], name: "index_backend_notifications_on_dismissed_by_id", using: :btree
 
   create_table "cart_items", force: :cascade do |t|
     t.integer  "cart_id"
@@ -75,18 +70,16 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.integer  "quantity"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["cart_id"], name: "index_cart_items_on_cart_id", using: :btree
+    t.index ["product_id"], name: "index_cart_items_on_product_id", using: :btree
   end
-
-  add_index "cart_items", ["cart_id"], name: "index_cart_items_on_cart_id", using: :btree
-  add_index "cart_items", ["product_id"], name: "index_cart_items_on_product_id", using: :btree
 
   create_table "carts", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["user_id"], name: "index_carts_on_user_id", using: :btree
   end
-
-  add_index "carts", ["user_id"], name: "index_carts_on_user_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -95,7 +88,6 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "image"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "image_processing", default: false
   end
 
   create_table "colors", force: :cascade do |t|
@@ -119,10 +111,9 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "download_token"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["product_id"], name: "index_downloads_on_product_id", using: :btree
+    t.index ["user_id"], name: "index_downloads_on_user_id", using: :btree
   end
-
-  add_index "downloads", ["product_id"], name: "index_downloads_on_product_id", using: :btree
-  add_index "downloads", ["user_id"], name: "index_downloads_on_user_id", using: :btree
 
   create_table "elements", force: :cascade do |t|
     t.integer  "part_id"
@@ -130,24 +121,21 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "image"
     t.string   "original_image_url"
     t.string   "guid",               limit: 36
-    t.boolean  "image_processing",              default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["color_id"], name: "index_elements_on_color_id", using: :btree
+    t.index ["part_id", "color_id"], name: "index_elements_on_part_id_and_color_id", unique: true, using: :btree
+    t.index ["part_id"], name: "index_elements_on_part_id", using: :btree
   end
-
-  add_index "elements", ["color_id"], name: "index_elements_on_color_id", using: :btree
-  add_index "elements", ["part_id", "color_id"], name: "index_elements_on_part_id_and_color_id", unique: true, using: :btree
-  add_index "elements", ["part_id"], name: "index_elements_on_part_id", using: :btree
 
   create_table "email_campaigns", force: :cascade do |t|
     t.text     "description"
-    t.integer  "click_throughs",   default: 0
+    t.integer  "click_throughs", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "image_processing", default: false
     t.text     "message"
     t.string   "subject"
-    t.integer  "emails_sent",      default: 0
+    t.integer  "emails_sent",    default: 0
     t.string   "guid"
     t.string   "image"
     t.string   "redirect_link"
@@ -160,11 +148,9 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "location"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "url_processing", default: false
+    t.index ["category_id"], name: "index_images_on_category_id", using: :btree
+    t.index ["product_id"], name: "index_images_on_product_id", using: :btree
   end
-
-  add_index "images", ["category_id"], name: "index_images_on_category_id", using: :btree
-  add_index "images", ["product_id"], name: "index_images_on_product_id", using: :btree
 
   create_table "instant_payment_notifications", force: :cascade do |t|
     t.string   "payment_status"
@@ -178,9 +164,8 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.boolean  "processed",      default: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.index ["order_id"], name: "index_instant_payment_notifications_on_order_id", using: :btree
   end
-
-  add_index "instant_payment_notifications", ["order_id"], name: "index_instant_payment_notifications_on_order_id", using: :btree
 
   create_table "line_items", force: :cascade do |t|
     t.integer  "order_id"
@@ -189,10 +174,9 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.decimal  "total_price"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["order_id"], name: "index_line_items_on_order_id", using: :btree
+    t.index ["product_id"], name: "index_line_items_on_product_id", using: :btree
   end
-
-  add_index "line_items", ["order_id"], name: "index_line_items_on_order_id", using: :btree
-  add_index "line_items", ["product_id"], name: "index_line_items_on_product_id", using: :btree
 
   create_table "lots", force: :cascade do |t|
     t.integer  "parts_list_id"
@@ -201,11 +185,10 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "note",          default: ""
+    t.index ["element_id"], name: "index_lots_on_element_id", using: :btree
+    t.index ["parts_list_id", "element_id"], name: "index_lots_on_parts_list_id_and_element_id", unique: true, using: :btree
+    t.index ["parts_list_id"], name: "index_lots_on_parts_list_id", using: :btree
   end
-
-  add_index "lots", ["element_id"], name: "index_lots_on_element_id", using: :btree
-  add_index "lots", ["parts_list_id", "element_id"], name: "index_lots_on_parts_list_id_and_element_id", unique: true, using: :btree
-  add_index "lots", ["parts_list_id"], name: "index_lots_on_parts_list_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
     t.integer  "user_id"
@@ -224,9 +207,8 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.integer  "shipping_status"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["user_id"], name: "index_orders_on_user_id", using: :btree
   end
-
-  add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
 
   create_table "partners", force: :cascade do |t|
     t.string   "name",       limit: 40
@@ -259,16 +241,14 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.integer  "product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "name_processing",   default: false
     t.boolean  "approved",          default: false
     t.json     "parts"
     t.text     "bricklink_xml"
     t.text     "ldr"
     t.string   "original_filename"
     t.string   "file"
+    t.index ["product_id"], name: "index_parts_lists_on_product_id", using: :btree
   end
-
-  add_index "parts_lists", ["product_id"], name: "index_parts_lists_on_product_id", using: :btree
 
   create_table "product_types", force: :cascade do |t|
     t.string   "name"
@@ -280,7 +260,6 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.boolean  "digital_product",        default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "image_processing",       default: false
   end
 
   create_table "products", force: :cascade do |t|
@@ -290,7 +269,7 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.integer  "subcategory_id"
     t.string   "product_code"
     t.text     "description"
-    t.decimal  "discount_percentage", default: 0.0
+    t.decimal  "discount_percentage", default: "0.0"
     t.decimal  "price"
     t.boolean  "ready_for_public",    default: false
     t.string   "pdf"
@@ -301,14 +280,12 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "youtube_url"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "pdf_processing",      default: false
     t.boolean  "featured",            default: false
     t.string   "designer",            default: "brian_lyles"
+    t.index ["category_id"], name: "index_products_on_category_id", using: :btree
+    t.index ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
+    t.index ["subcategory_id"], name: "index_products_on_subcategory_id", using: :btree
   end
-
-  add_index "products", ["category_id"], name: "index_products_on_category_id", using: :btree
-  add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
-  add_index "products", ["subcategory_id"], name: "index_products_on_subcategory_id", using: :btree
 
   create_table "radmins", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -325,10 +302,9 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.datetime "locked_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["email"], name: "index_radmins_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_radmins_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "radmins", ["email"], name: "index_radmins_on_email", unique: true, using: :btree
-  add_index "radmins", ["reset_password_token"], name: "index_radmins_on_reset_password_token", unique: true, using: :btree
 
   create_table "sales_reports", force: :cascade do |t|
     t.date     "report_date"
@@ -344,20 +320,18 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.decimal  "total_revenue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["product_id"], name: "index_sales_summaries_on_product_id", using: :btree
+    t.index ["sales_report_id"], name: "index_sales_summaries_on_sales_report_id", using: :btree
   end
-
-  add_index "sales_summaries", ["product_id"], name: "index_sales_summaries_on_product_id", using: :btree
-  add_index "sales_summaries", ["sales_report_id"], name: "index_sales_summaries_on_sales_report_id", using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
     t.text     "data"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["session_id"], name: "index_sessions_on_session_id", using: :btree
+    t.index ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
   end
-
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", using: :btree
-  add_index "sessions", ["updated_at"], name: "index_sessions_on_updated_at", using: :btree
 
   create_table "subcategories", force: :cascade do |t|
     t.string   "name"
@@ -367,9 +341,8 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.boolean  "ready_for_public", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["category_id"], name: "index_subcategories_on_category_id", using: :btree
   end
-
-  add_index "subcategories", ["category_id"], name: "index_subcategories_on_category_id", using: :btree
 
   create_table "switches", force: :cascade do |t|
     t.string   "switch",     limit: 30
@@ -384,11 +357,10 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.text     "body"
     t.string   "image_align"
     t.string   "image"
-    t.boolean  "live",             default: false
+    t.boolean  "live",        default: false
     t.string   "link"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "image_processing", default: false
   end
 
   create_table "user_parts_lists", force: :cascade do |t|
@@ -397,11 +369,10 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.text     "values"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["parts_list_id", "user_id"], name: "index_user_parts_lists_on_parts_list_id_and_user_id", unique: true, using: :btree
+    t.index ["parts_list_id"], name: "index_user_parts_lists_on_parts_list_id", using: :btree
+    t.index ["user_id"], name: "index_user_parts_lists_on_user_id", using: :btree
   end
-
-  add_index "user_parts_lists", ["parts_list_id", "user_id"], name: "index_user_parts_lists_on_parts_list_id_and_user_id", unique: true, using: :btree
-  add_index "user_parts_lists", ["parts_list_id"], name: "index_user_parts_lists_on_parts_list_id", using: :btree
-  add_index "user_parts_lists", ["user_id"], name: "index_user_parts_lists_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                             default: "",    null: false
@@ -424,9 +395,8 @@ ActiveRecord::Schema.define(version: 20221108131455) do
     t.string   "unsubscribe_token"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

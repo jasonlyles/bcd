@@ -32,7 +32,7 @@
                   <%= element.color_name %>
                 </td>
                 <td class="align-middle text-center">
-                  <%= image_tag(element.image.thumb.url) if element.image? %>
+                  <%= image_tag(element.image.thumb.url) unless element.image.thumb.url.blank? %>
                 </td>
                 <td class="align-middle text-center">
                   <%= link_to raw('<i class="fas fa-eye"></i>'), admin_element_path(element) %>

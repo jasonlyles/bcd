@@ -24,16 +24,12 @@
               <%= f.label :image, "Image", class: "form-label" %>
               <br/>
               <% if category.image_cache %>
-                <%= f.text_field :image_cache, :disabled => true, class: "form-control" %>
+                <%= f.text_field :image_cache, disabled: true, class: "form-control" %>
               <% else %>
-                <%= f.text_field :image, :disabled => true, class: "form-control" %>
+                <%= f.text_field :image, disabled: true, class: "form-control" %>
               <% end %>
               <br />
-              <% if category.image_processing? %>
-                Image is currently being processed. Check back in a few seconds.
-              <% else %>
-                <%= image_tag(category.image.medium.url) %>
-              <% end %>
+              <%= image_tag(category.image.medium.url) unless category.image.medium.url.blank? %>
             <% end %>
             <% if category.image? %>
               <div class="form-check mt-2">

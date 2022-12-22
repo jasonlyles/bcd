@@ -25,7 +25,7 @@
             <% @images.includes(:product).each do |image| %>
               <tr>
                 <td class="align-middle text-center">
-                  <%= image_tag(image.url.thumb.url) if image.url.present? %>
+                  <%= image_tag(image.url.thumb.url) unless image.url.thumb.url.blank? %>
                 </td>
                 <td class="align-middle text-center">
                   <%= image.product ? link_to(image.product.name, admin_product_path(image.product)) : image.url.to_s.split('.')[0].humanize %>

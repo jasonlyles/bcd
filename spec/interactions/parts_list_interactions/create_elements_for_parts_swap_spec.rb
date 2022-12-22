@@ -39,6 +39,7 @@ describe PartsListInteractions::CreateElementsForPartsSwap do
 
     context 'old and new parts are found by name' do
       it 'should succeed and set affected_parts_lists' do
+        FactoryGirl.create(:product_with_associations)
         part1 = FactoryGirl.create(:part, ldraw_id: '4162', bl_id: '4162', name: 'part1')
         part2 = FactoryGirl.create(:part, ldraw_id: '3030', bl_id: '3030', name: 'part2')
         part3 = FactoryGirl.create(:part, ldraw_id: '3065', bl_id: '3065', name: 'part3')
@@ -61,7 +62,7 @@ describe PartsListInteractions::CreateElementsForPartsSwap do
         interaction = PartsListInteractions::CreateElementsForPartsSwap.run(old_part_name: 'part1', new_part_name: 'part2')
 
         expect(interaction.succeeded?).to be true
-        expect(interaction.affected_parts_lists).to eq([[parts_list1.id, nil, parts_list1.name], [parts_list2.id, nil, parts_list2.name]])
+        expect(interaction.affected_parts_lists).to eq([[parts_list2.id, 'Colonial Revival House', parts_list2.name], [parts_list1.id, 'Colonial Revival House', parts_list1.name]])
       end
     end
   end

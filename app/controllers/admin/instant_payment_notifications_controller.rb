@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Admin::InstantPaymentNotificationsController < AdminController
   before_action :set_instant_payment_notification, only: [:show]
 
@@ -8,8 +10,7 @@ class Admin::InstantPaymentNotificationsController < AdminController
   end
 
   # GET /instant_payment_notifications/1
-  def show
-  end
+  def show; end
 
   private
   # Use callbacks to share common setup or constraints between actions.

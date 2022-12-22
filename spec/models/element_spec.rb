@@ -30,6 +30,7 @@ describe Element do
       it 'should update self and relevant part' do
         allow(Rebrickable).to receive(:get_element_combo).and_return(@get_element_combo_results)
         part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_rebrickable: true)
+        color = FactoryGirl.create(:color)
         element = FactoryGirl.create(:element)
 
         element.update_from_rebrickable(3001, 0)
@@ -44,6 +45,7 @@ describe Element do
       it 'should not update self or relevant part' do
         allow(Rebrickable).to receive(:get_element_combo).and_return({})
         part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_rebrickable: true)
+        color = FactoryGirl.create(:color)
         element = FactoryGirl.create(:element, original_image_url: nil)
 
         element.update_from_rebrickable(3001, 0)
@@ -60,6 +62,7 @@ describe Element do
       it 'should update self and relevant part' do
         allow(Bricklink).to receive(:get_element_image).and_return(@get_element_image_results)
         part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_bricklink: true)
+        color = FactoryGirl.create(:color)
         element = FactoryGirl.create(:element)
 
         element.update_from_bricklink(3001, 0)
@@ -74,6 +77,7 @@ describe Element do
       it 'should not update self or relevant part' do
         allow(Bricklink).to receive(:get_element_image).and_return({})
         part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_bricklink: true)
+        color = FactoryGirl.create(:color)
         element = FactoryGirl.create(:element, original_image_url: nil)
 
         element.update_from_bricklink(3001, 0)

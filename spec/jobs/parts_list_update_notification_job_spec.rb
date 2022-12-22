@@ -2,10 +2,7 @@ require 'spec_helper'
 
 describe PartsListUpdateNotificationJob do
   before do
-    @product_type = FactoryGirl.create(:product_type)
-    @category = FactoryGirl.create(:category)
-    @subcategory = FactoryGirl.create(:subcategory)
-    @product = FactoryGirl.create(:product)
+    @product = FactoryGirl.create(:product_with_associations)
   end
 
   describe 'perform' do
@@ -15,7 +12,7 @@ describe PartsListUpdateNotificationJob do
         order = FactoryGirl.create(:order_with_line_items, user_id: user.id)
 
         expect(UpdateMailer).to_not receive(:updated_parts_lists)
-        PartsListUpdateNotificationJob.new('', { 'product_ids' => [@product.id], 'message' => 'Just an update' }).perform
+        PartsListUpdateNotificationJob.perform('product_ids' => [@product.id], 'message' => 'Just an update')
       end
 
       it 'should NOT email a user if they do not want this type of email' do
@@ -23,7 +20,7 @@ describe PartsListUpdateNotificationJob do
         order = FactoryGirl.create(:order_with_line_items, user_id: user.id)
 
         expect(UpdateMailer).to_not receive(:updated_parts_lists)
-        PartsListUpdateNotificationJob.new('', { 'product_ids' => [@product.id], 'message' => 'Just an update' }).perform
+        PartsListUpdateNotificationJob.perform('product_ids' => [@product.id], 'message' => 'Just an update')
       end
 
       it 'should email a user if they are not cancelled and want to receive this type of email' do
@@ -31,7 +28,7 @@ describe PartsListUpdateNotificationJob do
         order = FactoryGirl.create(:order_with_line_items, user_id: user.id)
 
         expect(UpdateMailer).to receive(:updated_parts_lists).with(user.id, ["CB001 Colonial Revival House"], "Just an update")
-        PartsListUpdateNotificationJob.new('', { 'product_ids' => [@product.id], 'message' => 'Just an update' }).perform
+        PartsListUpdateNotificationJob.perform('product_ids' => [@product.id], 'message' => 'Just an update')
       end
     end
 
@@ -40,7 +37,7 @@ describe PartsListUpdateNotificationJob do
         user = FactoryGirl.create(:user, account_status: 'A', email_preference: 2)
 
         expect(UpdateMailer).to_not receive(:updated_parts_lists)
-        PartsListUpdateNotificationJob.new('', { 'product_ids' => [@product.id], 'message' => 'Just an update' }).perform
+        PartsListUpdateNotificationJob.perform('product_ids' => [@product.id], 'message' => 'Just an update')
       end
     end
 
@@ -51,7 +48,7 @@ describe PartsListUpdateNotificationJob do
 
         allow(UpdateMailer).to receive(:updated_parts_lists).and_raise(StandardError)
         expect(ExceptionNotifier).to receive(:notify_exception).with(StandardError, { data: { message: 'PartsListUpdateNotificationJob could not send an email to user 1 about products 1' } })
-        PartsListUpdateNotificationJob.new('', { 'product_ids' => [@product.id], 'message' => 'Just an update' }).perform
+        PartsListUpdateNotificationJob.perform('product_ids' => [@product.id], 'message' => 'Just an update')
       end
     end
   end

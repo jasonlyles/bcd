@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Guest < User
   def apply_omniauth
     nil

@@ -91,7 +91,7 @@
           <div class="card mt-2 p-2 <%= 'border-danger border-2' if lot.part_obsolete? %>">
               <div class="row no-gutters">
                 <div class="col-3">
-                  <%= image_tag(lot.thumb_image, class: 'image-fluid') %>
+                  <%= image_tag(lot.thumb_image, class: 'image-fluid') unless lot.thumb_image.blank? %>
                 </div>
                 <div class="col-9 px-2">
                   <div class="card-block px-2">

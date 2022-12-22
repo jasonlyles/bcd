@@ -11,9 +11,4 @@ FactoryGirl.define do
   factory :advertising_campaign_with_partner, :parent => :advertising_campaign do |advertising_campaign|
     advertising_campaign.after(:create){ |partner| FactoryGirl.create(:partner, :advertising_campaign => partner) }
   end
-  #factory :advertising_campaign_with_partner do
-  #  after(:create) do |advertising_campaign,evaluator|
-  #    FactoryGirl.create_list(:partner, 1, advertising_campaign: :partner)
-  #  end
-  #end
 end

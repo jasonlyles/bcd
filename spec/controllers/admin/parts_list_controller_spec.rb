@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Admin::PartsListsController do
   before do
     @radmin ||= FactoryGirl.create(:radmin)
+    @product = FactoryGirl.create(:product_with_associations)
   end
 
   before(:each) do |example|
@@ -16,7 +17,7 @@ describe Admin::PartsListsController do
   let(:valid_attributes) {
     {
         name: 'fake',
-        product_id: 2,
+        product_id: @product.id,
         bricklink_xml: '<XML>fake</XML>',
         original_filename: 'fake.xml'
     }
@@ -43,7 +44,7 @@ describe Admin::PartsListsController do
   describe "GET #show" do
     it "assigns the requested parts_list as @parts_list" do
       parts_list = PartsList.create! valid_attributes
-      get :show, id: parts_list.to_param
+      get :show, params: { id: parts_list.to_param }
 
       expect(assigns(:parts_list)).to eq(parts_list)
     end
@@ -60,7 +61,7 @@ describe Admin::PartsListsController do
   describe "GET #edit" do
     it "assigns the requested parts_list as @parts_list" do
       parts_list = PartsList.create! valid_attributes
-      get :edit, id: parts_list.to_param
+      get :edit, params: { id: parts_list.to_param }
 
       expect(assigns(:parts_list)).to eq(parts_list)
     end
@@ -71,13 +72,13 @@ describe Admin::PartsListsController do
       it "creates a new PartsList" do
         allow_any_instance_of(BricklinkXmlParser).to receive(:parse).and_return({})
         expect {
-          post :create, parts_list: valid_attributes
+          post :create, params: { parts_list: valid_attributes }
         }.to change(PartsList, :count).by(1)
       end
 
       it "assigns a newly created parts_list as @parts_list" do
         allow_any_instance_of(BricklinkXmlParser).to receive(:parse).and_return({})
-        post :create, parts_list: valid_attributes
+        post :create, params: { parts_list: valid_attributes }
 
         expect(assigns(:parts_list)).to be_a(PartsList)
         expect(assigns(:parts_list)).to be_persisted
@@ -85,7 +86,7 @@ describe Admin::PartsListsController do
 
       it "redirects to the created parts_list" do
         allow_any_instance_of(BricklinkXmlParser).to receive(:parse).and_return({})
-        post :create, parts_list: valid_attributes
+        post :create, params: { parts_list: valid_attributes }
 
         expect(response).to redirect_to([:admin, PartsList.last])
       end
@@ -93,13 +94,13 @@ describe Admin::PartsListsController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved parts_list as @parts_list" do
-        post :create, parts_list: invalid_attributes
+        post :create, params: { parts_list: invalid_attributes }
 
         expect(assigns(:parts_list)).to be_a_new(PartsList)
       end
 
       it "re-renders the 'new' template" do
-        post :create, parts_list: invalid_attributes
+        post :create, params: { parts_list: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -116,7 +117,7 @@ describe Admin::PartsListsController do
 
       it "updates the requested parts_list" do
         parts_list = PartsList.create! valid_attributes
-        put :update, id: parts_list.to_param, parts_list: new_attributes
+        put :update, params: { id: parts_list.to_param, parts_list: new_attributes }
         parts_list.reload
 
         expect(assigns(:parts_list)[:name]).to eq('not fake')
@@ -124,14 +125,14 @@ describe Admin::PartsListsController do
 
       it "assigns the requested parts_list as @parts_list" do
         parts_list = PartsList.create! valid_attributes
-        put :update, id: parts_list.to_param, parts_list: valid_attributes
+        put :update, params: { id: parts_list.to_param, parts_list: valid_attributes }
 
         expect(assigns(:parts_list)).to eq(parts_list)
       end
 
       it "redirects to the parts_list" do
         parts_list = PartsList.create! valid_attributes
-        put :update, id: parts_list.to_param, parts_list: valid_attributes
+        put :update, params: { id: parts_list.to_param, parts_list: valid_attributes }
 
         expect(response).to redirect_to([:admin, parts_list])
       end
@@ -140,14 +141,14 @@ describe Admin::PartsListsController do
     context "with invalid params" do
       it "assigns the parts_list as @parts_list" do
         parts_list = PartsList.create! valid_attributes
-        put :update, id: parts_list.to_param, parts_list: invalid_attributes
+        put :update, params: { id: parts_list.to_param, parts_list: invalid_attributes }
 
         expect(assigns(:parts_list)).to eq(parts_list)
       end
 
       it "re-renders the 'edit' template" do
         parts_list = PartsList.create! valid_attributes
-        put :update, id: parts_list.to_param, parts_list: invalid_attributes
+        put :update, params: { id: parts_list.to_param, parts_list: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -158,13 +159,13 @@ describe Admin::PartsListsController do
     it "destroys the requested parts_list" do
       parts_list = PartsList.create! valid_attributes
       expect {
-        delete :destroy, id: parts_list.to_param
+        delete :destroy, params: { id: parts_list.to_param }
       }.to change(PartsList, :count).by(-1)
     end
 
     it "redirects to the parts_lists list" do
       parts_list = PartsList.create! valid_attributes
-      delete :destroy, id: parts_list.to_param
+      delete :destroy, params: { id: parts_list.to_param }
 
       expect(response).to redirect_to(admin_parts_lists_url)
     end
@@ -184,7 +185,7 @@ describe Admin::PartsListsController do
         FactoryGirl.create(:part, name: 'Brick 1 x 1')
         FactoryGirl.create(:part, name: 'Brick 1 x 2')
 
-        post :create_new_elements, parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' }, format: :js
+        post :create_new_elements, params: { parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' } }, format: :js
 
         expect(assigns(:old_part_name)).not_to be_nil
         expect(assigns(:new_part_name)).not_to be_nil
@@ -196,7 +197,7 @@ describe Admin::PartsListsController do
 
     context 'interaction failed' do
       it 'should set a value for @error' do
-        post :create_new_elements, parts_lists: {}, format: :js
+        post :create_new_elements, params: { parts_lists: {} }, format: :js
 
         expect(assigns(:old_part_name)).to be_nil
         expect(assigns(:new_part_name)).to be_nil
@@ -213,7 +214,7 @@ describe Admin::PartsListsController do
         FactoryGirl.create(:part, name: 'Brick 1 x 1')
         FactoryGirl.create(:part, name: 'Brick 1 x 2')
 
-        post :swap_parts, parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' }, format: :js
+        post :swap_parts, params: { parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' } }, format: :js
 
         expect(assigns(:parts_lists_ids)).not_to be_nil
         expect(assigns(:error)).to be_nil
@@ -222,7 +223,7 @@ describe Admin::PartsListsController do
 
     context 'interaction failed' do
       it 'should set a value for @error' do
-        post :swap_parts, parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' }, format: :js
+        post :swap_parts, params: { parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' } }, format: :js
 
         expect(assigns(:parts_lists_ids)).to be_nil
         expect(assigns(:error)).not_to be_nil
@@ -234,22 +235,11 @@ describe Admin::PartsListsController do
     context 'PartsListUpdateNotificationJob queued' do
       it 'should return a happy message' do
         parts_list = FactoryGirl.create(:xml_parts_list)
-        allow(PartsListUpdateNotificationJob).to receive(:create).and_return(123)
+        allow(PartsListUpdateNotificationJob).to receive(:perform_later)
 
-        post :notify_customers_of_parts_list_update, parts_lists: { parts_list_ids: [parts_list.id], message: 'Test' }, format: :js
+        post :notify_customers_of_parts_list_update, params: { parts_lists: { parts_list_ids: parts_list.id, message: 'Test' } }, format: :js
 
         expect(assigns(:message)).to eq('Sending parts list update emails')
-      end
-    end
-
-    context 'PartsListUpdateNotificationJob not queued' do
-      it 'should return a message letting us know' do
-        parts_list = FactoryGirl.create(:xml_parts_list)
-        allow(PartsListUpdateNotificationJob).to receive(:create).and_return(nil)
-
-        post :notify_customers_of_parts_list_update, parts_lists: { parts_list_ids: [parts_list.id], message: 'Test' }, format: :js
-
-        expect(assigns(:message)).to eq("Couldn't queue mail jobs. Check out /jobs and see what's wrong")
       end
     end
   end

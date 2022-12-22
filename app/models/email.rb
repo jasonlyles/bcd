@@ -1,5 +1,6 @@
-class Email
+# frozen_string_literal: true
 
+class Email
   include ActiveModel::Validations
   include ActiveModel::Conversion
   extend ActiveModel::Naming

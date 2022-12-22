@@ -36,11 +36,7 @@
             </td>
             <td></td>
             <td class="pl-4">
-              <% if @element.image_processing? %>
-                Image available soon...
-              <% else %>
-                <%= image_tag(@element.image.thumb.url) %>
-              <% end %>
+              <%= image_tag(@element.image.thumb.url) unless @element.image.thumb.url.blank? %>
             </td>
           </tr>
         </table>

@@ -39,7 +39,7 @@ describe Admin::UpdatesController do
   describe "GET #show" do
     it "assigns the requested update as @update" do
       update = Update.create! valid_attributes
-      get :show, id: update.to_param
+      get :show, params: { id: update.to_param }
 
       expect(assigns(:update)).to eq(update)
     end
@@ -56,7 +56,7 @@ describe Admin::UpdatesController do
   describe "GET #edit" do
     it "assigns the requested update as @update" do
       update = Update.create! valid_attributes
-      get :edit, id: update.to_param
+      get :edit, params: { id: update.to_param }
 
       expect(assigns(:update)).to eq(update)
     end
@@ -66,19 +66,19 @@ describe Admin::UpdatesController do
     context "with valid params" do
       it "creates a new Update" do
         expect {
-          post :create, update: valid_attributes
+          post :create, params: { update: valid_attributes }
         }.to change(Update, :count).by(1)
       end
 
       it "assigns a newly created update as @update" do
-        post :create, update: valid_attributes
+        post :create, params: { update: valid_attributes }
 
         expect(assigns(:update)).to be_a(Update)
         expect(assigns(:update)).to be_persisted
       end
 
       it "redirects to the created update" do
-        post :create, update: valid_attributes
+        post :create, params: { update: valid_attributes }
 
         expect(response).to redirect_to([:admin, Update.last])
       end
@@ -86,13 +86,13 @@ describe Admin::UpdatesController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved update as @update" do
-        post :create, update: invalid_attributes
+        post :create, params: { update: invalid_attributes }
 
         expect(assigns(:update)).to be_a_new(Update)
       end
 
       it "re-renders the 'new' template" do
-        post :create, update: invalid_attributes
+        post :create, params: { update: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -109,7 +109,7 @@ describe Admin::UpdatesController do
 
       it "updates the requested update" do
         update = Update.create! valid_attributes
-        put :update, id: update.to_param, update: new_attributes
+        put :update, params: { id: update.to_param, update: new_attributes }
         update.reload
 
         expect(assigns(:update)[:title]).to eq('Update 2')
@@ -117,14 +117,14 @@ describe Admin::UpdatesController do
 
       it "assigns the requested update as @update" do
         update = Update.create! valid_attributes
-        put :update, id: update.to_param, update: valid_attributes
+        put :update, params: { id: update.to_param, update: valid_attributes }
 
         expect(assigns(:update)).to eq(update)
       end
 
       it "redirects to the update" do
         update = Update.create! valid_attributes
-        put :update, id: update.to_param, update: valid_attributes
+        put :update, params: { id: update.to_param, update: valid_attributes }
 
         expect(response).to redirect_to([:admin, update])
       end
@@ -133,14 +133,14 @@ describe Admin::UpdatesController do
     context "with invalid params" do
       it "assigns the update as @update" do
         update = Update.create! valid_attributes
-        put :update, id: update.to_param, update: invalid_attributes
+        put :update, params: { id: update.to_param, update: invalid_attributes }
 
         expect(assigns(:update)).to eq(update)
       end
 
       it "re-renders the 'edit' template" do
         update = Update.create! valid_attributes
-        put :update, id: update.to_param, update: {title: nil}
+        put :update, params: { id: update.to_param, update: { title: nil } }
 
         expect(response).to render_template("edit")
       end
@@ -151,13 +151,13 @@ describe Admin::UpdatesController do
     it "destroys the requested update" do
       update = Update.create! valid_attributes
       expect {
-        delete :destroy, id: update.to_param
+        delete :destroy, params: { id: update.to_param }
       }.to change(Update, :count).by(-1)
     end
 
     it "redirects to the updates list" do
       update = Update.create! valid_attributes
-      delete :destroy, id: update.to_param
+      delete :destroy, params: { id: update.to_param }
 
       expect(response).to redirect_to(admin_updates_url)
     end

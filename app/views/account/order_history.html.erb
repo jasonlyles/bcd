@@ -74,9 +74,9 @@
                   <tr>
                     <% product = item.product %>
                       <% image = product.images %>
-                        <% image_url = image[0].url.thumb if !image.blank? %>
+                        <% image_url = image[0].url.thumb unless image.blank? %>
                           <td>
-                            <%= image_tag(image_url.url) if !image_url.nil? %>
+                            <%= image_tag(image_url.url) unless image_url.blank? %>
                           </td>
                           <td class="align-middle">
                             <%= "#{product.product_code} #{product.name}" %>

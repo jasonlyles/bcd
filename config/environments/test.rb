@@ -39,7 +39,7 @@ BrickCity::Application.configure do
 
   #Config static asset server for tests with Cache-Control for performance
   config.server_static_assets = true
-  config.static_cache_control = "public, max-age=3600"
+  config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=3600' }
 
   config.eager_load = false
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def snippet(text, options = {})
     opts = { word_count: 20 }.merge(options)

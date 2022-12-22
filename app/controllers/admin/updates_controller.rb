@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::UpdatesController < AdminController
-  before_filter :get_update, only: [:show, :edit, :update, :destroy]
+  before_action :assign_update, only: %i[show edit update destroy]
 
   # GET /updates
   def index
@@ -8,8 +10,7 @@ class Admin::UpdatesController < AdminController
   end
 
   # GET /updates/1
-  def show
-  end
+  def show; end
 
   # GET /updates/new
   def new
@@ -17,27 +18,26 @@ class Admin::UpdatesController < AdminController
   end
 
   # GET /updates/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /updates
   def create
-    @update = Update.new(params[:update])
+    @update = Update.new(update_params)
     if @update.save
       redirect_to([:admin, @update], notice: 'Update was successfully created.')
     else
-      flash[:alert] = "Update was NOT created."
-      render "new"
+      flash[:alert] = 'Update was NOT created.'
+      render 'new'
     end
   end
 
   # PUT /updates/1
   def update
-    if @update.update_attributes(params[:update])
+    if @update.update_attributes(update_params)
       redirect_to([:admin, @update], notice: 'Update was successfully updated.')
     else
-      flash[:alert] = "Update was NOT updated."
-      render "edit"
+      flash[:alert] = 'Update was NOT updated.'
+      render 'edit'
     end
   end
 
@@ -49,7 +49,12 @@ class Admin::UpdatesController < AdminController
 
   private
 
-  def get_update
+  def assign_update
     @update = Update.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def update_params
+    params.require(:update).permit(:title, :description, :body, :image, :image_cache, :remove_image, :image_align, :created_at, :live, :link)
   end
 end

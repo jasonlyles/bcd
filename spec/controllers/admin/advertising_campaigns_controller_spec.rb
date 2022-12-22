@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Admin::AdvertisingCampaignsController do
   before do
     @radmin ||= FactoryGirl.create(:radmin)
+    @partner = FactoryGirl.create(:partner, id: 1)
   end
 
   before(:each) do
@@ -39,7 +40,7 @@ describe Admin::AdvertisingCampaignsController do
   describe "GET #show" do
     it "assigns the requested advertising_campaign as @advertising_campaign" do
       advertising_campaign = AdvertisingCampaign.create! valid_attributes
-      get :show, id: advertising_campaign.to_param
+      get :show, params: { id: advertising_campaign.to_param }
 
       expect(assigns(:advertising_campaign)).to eq(advertising_campaign)
     end
@@ -56,7 +57,7 @@ describe Admin::AdvertisingCampaignsController do
   describe "GET #edit" do
     it "assigns the requested advertising_campaign as @advertising_campaign" do
       advertising_campaign = AdvertisingCampaign.create! valid_attributes
-      get :edit, id: advertising_campaign.to_param
+      get :edit, params: { id: advertising_campaign.to_param }
 
       expect(assigns(:advertising_campaign)).to eq(advertising_campaign)
     end
@@ -66,19 +67,19 @@ describe Admin::AdvertisingCampaignsController do
     context "with valid params" do
       it "creates a new AdvertisingCampaign" do
         expect {
-          post :create, advertising_campaign: valid_attributes
+          post :create, params: { advertising_campaign: valid_attributes }
         }.to change(AdvertisingCampaign, :count).by(1)
       end
 
       it "assigns a newly created advertising_campaign as @advertising_campaign" do
-        post :create, advertising_campaign: valid_attributes
+        post :create, params: { advertising_campaign: valid_attributes }
 
         expect(assigns(:advertising_campaign)).to be_a(AdvertisingCampaign)
         expect(assigns(:advertising_campaign)).to be_persisted
       end
 
       it "redirects to the created advertising_campaign" do
-        post :create, advertising_campaign: valid_attributes
+        post :create, params: { advertising_campaign: valid_attributes }
 
         expect(response).to redirect_to([:admin, AdvertisingCampaign.last])
       end
@@ -86,13 +87,13 @@ describe Admin::AdvertisingCampaignsController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved advertising_campaign as @advertising_campaign" do
-        post :create, advertising_campaign: invalid_attributes
+        post :create, params: { advertising_campaign: invalid_attributes }
 
         expect(assigns(:advertising_campaign)).to be_a_new(AdvertisingCampaign)
       end
 
       it "re-renders the 'new' template" do
-        post :create, advertising_campaign: invalid_attributes
+        post :create, params: { advertising_campaign: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -111,7 +112,7 @@ describe Admin::AdvertisingCampaignsController do
 
       it "updates the requested advertising_campaign" do
         advertising_campaign = AdvertisingCampaign.create! valid_attributes
-        put :update, id: advertising_campaign.to_param, advertising_campaign: new_attributes
+        put :update, params: { id: advertising_campaign.to_param, advertising_campaign: new_attributes }
         advertising_campaign.reload
 
         expect(assigns(:advertising_campaign)[:reference_code]).to eq('123456789B')
@@ -121,14 +122,14 @@ describe Admin::AdvertisingCampaignsController do
 
       it "assigns the requested advertising_campaign as @advertising_campaign" do
         advertising_campaign = AdvertisingCampaign.create! valid_attributes
-        put :update, id: advertising_campaign.to_param, advertising_campaign: valid_attributes
+        put :update, params: { id: advertising_campaign.to_param, advertising_campaign: valid_attributes }
 
         expect(assigns(:advertising_campaign)).to eq(advertising_campaign)
       end
 
       it "redirects to the advertising_campaign" do
         advertising_campaign = AdvertisingCampaign.create! valid_attributes
-        put :update, id: advertising_campaign.to_param, advertising_campaign: valid_attributes
+        put :update, params: { id: advertising_campaign.to_param, advertising_campaign: valid_attributes }
 
         expect(response).to redirect_to([:admin, advertising_campaign])
       end
@@ -137,14 +138,14 @@ describe Admin::AdvertisingCampaignsController do
     context "with invalid params" do
       it "assigns the advertising_campaign as @advertising_campaign" do
         advertising_campaign = AdvertisingCampaign.create! valid_attributes
-        put :update, id: advertising_campaign.to_param, advertising_campaign: invalid_attributes
+        put :update, params: { id: advertising_campaign.to_param, advertising_campaign: invalid_attributes }
 
         expect(assigns(:advertising_campaign)).to eq(advertising_campaign)
       end
 
       it "re-renders the 'edit' template" do
         advertising_campaign = AdvertisingCampaign.create! valid_attributes
-        put :update, id: advertising_campaign.to_param, advertising_campaign: invalid_attributes
+        put :update, params: { id: advertising_campaign.to_param, advertising_campaign: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -155,13 +156,13 @@ describe Admin::AdvertisingCampaignsController do
     it "destroys the requested advertising_campaign" do
       advertising_campaign = AdvertisingCampaign.create! valid_attributes
       expect {
-        delete :destroy, id: advertising_campaign.to_param
+        delete :destroy, params: { id: advertising_campaign.to_param }
       }.to change(AdvertisingCampaign, :count).by(-1)
     end
 
     it "redirects to the advertising_campaigns list" do
       advertising_campaign = AdvertisingCampaign.create! valid_attributes
-      delete :destroy, id: advertising_campaign.to_param
+      delete :destroy, params: { id: advertising_campaign.to_param }
 
       expect(response).to redirect_to(admin_advertising_campaigns_url)
     end

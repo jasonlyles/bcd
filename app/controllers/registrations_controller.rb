@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class RegistrationsController < Devise::RegistrationsController
-  before_filter :get_authentications, except: %i[new build_resource]
-  before_filter :authenticate_user!, only: %i[update destroy]
+  before_action :assign_authentications, except: %i[new build_resource]
+  before_action :authenticate_user!, only: %i[update destroy]
 
   MAX_AUTHS_ALLOWED = 2 # Right now, just Facebook and Twitter
 
@@ -17,9 +19,8 @@ class RegistrationsController < Devise::RegistrationsController
     clean_up_guest if session[:guest] # If I have a guest that has a change of heart and wants to sign up, ditch the guest record
     @user = User.where('email=?', params[:user][:email]).first
     # If user has password, they've already signed up, redirect them to the login page
-    if @user && @user.encrypted_password?
-      return redirect_to '/users/sign_in', notice: 'This user already has an account, please login.'
-    end
+    return redirect_to '/users/sign_in', notice: 'This user already has an account, please login.' if @user && @user.encrypted_password?
+
     if @user.blank?
       build_resource(signup_params)
     else
@@ -59,12 +60,11 @@ class RegistrationsController < Devise::RegistrationsController
     if params[:user].key?(:current_password)
       if resource.update_with_password(resource_params)
         if is_navigational_format?
-          if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
-            flash_key = :update_needs_confirmation
-          end
+          flash_key = :update_needs_confirmation if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
           set_flash_message :notice, flash_key || :updated
         end
-        sign_in resource_name, resource, bypass: true
+        # sign_in resource_name, resource, bypass: true
+        bypass_sign_in(resource)
         respond_with resource, location: after_update_path_for(resource)
       else
         flash[:alert] = 'Uh-oh. Check below to see what you need to change'
@@ -75,12 +75,11 @@ class RegistrationsController < Devise::RegistrationsController
       # This case is for the Twitter/Facebook user who doesn't have a regular account, and hence no password.
       if resource.update_attributes(resource_params)
         if is_navigational_format?
-          if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
-            flash_key = :update_needs_confirmation
-          end
+          flash_key = :update_needs_confirmation if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
           set_flash_message :notice, flash_key || :updated
         end
-        sign_in resource_name, resource, bypass: true
+        # sign_in resource_name, resource, bypass: true
+        bypass_sign_in(resource)
         respond_with resource, location: after_update_path_for(resource)
       else
         flash[:alert] = 'Uh-oh. Check below to see what you need to change'
@@ -102,6 +101,10 @@ class RegistrationsController < Devise::RegistrationsController
 
   private
 
+  def resource_params
+    params[resource_name].permit(:password, :password_confirmation, :current_password, :email)
+  end
+
   def build_resource(hash = nil)
     super
     if session[:omniauth]
@@ -118,7 +121,7 @@ class RegistrationsController < Devise::RegistrationsController
     @user
   end
 
-  def get_authentications
+  def assign_authentications
     @authentications = current_user.authentications if current_user
   end
 

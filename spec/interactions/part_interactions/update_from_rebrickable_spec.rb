@@ -38,9 +38,9 @@ describe PartInteractions::UpdateFromRebrickable do
       expect(interaction.succeeded?).to eq(true)
       expect(@part.check_rebrickable).to eq(false)
       expect(@part.year_to).to eq('1986')
-      expect(@part.brickowl_ids).to eq(167230)
+      expect(@part.brickowl_ids).to eq('167230')
       expect(@part.bl_id).to eq('4276a')
-      expect(@part.alternate_nos).to eq({"alternates"=>["4276b", "upn0344"]})
+      expect(@part.alternate_nos).to eq({'alternates'=>['4276b', 'upn0344']})
     end
 
     it 'should set an error when having trouble saving' do

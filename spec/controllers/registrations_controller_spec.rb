@@ -9,7 +9,7 @@ describe RegistrationsController do
       session[:omniauth]['provider'] = "Twitter"
       session[:omniauth]['uid'] = "1234554321"
       request.env['devise.mapping'] = Devise.mappings[:user]
-      get :create, :user => {:email => 'snoopy@peanuts.com', :tos_accepted => true}
+      get :create, params: { user: { email: 'snoopy@peanuts.com', tos_accepted: true } }
       @user = User.where("email=?",'snoopy@peanuts.com').first
 
       expect(@user.authentications[0].uid).to eq('1234554321')
@@ -22,7 +22,7 @@ describe RegistrationsController do
       session[:omniauth]['provider'] = "Twitter"
       session[:omniauth]['uid'] = "1234554321"
       request.env['devise.mapping'] = Devise.mappings[:user]
-      get :create, :user => {:email => 'snoopy@peanuts.com', :tos_accepted => true}
+      get :create, params: { user: { email: 'snoopy@peanuts.com', tos_accepted: true } }
 
       expect(session[:omniauth]).to be_nil
     end
@@ -34,7 +34,7 @@ describe RegistrationsController do
           expect_any_instance_of(User).to receive(:encrypted_password?).and_return(nil)
           expect(controller).to receive(:save_authentication)
           request.env['devise.mapping'] = Devise.mappings[:user]
-          post :create, :user => {:email => @user.email}
+          post :create, params: { user: { email: @user.email } }
           @user.reload
 
           expect(@user.account_status).to eq('A')
@@ -46,7 +46,7 @@ describe RegistrationsController do
           @user = FactoryGirl.create(:user)
           expect(controller).to_not receive(:save_authentication)
           request.env['devise.mapping'] = Devise.mappings[:user]
-          post :create, :user => {:email => @user.email}
+          post :create, params: { user: { email: @user.email } }
           @user.reload
 
           expect(flash[:notice]).to eq('This user already has an account, please login.')
@@ -66,7 +66,7 @@ describe RegistrationsController do
           expect_any_instance_of(User).to receive(:save).and_return(true)
           expect_any_instance_of(User).to receive(:active_for_authentication?).and_return(false)
           request.env['devise.mapping'] = Devise.mappings[:user]
-          post :create, :user => {:email => 'email@email.com', :tos_accepted => true}
+          post :create, params: { user: { email: 'email@email.com', tos_accepted: true } }
 
           expect(flash[:notice]).to eq("You have signed up successfully. However, we could not sign you in because your account is not yet activated.")
           expect(response).to redirect_to('/')
@@ -83,7 +83,7 @@ describe RegistrationsController do
         session[:omniauth]['uid'] = "1234554321"
         expect_any_instance_of(User).to receive(:save).and_return(false)
         request.env['devise.mapping'] = Devise.mappings[:user]
-        post :create, :user => {:email => 'email@email.com', :tos_accepted => true}
+        post :create, params: { user: { email: 'email@email.com', tos_accepted: true } }
 
         expect(response).to redirect_to('/users/sign_up')
       end
@@ -96,7 +96,7 @@ describe RegistrationsController do
       encrypted_password = @user.encrypted_password
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
-      put :update, :user => {:current_password => 'blahblah1234', :password => 'blahblah5678', :password_confirmation => 'blahblah5678'}
+      put :update, params: { user: { current_password: 'blahblah1234', password: 'blahblah5678', password_confirmation: 'blahblah5678' } }
       @user = User.find(@user.id)
 
       expect(@user.encrypted_password).to_not eq(encrypted_password)
@@ -104,11 +104,11 @@ describe RegistrationsController do
     end
 
     it "should not update an existing registration for an email/password user with invalid params" do
-      @user = FactoryGirl.create(:user, :password => 'blahblah1234')
+      @user = FactoryGirl.create(:user, password: 'blahblah1234')
       email = @user.email
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
-      put :update, :user => {:current_password => 'blahblah1234', :password => 'blahblah5678', :password_confirmation => 'blahblah5678', :email => '6'}
+      put :update, params: { user: { current_password: 'blahblah1234', password: 'blahblah5678', password_confirmation: 'blahblah5678', email: '6' } }
       @user = User.find(@user.id)
 
       expect(@user.email).to eq(email)
@@ -121,11 +121,11 @@ describe RegistrationsController do
       email = @user.email
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
-      put :update, :user => {:email => "gunny@seargent.mil"}
+      put :update, params: { user: { email: 'gunny@seargent.mil' } }
       @user = User.find(@user.id)
 
       expect(@user.email).to_not eq(email)
-      expect(flash[:notice]).to eq("You updated your account successfully.")
+      expect(flash[:notice]).to eq('You updated your account successfully.')
     end
 
     it "should not update an existing registration for an omniauth-only user with invalid params" do
@@ -135,7 +135,7 @@ describe RegistrationsController do
       email = @user.email
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
-      put :update, :user => {:email => "6"}
+      put :update, params: { user: { email: '6' } }
       @user = User.find(@user.id)
 
       expect(@user.email).to eq(email)

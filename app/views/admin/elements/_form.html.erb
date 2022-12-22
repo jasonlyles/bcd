@@ -32,11 +32,7 @@
                 <%= f.text_field :image, :disabled => true, class: "form-control" %>
               <% end %>
               <br />
-              <% if element.image_processing? %>
-                Image is currently being processed. Check back in a few seconds.
-              <% else %>
-                <%= image_tag(element.image.thumb.url) %>
-              <% end %>
+              <%= image_tag(element.image.thumb.url) unless element.image.thumb.url.blank? %>
             <% end %>
             <% if element.image? %>
               <div class="form-check mt-2">

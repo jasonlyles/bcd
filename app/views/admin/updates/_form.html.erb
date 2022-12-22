@@ -25,11 +25,7 @@
                 <%= f.text_field :image, disabled: true, class: "form-control" %>
               <% end %>
               <br />
-              <% if update.image_processing? %>
-                Image is currently being processed. Check back in a few seconds.
-              <% else %>
-                <%= image_tag(update.image.medium.url) %>
-              <% end %>
+              <%= image_tag(update.image.medium.url) unless update.image.medium.url.blank? %>
             <% end %>
 
             <% if update.image? %>

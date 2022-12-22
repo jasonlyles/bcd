@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Rebrickable
-  REBRICKABLE_URL = 'https://rebrickable.com'.freeze
+  REBRICKABLE_URL = 'https://rebrickable.com'
 
   # For GETs
   def self.request(path)

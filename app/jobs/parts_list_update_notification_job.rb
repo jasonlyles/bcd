@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class PartsListUpdateNotificationJob < BaseJob
   @queue = :batchmailer
 
-  def perform
+  def self.perform(options)
     message = options['message']
     product_ids = options['product_ids']
     # Translate these product_ids into a hash with product names that I can look
@@ -17,7 +19,7 @@ class PartsListUpdateNotificationJob < BaseJob
       begin
         user = User.find(user_id)
         if !user.cancelled? && user.gets_important_emails?
-          #Trying a simple throttle to make sure I'm not sending more than 5
+          # Trying a simple throttle to make sure I'm not sending more than 5
           # emails/second so I don't run afoul of my Amazon SES limits
           sleep 0.2
           # Get a list of product names for the customers email.
