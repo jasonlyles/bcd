@@ -168,22 +168,19 @@ class StoreController < ApplicationController
     end
   end
 
-  # rubocop:disable Metrics/AbcSize
   def submit_order
     return redirect_to '/cart' if @cart.nil?
 
     @order = Order.new(order_params)
     @order.add_line_items_from_cart(@cart)
-    item_amount_string = ''
-    @order.line_items.each_with_index do |item, index|
-      item_amount_string += "&item_name_#{index + 1}=#{item.product.product_code} #{item.product.name}&amount_#{index + 1}=#{item.product.price.to_f}&quantity_#{index + 1}=#{item.quantity}"
-    end
     @order.request_id = SecureRandom.hex(20)
     if @order.save!
       @cart.destroy
       session.delete(:cart_id)
       cookies[:show_thank_you] = true
-      redirect_to CGI.escape("https://#{PaypalConfig.config.host}/cgi-bin/webscr?cmd=_cart&upload=1&custom=#{@order.request_id}&business=#{PaypalConfig.config.business_email}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&return=#{PaypalConfig.config.return_url}&notify_url=#{PaypalConfig.config.notify_url}&currency_code=USD#{item_amount_string}")
+      paypal_uri = assemble_paypal_uri
+
+      redirect_to paypal_uri
     else
       begin
         ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), env: request.env, data: { message: 'Failed trying to submit order.' })
@@ -192,7 +189,34 @@ class StoreController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
+
+  def assemble_paypal_uri
+    item_hash = assemble_paypal_uri_item_hash
+    uri = Addressable::URI.parse("https://#{PaypalConfig.config.host}/cgi-bin/webscr")
+    uri.query_values = {
+      cmd: '_cart',
+      upload: '1',
+      custom: @order.request_id,
+      business: PaypalConfig.config.business_email,
+      image_url: "#{Rails.application.config.web_host}/assets/logo140x89.png",
+      return: PaypalConfig.config.return_url,
+      notify_url: PaypalConfig.config.notify_url,
+      currency_code: 'USD'
+    }.merge(item_hash)
+
+    uri.normalize.to_s
+  end
+
+  def assemble_paypal_uri_item_hash
+    item_hash = {}
+    @order.line_items.each_with_index do |item, index|
+      item_hash["item_name_#{index + 1}".to_sym] = item.product.code_and_name
+      item_hash["amount_#{index + 1}".to_sym] = item.product.price.to_f * item.quantity
+      item_hash["quantity_#{index + 1}".to_sym] = item.quantity
+    end
+
+    item_hash
+  end
 
   def empty_cart
     @cart.cart_items.destroy_all if @cart&.cart_items

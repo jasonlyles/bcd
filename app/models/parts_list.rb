@@ -5,7 +5,6 @@ class PartsList < ApplicationRecord
   belongs_to :product
   has_many :lots
   has_many :elements, through: :lots
-  has_many :parts, through: :elements
   has_many :user_parts_lists
   accepts_nested_attributes_for :lots, allow_destroy: true
   validates_associated :lots
@@ -27,7 +26,9 @@ class PartsList < ApplicationRecord
     lots.inject(0) { |sum, p| sum + p.quantity }
   end
 
-  def obsolete_part?
-    parts.where(is_obsolete: true).exists?
+  # rubocop:disable Naming/PredicateName
+  def has_obsolete_part?
+    elements.includes(:part).map(&:part).select(&:is_obsolete?).present?
   end
+  # rubocop:enable Naming/PredicateName
 end

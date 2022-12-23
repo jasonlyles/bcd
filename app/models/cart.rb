@@ -9,6 +9,8 @@ class Cart < ApplicationRecord
   def add_product(product)
     # first, see if I already have the item in my cart
     current_item = cart_items.find_by_product_id(product.id)
+    return if current_item&.product&.digital_product?
+
     if current_item&.product&.physical_product?
       # If the item is already in the cart and is a physical product, increment...
       current_item.increment_quantity

@@ -75,6 +75,6 @@ class Admin::ProductsController < AdminController
 
   # Only allow a trusted parameter "white list" through.
   def product_params
-    params.require(:product).permit(:category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache, :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf, :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes, :parts_lists_attributes, :featured, :designer)
+    params.require(:product).permit(:category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache, :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf, :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes, :parts_lists_attributes, :featured, :designer, :_method)
   end
 end

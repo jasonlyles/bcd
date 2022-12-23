@@ -193,10 +193,10 @@ describe Admin::ProductsController do
     end
   end
 
-  describe 'get_type' do
+  describe 'assign_type' do
     it "should populate @product_types" do
       @product_type = FactoryGirl.create(:product_type, :name => 'Models')
-      controller.send(:get_type)
+      controller.send(:assign_type)
 
       expect(assigns(:product_types)).to eq([["Instructions", 1], ["Models", 2]])
     end

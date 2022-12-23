@@ -7,8 +7,4 @@ class Radmin < ApplicationRecord
 
   # Setup accessible (or protected) attributes for your model
   # attr_accessible :email, :password, :password_confirmation, :remember_me
-
-  def valid_password?(password)
-    valid_password?(password)
-  end
 end

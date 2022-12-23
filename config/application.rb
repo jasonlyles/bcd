@@ -81,6 +81,10 @@ module BrickCity
     # When using Ruby 2.4, you can preserve the timezone of the receiver when calling to_time.
     # ActiveSupport.to_time_preserves_timezone = false
 
+    # The error raised by this is:
+    # `ActionController::UnfilteredParameters: unable to convert unpermitted parameters to hash`
+    # Make sure all needed params are included in the whitelist, including :_method
+    # to accommodate links for deleting objects.
     config.action_controller.raise_on_unfiltered_parameters = true
   end
 end

@@ -87,7 +87,7 @@ class Product < ApplicationRecord
   end
 
   def orders?
-    LineItem.where(['product_id = ?', p.id]).exists?
+    LineItem.where(['product_id = ?', id]).exists?
   end
 
   def destroy

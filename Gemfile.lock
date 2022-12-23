@@ -618,6 +618,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-session_store
+  addressable
   asset_sync
   audited
   awesome_print

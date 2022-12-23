@@ -7,6 +7,7 @@ ruby '2.6.0'
 gem 'rails', '5.0.7'
 
 gem 'activerecord-session_store'
+gem 'addressable'
 gem 'audited'
 gem 'awesome_print', require: 'ap'
 gem 'aws-sdk'

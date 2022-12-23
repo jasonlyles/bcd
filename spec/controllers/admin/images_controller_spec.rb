@@ -191,9 +191,9 @@ describe Admin::ImagesController do
     end
   end
 
-  describe "get_products" do
+  describe "assign_products" do
     it "should return a list of products in a nice format" do
-      controller.send(:get_products)
+      controller.send(:assign_products)
 
       expect(assigns(:products)).to eq([["Colonial Revival House", 2]])
     end

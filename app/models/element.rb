@@ -128,8 +128,8 @@ class Element < ApplicationRecord
     rescue StandardError => e
       logger.error "There was a problem getting an image for #{original_image_url}: #{e.message}"
     end
-    s3_file = "parts_images/#{color_id}/#{guid}#{extension}"
-    self.image = File.open(s3_file)
+    # s3_file = "parts_images/#{color_id}/#{guid}#{extension}"
+    self.image = File.open(file)
     save
   end
 end

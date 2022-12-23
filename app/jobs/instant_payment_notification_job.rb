@@ -68,7 +68,7 @@ class InstantPaymentNotificationJob < BaseJob
         end
       rescue StandardError => e
         Rails.logger.debug('could not send order confirmation email')
-        ExceptionNotifier.notify_exception(error, data: { message: "Failed trying to send order confirmation email for #{order.to_json}: #{e.message}" })
+        ExceptionNotifier.notify_exception(e, data: { message: "Failed trying to send order confirmation email for #{order.to_json}: #{e.message}" })
       end
 
       handle_physical_items(order) if order.includes_physical_item?

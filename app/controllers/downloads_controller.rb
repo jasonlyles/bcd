@@ -71,16 +71,16 @@ class DownloadsController < ApplicationController
   def download
     @product = Product.find_by_base_product_code(params[:product_code])
     @downloads_remaining = get_users_downloads_remaining(@product.id)
-    if @downloads_remaining.zero?
-      flash[:notice] = "You have already reached your maximum allowed number of downloads for #{@product.base_product_code} #{@product.name}."
-      redirect_back(fallback_location: '/', only_path: true)
-    elsif @downloads_remaining.blank? && !@product.free?
+    if @downloads_remaining.blank? && !@product.free?
       flash[:alert] = 'Nice try. You can buy instructions for this model on this page, and then you can download them.'
       redirect_to controller: :store, action: :product_details, product_code: @product.product_code, product_name: @product.name.to_snake_case
+    elsif @downloads_remaining.zero?
+      flash[:notice] = "You have already reached your maximum allowed number of downloads for #{@product.base_product_code} #{@product.name}."
+      redirect_back(fallback_location: '/', only_path: true)
     else
       deliver_download(@product.pdf.path)
+      increment_download_count
     end
-    increment_download_count
   end
 
   def guest_downloads
