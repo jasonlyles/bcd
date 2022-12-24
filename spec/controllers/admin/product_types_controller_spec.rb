@@ -21,7 +21,7 @@ require 'spec_helper'
 describe Admin::ProductTypesController do
 
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
+    @radmin ||= FactoryBot.create(:radmin)
   end
 
   before(:each) do

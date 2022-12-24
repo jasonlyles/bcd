@@ -2,15 +2,15 @@ require "spec_helper"
 
 describe OrderMailer do
   before do
-    @product_type1 = FactoryGirl.create(:product_type)
-    @product_type2 = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
-    @category = FactoryGirl.create(:category)
-    @subcategory = FactoryGirl.create(:subcategory)
-    FactoryGirl.create(:product, :product_type_id => @product_type1.id, :category_id => @category.id, :subcategory_id => @subcategory.id, :product_code => 'XX111', :name => 'fake product')
-    @product = FactoryGirl.create(:product, :product_type_id => @product_type2.id, :category_id => @category.id, :subcategory_id => @subcategory.id, :product_code => 'XX111M')
-    @user = FactoryGirl.create(:user)
-    @order = FactoryGirl.create(:order)
-    @line_item = FactoryGirl.create(:line_item, :product_id => @product.id, :order_id => @order.id)
+    @product_type1 = FactoryBot.create(:product_type)
+    @product_type2 = FactoryBot.create(:product_type, :name => 'Models', :digital_product => false)
+    @category = FactoryBot.create(:category)
+    @subcategory = FactoryBot.create(:subcategory)
+    FactoryBot.create(:product, :product_type_id => @product_type1.id, :category_id => @category.id, :subcategory_id => @subcategory.id, :product_code => 'XX111', :name => 'fake product')
+    @product = FactoryBot.create(:product, :product_type_id => @product_type2.id, :category_id => @category.id, :subcategory_id => @subcategory.id, :product_code => 'XX111M')
+    @user = FactoryBot.create(:user)
+    @order = FactoryBot.create(:order)
+    @line_item = FactoryBot.create(:line_item, :product_id => @product.id, :order_id => @order.id)
     @mail = OrderMailer.order_confirmation(@user.id, @order.id)
     @physical_mail = OrderMailer.physical_item_purchased(@user.id,@order.id)
   end

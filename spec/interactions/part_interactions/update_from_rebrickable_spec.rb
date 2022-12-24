@@ -27,7 +27,7 @@ describe PartInteractions::UpdateFromRebrickable do
             "print_of" => nil
     }
 
-    @part = FactoryGirl.create(:part, ldraw_id: '4276a', bl_id: nil)
+    @part = FactoryBot.create(:part, ldraw_id: '4276a', bl_id: nil)
   end
 
   describe "run" do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Admin::EmailCampaignsController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
+    @radmin ||= FactoryBot.create(:radmin)
   end
 
   before(:each) do |example|
@@ -176,7 +176,7 @@ describe Admin::EmailCampaignsController do
 
   describe "send_marketing_emails" do
     it 'should queue up a resque job if all is well' do
-      @email_campaign = FactoryGirl.create(:email_campaign)
+      @email_campaign = FactoryBot.create(:email_campaign)
       expect(NewMarketingNotificationJob).to receive(:perform_later)
       patch :send_marketing_emails, params: { email_campaign: { 'id' => 1 } }
 
@@ -187,7 +187,7 @@ describe Admin::EmailCampaignsController do
 
   describe "send_marketing_email_preview" do
     it 'should queue up a resque job if all is well' do
-      @email_campaign = FactoryGirl.create(:email_campaign)
+      @email_campaign = FactoryBot.create(:email_campaign)
       expect(NewMarketingNotificationJob).to receive(:perform_later)
       patch :send_marketing_email_preview, params: { email_campaign: { 'id' => 1 } }
 

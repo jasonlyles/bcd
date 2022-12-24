@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Admin::InstantPaymentNotificationsController do
 
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @user = FactoryGirl.create(:user)
-    @order = FactoryGirl.create(:order, user: @user)
+    @radmin ||= FactoryBot.create(:radmin)
+    @user = FactoryBot.create(:user)
+    @order = FactoryBot.create(:order, user: @user)
   end
 
   before(:each) do |example|

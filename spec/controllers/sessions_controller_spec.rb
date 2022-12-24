@@ -6,7 +6,7 @@ describe SessionsController do
       @user = User.create!(email: "charles@mcwoofay.net", password: 'password', tos_accepted: true)
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
-      @cart = FactoryGirl.create(:cart)
+      @cart = FactoryBot.create(:cart)
       session[:cart_id] = @cart.id
       get :destroy
 
@@ -45,8 +45,8 @@ describe SessionsController do
   describe "guest_registration" do
     context 'with a current_guest' do
       it 'should assign current_guest to @user' do
-        current_guest = FactoryGirl.create(:user, :email => 'blahblah@blah.blah')
-        @cart = FactoryGirl.create(:cart, user_id: current_guest.id)
+        current_guest = FactoryBot.create(:user, :email => 'blahblah@blah.blah')
+        @cart = FactoryBot.create(:cart, user_id: current_guest.id)
         expect(controller).to receive(:set_guest_status).and_return(true)
         expect(controller).to receive(:current_guest).at_least(1).times.and_return(current_guest)
         request.env['devise.mapping'] = Devise.mappings[:user]
@@ -58,7 +58,7 @@ describe SessionsController do
 
     context 'without a current guest' do
       it 'should assign a new Guest object to @user' do
-        @cart = FactoryGirl.create(:cart)
+        @cart = FactoryBot.create(:cart)
         session[:cart_id] = @cart.id
         expect(controller).to receive(:set_guest_status).and_return(true)
         request.env['devise.mapping'] = Devise.mappings[:user]
@@ -73,7 +73,7 @@ describe SessionsController do
     context 'if current_guest' do
       context 'and user record is valid' do
         it 'should find the user record and update it' do
-          user = FactoryGirl.create(:user, :email => 'fake@fake.fake')
+          user = FactoryBot.create(:user, :email => 'fake@fake.fake')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(user)
           request.env['devise.mapping'] = Devise.mappings[:user]
           post :register_guest, params: { guest: { email: user.email, email_preference: 0 } }
@@ -86,7 +86,7 @@ describe SessionsController do
 
       context 'and user record is not valid' do
         it 'should render guest_registration' do
-          user = FactoryGirl.create(:user, :email => 'blar@blar.blar')
+          user = FactoryBot.create(:user, :email => 'blar@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(user)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).and_return(false)
@@ -107,7 +107,7 @@ describe SessionsController do
       end
 
       it 'should not create a new guest record if a guest record could be found by email' do
-        user = FactoryGirl.create(:user, :email => 'blar3@blar.blar')
+        user = FactoryBot.create(:user, :email => 'blar3@blar.blar')
         expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
         request.env['devise.mapping'] = Devise.mappings[:user]
         expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
@@ -118,7 +118,7 @@ describe SessionsController do
 
       context 'and user record is valid' do
         it 'should save the user' do
-          user = FactoryGirl.create(:user, :email => 'blar4@blar.blar', :account_status => '')
+          user = FactoryBot.create(:user, :email => 'blar4@blar.blar', :account_status => '')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
@@ -129,7 +129,7 @@ describe SessionsController do
         end
 
         it 'should set session[:guest] to the user ID' do
-          user = FactoryGirl.create(:user, :email => 'blar5@blar.blar')
+          user = FactoryBot.create(:user, :email => 'blar5@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
@@ -139,7 +139,7 @@ describe SessionsController do
         end
 
         it 'should redirect to checkout' do
-          user = FactoryGirl.create(:user, :email => 'blar6@blar.blar')
+          user = FactoryBot.create(:user, :email => 'blar6@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(true)
@@ -151,7 +151,7 @@ describe SessionsController do
 
       context 'and user record is not valid' do
         it 'should flash an alert message' do
-          user = FactoryGirl.create(:user, :email => 'blar7@blar.blar')
+          user = FactoryBot.create(:user, :email => 'blar7@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(false)
@@ -161,7 +161,7 @@ describe SessionsController do
         end
 
         it 'should render guest_registration' do
-          user = FactoryGirl.create(:user, :email => 'blar8@blar.blar')
+          user = FactoryBot.create(:user, :email => 'blar8@blar.blar')
           expect(controller).to receive(:current_guest).at_least(1).times.and_return(nil)
           request.env['devise.mapping'] = Devise.mappings[:user]
           expect_any_instance_of(User).to receive(:valid?).at_least(1).times.and_return(false)

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Admin::PartsController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
+    @radmin ||= FactoryBot.create(:radmin)
   end
 
   before(:each) do |example|
@@ -173,7 +173,7 @@ describe Admin::PartsController do
     context "update from bricklink succeeded" do
       it 'should flash a nice message and redirect back' do
         request.env['HTTP_REFERER'] = '/'
-        part = FactoryGirl.create(:part)
+        part = FactoryBot.create(:part)
         interactor = Struct.new(:error, :succeeded?)
         expect(PartInteractions::UpdateFromBricklink).to receive(:run).and_return(interactor.new(nil, true))
         put :update_via_bricklink, params: { id: part.id }
@@ -186,7 +186,7 @@ describe Admin::PartsController do
     context "update from bricklink failed" do
       it 'should flash the error to the user and redirect back' do
         request.env['HTTP_REFERER'] = '/'
-        part = FactoryGirl.create(:part)
+        part = FactoryBot.create(:part)
         interactor = Struct.new(:error, :succeeded?)
         expect(PartInteractions::UpdateFromBricklink).to receive(:run).and_return(interactor.new('BrickLink is down', false))
         put :update_via_bricklink, params: { id: part.id }
@@ -201,7 +201,7 @@ describe Admin::PartsController do
     context "update from rebrickable succeeded" do
       it 'should flash a nice message and redirect back' do
         request.env['HTTP_REFERER'] = '/'
-        part = FactoryGirl.create(:part)
+        part = FactoryBot.create(:part)
         interactor = Struct.new(:error, :succeeded?)
         expect(PartInteractions::UpdateFromRebrickable).to receive(:run).and_return(interactor.new(nil, true))
         put :update_via_rebrickable, params: { id: part.id }
@@ -214,7 +214,7 @@ describe Admin::PartsController do
     context "update from rebrickable failed" do
       it 'should flash the error to the user and redirect back' do
         request.env['HTTP_REFERER'] = '/'
-        part = FactoryGirl.create(:part)
+        part = FactoryBot.create(:part)
         interactor = Struct.new(:error, :succeeded?)
         expect(PartInteractions::UpdateFromRebrickable).to receive(:run).and_return(interactor.new('Rebrickable is down', false))
         put :update_via_rebrickable, params: { id: part.id }

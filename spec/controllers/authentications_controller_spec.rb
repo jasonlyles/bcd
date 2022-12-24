@@ -62,8 +62,8 @@ describe AuthenticationsController do
     end
 
     it "should redirect back and flash the user if they cancelled their account and they try to log in via auth provider" do
-      @user = FactoryGirl.create(:user, :account_status => 'C')
-      @authentication = FactoryGirl.create(:authentication, :user_id => @user.id)
+      @user = FactoryBot.create(:user, :account_status => 'C')
+      @authentication = FactoryBot.create(:authentication, :user_id => @user.id)
       request.env['HTTP_REFERER'] = '/'
       request.env["omniauth.auth"] = {}
       request.env["omniauth.auth"]["info"] = {}
@@ -89,8 +89,8 @@ describe AuthenticationsController do
     end
 
     it "should login with an existing authentication" do
-      @user = FactoryGirl.create(:user)
-      @authentication = FactoryGirl.create(:authentication, :user_id => @user.id, :uid => '12345')
+      @user = FactoryBot.create(:user)
+      @authentication = FactoryBot.create(:authentication, :user_id => @user.id, :uid => '12345')
       request.env["omniauth.auth"] = {}
       request.env["omniauth.auth"]["info"] = {}
       request.env["omniauth.auth"]["info"]["email"] = "snoopy@peanuts.com"
@@ -103,7 +103,7 @@ describe AuthenticationsController do
     end
 
     it "should create an authentication for a logged in user" do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       sign_in @user
       request.env["omniauth.auth"] = {}
       request.env["omniauth.auth"]["info"] = {}
@@ -117,9 +117,9 @@ describe AuthenticationsController do
     end
 
     it "should not create an authentication for a logged in user if another user owns that authentication" do
-      @user = FactoryGirl.create(:user)
-      @authentication = FactoryGirl.create(:authentication, :user_id => @user.id)
-      @user2 = FactoryGirl.create(:user, :email => 'ralph@ralph.mil')
+      @user = FactoryBot.create(:user)
+      @authentication = FactoryBot.create(:authentication, :user_id => @user.id)
+      @user2 = FactoryBot.create(:user, :email => 'ralph@ralph.mil')
       sign_in @user2
       request.env['HTTP_REFERER'] = '/account/edit'
       request.env["omniauth.auth"] = {}
@@ -136,9 +136,9 @@ describe AuthenticationsController do
 
   describe "destroy" do
     it "destroy action should destroy model and redirect to index action" do
-      @user ||= FactoryGirl.create(:user)
+      @user ||= FactoryBot.create(:user)
       sign_in(@user)
-      @authentication = FactoryGirl.create(:authentication)
+      @authentication = FactoryBot.create(:authentication)
       delete :destroy, params: { id: @authentication }
 
       expect(response).to redirect_to("/account/edit")
@@ -149,7 +149,7 @@ describe AuthenticationsController do
       @user = User.new(:email => 'test@test.com', :tos_accepted => true)
       expect(@user).to receive(:password_required?).at_least(1).times.and_return(false)
       @user.save!
-      @authentication = FactoryGirl.create(:authentication, :user_id => @user.id)
+      @authentication = FactoryBot.create(:authentication, :user_id => @user.id)
       sign_in @user
       delete :destroy, params: { id: @authentication }
 
@@ -160,7 +160,7 @@ describe AuthenticationsController do
 
   describe "clear_authentications" do
     it "should delete session[:omniauth] and redirect to new user registration url" do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       sign_in @user
       session[:omniauth] = {}
       post :clear_authentications

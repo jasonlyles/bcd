@@ -11,13 +11,13 @@ require 'spec_helper'
 #   end
 # end
 #def current_user
-#  @user ||= FactoryGirl.create(:user)
+#  @user ||= FactoryBot.create(:user)
 #end
 
 describe StaticHelper do
   describe "remaining downloads" do
     it "tells how many downloads a user has left" do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       sign_in @user
       expect(helper.downloads_remaining(1)).to eq(5)
     end

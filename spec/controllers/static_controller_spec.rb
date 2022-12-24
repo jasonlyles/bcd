@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe StaticController do
   before do
-    @product_type = FactoryGirl.create(:product_type)
+    @product_type = FactoryBot.create(:product_type)
   end
 
   describe "GET 'index'" do
@@ -22,7 +22,7 @@ describe StaticController do
   describe 'GET maintenance' do
     context 'maintenance is completed' do
       it 'should redirect to the home page' do
-        @switch = FactoryGirl.create(:switch, switch_on: false)
+        @switch = FactoryBot.create(:switch, switch_on: false)
         get 'maintenance'
 
         expect(flash[:notice]).to eq('Done with maintenance!')
@@ -32,7 +32,7 @@ describe StaticController do
 
     context 'maintenance is not yet complete' do
       it 'should render the maintenance page' do
-        @switch = FactoryGirl.create(:switch, switch_on: true)
+        @switch = FactoryBot.create(:switch, switch_on: true)
         get 'maintenance'
 
         expect(response).to be_success
@@ -93,25 +93,25 @@ describe StaticController do
     end
 
     it 'should get legacy_menswear_instructions' do
-      cat = FactoryGirl.create(:category)
-      subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product, product_code: 'CB027')
+      cat = FactoryBot.create(:category)
+      subcat = FactoryBot.create(:subcategory)
+      product = FactoryBot.create(:product, product_code: 'CB027')
       get 'legacy_menswear_instructions'
       expect(response).to redirect_to controller: :store, action: :product_details, product_code: 'CB027', product_name: 'colonial_revival_house'
     end
 
     it 'should get legacy_archfirm_instructions' do
-      cat = FactoryGirl.create(:category)
-      subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product, product_code: 'CB028')
+      cat = FactoryBot.create(:category)
+      subcat = FactoryBot.create(:subcategory)
+      product = FactoryBot.create(:product, product_code: 'CB028')
       get 'legacy_archfirm_instructions'
       expect(response).to redirect_to controller: :store, action: :product_details, product_code: 'CB028', product_name: 'colonial_revival_house'
     end
 
     it 'should get legacy_speakeasy_instructions' do
-      cat = FactoryGirl.create(:category)
-      subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product, product_code: 'CB029')
+      cat = FactoryBot.create(:category)
+      subcat = FactoryBot.create(:subcategory)
+      product = FactoryBot.create(:product, product_code: 'CB029')
       get 'legacy_speakeasy_instructions'
       expect(response).to redirect_to controller: :store, action: :product_details, product_code: 'CB029', product_name: 'colonial_revival_house'
     end

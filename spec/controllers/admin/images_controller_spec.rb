@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe Admin::ImagesController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @product_type = FactoryGirl.create(:product_type)
-    @category = FactoryGirl.create(:category, id: 1)
-    @subcategory = FactoryGirl.create(:subcategory)
-    @product = FactoryGirl.create(:product, id: 2, category: @category, subcategory: @subcategory, product_code: 'ZZ001')
+    @radmin ||= FactoryBot.create(:radmin)
+    @product_type = FactoryBot.create(:product_type)
+    @category = FactoryBot.create(:category, id: 1)
+    @subcategory = FactoryBot.create(:subcategory)
+    @product = FactoryBot.create(:product, id: 2, category: @category, subcategory: @subcategory, product_code: 'ZZ001')
   end
 
   before(:each) do |example|

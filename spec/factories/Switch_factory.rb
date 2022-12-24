@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :switch do
-    switch "maintenance_mode"
+    switch { 'maintenance_mode' }
   end
 end

@@ -2,16 +2,17 @@
 
 source 'http://rubygems.org'
 
-ruby '2.6.0'
+ruby '2.6.10'
 
-gem 'rails', '5.0.7'
+gem 'rails', '5.1.7'
 
 gem 'activerecord-session_store'
 gem 'addressable'
 gem 'audited'
 gem 'awesome_print', require: 'ap'
-gem 'aws-sdk'
 gem 'aws-sdk-rails'
+gem 'aws-sdk-s3'
+gem 'aws-sdk-ses'
 gem 'carrierwave'
 gem 'devise'
 gem 'exception_notification'
@@ -32,7 +33,6 @@ gem 'platform-api' # For Heroku's API
 gem 'rack-protection', '~> 2.0'
 gem 'rake'
 gem 'ransack'
-gem 'responders', '~> 2.0'
 gem 'resque'
 gem 'resque_mailer'
 gem 'roboto'
@@ -55,8 +55,7 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'bullet'
   gem 'dotenv-rails'
-  gem 'factory_girl_generator'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'foreman'
   gem 'mail_view', '~> 2.0.4'
@@ -66,7 +65,7 @@ group :development, :test do
   gem 'rack-mini-profiler'
   gem 'rails-controller-testing'
   gem 'rspec-activemodel-mocks'
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails'
   gem 'simplecov'
 
   # code quality gems

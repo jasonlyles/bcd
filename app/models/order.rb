@@ -16,9 +16,9 @@ class Order < ApplicationRecord
   # validates :user_id, :presence => true
   # validates :confirmation_number => true
   validates :first_name, :last_name, :address_street1, :address_city, :address_state, :address_country,
-            :address_zip, presence: true, if: "address_submission_method == 'form'"
-  validates :address_zip, length: { is: 5 }, if: "address_submission_method == 'form'"
-  validates :address_zip, numericality: { only_integer: true }, if: "address_submission_method == 'form'"
+            :address_zip, presence: true, if: -> { :address_submission_method == 'form' }
+  validates :address_zip, length: { is: 5 }, if: -> { :address_submission_method == 'form' }
+  validates :address_zip, numericality: { only_integer: true }, if: -> { :address_submission_method == 'form' }
 
   def includes_physical_item?
     line_items.includes(product: [:product_type]).each do |item|

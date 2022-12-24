@@ -5,8 +5,8 @@ describe ImageUploader do
   include CarrierWave::Test::Matchers
 
   before do
-    product = FactoryGirl.create(:product_with_associations)
-    @image = FactoryGirl.create(:image, product: product)
+    product = FactoryBot.create(:product_with_associations)
+    @image = FactoryBot.create(:image, product: product)
     ImageUploader.enable_processing = true
     @uploader = ImageUploader.new(@image, :url)
     File.open(File.join(Rails.root, 'spec', 'support', 'images', 'cv009_small.png')) { |f| @uploader.store!(f) }

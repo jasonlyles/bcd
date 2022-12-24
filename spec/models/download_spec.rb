@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe Download do
   before do
-    @product = FactoryGirl.create(:product_with_associations)
+    @product = FactoryBot.create(:product_with_associations)
   end
 
   describe "add_download_to_user_and_model" do
     it "should add download to user/product if the user has downloaded at least once" do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       @download = Download.new(user_id: @user.id, product_id: @product.id, remaining: MAX_DOWNLOADS-1)
       @download.save!
       Download.add_download_to_user_and_model(@user, @product.id)
@@ -17,7 +17,7 @@ describe Download do
     end
 
     it "should not add download to user/product if the user has not downloaded at least once" do
-      @user = FactoryGirl.create(:user)
+      @user = FactoryBot.create(:user)
       @download = Download.new(user_id: @user.id, product_id: @product.id)
       @download.save!
 
@@ -28,10 +28,10 @@ describe Download do
 
   describe "update_all_users_who_have_downloaded_at_least_once" do
     it "should update all users who have downloaded at least once" do
-      @user = FactoryGirl.create(:user)
-      @user2 = FactoryGirl.create(:user, email: 'blah@blah.blah')
-      @download1 = FactoryGirl.create(:download, user_id: @user.id)
-      @download2 = FactoryGirl.create(:download, user_id: @user2.id)
+      @user = FactoryBot.create(:user)
+      @user2 = FactoryBot.create(:user, email: 'blah@blah.blah')
+      @download1 = FactoryBot.create(:download, user_id: @user.id)
+      @download2 = FactoryBot.create(:download, user_id: @user2.id)
       Download.update_all_users_who_have_downloaded_at_least_once(@product.id)
       @downloads = Download.all
       @downloads.each do |dl|
@@ -40,10 +40,10 @@ describe Download do
     end
 
     it "should return the users who had their download remaining counts updated" do
-      @user = FactoryGirl.create(:user)
-      @user2 = FactoryGirl.create(:user, email: 'blah@blah.blah')
-      @download1 = FactoryGirl.create(:download, user_id: @user.id)
-      @download2 = FactoryGirl.create(:download, user_id: @user2.id)
+      @user = FactoryBot.create(:user)
+      @user2 = FactoryBot.create(:user, email: 'blah@blah.blah')
+      @download1 = FactoryBot.create(:download, user_id: @user.id)
+      @download2 = FactoryBot.create(:download, user_id: @user2.id)
       @affected_downloads = Download.update_all_users_who_have_downloaded_at_least_once(@product.id)
       expect(@affected_downloads.size).to eq(2)
       expect(@affected_downloads[0].class).to eq(User)
@@ -53,7 +53,7 @@ describe Download do
   describe 'self.update_download_counts' do
     context 'with no token passed in' do
       it 'should find the record by user ID and product ID and update count and remaining' do
-        @user = FactoryGirl.create(:user)
+        @user = FactoryBot.create(:user)
         @download = Download.new(user_id: @user.id, product_id: @product.id)
         @download.save!
         expect(Download).to receive(:find_or_create_by).and_return(@download)
@@ -68,7 +68,7 @@ describe Download do
 
     context 'with a token passed in' do
       it 'should find the record by user ID and token and update count and remaining' do
-        @user = FactoryGirl.create(:user)
+        @user = FactoryBot.create(:user)
         @download = Download.new(user_id: @user.id, product_id: @product.id, download_token: 'token')
         @download.save!
         expect(Download).to receive(:find_by_user_id_and_download_token).and_return(@download)
@@ -84,8 +84,8 @@ describe Download do
 
   describe 'restock' do
     it 'should add MAX_DOWNLOADS to @remaining' do
-      @user = FactoryGirl.create(:user)
-      @download = FactoryGirl.create(:download, remaining: 1)
+      @user = FactoryBot.create(:user)
+      @download = FactoryBot.create(:download, remaining: 1)
       @download.restock
 
       expect(@download.remaining).to eq MAX_DOWNLOADS+1
@@ -94,9 +94,9 @@ describe Download do
 
   describe "self.restock_for_order" do
     it 'should restock downloads if downloads already existed' do
-      @user = FactoryGirl.create(:user)
-      @order = FactoryGirl.create(:order)
-      @download = FactoryGirl.create(:download, remaining: 1, user_id: @user.id, product_id: @product.id)
+      @user = FactoryBot.create(:user)
+      @order = FactoryBot.create(:order)
+      @download = FactoryBot.create(:download, remaining: 1, user_id: @user.id, product_id: @product.id)
       li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
       @order.line_items << li1
       Download.restock_for_order(@order)
@@ -105,8 +105,8 @@ describe Download do
     end
 
     it 'should not restock downloads if the app cannot find an existing download record' do
-      @user = FactoryGirl.create(:user)
-      @order = FactoryGirl.create(:order)
+      @user = FactoryBot.create(:user)
+      @order = FactoryBot.create(:order)
       li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
       @order.line_items << li1
       expect_any_instance_of(Download).to_not receive(:restock)

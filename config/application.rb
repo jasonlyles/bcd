@@ -59,8 +59,6 @@ module BrickCity
     config.assets.precompile += ['ie.css', 'admin.css']
 
     # New config values for Rails 5:
-    # Once whatever deprecation warnings are gone, set this to false
-    ActiveSupport.halt_callback_chains_on_return_false = true
     # Probably don't need this, but if the app needs some autoloading in prod for
     # things that work in dev, set:
     # Rails.application.config.enable_dependency_loading = true
@@ -80,11 +78,5 @@ module BrickCity
     config.action_mailer.perform_caching = true
     # When using Ruby 2.4, you can preserve the timezone of the receiver when calling to_time.
     # ActiveSupport.to_time_preserves_timezone = false
-
-    # The error raised by this is:
-    # `ActionController::UnfilteredParameters: unable to convert unpermitted parameters to hash`
-    # Make sure all needed params are included in the whitelist, including :_method
-    # to accommodate links for deleting objects.
-    config.action_controller.raise_on_unfiltered_parameters = true
   end
 end

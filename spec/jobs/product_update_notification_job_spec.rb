@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe ProductUpdateNotificationJob do
   before do
-    @product = FactoryGirl.create(:product_with_associations)
-    @image = FactoryGirl.create(:image)
+    @product = FactoryBot.create(:product_with_associations)
+    @image = FactoryBot.create(:image)
   end
 
   describe "perform" do
@@ -14,7 +14,7 @@ describe ProductUpdateNotificationJob do
     end
 
     it 'should email users if users have previously downloaded the product' do
-      expect(Download).to receive(:update_all_users_who_have_downloaded_at_least_once).and_return([FactoryGirl.create(:user)])
+      expect(Download).to receive(:update_all_users_who_have_downloaded_at_least_once).and_return([FactoryBot.create(:user)])
       expect(ProductUpdateNotificationJob).to receive(:email_users_about_updated_instructions)
       ProductUpdateNotificationJob.perform('product_id' => @product.id, 'message' => 'Test')
     end
@@ -22,7 +22,7 @@ describe ProductUpdateNotificationJob do
 
   describe "email_users_about_updated_instructions" do
     it "should send an email to each user who wants to get one" do
-      expect(Download).to receive(:update_all_users_who_have_downloaded_at_least_once).and_return([FactoryGirl.create(:user)])
+      expect(Download).to receive(:update_all_users_who_have_downloaded_at_least_once).and_return([FactoryBot.create(:user)])
       expect(UpdateMailer).to receive(:updated_instructions).once.and_return(Mail::Message.new(from: 'fake', to: 'fake'))
       expect_any_instance_of(Mail::Message).to receive(:deliver).once.and_return(true)
       ProductUpdateNotificationJob.perform('product_id' => @product.id, 'message' => 'Test')

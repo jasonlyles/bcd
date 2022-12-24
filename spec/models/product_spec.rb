@@ -2,28 +2,28 @@ require 'spec_helper'
 
 describe Product do
   before do
-    @product_type = FactoryGirl.create(:product_type, :digital_product => true)
-    @product_type2 = FactoryGirl.create(:product_type, :name => 'Models', :digital_product => false)
-    @category = FactoryGirl.create(:category)
-    @subcategory = FactoryGirl.create(:subcategory)
+    @product_type = FactoryBot.create(:product_type, :digital_product => true)
+    @product_type2 = FactoryBot.create(:product_type, :name => 'Models', :digital_product => false)
+    @category = FactoryBot.create(:category)
+    @subcategory = FactoryBot.create(:subcategory)
   end
 
   it "should find live products from the same category" do
-    category = FactoryGirl.create(:category, :name => "blah")
-    products = [FactoryGirl.create(:product),
-                FactoryGirl.create(:product,
+    category = FactoryBot.create(:category, :name => "blah")
+    products = [FactoryBot.create(:product),
+                FactoryBot.create(:product,
                                    :name => "Grader",
                                    :product_code => "CV002",
                                    :description => "Winter Village Grader... are you kidding? w00t! Plow your winter village to the ground and then flatten it out with this sweet grader.",
                                    :price => "5.00",
                                    :ready_for_public => "f"),
-                FactoryGirl.create(:product,
+                FactoryBot.create(:product,
                                    :name => "Zeppelin",
                                    :product_code => "CV003",
                                    :description => "Winter Village Zeppelin... are you kidding? w00t! Flatten London with this Winter Village Zeppelin, then land in a nearby village and celebrate Christmas.",
                                    :price => "5.00",
                                    :ready_for_public => "t"),
-                FactoryGirl.create(:product,
+                FactoryBot.create(:product,
                                    :name => "Chocolate Factory",
                                    :product_code => "CB004",
                                    :description => "Winter Village Chocolate Factory... are you kidding? w00t! Charlie won't believe his eyes when he gets to celebrate Christmas inside a chocolate factory... with oompah-loompahs.",
@@ -38,8 +38,8 @@ describe Product do
 
   it "should only find models that are ready for the public" do
     #First product is ready for public, 2nd one is not, so there should only be 1 product
-    products = [FactoryGirl.create(:product),
-                 FactoryGirl.create(:product,
+    products = [FactoryBot.create(:product),
+                 FactoryBot.create(:product,
                          :name => "Grader",
                          :product_code => "WC002",
                          :description => "Winter Village Grader... are you kidding? w00t! Plow your winter village to the ground and then flatten it out with this sweet grader.",
@@ -52,20 +52,20 @@ describe Product do
   end
 
   it "should delete related images" do
-    @product = FactoryGirl.create(:product)
-    @image = FactoryGirl.create(:image)
+    @product = FactoryBot.create(:product)
+    @image = FactoryBot.create(:image)
 
     expect(lambda { @product.destroy }).to change(Image, :count)
   end
 
   it "is valid with valid attributes" do
-    @product = FactoryGirl.create(:product)
+    @product = FactoryBot.create(:product)
     expect(@product).to be_valid
   end
 
   it "is invalid if product_code is not unique" do
-    @products = [FactoryGirl.create(:product),
-                 FactoryGirl.create(:product,
+    @products = [FactoryBot.create(:product),
+                 FactoryBot.create(:product,
                          :name => "Grader",
                          :product_code => "WC002",
                          :product_type_id => @product_type.id,
@@ -88,8 +88,8 @@ describe Product do
   end
 
   it "is invalid if name is not unique" do
-    @products = [FactoryGirl.create(:product),
-                 FactoryGirl.create(:product,
+    @products = [FactoryBot.create(:product),
+                 FactoryBot.create(:product,
                          :name => "Grader",
                          :product_code => "WC002",
                          :product_type_id => @product_type.id,
@@ -154,54 +154,54 @@ describe Product do
   end
 
   it "should be invalid if it is free and has a price > 0" do
-    @product = FactoryGirl.build(:free_product, :price => 10)
+    @product = FactoryBot.build(:free_product, :price => 10)
     @product.valid?
 
     expect(@product.errors[:price]).to include(" Freebies should be $0")
   end
 
   it "should be valid if it is free and has a price of 0" do
-    @product = FactoryGirl.create(:free_product)
+    @product = FactoryBot.create(:free_product)
 
     expect(@product).to be_valid
   end
 
   it "should be invalid if it has a product_code that doesn't match the pattern for Instructions" do
-    @product = FactoryGirl.build(:product, :product_code => 'doh')
+    @product = FactoryBot.build(:product, :product_code => 'doh')
     @product.valid?
 
     expect(@product.errors[:product_code]).to include("Instruction product codes must follow the pattern CB002.")
   end
 
   it "should be invalid if it has a product_code that doesn't match the pattern for Models" do
-    @product1 = FactoryGirl.create(:product)
-    @product = FactoryGirl.build(:product, :product_type_id => @product_type2.id, :name => 'fake model', :product_code => 'doh')
+    @product1 = FactoryBot.create(:product)
+    @product = FactoryBot.build(:product, :product_type_id => @product_type2.id, :name => 'fake model', :product_code => 'doh')
     @product.valid?
 
     expect(@product.errors[:product_code]).to include("Model product codes must follow the pattern CB002M.")
   end
 
   it "should be invalid if it has a product_code that doesn't match the pattern for Kits" do
-    @product_type3 = FactoryGirl.create(:product_type, :name => 'Kits', :digital_product => false)
-    @product1 = FactoryGirl.create(:product)
-    @product = FactoryGirl.build(:product, :product_type_id => @product_type3.id, :name => 'fake kit', :product_code => 'doh')
+    @product_type3 = FactoryBot.create(:product_type, :name => 'Kits', :digital_product => false)
+    @product1 = FactoryBot.create(:product)
+    @product = FactoryBot.build(:product, :product_type_id => @product_type3.id, :name => 'fake kit', :product_code => 'doh')
     @product.valid?
 
     expect(@product.errors[:product_code]).to include("Kit product codes must follow the pattern CB002K.")
   end
 
   it "should be invalid if there is no base model with the same base product_code for Models" do
-    @product1 = FactoryGirl.create(:product)
-    @product = FactoryGirl.build(:product, :product_type_id => @product_type2.id, :name => 'fake model', :product_code => 'HH001M')
+    @product1 = FactoryBot.create(:product)
+    @product = FactoryBot.build(:product, :product_type_id => @product_type2.id, :name => 'fake model', :product_code => 'HH001M')
     @product.valid?
 
     expect(@product.errors[:product_code]).to include("Model product codes must have a base model with a product code of HH001")
   end
 
   it "should be invalid if there is no base model with the same base product_code for Kits" do
-    @product_type3 = FactoryGirl.create(:product_type, :name =>"Kits")
-    @product1 = FactoryGirl.create(:product)
-    @product = FactoryGirl.build(:product, :product_type_id => @product_type3.id, :name => 'fake kit', :product_code => 'HH001K')
+    @product_type3 = FactoryBot.create(:product_type, :name =>"Kits")
+    @product1 = FactoryBot.create(:product)
+    @product = FactoryBot.build(:product, :product_type_id => @product_type3.id, :name => 'fake kit', :product_code => 'HH001K')
     @product.valid?
 
     expect(@product.errors[:product_code]).to include("Kit product codes must have a base model with a product code of HH001")
@@ -209,23 +209,23 @@ describe Product do
 
   describe "destroy" do
     it "should switch the ready_for_public flag to false if there are existing orders for the product" do
-      @product = FactoryGirl.create(:product)
-      @order = FactoryGirl.create(:order)
-      @line_item = FactoryGirl.create(:line_item, :product_id => @product.id, :order_id => @order.id)
+      @product = FactoryBot.create(:product)
+      @order = FactoryBot.create(:order)
+      @line_item = FactoryBot.create(:line_item, :product_id => @product.id, :order_id => @order.id)
 
       expect(lambda{@product.destroy}).to change(@product, :ready_for_public).from(true).to(false)
     end
 
     it "should not destroy the product if there are existing orders for the product" do
-      @product = FactoryGirl.create(:product)
-      @order = FactoryGirl.create(:order)
-      @line_item = FactoryGirl.create(:line_item, :product_id => @product.id, :order_id => @order.id)
+      @product = FactoryBot.create(:product)
+      @order = FactoryBot.create(:order)
+      @line_item = FactoryBot.create(:line_item, :product_id => @product.id, :order_id => @order.id)
 
       expect(lambda { @product.destroy }).to_not change(Product, :count)
     end
 
     it "should delete the product if there are no orders for the product" do
-      @product = FactoryGirl.create(:product)
+      @product = FactoryBot.create(:product)
 
       expect(lambda { @product.destroy }).to change(Product, :count)
     end
@@ -281,45 +281,45 @@ describe Product do
 
   describe "out_of_stock?" do
     it "should return false if quantity > 0" do
-      @base_product = FactoryGirl.create(:product, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
-      @product = FactoryGirl.create(:product, :quantity => 2, :product_type_id => @product_type2.id, :product_code => 'XX111M', :name => 'fake product')
+      @base_product = FactoryBot.create(:product, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
+      @product = FactoryBot.create(:product, :quantity => 2, :product_type_id => @product_type2.id, :product_code => 'XX111M', :name => 'fake product')
       expect(@product.out_of_stock?).to eq(false)
     end
 
     it "should return true if quantity is 0" do
-      @product_type3 = FactoryGirl.create(:product_type, :name => 'Kits', :digital_product => false)
-      @base_product = FactoryGirl.create(:product, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
-      @product = FactoryGirl.create(:product, :quantity => 0, :product_type_id => @product_type3.id, :product_code => 'XX111K', :name => 'fake product')
+      @product_type3 = FactoryBot.create(:product_type, :name => 'Kits', :digital_product => false)
+      @base_product = FactoryBot.create(:product, :quantity => 1, :product_type_id => @product_type.id, :product_code => 'XX111')
+      @product = FactoryBot.create(:product, :quantity => 0, :product_type_id => @product_type3.id, :product_code => 'XX111K', :name => 'fake product')
       expect(@product.out_of_stock?).to eq(true)
     end
   end
 
   describe "base_product_code" do
     it "should pick out the base product code when passed a product code" do
-      @base_product = FactoryGirl.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
-      @product = FactoryGirl.create(:product, :product_type_id => @product_type2.id, :product_code => 'XX001M', :name => 'fake product')
+      @base_product = FactoryBot.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
+      @product = FactoryBot.create(:product, :product_type_id => @product_type2.id, :product_code => 'XX001M', :name => 'fake product')
       expect(@product.base_product_code('XX045C')).to eq('XX045')
     end
 
     it "should pick out the base product code using the records product_code" do
-      @base_product = FactoryGirl.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
-      @product = FactoryGirl.create(:product, :product_type_id => @product_type2.id, :product_code => 'XX001M', :name => 'fake product')
+      @base_product = FactoryBot.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
+      @product = FactoryBot.create(:product, :product_type_id => @product_type2.id, :product_code => 'XX001M', :name => 'fake product')
       expect(@product.base_product_code).to eq('XX001')
     end
   end
 
   describe "find_by_base_product_code" do
     it "should by a product by its base code" do
-      @product = FactoryGirl.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
+      @product = FactoryBot.create(:product, :product_type_id => @product_type.id, :product_code => 'XX001')
       expect(Product.find_by_base_product_code('XX001M').product_code).to eq('XX001')
     end
   end
 
   describe "find all by price" do
     it "should find all products at a given price point" do
-      @product1 = FactoryGirl.create(:product)
-      @product2 = FactoryGirl.create(:product, :product_type_id => @product_type.id, :name => 'super fakey', :product_code => 'HH001', :price => 10)
-      @product3 = FactoryGirl.create(:product, :product_type_id => @product_type.id, :name => 'free fakey', :product_code => 'HH002', :free => 't', :price => 0)
+      @product1 = FactoryBot.create(:product)
+      @product2 = FactoryBot.create(:product, :product_type_id => @product_type.id, :name => 'super fakey', :product_code => 'HH001', :price => 10)
+      @product3 = FactoryBot.create(:product, :product_type_id => @product_type.id, :name => 'free fakey', :product_code => 'HH002', :free => 't', :price => 0)
 
       prods = Product.find_all_by_price(10)
       expect(prods.length).to eq(2)
@@ -330,19 +330,19 @@ describe Product do
 
   describe "physical_product?" do
     it "should return true if product type is not blank and is != Instructions" do
-      @product1 = FactoryGirl.create(:product)
-      @product2 = FactoryGirl.create(:physical_product)
+      @product1 = FactoryBot.create(:product)
+      @product2 = FactoryBot.create(:physical_product)
 
       expect(@product2.physical_product?).to eq(true)
     end
 
     it "should return false if product type is Instructions or product type is blank" do
-      @product1 = FactoryGirl.create(:product)
+      @product1 = FactoryBot.create(:product)
 
       expect(@product1.physical_product?).to eq(false)
 
       #This represents the case where a product is brand new (via the new action) and doesn't have a type yet
-      @product2 = FactoryGirl.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
+      @product2 = FactoryBot.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
 
       expect(@product2.physical_product?).to eq(false)
     end
@@ -350,21 +350,21 @@ describe Product do
 
   describe "digital_product?" do
     it "should return true if product type is not blank and is == Instructions" do
-      @product1 = FactoryGirl.create(:product)
-      @product2 = FactoryGirl.create(:physical_product)
+      @product1 = FactoryBot.create(:product)
+      @product2 = FactoryBot.create(:physical_product)
 
       expect(@product1.digital_product?).to eq(true)
     end
 
     it "should return false if product type is not Instructions or product type is blank" do
-      @product1 = FactoryGirl.create(:product)
-      @product2 = FactoryGirl.create(:physical_product, :product_type_id => @product_type2.id)
+      @product1 = FactoryBot.create(:product)
+      @product2 = FactoryBot.create(:physical_product, :product_type_id => @product_type2.id)
 
       expect(@product2.digital_product?).to eq(false)
 
       #This represents the case where a product is brand new (via the new action) and doesn't have a type yet.
       #It gets set to true so that all fields are displayed on the product form
-      @product3 = FactoryGirl.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
+      @product3 = FactoryBot.build(:product, :product_type_id => '', :product_code => 'VV001', :name => 'Fake')
 
       expect(@product3.digital_product?).to eq(true)
     end
@@ -372,14 +372,14 @@ describe Product do
 
   describe "main_image" do
     it "should return nil if no image can be found for the product" do
-      @product = FactoryGirl.create(:product)
+      @product = FactoryBot.create(:product)
 
       expect(@product.main_image).to be_nil
     end
 
     it "should return an image url if an image is found for the product" do
-      @product = FactoryGirl.create(:product)
-      @image = FactoryGirl.create(:image)
+      @product = FactoryBot.create(:product)
+      @image = FactoryBot.create(:image)
 
       expect(@product.main_image).not_to be_nil
     end
@@ -387,9 +387,9 @@ describe Product do
 
   describe "retire" do
     it "should set category_id and subcategory_id to Retired IDs and ready_for_public to false" do
-      @retired_category = FactoryGirl.create(:category, name: "Retired")
-      @retired_subcategory = FactoryGirl.create(:subcategory, name: "Retired", code: 'BB')
-      @product = FactoryGirl.create(:product, ready_for_public: true)
+      @retired_category = FactoryBot.create(:category, name: "Retired")
+      @retired_subcategory = FactoryBot.create(:subcategory, name: "Retired", code: 'BB')
+      @product = FactoryBot.create(:product, ready_for_public: true)
       @product.retire
 
       expect(@product.category_id).to eq(@retired_category.id)
@@ -400,13 +400,13 @@ describe Product do
 
   describe "discounted_price" do
     it 'should return the price if there is no discount' do
-      @product = FactoryGirl.create(:product, discount_percentage: 0)
+      @product = FactoryBot.create(:product, discount_percentage: 0)
 
       expect(@product.discounted_price.to_f).to eq(@product.price.to_f)
     end
 
     it 'should return a discounted price if discount_percentage is set' do
-      @product = FactoryGirl.create(:product, discount_percentage: 25)
+      @product = FactoryBot.create(:product, discount_percentage: 25)
 
       expect(@product.discounted_price.to_f).to eq(7.5)
     end

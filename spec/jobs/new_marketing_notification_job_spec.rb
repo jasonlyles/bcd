@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe NewMarketingNotificationJob do
   before do
-    @product = FactoryGirl.create(:product_with_associations)
-    @image = FactoryGirl.create(:image)
-    @email_campaign = FactoryGirl.create(:email_campaign)
+    @product = FactoryBot.create(:product_with_associations)
+    @image = FactoryBot.create(:image)
+    @email_campaign = FactoryBot.create(:email_campaign)
   end
 
   describe "perform" do

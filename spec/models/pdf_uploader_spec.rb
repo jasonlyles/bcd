@@ -5,7 +5,7 @@ describe PdfUploader do
   include CarrierWave::Test::Matchers
 
   before do
-    product = FactoryGirl.create(:product_with_associations)
+    product = FactoryBot.create(:product_with_associations)
     @uploader = PdfUploader.new(product, :pdf)
     @uploader.store!
     File.open(File.join(Rails.root, 'spec', 'support', 'pdfs', 'test.pdf')) { |f| @uploader.store!(f) }

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Admin::CategoriesController do
 
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
+    @radmin ||= FactoryBot.create(:radmin)
   end
 
   before(:each) do |example|
@@ -166,7 +166,7 @@ describe Admin::CategoriesController do
     end
 
     it "should not destroy a category that has subcategories" do
-      @category = FactoryGirl.create(:category_with_subcategories)
+      @category = FactoryBot.create(:category_with_subcategories)
       delete :destroy, params: { id: @category.id }
 
       expect(response).to redirect_to(admin_categories_url)
@@ -184,7 +184,7 @@ describe Admin::CategoriesController do
 
   describe "requesting a categories subcategories" do
     it "should fetch some subcategories" do
-      @category = FactoryGirl.create(:category_with_subcategories)
+      @category = FactoryBot.create(:category_with_subcategories)
       get :subcategories, params: { id: 1 }, format: :json
 
       expect(JSON.parse(response.body)[0]['description']).to eq('City Vehicles are awesome')

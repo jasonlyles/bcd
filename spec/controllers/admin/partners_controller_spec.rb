@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Admin::PartnersController do
 
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
+    @radmin ||= FactoryBot.create(:radmin)
   end
 
   before(:each) do

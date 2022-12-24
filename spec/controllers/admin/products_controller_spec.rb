@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Admin::ProductsController do
 
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @category = FactoryGirl.create(:category)
-    @subcategory = FactoryGirl.create(:subcategory)
-    @product_type = FactoryGirl.create(:product_type)
+    @radmin ||= FactoryBot.create(:radmin)
+    @category = FactoryBot.create(:category)
+    @subcategory = FactoryBot.create(:subcategory)
+    @product_type = FactoryBot.create(:product_type)
   end
 
   before(:each) do |example|
@@ -74,7 +74,7 @@ describe Admin::ProductsController do
     end
 
     it "should pre-populate some product fields if a product_code is passed in params" do
-      product = FactoryGirl.create(:product, category: @category, subcategory: @subcategory)
+      product = FactoryBot.create(:product, category: @category, subcategory: @subcategory)
       get :new, params: { product_code: product.product_code }
 
       expect(assigns(:product).name).to eq(product.name)
@@ -195,7 +195,7 @@ describe Admin::ProductsController do
 
   describe 'assign_type' do
     it "should populate @product_types" do
-      @product_type = FactoryGirl.create(:product_type, :name => 'Models')
+      @product_type = FactoryBot.create(:product_type, :name => 'Models')
       controller.send(:assign_type)
 
       expect(assigns(:product_types)).to eq([["Instructions", 1], ["Models", 2]])
@@ -205,9 +205,9 @@ describe Admin::ProductsController do
   describe "retire_product" do
     it "should retire the product" do
       request.env["HTTP_REFERER"] = '/'
-      retired_category = FactoryGirl.create(:category, name: 'Retired')
-      retired_subcategory = FactoryGirl.create(:subcategory, name: 'Retired', code: 'RT')
-      product = FactoryGirl.create(:product, category_id: @category.id, subcategory_id: @subcategory.id)
+      retired_category = FactoryBot.create(:category, name: 'Retired')
+      retired_subcategory = FactoryBot.create(:subcategory, name: 'Retired', code: 'RT')
+      product = FactoryBot.create(:product, category_id: @category.id, subcategory_id: @subcategory.id)
       post :retire_product, params: { product: { id: product.id } }
 
       expect(assigns(:product)).to eq(product)

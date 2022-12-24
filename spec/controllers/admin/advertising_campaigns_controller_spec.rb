@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Admin::AdvertisingCampaignsController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @partner = FactoryGirl.create(:partner, id: 1)
+    @radmin ||= FactoryBot.create(:radmin)
+    @partner = FactoryBot.create(:partner, id: 1)
   end
 
   before(:each) do

@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Admin::ElementsController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @part = FactoryGirl.create(:part)
-    @color = FactoryGirl.create(:color)
+    @radmin ||= FactoryBot.create(:radmin)
+    @part = FactoryBot.create(:part)
+    @color = FactoryBot.create(:color)
   end
 
   before(:each) do |example|
@@ -180,7 +180,7 @@ describe Admin::ElementsController do
     context 'where the element already exists' do
       it 'should find the existing element and return it' do
         allow_any_instance_of(ImageUploader).to receive(:present?).and_return(true)
-        element = FactoryGirl.create(:element, color_id: @color.id, part_id: @part.id, image: 'fake.jpg')
+        element = FactoryBot.create(:element, color_id: @color.id, part_id: @part.id, image: 'fake.jpg')
 
         params = {
           part_name: @part.name,

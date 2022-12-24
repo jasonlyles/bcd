@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe InstantPaymentNotification, type: :model do
   before do
-    FactoryGirl.create(:product_with_associations)
+    FactoryBot.create(:product_with_associations)
   end
 
   describe 'valid_ipn?' do
@@ -42,14 +42,14 @@ describe InstantPaymentNotification, type: :model do
 
   describe 'valid_amount?' do
     it "should return true for a valid amount" do
-      order = FactoryGirl.create(:order_with_line_items)
+      order = FactoryBot.create(:order_with_line_items)
       ipn = InstantPaymentNotification.new({ order_id: order.id, params: { mc_gross: '10.0' } })
 
       expect(ipn.valid_amount?).to eq(true)
     end
 
     it "should return false for an invalid amount" do
-      order = FactoryGirl.create(:order_with_line_items)
+      order = FactoryBot.create(:order_with_line_items)
       ipn = InstantPaymentNotification.new({ order: order, params: { mc_gross: '0.25' } })
 
       expect(ipn.valid_amount?).to eq(false)

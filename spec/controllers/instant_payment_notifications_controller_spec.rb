@@ -3,8 +3,8 @@ require 'spec_helper'
 describe InstantPaymentNotificationsController do
 
   before do
-    @user = FactoryGirl.create(:user)
-    @order = FactoryGirl.create(:order, user_id: @user.id)
+    @user = FactoryBot.create(:user)
+    @order = FactoryBot.create(:order, user_id: @user.id)
   end
 
   # This should return the minimal set of attributes required to create a valid

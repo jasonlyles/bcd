@@ -30,7 +30,7 @@ describe RegistrationsController do
     context 'can find user based on email passed in' do
       context 'user is saved as a guest' do
         it 'should set user account status to A and make a call to save authentication' do
-          @user = FactoryGirl.create(:user, :account_status => 'G')
+          @user = FactoryBot.create(:user, :account_status => 'G')
           expect_any_instance_of(User).to receive(:encrypted_password?).and_return(nil)
           expect(controller).to receive(:save_authentication)
           request.env['devise.mapping'] = Devise.mappings[:user]
@@ -43,7 +43,7 @@ describe RegistrationsController do
 
       context 'user has an existing password' do
         it 'should redirect to the signin page with a notice to sign in' do
-          @user = FactoryGirl.create(:user)
+          @user = FactoryBot.create(:user)
           expect(controller).to_not receive(:save_authentication)
           request.env['devise.mapping'] = Devise.mappings[:user]
           post :create, params: { user: { email: @user.email } }
@@ -92,7 +92,7 @@ describe RegistrationsController do
 
   describe "update" do
     it "should update an existing registration password for an email/password user with valid params" do
-      @user = FactoryGirl.create(:user, :password => 'blahblah1234')
+      @user = FactoryBot.create(:user, :password => 'blahblah1234')
       encrypted_password = @user.encrypted_password
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user
@@ -104,7 +104,7 @@ describe RegistrationsController do
     end
 
     it "should not update an existing registration for an email/password user with invalid params" do
-      @user = FactoryGirl.create(:user, password: 'blahblah1234')
+      @user = FactoryBot.create(:user, password: 'blahblah1234')
       email = @user.email
       request.env['devise.mapping'] = Devise.mappings[:user]
       sign_in @user

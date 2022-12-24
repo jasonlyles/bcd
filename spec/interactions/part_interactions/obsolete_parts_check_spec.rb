@@ -56,7 +56,7 @@ describe PartInteractions::ObsoletePartsCheck do
         }
     }
 
-    @part = FactoryGirl.create(:part, ldraw_id: '4276a')
+    @part = FactoryBot.create(:part, ldraw_id: '4276a')
   end
 
   describe "run" do

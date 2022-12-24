@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe Admin::PartsListsController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @product = FactoryGirl.create(:product_with_associations)
+    @radmin ||= FactoryBot.create(:radmin)
+    @product = FactoryBot.create(:product_with_associations)
   end
 
   before(:each) do |example|
@@ -182,8 +182,8 @@ describe Admin::PartsListsController do
   describe 'create_new_elements' do
     context 'interaction succeeded' do
       it 'should set appropriate values' do
-        FactoryGirl.create(:part, name: 'Brick 1 x 1')
-        FactoryGirl.create(:part, name: 'Brick 1 x 2')
+        FactoryBot.create(:part, name: 'Brick 1 x 1')
+        FactoryBot.create(:part, name: 'Brick 1 x 2')
 
         post :create_new_elements, params: { parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' } }, format: :js
 
@@ -211,8 +211,8 @@ describe Admin::PartsListsController do
   describe 'swap_parts' do
     context 'interaction succeeded' do
       it 'should set appropriate values' do
-        FactoryGirl.create(:part, name: 'Brick 1 x 1')
-        FactoryGirl.create(:part, name: 'Brick 1 x 2')
+        FactoryBot.create(:part, name: 'Brick 1 x 1')
+        FactoryBot.create(:part, name: 'Brick 1 x 2')
 
         post :swap_parts, params: { parts_lists: { old_part: 'Brick 1 x 1', new_part: 'Brick 1 x 2' } }, format: :js
 
@@ -234,7 +234,7 @@ describe Admin::PartsListsController do
   describe 'notify_customers_of_parts_list_update' do
     context 'PartsListUpdateNotificationJob queued' do
       it 'should return a happy message' do
-        parts_list = FactoryGirl.create(:xml_parts_list)
+        parts_list = FactoryBot.create(:xml_parts_list)
         allow(PartsListUpdateNotificationJob).to receive(:perform_later)
 
         post :notify_customers_of_parts_list_update, params: { parts_lists: { parts_list_ids: parts_list.id, message: 'Test' } }, format: :js

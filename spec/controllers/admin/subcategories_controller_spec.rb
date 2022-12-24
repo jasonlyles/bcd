@@ -3,9 +3,9 @@ require 'spec_helper'
 describe Admin::SubcategoriesController do
 
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @product_type = FactoryGirl.create(:product_type)
-    @category = FactoryGirl.create(:category)
+    @radmin ||= FactoryBot.create(:radmin)
+    @product_type = FactoryBot.create(:product_type)
+    @category = FactoryBot.create(:category)
   end
 
   before(:each) do |example|
@@ -170,7 +170,7 @@ describe Admin::SubcategoriesController do
     end
 
     it "should not destroy a subcategory that has products" do
-      @subcat = FactoryGirl.create(:subcategory_with_products)
+      @subcat = FactoryBot.create(:subcategory_with_products)
       sign_in @radmin
       delete :destroy, params: { id: @subcat.id }
       expect(response).to redirect_to(admin_subcategories_url)
@@ -180,8 +180,8 @@ describe Admin::SubcategoriesController do
 
   describe "model_code" do
     it "should get a suggested model_code" do
-      @subcategory = FactoryGirl.create(:subcategory)
-      @product = FactoryGirl.create(:product)
+      @subcategory = FactoryBot.create(:subcategory)
+      @product = FactoryBot.create(:product)
       sign_in @radmin
       get :model_code, params: { id: @subcategory.id }, format: :json
 

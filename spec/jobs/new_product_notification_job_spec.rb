@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe NewProductNotificationJob do
   before do
-    @product = FactoryGirl.create(:product_with_associations)
-    @image = FactoryGirl.create(:image)
+    @product = FactoryBot.create(:product_with_associations)
+    @image = FactoryBot.create(:image)
   end
 
   describe "perform" do

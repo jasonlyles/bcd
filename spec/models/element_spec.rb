@@ -29,9 +29,9 @@ describe Element do
     context 'returns data' do
       it 'should update self and relevant part' do
         allow(Rebrickable).to receive(:get_element_combo).and_return(@get_element_combo_results)
-        part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_rebrickable: true)
-        color = FactoryGirl.create(:color)
-        element = FactoryGirl.create(:element)
+        part = FactoryBot.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_rebrickable: true)
+        color = FactoryBot.create(:color)
+        element = FactoryBot.create(:element)
 
         element.update_from_rebrickable(3001, 0)
         part.reload
@@ -44,9 +44,9 @@ describe Element do
     context 'doesnt return data' do
       it 'should not update self or relevant part' do
         allow(Rebrickable).to receive(:get_element_combo).and_return({})
-        part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_rebrickable: true)
-        color = FactoryGirl.create(:color)
-        element = FactoryGirl.create(:element, original_image_url: nil)
+        part = FactoryBot.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_rebrickable: true)
+        color = FactoryBot.create(:color)
+        element = FactoryBot.create(:element, original_image_url: nil)
 
         element.update_from_rebrickable(3001, 0)
         part.reload
@@ -61,9 +61,9 @@ describe Element do
     context 'returns data' do
       it 'should update self and relevant part' do
         allow(Bricklink).to receive(:get_element_image).and_return(@get_element_image_results)
-        part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_bricklink: true)
-        color = FactoryGirl.create(:color)
-        element = FactoryGirl.create(:element)
+        part = FactoryBot.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_bricklink: true)
+        color = FactoryBot.create(:color)
+        element = FactoryBot.create(:element)
 
         element.update_from_bricklink(3001, 0)
         part.reload
@@ -76,9 +76,9 @@ describe Element do
     context 'doesnt return data' do
       it 'should not update self or relevant part' do
         allow(Bricklink).to receive(:get_element_image).and_return({})
-        part = FactoryGirl.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_bricklink: true)
-        color = FactoryGirl.create(:color)
-        element = FactoryGirl.create(:element, original_image_url: nil)
+        part = FactoryBot.create(:part, ldraw_id: 3001, name: '2x2 Brick', check_bricklink: true)
+        color = FactoryBot.create(:color)
+        element = FactoryBot.create(:element, original_image_url: nil)
 
         element.update_from_bricklink(3001, 0)
         part.reload
@@ -92,9 +92,9 @@ describe Element do
   describe 'Element.find_or_create_via_external' do
     context 'element image is present' do
       it 'should return element found in db' do
-        part = FactoryGirl.create(:part, ldraw_id: 3000)
-        color = FactoryGirl.create(:color, ldraw_id: 3)
-        element = FactoryGirl.create(:element, image: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files', 'example.png')), part_id: part.id, color_id: color.id)
+        part = FactoryBot.create(:part, ldraw_id: 3000)
+        color = FactoryBot.create(:color, ldraw_id: 3)
+        element = FactoryBot.create(:element, image: File.open(File.join(Rails.root, 'spec', 'fixtures', 'files', 'example.png')), part_id: part.id, color_id: color.id)
         part_key = '3000_3'
         returned_element = Element.find_or_create_via_external(part_key)
 
@@ -104,9 +104,9 @@ describe Element do
 
     context 'element image is not present' do
       it 'should update via bricklink and rebrickable and store an image' do
-        part = FactoryGirl.create(:part, ldraw_id: 3000)
-        color = FactoryGirl.create(:color, ldraw_id: 3)
-        element = FactoryGirl.create(:element, part_id: part.id, color_id: color.id, original_image_url: nil)
+        part = FactoryBot.create(:part, ldraw_id: 3000)
+        color = FactoryBot.create(:color, ldraw_id: 3)
+        element = FactoryBot.create(:element, part_id: part.id, color_id: color.id, original_image_url: nil)
         part_key = '3000_3'
         expect_any_instance_of(Element).to receive(:update_from_rebrickable)
         expect_any_instance_of(Element).to receive(:update_from_bricklink)
