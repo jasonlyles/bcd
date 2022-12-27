@@ -5,7 +5,7 @@ describe Order do
     @product = FactoryBot.create(:product_with_associations)
   end
 
-  describe "has_physical_product?" do
+  describe 'has_physical_product?' do
     it "should return false if the order doesn't include a physical product" do
       li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
       order = Order.new
@@ -13,7 +13,7 @@ describe Order do
       expect(order.includes_physical_item?).to eq(false)
     end
 
-    it "should return true if the order includes a physical product" do
+    it 'should return true if the order includes a physical product' do
       product_type = FactoryBot.create(:product_type, name: 'Models', digital_product: false)
       product2 = FactoryBot.create(:physical_product, product_type_id: product_type.id)
       li1 = LineItem.create product_id: product2.id, quantity: 1, total_price: 5
@@ -24,8 +24,8 @@ describe Order do
     end
   end
 
-  describe "includes_digital_item?" do
-    it "should return true if the order has at least one digital product" do
+  describe 'includes_digital_item?' do
+    it 'should return true if the order has at least one digital product' do
       li1 = LineItem.new product_id: @product.id, quantity: 1, total_price: 5
       order = Order.new
       order.line_items << li1
@@ -35,7 +35,7 @@ describe Order do
     it "should return false if the order doesn't have at least one digital product" do
       product_type = FactoryBot.create(:product_type, name: 'Models', digital_product: false)
       product = FactoryBot.create(:physical_product, product_type_id: product_type.id)
-      li1 = LineItem.new :product_id => product.id, quantity: 1, total_price: 5
+      li1 = LineItem.new product_id: product.id, quantity: 1, total_price: 5
       order = Order.new
       order.line_items << li1
 
@@ -43,8 +43,8 @@ describe Order do
     end
   end
 
-  describe "retrieve_digital_items" do
-    it "should return an array of digital products if the order includes digital products" do
+  describe 'retrieve_digital_items' do
+    it 'should return an array of digital products if the order includes digital products' do
       FactoryBot.create(:product_type, name: 'Models', digital_product: false)
       product2 = FactoryBot.create(:product, name: 'fake', product_code: 'CB099', price: 10)
       product3 = FactoryBot.create(:physical_product)
@@ -70,8 +70,8 @@ describe Order do
     end
   end
 
-  describe "self.shipping_status_not_complete" do
-    it "should get records where shipping status is not complete" do
+  describe 'self.shipping_status_not_complete' do
+    it 'should get records where shipping status is not complete' do
       order1 = FactoryBot.create(:order, { shipping_status: '1' })
       order2 = FactoryBot.create(:order, { shipping_status: '0' })
       order3 = FactoryBot.create(:order, { shipping_status: '1' })
@@ -81,8 +81,8 @@ describe Order do
     end
   end
 
-  describe "self.shipping_status_complete" do
-    it "should get records where shipping status is complete" do
+  describe 'self.shipping_status_complete' do
+    it 'should get records where shipping status is complete' do
       order1 = FactoryBot.create(:order, { shipping_status: '1' })
       order2 = FactoryBot.create(:order, { shipping_status: '0' })
       order3 = FactoryBot.create(:order, { shipping_status: '0' })
@@ -92,17 +92,16 @@ describe Order do
     end
   end
 
-  describe "add_line_items_from_cart" do
-    it "should add line items from cart" do
+  describe 'add_line_items_from_cart' do
+    it 'should add line items from cart' do
       cart = Cart.new
       cart.add_product(@product)
       cart.add_product(FactoryBot.create(:product,
-                               name: 'Grader',
-                               product_code: 'WC002',
-                               description: 'Winter Village Grader... are you kidding? w00t! Plow your winter village to the ground and then flatten it out with this sweet grader.',
-                               price: '5.00',
-                               ready_for_public: 't'
-                       ))
+                                         name: 'Grader',
+                                         product_code: 'WC002',
+                                         description: 'Winter Village Grader... are you kidding? w00t! Plow your winter village to the ground and then flatten it out with this sweet grader.',
+                                         price: '5.00',
+                                         ready_for_public: 't'))
 
       order = Order.new
       order.add_line_items_from_cart(cart)
@@ -111,8 +110,8 @@ describe Order do
     end
   end
 
-  describe "total_price" do
-    it "should return a total price" do
+  describe 'total_price' do
+    it 'should return a total price' do
       li1 = LineItem.new product_id: 1, quantity: 1, total_price: 5
       li2 = LineItem.new product_id: 2, quantity: 1, total_price: 10
       order = Order.new
@@ -122,40 +121,40 @@ describe Order do
     end
   end
 
-  it "should delete related line_items when it gets deleted" do
+  it 'should delete related line_items when it gets deleted' do
     @order = FactoryBot.create(:order_with_line_items)
 
-    expect(lambda { @order.destroy }).to change(LineItem, :count).from(1).to(0)
+    expect { @order.destroy }.to change(LineItem, :count).from(1).to(0)
   end
 
-  describe "Order.all_transactions_for_month" do
-    it "should return an array o arrays with each array representing a single transaction, with all transactions for a month" do
+  describe 'Order.all_transactions_for_month' do
+    it 'should return an array o arrays with each array representing a single transaction, with all transactions for a month' do
       @user = FactoryBot.create(:user)
       @order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user_id: @user.id)
-      transactions = Order.all_transactions_for_month(Date.today.month,Date.today.year)
-      expect(transactions).to eq([['charlie_brown@peanuts.com', 'blarney', 'blar', 'COMPLETED', Date.today.strftime("%m/%d/%Y"), 'CB001 Colonial Revival House', 1, '10.0']])
+      transactions = Order.all_transactions_for_month(Date.today.month, Date.today.year)
+      expect(transactions).to eq([['charlie_brown@peanuts.com', 'blarney', 'blar', 'COMPLETED', Date.today.strftime('%m/%d/%Y'), 'CB001 Colonial Revival House', 1, '10.0']])
     end
   end
 
-  describe "Order.transaction_csv" do
-    it "should take transactions fed in and return a csv" do
+  describe 'Order.transaction_csv' do
+    it 'should take transactions fed in and return a csv' do
       @user = FactoryBot.create(:user)
       @order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user_id: @user.id)
-      transactions = Order.all_transactions_for_month(Date.today.month,Date.today.year)
+      transactions = Order.all_transactions_for_month(Date.today.month, Date.today.year)
       transaction_csv = Order.transaction_csv(transactions)
-      expect(transaction_csv).to  eq("Email,Transaction ID,Request ID,Status,Date,Product,Qty,Total Price\ncharlie_brown@peanuts.com,blarney,blar,COMPLETED,#{Date.today.strftime("%m/%d/%Y")},CB001 Colonial Revival House,1,10.0\n")
+      expect(transaction_csv).to eq("Email,Transaction ID,Request ID,Status,Date,Product,Qty,Total Price\ncharlie_brown@peanuts.com,blarney,blar,COMPLETED,#{Date.today.strftime('%m/%d/%Y')},CB001 Colonial Revival House,1,10.0\n")
     end
   end
 
-  describe "retrieve_download_links" do
+  describe 'retrieve_download_links' do
     context 'the product in question includes instructions' do
-      it "should return an array of urls with query strings, paired with descriptive titles for each link" do
+      it 'should return an array of urls with query strings, paired with descriptive titles for each link' do
         user = FactoryBot.create(:user)
         order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user: user)
         expect(SecureRandom).to receive(:hex).and_return('fake_hex')
 
         links = order.retrieve_download_links
-        expect(links).to eq([["CB001 Colonial Revival House PDF", "/guest_download?id=#{user.guid}&token=fake_hex"]])
+        expect(links).to eq([['CB001 Colonial Revival House PDF', "/guest_download?id=#{user.guid}&token=fake_hex"]])
       end
     end
 

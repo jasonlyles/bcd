@@ -1,6 +1,6 @@
 require 'resque/server'
 
-BrickCity::Application.routes.draw do
+Rails.application.routes.draw do
   mount_roboto
   # Legacy routes
   get 'for-sale', to: 'static#legacy_instructions', constraints: { format: 'html' }
@@ -89,7 +89,6 @@ BrickCity::Application.routes.draw do
     end
     resources :updates
   end
-
 
   if Rails.env.development?
     # MailPreview routes
@@ -213,7 +212,7 @@ BrickCity::Application.routes.draw do
   # misc routes
   get '/campaign/:guid' => 'email_campaigns#register_click_through_and_redirect'
 
-  get ":product_code/:product_name", to: 'store#product_details'
+  get ':product_code/:product_name', to: 'store#product_details'
 
   root to: 'static#index'
 end

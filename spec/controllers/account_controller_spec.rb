@@ -28,7 +28,7 @@ describe AccountController do
       sign_in @user
       get :index
 
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it 'should get only completed orders for display' do

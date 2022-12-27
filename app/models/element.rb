@@ -8,7 +8,7 @@ class Element < ApplicationRecord
   has_many :lots, dependent: :restrict_with_error
   has_many :parts_lists, through: :lots
   has_one :image
-  mount_uploader :image, ImageUploader
+  mount_uploader :image, ImageUploader, validate_integrity: true
 
   after_commit :destroy_image, on: :destroy
 
@@ -123,7 +123,7 @@ class Element < ApplicationRecord
     file = "#{parts_image_dir}/#{guid}#{extension}"
     begin
       File.open(file, 'wb') do |fo|
-        fo.write File.open(original_image_url).read
+        fo.write URI.parse(original_image_url).open.read
       end
     rescue StandardError => e
       logger.error "There was a problem getting an image for #{original_image_url}: #{e.message}"

@@ -8,14 +8,14 @@ describe StaticController do
   describe "GET 'index'" do
     it 'should be successful' do
       get 'index'
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
   describe 'GET contact' do
     it 'should get contact' do
       get 'contact'
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -35,7 +35,7 @@ describe StaticController do
         @switch = FactoryBot.create(:switch, switch_on: true)
         get 'maintenance'
 
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

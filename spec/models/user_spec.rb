@@ -16,53 +16,53 @@ describe User do
     end
   end
 
-  it "should not save if tos is not accepted" do
+  it 'should not save if tos is not accepted' do
     user = User.new(email: 'test@test.com')
 
     expect(user).to_not be_valid
   end
 
-  it "should not delete orders when user is deleted" do
+  it 'should not delete orders when user is deleted' do
     user = FactoryBot.create(:user)
     FactoryBot.create(:order, user: user)
 
-    expect(lambda { user.destroy }).to_not change(Order, :count)
+    expect(-> { user.destroy }).to_not change(Order, :count)
   end
 
-  it "should not delete downloads when user is deleted" do
+  it 'should not delete downloads when user is deleted' do
     user = FactoryBot.create(:user)
     FactoryBot.create(:download, user: user)
 
-    expect(lambda{ user.destroy }).to_not change(Download, :count)
+    expect(-> { user.destroy }).to_not change(Download, :count)
   end
 
-  it "should delete authentications when user is deleted" do
+  it 'should delete authentications when user is deleted' do
     user = FactoryBot.create(:user)
     authentication_hash = { 'provider' => 'Twitter', 'uid' => '12345' }
     user.apply_omniauth(authentication_hash)
     user.save
 
-    expect(lambda{ user.destroy }).to change(Authentication, :count).from(1).to(0)
+    expect { user.destroy }.to change(Authentication, :count).from(1).to(0)
   end
 
-  describe "apply_omniauth" do
-    it "should apply omniauth, with a vengeance" do
+  describe 'apply_omniauth' do
+    it 'should apply omniauth, with a vengeance' do
       user = FactoryBot.create(:user)
       authentication_hash = { 'provider' => 'Twitter', 'uid' => '12345' }
       user.apply_omniauth(authentication_hash)
 
-      expect(lambda { user.save }).to change(Authentication, :count).from(0).to(1)
+      expect { user.save }.to change(Authentication, :count).from(0).to(1)
     end
   end
 
-  describe "password_required?" do
-    it "should require a password of a user who has no authentications" do
+  describe 'password_required?' do
+    it 'should require a password of a user who has no authentications' do
       user = FactoryBot.create(:user)
 
       expect(user.password_required?).to eq(true)
     end
 
-    it "should not require a password of a user who has authentications" do
+    it 'should not require a password of a user who has authentications' do
       user = FactoryBot.create(:user)
       authentication_hash = { 'provider' => 'Twitter', 'uid' => '12345' }
       user.apply_omniauth(authentication_hash)
@@ -72,25 +72,25 @@ describe User do
     end
   end
 
-  describe "cancel_account" do
+  describe 'cancel_account' do
     it "should cancel account by changing account_status to 'C'" do
       user = FactoryBot.create(:user)
 
-      expect(lambda { user.cancel_account }).to change(user, :account_status).from('A').to('C')
+      expect { user.cancel_account }.to change(user, :account_status).from('A').to('C')
     end
 
-    it "should not delete a users authentications" do
+    it 'should not delete a users authentications' do
       user = FactoryBot.create(:user)
       FactoryBot.create(:authentication, user: user)
       FactoryBot.create(:authentication, provider: 'Facebook', user: user)
       user = User.find(user.id)
 
-      expect(lambda { user.cancel_account }).to_not change(Authentication, :count)
+      expect(-> { user.cancel_account }).to_not change(Authentication, :count)
     end
   end
 
-  describe "completed_orders" do
-    it "should return a list of completed orders" do
+  describe 'completed_orders' do
+    it 'should return a list of completed orders' do
       user = FactoryBot.create(:user)
       FactoryBot.create(:order)
       FactoryBot.create(:order)
@@ -100,8 +100,8 @@ describe User do
     end
   end
 
-  describe "get_info_for_product" do
-    it "should return a Struct with the product and info about the product, including parts list IDs" do
+  describe 'get_info_for_product' do
+    it 'should return a Struct with the product and info about the product, including parts list IDs' do
       FactoryBot.create(:image)
       user = FactoryBot.create(:user)
       FactoryBot.create(:download)
@@ -109,10 +109,10 @@ describe User do
 
       expect(product_info.product).to be_a(Product)
       expect(product_info.download).to be_a(Download)
-      expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
+      expect(product_info.image_url.to_s).to eq('/images/image/url/1/thumb_example.png')
     end
 
-    it "should return a Struct with the product and info about the product, but nil parts list IDs" do
+    it 'should return a Struct with the product and info about the product, but nil parts list IDs' do
       product_type2 = FactoryBot.create(:product_type, name: 'Models')
       product2 = FactoryBot.create(:product, name: 'Tower of Pisa Model', product_code: 'CB001M', product_type: product_type2)
       image = FactoryBot.create(:image, product_id: product2.id)
@@ -121,12 +121,12 @@ describe User do
 
       expect(product_info.product).to be_a(Product)
       expect(product_info.download).to be_nil
-      expect(product_info.image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
+      expect(product_info.image_url.to_s).to eq('/images/image/url/1/thumb_example.png')
     end
   end
 
-  describe "product_info_for_products_owned" do
-    it "should return an array of Structs with product info about the products the user has rights to" do
+  describe 'product_info_for_products_owned' do
+    it 'should return an array of Structs with product info about the products the user has rights to' do
       FactoryBot.create(:free_product, product_code: 'FF001', name: 'Free stuff')
       FactoryBot.create(:order_with_line_items)
       FactoryBot.create(:image)
@@ -137,11 +137,11 @@ describe User do
       expect(product_info.length).to eq(2)
       expect(product_info[0].product).to be_a(Product)
       expect(product_info[0].download).to be_a(Download)
-      expect(product_info[0].image_url.to_s).to eq("/images/image/url/1/thumb_example.png")
+      expect(product_info[0].image_url.to_s).to eq('/images/image/url/1/thumb_example.png')
       expect(product_info[1].product).to be_a(Product)
     end
 
-    it "should not return a product a second time if a user has bought it twice" do
+    it 'should not return a product a second time if a user has bought it twice' do
       FactoryBot.create(:free_product, product_code: 'FF001', name: 'Free stuff')
       FactoryBot.create(:order_with_line_items)
       FactoryBot.create(:order_with_line_items)
@@ -153,14 +153,14 @@ describe User do
       expect(product_info.length).to eq(2)
     end
 
-    it "should return an empty array if a user does not have any completed orders" do
+    it 'should return an empty array if a user does not have any completed orders' do
       user = FactoryBot.create(:user)
 
       expect(user.product_info_for_products_owned).to eq([])
     end
   end
 
-  describe "self.who_get_all_emails" do
+  describe 'self.who_get_all_emails' do
     it 'should return email, guid and unsubscribe_token for users with email_preference of 2 and who are not cancelled' do
       user1 = FactoryBot.create(:user, email_preference: 1, account_status: 'A')
       user2 = FactoryBot.create(:user, email: 'user2@gmail.com', email_preference: 2, account_status: 'C')
@@ -171,7 +171,7 @@ describe User do
     end
   end
 
-  describe "self.who_get_important_emails" do
+  describe 'self.who_get_important_emails' do
     it 'should return email, guid and unsubscribe_token for users with email_preference of 1 or 2 and who are not cancelled' do
       user1 = FactoryBot.create(:user, email_preference: 1, account_status: 'A')
       user2 = FactoryBot.create(:user, email: 'user2@gmail.com', email_preference: 2, account_status: 'C')

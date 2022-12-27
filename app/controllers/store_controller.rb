@@ -57,7 +57,7 @@ class StoreController < ApplicationController
     else
       @category = Category.find_by_name(params[:category_name])
       if @category
-        @products = @category.products.find_instructions_for_sale.order('product_code ASC').page(params[:page]).per(12)
+        @products = @category.products.find_instructions_for_sale.includes(:images).order('product_code ASC').page(params[:page]).per(12)
       else
         flash[:notice] = 'Sorry. That product category does not exist.'
         redirect_to action: :index

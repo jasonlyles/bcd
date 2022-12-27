@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Update < ApplicationRecord
-  mount_uploader :image, ImageUploader
+  mount_uploader :image, ImageUploader, validate_integrity: true
   # attr_accessible :title, :description, :body, :image, :image_cache, :remove_image, :image_align, :created_at, :live, :link
 
   validates :title, presence: true

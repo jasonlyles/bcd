@@ -7,7 +7,7 @@ module ApplicationHelper
   end
 
   def featured_items
-    Product.find_products_for_sale.featured.order('random()').first(1)
+    Product.find_products_for_sale.featured.order(Arel.sql('random()')).first(1)
   end
 
   def current_month

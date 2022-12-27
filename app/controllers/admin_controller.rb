@@ -60,9 +60,7 @@ class AdminController < ApplicationController
   def find_user
     @user = User.find_by_email(params[:user][:email].downcase)
     @products = Product.ready_instructions.order('category_id').order('product_code')
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   def find_order
@@ -72,9 +70,7 @@ class AdminController < ApplicationController
                        :find_by_transaction_id
                      end
     @order = Order.send(find_by_method, params[:order][:lookup_id])
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   def admin_profile
@@ -106,9 +102,7 @@ class AdminController < ApplicationController
     @user = User.find_by_email(user[:email].downcase)
     @user.update_attributes(account_status: user[:account_status])
     @products = Product.ready_instructions.order('category_id').order('product_code')
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   def order
@@ -185,9 +179,7 @@ class AdminController < ApplicationController
         @report.save
       end
     end
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength

@@ -16,12 +16,12 @@ describe PdfUploader do
   end
 
   it 'should make the pdf readable and writable to owner, and others can read' do
-    expect(@uploader).to have_permissions(0644)
+    expect(@uploader).to have_permissions(0o644)
   end
 
   it 'should only allow pdfs to be uploaded' do
-    expect(lambda{@uploader.store!(File.open(File.join(Rails.root, 'spec', 'support', 'images', 'cv009_small.png')))}).to raise_error(CarrierWave::IntegrityError)
-    expect(@uploader.extension_whitelist).to eq(['pdf'])
+    expect { @uploader.store!(File.open(File.join(Rails.root, 'spec', 'support', 'images', 'cv009_small.png'))) }.to raise_error(CarrierWave::IntegrityError)
+    expect(@uploader.extension_allowlist).to eq(['pdf'])
   end
 
   it 'should create a storage dir based on model category, subcategory and code' do

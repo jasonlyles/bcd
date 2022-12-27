@@ -10,8 +10,6 @@ class Admin::BackendNotificationsController < AdminController
     @backend_notification.dismissed_by = current_radmin
     @backend_notification.save
 
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 end

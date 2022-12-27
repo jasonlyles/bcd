@@ -96,9 +96,7 @@ class Admin::PartsListsController < AdminController
       @error = interaction.error
     end
 
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   # POST /admin/parts_lists/swap_parts
@@ -114,9 +112,7 @@ class Admin::PartsListsController < AdminController
       @error = interaction.error
     end
 
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   # POST /admin/parts_lists/notify_customers_of_parts_list_update
@@ -126,9 +122,7 @@ class Admin::PartsListsController < AdminController
     PartsListUpdateNotificationJob.perform_later(product_ids: product_ids, message: params[:parts_lists][:message])
     @message = 'Sending parts list update emails'
 
-    respond_to do |format|
-      format.js
-    end
+    respond_to(&:js)
   end
 
   private

@@ -2,7 +2,7 @@
 
 class EmailCampaign < ApplicationRecord
   before_create :generate_guid
-  mount_uploader :image, ImageUploader
+  mount_uploader :image, ImageUploader, validate_integrity: true
   # attr_accessible :click_throughs, :description, :image, :image_cache, :remove_image, :message,
   # :subject, :emails_sent, :guid, :redirect_link
 
