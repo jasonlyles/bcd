@@ -17,36 +17,36 @@ gem 'bootsnap', require: false
 gem 'carrierwave'
 gem 'devise'
 gem 'exception_notification'
-gem 'ffi' # , '>= 1.9.24'
+gem 'ffi'
 gem 'fog-aws'
 gem 'hpricot'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'json' # , '2.1.0'
+gem 'json'
 gem 'kaminari'
 gem 'mini_magick'
 gem 'nested_form'
-gem 'omniauth' # , '~> 1.3'
+gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'pg'
 gem 'platform-api' # For Heroku's API
-gem 'rack-protection' # , '~> 2.0'
+gem 'rack-protection'
 gem 'rake'
 gem 'ransack'
 gem 'resque'
 gem 'resque_mailer'
 gem 'roboto'
 gem 'ruby_parser'
-gem 'sinatra' # , '~> 2.0'
+gem 'sinatra'
 gem 'sitemap_generator'
 gem 'twitter'
 
 # assets
 gem 'asset_sync'
 gem 'bootstrap', '~> 4.1'
-gem 'sass-rails' # , '~> 5.0'
-gem 'sprockets' # , '~> 3.7'
+gem 'sass-rails'
+gem 'sprockets'
 gem 'uglifier'
 
 gem 'thin'
@@ -60,14 +60,14 @@ group :development, :test do
   gem 'faker'
   gem 'foreman'
   gem 'listen'
-  gem 'mail_view' # , '~> 2.0.4'
+  gem 'mail_view'
   gem 'nifty-generators'
   gem 'pry'
   gem 'pry-byebug'
   # gem 'rack-mini-profiler'
   gem 'rails-controller-testing'
   gem 'rspec-activemodel-mocks'
-  gem 'rspec-rails' # , '~> 5.0.0'
+  gem 'rspec-rails'
   gem 'simplecov'
 
   # code quality gems
@@ -80,7 +80,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'web-console' # , '~> 2.0'
+  gem 'web-console'
 end
 
 group :test do

@@ -1,5 +1,4 @@
 Ruby/Rails upgrade notes:
-* Clean up commented-out specified versions in gemfile
 * Test everything via the website.
 * Start tracking the various errors I get emails for and figure out how to repro and fix them.
 * Update the images in the new user tutorial, and possibly some of the text to reflect
@@ -16,9 +15,6 @@ Ruby/Rails upgrade notes:
   vars and set them to true. (This is done for you on Heroku)
 * Push the Amazon, Paypal and Email configs to initializers and get rid of those files.
 * Element#store_image: I think I forgot to set this up to work with S3.
-
-* Issues:
-  * users/sign_out 404s (I think it's time to clean up the product_code/product_name route)
 
   0500 Unexpected error while processing request: can't convert nil into Integer
   	/Users/jasonlyles/.rbenv/versions/2.6.10/lib/ruby/gems/2.6.0/gems/rack-mini-profiler-3.0.0/lib/mini_profiler/timer_struct/page.rb:130:in `%'

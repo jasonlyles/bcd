@@ -226,7 +226,7 @@ class StoreController < ApplicationController
   def product_details
     @product = Product.where(['product_code=?', params[:product_code].upcase]).first
     if @product
-      @similar_products = @product.find_live_products_from_same_category
+      @similar_products = @product.find_live_products_from_same_category.includes(:images)
     else
       not_found
     end
