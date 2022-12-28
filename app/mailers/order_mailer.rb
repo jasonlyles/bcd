@@ -60,11 +60,11 @@ class OrderMailer < AsyncMailer
     mail(reply_to: user.email, to: [user.email, 'service@brickcitydepot.com'], subject: "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}")
   end
 
-  # :nocov
+  # :nocov:
   def queue_name
     'mailer'
   end
-  # :nocov
+  # :nocov:
 end
 
 # :nocov:

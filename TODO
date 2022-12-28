@@ -15,6 +15,7 @@ Ruby/Rails upgrade notes:
   vars and set them to true. (This is done for you on Heroku)
 * Push the Amazon, Paypal and Email configs to initializers and get rid of those files.
 * Element#store_image: I think I forgot to set this up to work with S3.
+* Move env vars to encrypted creds files.
 
   0500 Unexpected error while processing request: can't convert nil into Integer
   	/Users/jasonlyles/.rbenv/versions/2.6.10/lib/ruby/gems/2.6.0/gems/rack-mini-profiler-3.0.0/lib/mini_profiler/timer_struct/page.rb:130:in `%'

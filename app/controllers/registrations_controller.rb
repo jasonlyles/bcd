@@ -85,7 +85,7 @@ class RegistrationsController < Devise::RegistrationsController
         clean_up_passwords resource
         respond_with resource
       end
-    elsif resource.update_attributes(resource_params)
+    elsif resource.update(resource_params)
       # This case is for the Twitter/Facebook user who doesn't have a regular account, and hence no password.
       if is_navigational_format?
         flash_key = :update_needs_confirmation if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?

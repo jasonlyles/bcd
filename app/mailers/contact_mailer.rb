@@ -14,11 +14,11 @@ class ContactMailer < AsyncMailer
     mail(reply_to: @email, subject: 'New Contact Form')
   end
 
-  # :nocov
+  # :nocov:
   def queue_name
     'mailer'
   end
-  # :nocov
+  # :nocov:
 end
 
 # :nocov:

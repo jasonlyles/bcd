@@ -33,7 +33,7 @@ class Admin::UpdatesController < AdminController
 
   # PUT /updates/1
   def update
-    if @update.update_attributes(update_params)
+    if @update.update(update_params)
       redirect_to([:admin, @update], notice: 'Update was successfully updated.')
     else
       flash[:alert] = 'Update was NOT updated.'

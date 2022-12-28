@@ -1,1 +1,1 @@
-require 'ext/string_extensions'
+require 'extensions/string'

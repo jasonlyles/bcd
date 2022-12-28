@@ -40,7 +40,7 @@ class Admin::CategoriesController < AdminController
 
   # PUT /categories/1
   def update
-    if @category.update_attributes(category_params)
+    if @category.update(category_params)
       redirect_to([:admin, @category], notice: 'Category was successfully updated.')
     else
       flash[:alert] = 'Category was NOT updated'

@@ -33,7 +33,7 @@ class Admin::ElementsController < AdminController
 
   # PUT /elements/1
   def update
-    if @element.update_attributes(element_params)
+    if @element.update(element_params)
       if params['element']['remove_image'].present? && params['element']['remove_image'] == '1'
         flash[:notice] = 'Element was successfully updated.'
         render 'edit'

@@ -82,7 +82,7 @@ class AdminController < ApplicationController
     if !params[:radmin][:email].blank? || @radmin.valid_password?(params[:radmin][:current_password])
       # Deleting the current_password from the params because it's protected from mass assignment, and doesn't get saved.
       params[:radmin].delete(:current_password)
-      if @radmin.update_attributes(radmin_params)
+      if @radmin.update(radmin_params)
         # sign_in :radmin, @radmin, bypass: true
         bypass_sign_in(@radmin)
         # respond_with resource, location: after_update_path_for(resource)
@@ -100,7 +100,7 @@ class AdminController < ApplicationController
   def change_user_status
     user = params[:user]
     @user = User.find_by_email(user[:email].downcase)
-    @user.update_attributes(account_status: user[:account_status])
+    @user.update(account_status: user[:account_status])
     @products = Product.ready_instructions.order('category_id').order('product_code')
     respond_to(&:js)
   end

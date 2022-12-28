@@ -33,7 +33,7 @@ class Admin::ProductTypesController < AdminController
 
   # PATCH/PUT /product_types/1
   def update
-    if @product_type.update_attributes(product_type_params)
+    if @product_type.update(product_type_params)
       redirect_to [:admin, @product_type], notice: 'Product type was successfully updated.'
     else
       render 'edit'

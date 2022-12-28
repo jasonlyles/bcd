@@ -60,7 +60,7 @@
               <td></td>
               <td class="px-4"></td>
               <td class="pl-4">
-                <%= link_to "#{subcat.code} #{subcat.name}", subcat %>
+                <%= link_to "#{subcat.code} #{subcat.name}", admin_subcategory_path(subcat) %>
               </td>
             </tr>
           <% end %>

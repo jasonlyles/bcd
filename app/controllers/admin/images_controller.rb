@@ -38,7 +38,7 @@ class Admin::ImagesController < AdminController
 
   # PUT /images/1
   def update
-    if @image.update_attributes(image_params)
+    if @image.update(image_params)
       redirect_to([:admin, @image], notice: 'Image was successfully updated.')
     else
       flash[:alert] = 'Image was NOT updated'

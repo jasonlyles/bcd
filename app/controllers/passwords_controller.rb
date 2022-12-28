@@ -18,7 +18,7 @@ class PasswordsController < Devise::PasswordsController
   end
 
   def update_password
-    if current_user.update_attributes(params[:user])
+    if current_user.update(params[:user])
       # sign_in current_user, bypass: true
       bypass_sign_in(current_user)
       flash[:notice] = 'Profile was successfully updated.'

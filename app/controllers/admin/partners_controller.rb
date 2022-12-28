@@ -33,7 +33,7 @@ class Admin::PartnersController < AdminController
 
   # PUT /partners/1
   def update
-    if @partner.update_attributes(partner_params)
+    if @partner.update(partner_params)
       redirect_to([:admin, @partner], notice: 'Partner was successfully updated.')
     else
       flash[:alert] = 'Partner was NOT updated'

@@ -33,7 +33,7 @@ class Admin::EmailCampaignsController < AdminController
 
   # PUT /email_campaigns/1
   def update
-    if @email_campaign.update_attributes(email_campaign_params)
+    if @email_campaign.update(email_campaign_params)
       redirect_to([:admin, @email_campaign], notice: 'Email campaign was successfully updated.')
     else
       flash[:alert] = 'Email campaign was NOT updated'

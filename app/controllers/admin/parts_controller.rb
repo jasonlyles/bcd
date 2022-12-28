@@ -54,7 +54,7 @@ class Admin::PartsController < AdminController
 
   # PUT /parts/1
   def update
-    if @part.update_attributes(part_params)
+    if @part.update(part_params)
       PartInteractions::UpdateFromBricklink.run(part: @part) if @part.check_bricklink?
       PartInteractions::UpdateFromRebrickable.run(part: @part) if @part.check_rebrickable?
       redirect_to([:admin, @part], notice: 'Part was successfully updated.')

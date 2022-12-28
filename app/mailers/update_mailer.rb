@@ -24,11 +24,11 @@ class UpdateMailer < AsyncMailer
     mail(to: @user.email, subject: 'Parts lists for instructions you own have been updated')
   end
 
-  # :nocov
+  # :nocov:
   def queue_name
     'batchmailer'
   end
-  # :nocov
+  # :nocov:
 end
 # :nocov:
 if Rails.env.development?

@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 
 ruby '2.6.10'
 
-gem 'rails', '5.2.8'
+gem 'rails', '6.0.6'
 
 gem 'activerecord-session_store'
 gem 'addressable'

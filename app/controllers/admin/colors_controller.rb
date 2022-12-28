@@ -31,7 +31,7 @@ class Admin::ColorsController < AdminController
 
   # PUT /colors/1
   def update
-    if @color.update_attributes(color_params)
+    if @color.update(color_params)
       redirect_to([:admin, @color], notice: 'Color was successfully updated.')
     else
       flash[:alert] = 'Color was NOT updated'

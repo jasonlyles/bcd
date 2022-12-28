@@ -36,9 +36,12 @@ class Product < ApplicationRecord
   scope :ready, -> { where(ready_for_public: true).includes(:category).includes(:subcategory) }
   scope :featured, -> { where(featured: true) }
   scope :in_stock, -> { where('quantity > 0') } # Maybe set up to use only physical products, and not digital products
-  scope :instructions, -> { Product.joins(:product_type).where("product_types.name='Instructions'") }
   scope :ready_instructions, -> { ready.instructions }
   scope :sellable_instructions, -> { ready_instructions.where(free: false) }
+
+  def self.instructions
+    Product.joins(:product_type).where("product_types.name='Instructions'")
+  end
 
   def self.find_all_by_price(price)
     price = 0 if price == 'free'

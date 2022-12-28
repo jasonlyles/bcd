@@ -21,11 +21,11 @@ class MarketingMailer < ActionMailer::Base
     mail(to: @user.email, subject: @email_campaign.subject)
   end
 
-  # :nocov
+  # :nocov:
   def queue_name
     'batchmailer'
   end
-  # :nocov
+  # :nocov:
 end
 
 # :nocov:

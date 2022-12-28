@@ -34,7 +34,7 @@ class Admin::SubcategoriesController < AdminController
 
   # PUT /subcategories/1
   def update
-    if @subcategory.update_attributes(subcategory_params)
+    if @subcategory.update(subcategory_params)
       redirect_to([:admin, @subcategory], notice: 'Subcategory was successfully updated.')
     else
       flash[:alert] = 'Subcategory was NOT updated.'

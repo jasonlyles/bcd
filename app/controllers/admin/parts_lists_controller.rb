@@ -61,7 +61,7 @@ class Admin::PartsListsController < AdminController
   # PUT /parts_lists/1
   def update
     @parts_list = PartsList.find(params[:id])
-    if @parts_list.update_attributes(parts_list_params.except(:file))
+    if @parts_list.update(parts_list_params.except(:file))
       BackendNotification.create(message: "#{current_radmin.email} updated the parts list for #{@parts_list.product&.code_and_name || 'undefined product'}. Be sure to email an update to users if necessary.")
       redirect_to([:admin, @parts_list], notice: 'Parts List was successfully updated.')
     else

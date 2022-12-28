@@ -38,7 +38,7 @@ class Admin::AdvertisingCampaignsController < AdminController
 
   # PUT /advertising_campaigns/1
   def update
-    if @advertising_campaign.update_attributes(advertising_campaign_params)
+    if @advertising_campaign.update(advertising_campaign_params)
       redirect_to([:admin, @advertising_campaign], notice: 'Advertising campaign was successfully updated.')
     else
       flash[:alert] = 'Advertising Campaign was NOT updated'

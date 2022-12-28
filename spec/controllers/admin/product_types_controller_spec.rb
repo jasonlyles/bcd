@@ -115,7 +115,7 @@ describe Admin::ProductTypesController do
         product_type = ProductType.create! valid_attributes
         # Assuming there are no other product_types in the database, this
         # specifies that the ProductType created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
         put :update, params: { id: product_type.to_param, product_type: { "name" => "Fake" } }
 

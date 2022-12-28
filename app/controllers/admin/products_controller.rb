@@ -42,7 +42,7 @@ class Admin::ProductsController < AdminController
 
   # PUT /products/1
   def update
-    if @product.update_attributes(product_params)
+    if @product.update(product_params)
       BackendNotification.create(message: "#{current_radmin.email} updated the PDF for #{@product.code_and_name}. Be sure to email an update to users if necessary.") if @product.pdf_changed? && !params[:product][:remove_pdf].present?
       redirect_to([:admin, @product], notice: 'Product was successfully updated.')
     else
