@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 
 ruby '2.6.10'
 
-gem 'rails', '6.0.6'
+gem 'rails', '6.1.7'
 
 gem 'activerecord-session_store'
 gem 'addressable'
@@ -62,13 +62,19 @@ group :development, :test do
   gem 'listen'
   gem 'mail_view'
   gem 'nifty-generators'
-  gem 'pry'
-  gem 'pry-byebug'
+  gem 'pry-rails'
   # gem 'rack-mini-profiler'
   gem 'rails-controller-testing'
   gem 'rspec-activemodel-mocks'
   gem 'rspec-rails'
   gem 'simplecov'
+
+  # Specifically adding these 4 gems gets some warnings to go away. Will try once I get
+  # to Rails 7 to remove these.
+  gem 'net-http'
+  gem 'net-imap'
+  gem 'net-smtp'
+  gem 'uri', '0.10.0'
 
   # code quality gems
   gem 'brakeman'

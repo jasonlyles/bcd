@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module BrickCity
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     # Settings in config/environments/* take precedence over those specified here.
 
@@ -24,6 +24,7 @@ module BrickCity
     # Custom directories with classes and modules you want to be autoloadable.
     config.eager_load_paths += %W[#{config.root}/lib]
     config.eager_load_paths += Dir["#{config.root}/lib/**/"]
+    # config.eager_load_paths << Rails.root.join("extras")
 
     # This might cause trouble:
     config.add_autoload_paths_to_load_path = false

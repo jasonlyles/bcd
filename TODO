@@ -13,9 +13,13 @@ Ruby/Rails upgrade notes:
   A note from the rails_12factor gem I'm removing for being on Rails 5+:
   Make sure to add both the RAILS_SERVE_STATIC_FILES and RAILS_LOG_TO_STDOUT ENV
   vars and set them to true. (This is done for you on Heroku)
-* Push the Amazon, Paypal and Email configs to initializers and get rid of those files.
 * Element#store_image: I think I forgot to set this up to work with S3.
-* Move env vars to encrypted creds files.
+* Push the Amazon, Paypal and Email configs to initializers and get rid of those files.
+  Also, move some env vars to encrypted creds files. Move others to a special config file
+  via something like https://blog.saeloun.com/2019/02/23/rails-config-for-secrets-credentials.html
+* If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
+* Work on additional test coverage
+* Replace kaminari with pagy
 
   0500 Unexpected error while processing request: can't convert nil into Integer
   	/Users/jasonlyles/.rbenv/versions/2.6.10/lib/ruby/gems/2.6.0/gems/rack-mini-profiler-3.0.0/lib/mini_profiler/timer_struct/page.rb:130:in `%'

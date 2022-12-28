@@ -10,7 +10,7 @@ module PartInteractions
       count = 0
       Part.where(is_obsolete: false).find_each do |part|
         count += 1
-        puts "Working on part #{count}"
+        Rails.logger.info "Working on part #{count}"
         bricklink_part = Bricklink.get_part(part.ldraw_id)
         bl_part = bricklink_part['data']
         if bl_part.blank?

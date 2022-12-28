@@ -1,5 +1,3 @@
-module Kaminari::ActionViewExtension::InstanceMethods
-  def paginate(scope,options = {}, &block)
-  end
+module Kaminari::ActiveRecordExtension::InstanceMethods
+  def paginate(scope, options = {}, &block); end
 end
-
