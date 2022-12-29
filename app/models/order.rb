@@ -106,7 +106,7 @@ class Order < ApplicationRecord
       product_name = product.code_and_name
       guid = user.guid
       download = Download.where(['user_id=? and product_id=?', user_id, product.id])
-                         .first_or_create(download_token: SecureRandom.hex(20), product_id: product.id, user_id: user_id)
+                         .first_or_create(download_token: SecureRandom.hex(20), product_id: product.id, user_id:)
       product.parts_lists.each { |pl| links << ["#{product_name} Parts List", "/parts_lists/#{pl.id}?user_guid=#{guid}&token=#{download.download_token}"] }
 
       links << ["#{product_name} PDF", "/guest_download?id=#{guid}&token=#{download.download_token}"]

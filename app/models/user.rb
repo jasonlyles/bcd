@@ -82,7 +82,7 @@ class User < ApplicationRecord
   def owns_product?(product_id)
     return true if Product.freebies.map(&:id).include?(product_id)
 
-    line_items.where(product_id: product_id).exists?
+    line_items.where(product_id:).exists?
   end
 
   def guest?

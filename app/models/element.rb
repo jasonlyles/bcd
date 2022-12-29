@@ -53,7 +53,7 @@ class Element < ApplicationRecord
   # TODO: Maybe expand this to update other attributes as well, not just the image.
   # year_from and year_to are also available.
   def update_from_rebrickable(part_id, color_id)
-    data = Rebrickable.get_element_combo(part_id: part_id, color_id: color_id)
+    data = Rebrickable.get_element_combo(part_id:, color_id:)
     return unless data['part_img_url'].present?
 
     self.original_image_url = data['part_img_url']
@@ -62,7 +62,7 @@ class Element < ApplicationRecord
   end
 
   def update_from_bricklink(part_id, color_id)
-    data = Bricklink.get_element_image(part_id: part_id, color_id: color_id)
+    data = Bricklink.get_element_image(part_id:, color_id:)
     return unless data['data'].present? && data['data']['thumbnail_url'].present?
 
     self.original_image_url = "https:#{data['data']['thumbnail_url']}"

@@ -33,7 +33,7 @@ class PartsListUpdateNotificationJob < BaseJob
     rescue StandardError => e
       message = "PartsListUpdateNotificationJob could not send an email to user #{user_id} about products #{product_ids.join(',')}"
       Rails.logger.error(message)
-      ExceptionNotifier.notify_exception(e, data: { message: message })
+      ExceptionNotifier.notify_exception(e, data: { message: })
     end
   end
   # rubocop:enable Metrics/AbcSize

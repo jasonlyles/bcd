@@ -55,7 +55,7 @@ class Cart < ApplicationRecord
   end
 
   def self.users_most_recent_cart(user_id)
-    Cart.where(user_id: user_id).order('created_at desc').limit(1)[0]
+    Cart.where(user_id:).order('created_at desc').limit(1)[0]
   end
 
   def includes_physical_item?

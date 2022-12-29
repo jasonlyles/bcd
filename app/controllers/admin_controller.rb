@@ -21,12 +21,12 @@ class AdminController < ApplicationController
     @user = User.find(user_id)
 
     @order = Order.where("user_id = ? and status = 'GIFT'", user_id).first
-    @order = Order.new(user_id: user_id, status: 'GIFT', transaction_id: SecureRandom.hex(20), request_id: SecureRandom.hex(20)) if @order.blank?
+    @order = Order.new(user_id:, status: 'GIFT', transaction_id: SecureRandom.hex(20), request_id: SecureRandom.hex(20)) if @order.blank?
 
     @line_item = LineItem.where('order_id = ? and product_id = ?', @order.id, product_id).first
     @line_item.destroy if @user.owns_product?(product_id)
 
-    @order.line_items << LineItem.new(product_id: product_id, quantity: 1, total_price: 0) if @line_item.blank?
+    @order.line_items << LineItem.new(product_id:, quantity: 1, total_price: 0) if @line_item.blank?
     respond_to do |format|
       if @order.save
         format.json { render json: true }
@@ -149,7 +149,7 @@ class AdminController < ApplicationController
     start_month = start_date['month']
     start_year = start_date['year']
     end_date = params[:end_date]
-    @report = SalesReport.new(start_date: start_date, end_date: end_date)
+    @report = SalesReport.new(start_date:, end_date:)
     @report.report_date = "#{start_year}-#{start_month}-01"
 
     if @report.multiple_months?

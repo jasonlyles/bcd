@@ -11,7 +11,7 @@ class Bricklink
     request = Net::HTTP::Get.new(uri.request_uri)
     consumer = OAuth::Consumer.new(ENV['BRICKLINK_CONSUMER_KEY'], ENV['BRICKLINK_CONSUMER_SECRET'], site: BRICKLINK_URL)
     access_token_struct = OpenStruct.new(token: ENV['BRICKLINK_ACCESS_TOKEN'], secret: ENV['BRICKLINK_ACCESS_TOKEN_SECRET'])
-    oauth_params = { consumer: consumer, token: access_token_struct }
+    oauth_params = { consumer:, token: access_token_struct }
     oauth_helper = OAuth::Client::Helper.new(request, oauth_params.merge(request_uri: uri))
     request['Authorization'] = oauth_helper.header
     http.request(request)

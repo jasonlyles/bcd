@@ -141,7 +141,7 @@ class DownloadsController < ApplicationController
   # :nocov:
   def download_from_local(file)
     filename = file.match(/\w+\.\w+/).to_s
-    send_file(file, type: 'application/pdf', filename: filename, disposition: 'attachment')
+    send_file(file, type: 'application/pdf', filename:, disposition: 'attachment')
   end
   # :nocov:
 

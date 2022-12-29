@@ -8,7 +8,7 @@ class Download < ApplicationRecord
 
   def self.update_download_counts(current_user, product_id, token = nil)
     download = if token.blank?
-                 Download.find_or_create_by(user_id: current_user.id, product_id: product_id)
+                 Download.find_or_create_by(user_id: current_user.id, product_id:)
                else
                  Download.find_by_user_id_and_download_token(current_user.id, token)
                end

@@ -14,8 +14,8 @@ class Part < ApplicationRecord
     part_id = part_key.split('_').first
     part = Part.find_or_create_by(ldraw_id: part_id)
 
-    PartInteractions::UpdateFromBricklink.run(part: part) if part.check_bricklink?
-    PartInteractions::UpdateFromRebrickable.run(part: part) if part.check_rebrickable?
+    PartInteractions::UpdateFromBricklink.run(part:) if part.check_bricklink?
+    PartInteractions::UpdateFromRebrickable.run(part:) if part.check_rebrickable?
 
     part
   end
