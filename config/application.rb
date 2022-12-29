@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module BrickCity
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Settings in config/environments/* take precedence over those specified here.
 
@@ -22,9 +22,10 @@ module BrickCity
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
+    # config.autoload_paths += %W[#{config.root}/lib]
+    # config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.eager_load_paths += %W[#{config.root}/lib]
     config.eager_load_paths += Dir["#{config.root}/lib/**/"]
-    # config.eager_load_paths << Rails.root.join("extras")
 
     # This might cause trouble:
     config.add_autoload_paths_to_load_path = false
@@ -34,8 +35,6 @@ module BrickCity
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'
-
-    config.autoloader = :zeitwerk
 
     # Enable the asset pipeline
     # config.assets.enabled = true

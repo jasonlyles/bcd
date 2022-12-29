@@ -1,4 +1,4 @@
-class CreateElements < ActiveRecord::Migration
+class CreateElements < ActiveRecord::Migration[4.2]
   def change
     create_table :elements do |t|
       t.references  :part
@@ -12,7 +12,7 @@ class CreateElements < ActiveRecord::Migration
 
       t.index :part_id
       t.index :color_id
-      t.index [:part_id, :color_id], unique: true
+      t.index %i[part_id color_id], unique: true
     end
   end
 end

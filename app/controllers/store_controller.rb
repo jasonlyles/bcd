@@ -180,7 +180,7 @@ class StoreController < ApplicationController
       cookies[:show_thank_you] = true
       paypal_uri = assemble_paypal_uri
 
-      redirect_to paypal_uri
+      redirect_to paypal_uri, allow_other_host: true
     else
       begin
         ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), env: request.env, data: { message: 'Failed trying to submit order.' })

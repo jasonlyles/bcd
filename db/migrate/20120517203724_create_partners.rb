@@ -1,9 +1,9 @@
-class CreatePartners < ActiveRecord::Migration
+class CreatePartners < ActiveRecord::Migration[4.2]
   def self.up
     create_table :partners do |t|
-      t.string :name, :limit => 40
-      t.string :url, :limit => 40
-      t.string :contact, :limit => 40
+      t.string :name, limit: 40
+      t.string :url, limit: 40
+      t.string :contact, limit: 40
 
       t.timestamps
     end

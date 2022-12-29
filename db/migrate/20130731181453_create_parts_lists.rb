@@ -1,4 +1,4 @@
-class CreatePartsLists < ActiveRecord::Migration
+class CreatePartsLists < ActiveRecord::Migration[4.2]
   def change
     create_table :parts_lists do |t|
       t.string :parts_list_type

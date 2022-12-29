@@ -1,4 +1,4 @@
-class CreateBackendNotifications < ActiveRecord::Migration
+class CreateBackendNotifications < ActiveRecord::Migration[4.2]
   def change
     create_table :backend_notifications do |t|
       t.text :message

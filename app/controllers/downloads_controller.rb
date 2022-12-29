@@ -135,7 +135,7 @@ class DownloadsController < ApplicationController
 
   def download_from_amazon(file)
     link = Amazon::Storage.authenticated_url(file)
-    redirect_to link
+    redirect_to link, allow_other_host: true
   end
 
   # :nocov:

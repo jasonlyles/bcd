@@ -1,4 +1,4 @@
-class CreateInstantPaymentNotifications < ActiveRecord::Migration
+class CreateInstantPaymentNotifications < ActiveRecord::Migration[4.2]
   def change
     create_table :instant_payment_notifications do |t|
       t.string :payment_status

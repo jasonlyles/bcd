@@ -1,4 +1,4 @@
-class CreateEmailCampaigns < ActiveRecord::Migration
+class CreateEmailCampaigns < ActiveRecord::Migration[4.2]
   def self.up
     create_table :email_campaigns do |t|
       t.text :description

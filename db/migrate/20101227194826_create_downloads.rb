@@ -1,10 +1,10 @@
-class CreateDownloads < ActiveRecord::Migration
+class CreateDownloads < ActiveRecord::Migration[4.2]
   def self.up
     create_table :downloads do |t|
       t.integer :product_id
-      t.integer :count, :default => 0
+      t.integer :count, default: 0
       t.integer :user_id
-      t.integer :remaining, :default => MAX_DOWNLOADS
+      t.integer :remaining, default: MAX_DOWNLOADS
       t.string :download_token
 
       t.timestamps

@@ -2,9 +2,9 @@
 
 source 'http://rubygems.org'
 
-ruby '2.6.10'
+ruby '3.0.5'
 
-gem 'rails', '6.1.7'
+gem 'rails', '7.0.4'
 
 gem 'activerecord-session_store'
 gem 'addressable'
@@ -46,7 +46,7 @@ gem 'twitter'
 gem 'asset_sync'
 gem 'bootstrap', '~> 4.1'
 gem 'sass-rails'
-gem 'sprockets'
+gem 'sprockets-rails'
 gem 'uglifier'
 
 gem 'thin'
@@ -71,10 +71,10 @@ group :development, :test do
 
   # Specifically adding these 4 gems gets some warnings to go away. Will try once I get
   # to Rails 7 to remove these.
-  gem 'net-http'
-  gem 'net-imap'
-  gem 'net-smtp'
-  gem 'uri', '0.10.0'
+  # gem 'net-http'
+  # gem 'net-imap'
+  # gem 'net-smtp'
+  # gem 'uri', '0.10.0'
 
   # code quality gems
   gem 'brakeman'

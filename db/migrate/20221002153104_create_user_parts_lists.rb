@@ -1,4 +1,4 @@
-class CreateUserPartsLists < ActiveRecord::Migration
+class CreateUserPartsLists < ActiveRecord::Migration[4.2]
   def change
     create_table :user_parts_lists do |t|
       t.references :parts_list
@@ -9,7 +9,7 @@ class CreateUserPartsLists < ActiveRecord::Migration
 
       t.index :parts_list_id
       t.index :user_id
-      t.index [:parts_list_id, :user_id], unique: true
+      t.index %i[parts_list_id user_id], unique: true
     end
   end
 end

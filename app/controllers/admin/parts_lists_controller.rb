@@ -22,13 +22,13 @@ class Admin::PartsListsController < AdminController
 
   # GET /parts_lists/1/edit
   def edit
-    @parts_list = PartsList.includes(elements: :part).find(params[:id])
-    @lots = @parts_list.lots.includes(:part, :color, element: :part).order('parts.name ASC, colors.bl_name ASC')
+    @parts_list = PartsList.find(params[:id])
+    @lots = @parts_list.lots.includes(element: %i[part color]).order('parts.name ASC, colors.bl_name ASC')
   end
 
   def show
-    @parts_list = PartsList.includes(elements: :part).find(params[:id])
-    @lots = @parts_list.lots.includes(:part, :color, element: :part).order('parts.name ASC, colors.bl_name ASC')
+    @parts_list = PartsList.find(params[:id])
+    @lots = @parts_list.lots.includes(:part, :color, element: %i[part color]).order('parts.name ASC, colors.bl_name ASC')
 
     if @parts_list.bricklink_xml?
       xml_doc = Nokogiri::XML(@parts_list.bricklink_xml)
@@ -62,7 +62,7 @@ class Admin::PartsListsController < AdminController
   def update
     @parts_list = PartsList.find(params[:id])
     if @parts_list.update(parts_list_params.except(:file))
-      BackendNotification.create(message: "#{current_radmin.email} updated the parts list for #{@parts_list.product&.code_and_name || 'undefined product'}. Be sure to email an update to users if necessary.")
+      BackendNotification.create(message: "#{current_radmin.email} updated the parts list for #{@parts_list.product&.code_and_name || 'undefined product'}. Be sure to email an update to users if necessary.") unless @parts_list.saved_changes.blank? || @parts_list.saved_changes.keys.sort == %w[approved updated_at]
       redirect_to([:admin, @parts_list], notice: 'Parts List was successfully updated.')
     else
       flash[:alert] = 'Parts List was NOT updated'

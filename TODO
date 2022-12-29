@@ -20,6 +20,10 @@ Ruby/Rails upgrade notes:
 * If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
 * Work on additional test coverage
 * Replace kaminari with pagy
+* Switch to google analytics 4
+* As part of moving off Heroku, I can get rid of TempAgency, and any other Heroku-specific code.
+* Clean up lib dir, moving stuff into services when appropriate.
+* Look at moving from carrierwave to ActiveStorage. Is it worth the trouble?
 
   0500 Unexpected error while processing request: can't convert nil into Integer
   	/Users/jasonlyles/.rbenv/versions/2.6.10/lib/ruby/gems/2.6.0/gems/rack-mini-profiler-3.0.0/lib/mini_profiler/timer_struct/page.rb:130:in `%'

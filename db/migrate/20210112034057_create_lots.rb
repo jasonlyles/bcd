@@ -1,4 +1,4 @@
-class CreateLots < ActiveRecord::Migration
+class CreateLots < ActiveRecord::Migration[4.2]
   def change
     create_table :lots do |t|
       t.references :parts_list
@@ -9,7 +9,7 @@ class CreateLots < ActiveRecord::Migration
 
       t.index :parts_list_id
       t.index :element_id
-      t.index [:parts_list_id, :element_id], unique: true
+      t.index %i[parts_list_id element_id], unique: true
     end
   end
 end

@@ -1,4 +1,4 @@
-class CreateUpdates < ActiveRecord::Migration
+class CreateUpdates < ActiveRecord::Migration[4.2]
   def self.up
     create_table :updates do |t|
       t.string :title
@@ -6,7 +6,7 @@ class CreateUpdates < ActiveRecord::Migration
       t.text :body
       t.string :image_align
       t.string :image
-      t.boolean :live, :default => false
+      t.boolean :live, default: false
       t.string :link
 
       t.timestamps
