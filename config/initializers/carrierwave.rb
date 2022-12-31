@@ -15,9 +15,9 @@ CarrierWave.configure do |config|
     # config.cache_dir = "uploads"
     # config.s3_access_policy = :private
 
-    # config.s3_access_key_id = ENV['BCD_S3_KEY']
-    # config.s3_secret_access_key = ENV['BCD_S3_SECRET']
-    # config.s3_bucket = ENV['BCD_S3_INSTRUCTION_BUCKET']
+    # config.s3_access_key_id = Rails.application.credentials.aws.access_key_id
+    # config.s3_secret_access_key = Rails.application.credentials.aws.secret_access_key
+    # config.s3_bucket = Rails.application.credentials.aws.instruction_bucket
     config.storage = :fog
     config.fog_credentials = {
       provider: 'AWS',

@@ -1,6 +1,16 @@
 Ruby/Rails upgrade notes:
 * Test everything via the website.
 * Start tracking the various errors I get emails for and figure out how to repro and fix them.
+  1. Fail on /auth/twitter
+     An OAuth::Unauthorized occurred in #:
+     403 Forbidden
+  2. Possible roboto/sitemap misconfiguration:
+     An ActionView::MissingTemplate occurred in static#index:
+     Missing template static/index, application/index with {:locale=>[:en], :formats=>["image/*"], :variants=>[], :handlers=>[:erb, :builder, :raw, :ruby]}. Searched in:
+     * "/app/app/views"
+     * "/app/vendor/bundle/ruby/2.4.0/gems/roboto-0.2.0/app/views"
+     * "/app/vendor/bundle/ruby/2.4.0/gems/kaminari-0.17.0/app/views"
+     * "/app/vendor/bundle/ruby/2.4.0/gems/devise-3.5.10/app/views"
 * Update the images in the new user tutorial, and possibly some of the text to reflect
   the changes with the new parts list.
 * Make sure the places in the code using `only_path: true` are doing what I think they're doing.
@@ -15,15 +25,37 @@ Ruby/Rails upgrade notes:
   vars and set them to true. (This is done for you on Heroku)
 * Element#store_image: I think I forgot to set this up to work with S3.
 * Push the Amazon, Paypal and Email configs to initializers and get rid of those files.
-  Also, move some env vars to encrypted creds files. Move others to a special config file
-  via something like https://blog.saeloun.com/2019/02/23/rails-config-for-secrets-credentials.html
+  Move others to a special config file via something like:
+  https://blog.saeloun.com/2019/02/23/rails-config-for-secrets-credentials.html
+
+* Might have to set up separately from Heroku:
+  1. Papertrail
+  2. Redis (Rediscloud?)
+  3. New Relic
+  4. Postgres
+* Set up database config apart from Heroku
+
 * If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
 * Work on additional test coverage
-* Replace kaminari with pagy
 * Switch to google analytics 4
 * As part of moving off Heroku, I can get rid of TempAgency, and any other Heroku-specific code.
 * Clean up lib dir, moving stuff into services when appropriate.
 * Look at moving from carrierwave to ActiveStorage. Is it worth the trouble?
+* Upgrade bootstrap to 5.3, or maybe just move to tailwind.
+* Get this thing using importmaps
+* Get staging env vars from bcd-stg and then delete that app.
+* Add the cookie message for GDRP
+* Move config/lsynth.yml stuff to an initializer.
+* Review sitemap_generator
+
+OAUTH stuff:
+* Test FB login + developer account: old juno, vestal virgins
+* Test Twitter login: cj, midget ninjas
+* Twitter BCD sleepz
+* For BCD prod, Twitter allows me to login, but I have to go there twice before it will redirect back correctly.
+* For BCD prod, Facebook oauth is just busted. Looks like the app was found in violation of some policy.
+
+* I seem to have lost access to my twitter oauth apps. Re-create them.
 
   0500 Unexpected error while processing request: can't convert nil into Integer
   	/Users/jasonlyles/.rbenv/versions/2.6.10/lib/ruby/gems/2.6.0/gems/rack-mini-profiler-3.0.0/lib/mini_profiler/timer_struct/page.rb:130:in `%'

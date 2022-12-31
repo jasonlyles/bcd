@@ -28,6 +28,7 @@ gem 'mini_magick'
 gem 'nested_form'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-twitter'
 gem 'pg'
 gem 'platform-api' # For Heroku's API
@@ -55,7 +56,6 @@ group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'bullet'
-  gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'faker'
   gem 'foreman'
@@ -68,13 +68,6 @@ group :development, :test do
   gem 'rspec-activemodel-mocks'
   gem 'rspec-rails'
   gem 'simplecov'
-
-  # Specifically adding these 4 gems gets some warnings to go away. Will try once I get
-  # to Rails 7 to remove these.
-  # gem 'net-http'
-  # gem 'net-imap'
-  # gem 'net-smtp'
-  # gem 'uri', '0.10.0'
 
   # code quality gems
   gem 'brakeman'

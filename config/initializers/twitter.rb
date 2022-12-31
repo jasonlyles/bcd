@@ -1,6 +1,6 @@
 client = Twitter::REST::Client.new do |config|
-  config.consumer_key = ENV['BCD_TWITTER_KEY']
-  config.consumer_secret = ENV['BCD_TWITTER_SECRET']
-  config.access_token = ENV['BCD_OAUTH_TOKEN']
-  config.access_token_secret = ENV['BCD_OAUTH_SECRET']
+  config.consumer_key = Rails.application.credentials.twitter.api_key
+  config.consumer_secret = Rails.application.credentials.twitter.secret
+  config.access_token = Rails.application.credentials.oauth.token
+  config.access_token_secret = Rails.application.credentials.oauth.secret
 end

@@ -1,4 +1,4 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
-  provider :twitter, ENV['BCD_TWITTER_KEY'], ENV['BCD_TWITTER_SECRET'], {:authorize_params => {:force_login => true}}
-  provider :facebook, ENV['BCD_FACEBOOK_APP_ID'], ENV['BCD_FACEBOOK_SECRET'], :scope => 'email', auth_type: 'reauthenticate'
+  provider :twitter, Rails.application.credentials.twitter.api_key, Rails.application.credentials.twitter.secret, { authorize_params: { force_login: true } }
+  provider :facebook, Rails.application.credentials.facebook.app_id, Rails.application.credentials.facebook.secret, scope: 'email', auth_type: 'reauthenticate'
 end

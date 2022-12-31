@@ -10,7 +10,7 @@ class BrickOwl
   # For GETs
   # Pass in args as: '&thing=1&other_thing=2'
   def self.get_request(path, args = nil)
-    key = ENV['BRICKOWL_API_KEY']
+    key = Rails.application.credentials.brickowl.api_key
     uri = URI.parse("#{BRICKOWL_URL}/v1/#{path}?key=#{key}#{args}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -21,7 +21,7 @@ class BrickOwl
 
   # Pass in args as: '&thing=1&other_thing=2'
   def self.post_request(path, body)
-    key = ENV['BRICKOWL_API_KEY']
+    key = Rails.application.credentials.brickowl.api_key
     uri = URI.parse("#{BRICKOWL_URL}/v1/#{path}")
     request = Net::HTTP::Post.new(uri)
     request.content_type = 'application/json'

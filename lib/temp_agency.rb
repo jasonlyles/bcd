@@ -14,14 +14,14 @@ module TempAgency
     end
 
     def workers
-      workers = @heroku.formation.info(ENV['APP_NAME'], @ps_name)
+      workers = @heroku.formation.info(Rails.application.credentials.app.name, @ps_name)
       Rails.logger.debug("ACTIVE WORKERS FOR #{@ps_name}: #{workers['quantity']}")
       workers['quantity']
     end
 
     def workers=(qty)
       Rails.logger.debug("SETTING WORKERS TO: #{qty} on PS #{@ps_name}")
-      @heroku.formation.update(ENV['APP_NAME'], @ps_name, { 'quantity' => qty, 'size' => 'Standard-1X' })
+      @heroku.formation.update(Rails.application.credentials.app.name, @ps_name, { 'quantity' => qty, 'size' => 'Standard-1X' })
     end
 
     def job_count

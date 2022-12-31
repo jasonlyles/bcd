@@ -34,7 +34,7 @@ module ApplicationHelper
     { image: asset_url('logo_200x200.png'),
       title: "Brick City Depot. The internets' best source for custom Lego instructions.",
       description: 'Brick City Depot sells custom Lego instructions, models and kits. Featuring models based on the Lego Modular Buildings line.',
-      app_id: ENV['BCD_FACEBOOK_APP_ID'],
+      app_id: Rails.application.credentials.facebook.app_id,
       site_name: 'Brick City Depot',
       url: request.original_url }
   end

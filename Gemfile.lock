@@ -177,10 +177,6 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.8.1)
-    dotenv-rails (2.8.1)
-      dotenv (= 2.8.1)
-      railties (>= 3.2)
     equalizer (0.0.11)
     erubi (1.12.0)
     erubis (2.7.0)
@@ -354,6 +350,9 @@ GEM
       omniauth (>= 1.0, < 3)
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
+      omniauth (~> 2.0)
+    omniauth-rails_csrf_protection (1.0.1)
+      actionpack (>= 4.2)
       omniauth (~> 2.0)
     omniauth-twitter (1.4.0)
       omniauth-oauth (~> 1.1)
@@ -599,7 +598,6 @@ DEPENDENCIES
   carrierwave
   database_cleaner
   devise
-  dotenv-rails
   exception_notification
   factory_bot_rails
   faker
@@ -622,6 +620,7 @@ DEPENDENCIES
   nifty-generators
   omniauth
   omniauth-facebook
+  omniauth-rails_csrf_protection
   omniauth-twitter
   overcommit
   pg

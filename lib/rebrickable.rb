@@ -9,7 +9,7 @@ class Rebrickable
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     req = Net::HTTP::Get.new(uri.request_uri)
-    req['Authorization'] = "key #{ENV['REBRICKABLE_API_KEY']}"
+    req['Authorization'] = "key #{Rails.application.credentials.rebrickable.api_key}"
     req['Accept'] = 'application/json'
     http.request(req)
   end
@@ -19,7 +19,7 @@ class Rebrickable
     request = Net::HTTP::Post.new(uri)
     request.content_type = 'application/x-www-form-urlencoded'
     request['Accept'] = 'application/json'
-    request['Authorization'] = "key #{ENV['REBRICKABLE_API_KEY']}"
+    request['Authorization'] = "key #{Rails.application.credentials.rebrickable.api_key}"
     request.set_form_data(
       body
     )
