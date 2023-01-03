@@ -45,7 +45,6 @@ Ruby/Rails upgrade notes:
 * Get this thing using importmaps
 * Get staging env vars from bcd-stg and then delete that app.
 * Add the cookie message for GDRP
-* Move config/lsynth.yml stuff to an initializer.
 * Review sitemap_generator
 
 OAUTH stuff:

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class LdrParser
-  LSYNTH = YAML.load_file("#{Rails.root}/config/lsynth.yml")
-
   attr_accessor :submodels, :lsynthed_parts
 
   def initialize(ldr)
@@ -64,11 +62,11 @@ class LdrParser
   private
 
   def translate_lsynth_part(name)
-    LSYNTH['lsynth']['translations'][name]
+    LSynth[:translations][name]
   end
 
   def lsynth_part?(part)
-    lsynth_parts = LSYNTH['lsynth']['parts']
+    lsynth_parts = LSynth[:parts]
     lsynth_parts.include?(part.to_s)
   end
 
