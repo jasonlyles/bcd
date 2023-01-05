@@ -57,7 +57,7 @@ class OrderMailer < AsyncMailer
     @name = name
     @hide_unsubscribe = true
 
-    mail(reply_to: user.email, to: [user.email, 'service@brickcitydepot.com'], subject: "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}")
+    mail(reply_to: user.email, to: [user.email, 'sales@brickcitydepot.com'], subject: "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}")
   end
 
   # :nocov:
