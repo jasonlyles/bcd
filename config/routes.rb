@@ -63,7 +63,7 @@ Rails.application.routes.draw do
   devise_for :radmins
   authenticate :radmin do
     mount Resque::Server.new, at: '/jobs', as: 'jobs'
-    get '/jobs/bcd admin', to: redirect('/woofay') # Trick for adding a link back to BCD admin from Resque dashboard
+    get '/jobs/bcd_admin', to: redirect('/woofay') # Trick for adding a link back to BCD admin from Resque dashboard
   end
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', passwords: 'passwords' }
