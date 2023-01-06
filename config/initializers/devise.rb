@@ -37,16 +37,16 @@ Devise.setup do |config|
   # ==> Configuration for :database_authenticatable
   # For bcrypt, this is the cost for hashing the password and defaults to 10. If
   # using other encryptors, it sets how many times you want the password re-encrypted.
-  #config.stretches = 10
+  # config.stretches = 10
   config.stretches = Rails.env.test? ? 1 : 10
   # Define which will be the encryption algorithm. Devise also supports encryptors
   # from others authentication tools as :clearance_sha1, :authlogic_sha512 (then
   # you should set stretches above to 20 for default behavior) and :restful_authentication_sha1
   # (then you should set stretches to 10, and copy REST_AUTH_SITE_KEY to pepper)
-  #config.encryptor = :bcrypt
+  # config.encryptor = :bcrypt
 
   # Setup a pepper to generate the encrypted password.
-  config.pepper = ENV['BCD_DEVISE_PEPPER']
+  config.pepper = Rails.application.credentials.devise.pepper
 
   # ==> Configuration for :confirmable
   # The time you want to give your user to confirm his account. During this time
@@ -148,5 +148,5 @@ Devise.setup do |config|
   # change their passwords.
   config.reset_password_within = 6.hours
 
-  config.secret_key = ENV['BCD_DEVISE_SECRET_KEY']
+  config.secret_key = Rails.application.credentials.devise.secret_key
 end

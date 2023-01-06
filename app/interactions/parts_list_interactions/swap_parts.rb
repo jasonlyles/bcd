@@ -1,6 +1,12 @@
+# frozen_string_literal: true
+
 module PartsListInteractions
   class SwapParts < BasePartsListInteraction
     attr_accessor :affected_parts_lists_ids
+
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/PerceivedComplexity
     # This run method should be the only public method
     def run
       old_part_name = @options[:old_part_name]
@@ -30,10 +36,13 @@ module PartsListInteractions
       end
 
       self.affected_parts_lists_ids = PartsList.includes(:product).where(id: parts_list_ids.flatten.uniq).map(&:id)
-      Rails.logger.info("PartsListInteractions::SwapParts Parts lists being updated: #{self.affected_parts_lists_ids}")
+      Rails.logger.info("PartsListInteractions::SwapParts Parts lists being updated: #{affected_parts_lists_ids}")
     rescue StandardError => e
       self.error = 'Unexpected Error'
       Rails.logger.error("PartsListInteractions::SwapParts Old Name: #{old_part_name} New Name: #{new_part_name} Some unexpected error: #{e.message}")
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/PerceivedComplexity
   end
 end

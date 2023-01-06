@@ -1,9 +1,9 @@
-# Read about factories at http://github.com/thoughtbot/factory_girl
+# Read about factories at http://github.com/thoughtbot/factory_bot
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :lot do
-    element_id '1'
-    parts_list_id '1'
-    quantity '1'
+    element_id { 1 }
+    parts_list_id { 1 }
+    quantity { 1 }
   end
 end

@@ -1,14 +1,14 @@
 <div class="card mb-4 mt-4">
   <% unless product.main_image.blank? %>
     <div class="similar-product-header">
-      <%= link_to(image_tag(product.main_image.medium, class: 'card-img-top img-fluid object-fit-cover'), {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case}) %>
+      <%= link_to(image_tag(product.main_image.medium, class: 'card-img-top img-fluid object-fit-cover'), { action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case }) unless product.main_image.medium.blank? %>
     </div>
   <% end %>
   <div class="card-body">
-    <h5 class="card-title"><%= link_to product.code_and_name, {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case} %></h5>
+    <h5 class="card-title"><%= link_to product.code_and_name, { action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case } %></h5>
   </div>
   <div class="card-footer card-footer-no-border bg-transparent">
-    <% if product.is_free? %>
+    <% if product.free? %>
       <span class="h4">
         <strong>FREE</strong>
       </span>
@@ -17,8 +17,7 @@
         <%= number_to_currency(product.price) %>
       </span>
       <div class="mt-2">
-        <%= link_to raw("<i class='fas fa-cart-plus'></i>&nbsp; <span style='font-size:larger'>Add to Cart</span>"), {action: "add_to_cart", product_code: product.product_code}, class: 'btn btn-primary btn-block', data: {disable_with: 'Adding...'}, method:
-        :post %>
+        <%= link_to raw("<i class='fas fa-cart-plus'></i>&nbsp; <span style='font-size:larger'>Add to Cart</span>"), { action: "add_to_cart", product_code: product.product_code }, class: 'btn btn-primary btn-block', data: { disable_with: 'Adding...' }, method: :post %>
       </div>
     <% end %>
   </div>

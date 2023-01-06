@@ -1,5 +1,10 @@
+# frozen_string_literal: true
+
 module PartInteractions
   class UpdateFromRebrickable < BasePartInteraction
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
+    # rubocop:disable Metrics/PerceivedComplexity
     def run
       rebrickable_part = Rebrickable.get_part(@part.ldraw_id)
       Rails.logger.info("PartInteractions::UpdateFromRebrickable::#{@part.id} Rebrickable called")
@@ -32,5 +37,8 @@ module PartInteractions
       self.error = "Rebrickable Update Failure. LDraw ID: #{@part.ldraw_id} ERROR: #{e.message}"
       Rails.logger.error("PartInteractions::UpdateFromRebrickable::#{@part.id} failed.\nERROR: #{e}\n#{e.backtrace}")
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/PerceivedComplexity
   end
 end

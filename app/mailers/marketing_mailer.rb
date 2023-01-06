@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 class MarketingMailer < ActionMailer::Base
-  default :from => "Brick City Depot <sales@brickcitydepot.com>"
+  default from: 'Brick City Depot <sales@brickcitydepot.com>'
   layout 'base_email'
 
-  def new_product_notification(product, product_type, image_url, user, message=nil)
+  def new_product_notification(product, product_type, image_url, user, message = nil)
     @host = Rails.application.config.web_host
     @product = product
     @product_type = product_type
     @image = image_url
     @message = message
     @user = user
-    mail(to: @user.email, subject: "New Product!")
+    mail(to: @user.email, subject: 'New Product!')
   end
 
   def new_marketing_notification(email_campaign, user)
@@ -18,14 +20,15 @@ class MarketingMailer < ActionMailer::Base
     @user = user
     mail(to: @user.email, subject: @email_campaign.subject)
   end
-#:nocov
+
+  # :nocov:
   def queue_name
-    "batchmailer"
+    'batchmailer'
   end
-#:nocov
+  # :nocov:
 end
 
-#:nocov:
+# :nocov:
 if Rails.env.development?
   class MarketingMailer::Preview < MailView
     def new_product_notification
@@ -33,7 +36,7 @@ if Rails.env.development?
       @product = Product.first
 
       MarketingMailer.new_product_notification(@product, @product.product_type.name, @product.main_image.medium,
-                                               @user, "Marketing mumbo-jumbo...")
+                                               @user, 'Marketing mumbo-jumbo...')
     end
 
     def new_marketing_notification
@@ -43,5 +46,4 @@ if Rails.env.development?
     end
   end
 end
-#:nocov:
-
+# :nocov:

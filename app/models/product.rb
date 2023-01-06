@@ -1,4 +1,6 @@
-class Product < ActiveRecord::Base
+# frozen_string_literal: true
+
+class Product < ApplicationRecord
   belongs_to :category
   belongs_to :subcategory
   belongs_to :product_type
@@ -6,14 +8,13 @@ class Product < ActiveRecord::Base
   has_many :images, dependent: :destroy
   has_many :parts_lists, dependent: :destroy
   mount_uploader :pdf, PdfUploader
-  process_in_background :pdf
   accepts_nested_attributes_for :images, allow_destroy: true
   accepts_nested_attributes_for :parts_lists, allow_destroy: true
 
-  attr_accessible :category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache,
-                  :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf,
-                  :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes,
-                  :parts_lists_attributes, :featured, :designer
+  # attr_accessible :category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache,
+  # :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf,
+  # :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes,
+  # :parts_lists_attributes, :featured, :designer
 
   validates :product_code, uniqueness: true, presence: true
   validates :product_type_id, presence: true
@@ -35,9 +36,12 @@ class Product < ActiveRecord::Base
   scope :ready, -> { where(ready_for_public: true).includes(:category).includes(:subcategory) }
   scope :featured, -> { where(featured: true) }
   scope :in_stock, -> { where('quantity > 0') } # Maybe set up to use only physical products, and not digital products
-  scope :instructions, -> { Product.joins(:product_type).where("product_types.name='Instructions'") }
   scope :ready_instructions, -> { ready.instructions }
   scope :sellable_instructions, -> { ready_instructions.where(free: false) }
+
+  def self.instructions
+    Product.joins(:product_type).where("product_types.name='Instructions'")
+  end
 
   def self.find_all_by_price(price)
     price = 0 if price == 'free'
@@ -85,13 +89,12 @@ class Product < ActiveRecord::Base
     Product.ready.where(["free != 't' and quantity >= 1 and category_id = ? and id <> ?", category_id, id]).limit(4)
   end
 
-  def has_orders?
-    line_item = LineItem.where(['product_id = ?', id]).limit(1)
-    line_item.empty? ? false : true
+  def orders?
+    LineItem.where(['product_id = ?', id]).exists?
   end
 
   def destroy
-    if has_orders?
+    if orders?
       # switch ready_for_public flag to 'f', effectively taking the product off the market, but leaving it in the
       # database for reporting purposes
       self.ready_for_public = 'f'
@@ -102,17 +105,17 @@ class Product < ActiveRecord::Base
   end
 
   def decrement_quantity(amount)
-    unless product_type.digital_product?
-      self.quantity -= amount
-      save
-    end
+    return if product_type.digital_product?
+
+    self.quantity -= amount
+    save
   end
 
-  def is_physical_product?
-    !is_digital_product?
+  def physical_product?
+    !digital_product?
   end
 
-  def is_digital_product?
+  def digital_product?
     if product_type
       product_type.digital_product?
     else
@@ -129,7 +132,7 @@ class Product < ActiveRecord::Base
   end
 
   def out_of_stock?
-    self.quantity == 0
+    self.quantity.zero?
   end
 
   def base_product_code(code = nil)
@@ -142,16 +145,12 @@ class Product < ActiveRecord::Base
 
   def self.find_by_base_product_code(product_code)
     product = Product.new
-    product = find_by_product_code(product.base_product_code(product_code.upcase))
-    product
-  end
-
-  def is_free?
-    free
+    find_by_product_code(product.base_product_code(product_code.upcase))
   end
 
   def main_image
     return images[0].url unless images.blank?
+
     nil
   end
 

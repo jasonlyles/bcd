@@ -2,12 +2,9 @@ require "spec_helper"
 
 describe MarketingMailer do
   before do
-    @product_type = FactoryGirl.create(:product_type)
-    @category = FactoryGirl.create(:category)
-    @subcategory = FactoryGirl.create(:subcategory)
-    @product = FactoryGirl.create(:product)
-    @user = FactoryGirl.create(:user)
-    @email_campaign = FactoryGirl.create(:email_campaign)
+    @product = FactoryBot.create(:product_with_associations)
+    @user = FactoryBot.create(:user)
+    @email_campaign = FactoryBot.create(:email_campaign)
   end
 
   describe "sending a new product notification email to a user" do

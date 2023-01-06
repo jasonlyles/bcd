@@ -1,0 +1,4 @@
+speedups:
+  block_vs_symbol_to_proc: false
+exclude_paths:
+  - 'db/schema.rb'

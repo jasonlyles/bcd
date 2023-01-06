@@ -5,11 +5,11 @@ describe UpdateMailer do
     it "should send user an email for instructions that have been updated" do
       Category.delete_all
       Subcategory.delete_all
-      @product_type = FactoryGirl.create(:product_type)
-      @category = FactoryGirl.create(:category)
-      @subcategory = FactoryGirl.create(:subcategory, :category_id => @category.id)
-      @user = FactoryGirl.create(:user)
-      @model = FactoryGirl.create(:product, :subcategory_id => @subcategory.id, :category_id => @category.id)
+      @product_type = FactoryBot.create(:product_type)
+      @category = FactoryBot.create(:category)
+      @subcategory = FactoryBot.create(:subcategory, :category_id => @category.id)
+      @user = FactoryBot.create(:user)
+      @model = FactoryBot.create(:product, :subcategory_id => @subcategory.id, :category_id => @category.id)
       @mail = UpdateMailer.updated_instructions(@user.id, @model.id, message='BLAH BLAH BLAH')
 
       expect(@mail.subject).to eq("Instructions for CB001 Colonial Revival House have been updated")

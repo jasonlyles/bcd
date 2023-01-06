@@ -33,11 +33,7 @@
                 <%= f.text_field :image, disabled: true, class: "form-control" %>
               <% end %>
               <br />
-              <% if email_campaign.image_processing? %>
-                Image is currently being processed. Check back in a few seconds.
-              <% else %>
-                <%= image_tag(email_campaign.image.medium.url) %>
-              <% end %>
+              <%= image_tag(email_campaign.image.medium.url) unless email_campaign.image.medium.url.blank? %>
             <% end %>
             <% if email_campaign.image? %>
               <div class="form-check mt-2">

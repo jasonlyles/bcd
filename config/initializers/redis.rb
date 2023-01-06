@@ -1,3 +1,1 @@
-if ENV["REDISCLOUD_URL"]
-  $redis = Redis.new(:url => ENV["REDISCLOUD_URL"])
-end
+$redis = Redis.new(url: Rails.application.credentials.redis.url) if Rails.application.credentials.redis.url

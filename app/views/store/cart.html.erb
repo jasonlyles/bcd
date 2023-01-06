@@ -21,33 +21,33 @@
               <% if !image.blank? %>
                 <% image_url = image.url.thumb %>
                 <td>
-                  <%= link_to image_tag(image_url.url), { action: :product_details, product_code: item.product.product_code, product_name: item.product.name.to_snake_case } %>
+                  <%= link_to image_tag(image_url.url), { action: :product_details, product_code: item.product.product_code, product_name: item.product.name.to_snake_case } unless image_url.url.blank? %>
                 </td>
               <% end %>
               <td class="align-middle">
                 <span class="d-none d-md-block">
-                  <%= link_to "#{item.product.product_code} #{item.product.name}", {:action => :product_details, :product_code => item.product.product_code, :product_name => item.product.name.to_snake_case} %>
+                  <%= link_to "#{item.product.product_code} #{item.product.name}", { action: :product_details, product_code: item.product.product_code, product_name: item.product.name.to_snake_case } %>
                 </span>
               </td>
               <td class="align-middle"><%= item.product.product_type.name %></td>
               <td class="align-middle"><%= number_to_currency(item.price) %></td>
               <td class="align-middle">
-                <% if item.product.is_physical_product? %>
-                  <%= form_for(:cart, :url => {:action => :update_item_in_cart}) do |f| %>
+                <% if item.product.physical_product? %>
+                  <%= form_for(:cart, url: { action: :update_item_in_cart }) do |f| %>
                     <%= f.hidden_field :item_id, value: item.id %>
                     <div class="form-group">
                       <%= f.text_field :quantity, value: item.quantity, size: 1, class: 'form-control' %>
                     </div>
-                    <%= f.submit 'Update', class: 'btn btn-primary btn-sm', data: {disable_with: 'Updating'} %>
+                    <%= f.submit 'Update', class: 'btn btn-primary btn-sm', data: { disable_with: 'Updating' } %>
                   <% end %>
                 <% else %>
-                  <%= form_for(:cart, :url => {:action => :update_item_in_cart}) do |f| %>
-                    <%= f.hidden_field :item_id, :value => item.id %>
-                    <%= f.hidden_field :quantity, :value => 0 %>
+                  <%= form_for(:cart, url: { action: :update_item_in_cart }) do |f| %>
+                    <%= f.hidden_field :item_id, value: item.id %>
+                    <%= f.hidden_field :quantity, value: 0 %>
                     <div class="input-group input-group-sm mb-3">
                       <%= f.text_field :display_quantity, value: 1, size: 1, disabled: true, class: 'form-control' %>
                       <div class="input-group-append">
-                        <%= f.submit 'Remove', class: 'btn btn-outline-primary btn-sm', data: {disable_with: 'Removing'} %>
+                        <%= f.submit 'Remove', class: 'btn btn-outline-primary btn-sm', data: { disable_with: 'Removing' } %>
                       </div>
                     </div>
                   <% end %>
@@ -66,7 +66,7 @@
       </div>
       <div class="clearfix"></div>
       <br/>
-      <%= render :partial => 'shared/cart_nav_buttons' %>
+      <%= render partial: 'shared/cart_nav_buttons' %>
     <% else %>
       <div class="text-center">
         <br/>

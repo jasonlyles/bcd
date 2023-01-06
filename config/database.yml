@@ -1,39 +1,49 @@
 # SQLite version 3.x
 # #   gem install sqlite3-ruby (not necessary on OS X Leopard)
 development:
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  username: postgres
-  database: brickcity_development
+  adapter:   postgresql
+  encoding:  unicode
+  host:      localhost
+  username:  postgres
+  database:  brickcity_development
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: 5
+  pool:      5
 
-# Warning: The database defined as 'test' will be erased and
+# Warning:   The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
 # Do not set this db to the same as development or production.
 test:
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  username: postgres
-  database: brickcity_test
+  adapter:   postgresql
+  encoding:  unicode
+  host:      localhost
+  username:  postgres
+  database:  brickcity_test
   # For details on connection pooling, see rails configuration guide
   # http://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: 5
+  pool:      5
 
 staging:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  timeout: 5000
+  adapter:   postgresql
+  encoding:  unicode
+  host:      localhost
+  username:  postgres
+  database:  brickcity_staging
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool:      5
 
 profile:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  timeout: 5000
+  adapter:   sqlite3
+  database:  db/production.sqlite3
+  timeout:   5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  timeout: 5000
+  adapter:   postgresql
+  encoding:  unicode
+  host:      localhost
+  username:  postgres
+  database:  brickcity_production
+  # For details on connection pooling, see rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool:      5

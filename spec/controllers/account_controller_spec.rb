@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe AccountController do
   before do
-    @user ||= FactoryGirl.create(:user)
+    @user ||= FactoryBot.create(:user)
   end
 
   describe 'order_history' do
     it "should return all orders in order history, even if they don't have a status" do
-      order1 = FactoryGirl.create(:order)
-      order2 = FactoryGirl.create(:order, status: 'INVALID')
-      order3 = FactoryGirl.create(:order, status: nil)
+      order1 = FactoryBot.create(:order)
+      order2 = FactoryBot.create(:order, status: 'INVALID')
+      order3 = FactoryBot.create(:order, status: nil)
       sign_in @user
       get :order_history
 
@@ -28,16 +28,13 @@ describe AccountController do
       sign_in @user
       get :index
 
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it 'should get only completed orders for display' do
-      product_type = FactoryGirl.create(:product_type)
-      category = FactoryGirl.create(:category)
-      subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product)
-      order1 = FactoryGirl.create(:order_with_line_items)
-      order2 = FactoryGirl.create(:order, status: 'INVALID')
+      FactoryBot.create(:product_with_associations)
+      order1 = FactoryBot.create(:order_with_line_items)
+      order2 = FactoryBot.create(:order, status: 'INVALID')
       sign_in @user
       get :index
 
@@ -48,7 +45,7 @@ describe AccountController do
   describe 'unsubscribe_from_emails' do
     context 'cannot find user based on guid and unsubscribe_token passed in' do
       it 'should render still_subscribed' do
-        get :unsubscribe_from_emails, id: 'fake', unsubscribe_token: 'also_fake'
+        get :unsubscribe_from_emails, params: { id: 'fake', unsubscribe_token: 'also_fake' }
 
         expect(response).to render_template(:still_subscribed)
       end
@@ -57,9 +54,9 @@ describe AccountController do
     context 'finds user based on guid and unsubscribe_token passed in' do
       context 'and user cannot be saved' do
         it 'should render still_subscribed' do
-          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'ralph@mil.mil', guid: 'guid')
+          @user = FactoryBot.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'ralph@mil.mil', guid: 'guid')
           allow_any_instance_of(User).to receive(:save).and_return(false)
-          get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
+          get :unsubscribe_from_emails, params: { id: @user.guid, token: @user.unsubscribe_token }
 
           @user.reload
           expect(@user.email_preference).to eq(2)
@@ -69,8 +66,8 @@ describe AccountController do
 
       context 'and user can be saved' do
         it 'should render unsubscribed' do
-          @user = FactoryGirl.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'mil@ralph.ralph', guid: 'guid')
-          get :unsubscribe_from_emails, id: @user.guid, token: @user.unsubscribe_token
+          @user = FactoryBot.create(:user, unsubscribe_token: 'chimichangas', email_preference: 2, email: 'mil@ralph.ralph', guid: 'guid')
+          get :unsubscribe_from_emails, params: { id: @user.guid, token: @user.unsubscribe_token }
 
           @user.reload
           expect(@user.email_preference).to eq(0)

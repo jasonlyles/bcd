@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Admin::ProductsController < AdminController
-  before_filter :get_type, :only => [:new, :edit, :create, :update]
-  before_filter :find_product, only: [:show, :edit, :update, :destroy]
+  before_action :assign_type, only: %i[new edit create update]
+  before_action :find_product, only: %i[show edit update destroy]
 
   # GET /products
   def index
@@ -9,41 +11,39 @@ class Admin::ProductsController < AdminController
   end
 
   # GET /products/1
-  def show
-  end
+  def show; end
 
   # GET /products/new
   def new
     @product = Product.new
-    if params[:product_code]
-      #This is for creating a derivative product, i.e., a model/kit based of the base product, the instructions
-      product = Product.find_by_product_code(params[:product_code])
-      if product
-        @derivative_product = true
-        @product = product.dup
-      end
-    end
+    return unless params[:product_code]
+
+    # This is for creating a derivative product, i.e., a model/kit based of the base product, the instructions
+    product = Product.find_by_product_code(params[:product_code])
+    return unless product
+
+    @derivative_product = true
+    @product = product.dup
   end
 
   # GET /products/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /products
   def create
-    @product = Product.new(params[:product])
+    @product = Product.new(product_params)
     if @product.save
       redirect_to([:admin, @product], notice: 'Product was successfully created.')
     else
-      flash[:alert] = "Product was NOT created"
+      flash[:alert] = 'Product was NOT created'
       render 'new'
     end
   end
 
   # PUT /products/1
   def update
-    if @product.update_attributes(params[:product])
-      BackendNotification.create(message: "#{current_radmin.email} updated the PDF for #{@product.code_and_name}. Be sure to email an update to users if necessary.") if @product.pdf_updated? && !params[:product][:remove_pdf].present?
+    if @product.update(product_params)
+      BackendNotification.create(message: "#{current_radmin.email} updated the PDF for #{@product.code_and_name}. Be sure to email an update to users if necessary.") if @product.pdf_changed? && !params[:product][:remove_pdf].present?
       redirect_to([:admin, @product], notice: 'Product was successfully updated.')
     else
       flash[:alert] = 'Product was NOT updated'
@@ -60,7 +60,7 @@ class Admin::ProductsController < AdminController
   def retire_product
     @product = Product.find(params[:product][:id])
     @product.retire
-    redirect_to :back
+    redirect_back(fallback_location: '/admin/products')
   end
 
   private
@@ -69,7 +69,12 @@ class Admin::ProductsController < AdminController
     @product = Product.find(params[:id])
   end
 
-  def get_type
-    @product_types = ProductType.all.collect{|product_type| [product_type.name,product_type.id]}
+  def assign_type
+    @product_types = ProductType.all.collect { |product_type| [product_type.name, product_type.id] }
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def product_params
+    params.require(:product).permit(:category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache, :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf, :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes, :parts_lists_attributes, :featured, :designer, :_method)
   end
 end

@@ -8,7 +8,7 @@ User email:
 <%= @user.email %>
 \ Physical Items:
 <% @order.line_items.each do |line_item| %>
-  <% if line_item.product.is_physical_product? %>
+  <% if line_item.product.physical_product? %>
     <%= "#{line_item.product.product_code} #{line_item.product.name}" %>
   <% end %>
 <% end %>
@@ -17,10 +17,10 @@ User email:
 \
 <%= "#{@order.first_name} #{@order.last_name}" %>
 \
-<%= @order.address_street_1 %>
-<% if @order.address_street_2? %>
+<%= @order.address_street1 %>
+<% if @order.address_street2? %>
   \
-  <%= @order.address_street_2 %>
+  <%= @order.address_street2 %>
 <% end %>
 \
 <%= "#{@order.address_city}, #{@order.address_state} #{@order.address_zip}" %>

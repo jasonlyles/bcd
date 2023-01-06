@@ -1,4 +1,4 @@
-class CreateLineItems < ActiveRecord::Migration
+class CreateLineItems < ActiveRecord::Migration[4.2]
   def self.up
     create_table :line_items do |t|
       t.integer :order_id

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Update do
   it "should be valid with valid attributes" do
-    update = FactoryGirl.create(:update)
+    update = FactoryBot.create(:update)
     expect(update).to be_valid
   end
 

@@ -1,9 +1,9 @@
-# Read about factories at http://github.com/thoughtbot/factory_girl
+# Read about factories at http://github.com/thoughtbot/factory_bot
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :partner do
-    name "MyString"
-    url "MyString"
-    contact "MyString"
+    name { 'MyString' }
+    url { 'MyString' }
+    contact { 'MyString' }
   end
 end

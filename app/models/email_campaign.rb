@@ -1,8 +1,10 @@
-class EmailCampaign < ActiveRecord::Base
+# frozen_string_literal: true
+
+class EmailCampaign < ApplicationRecord
   before_create :generate_guid
-  mount_uploader :image, ImageUploader
-  attr_accessible :click_throughs, :description, :image, :image_cache, :remove_image, :message,
-                  :subject, :emails_sent, :guid, :redirect_link
+  mount_uploader :image, ImageUploader, validate_integrity: true
+  # attr_accessible :click_throughs, :description, :image, :image_cache, :remove_image, :message,
+  # :subject, :emails_sent, :guid, :redirect_link
 
   validates_presence_of :description, :subject
 
@@ -15,7 +17,7 @@ class EmailCampaign < ActiveRecord::Base
   end
 
   def destroy
-    if self.emails_sent > 0
+    if emails_sent.positive?
       nil
     else
       super

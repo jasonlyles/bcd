@@ -91,7 +91,7 @@
                 <% end %>
               </div>
               <% unless product.nil? || product.main_image.blank? %>
-                <%= link_to(image_tag(product.main_image.medium, class: 'card-img-right flex-auto img-fluid', alt: "#{product.name}"), controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case) %>
+                <%= link_to(image_tag(product.main_image.medium, class: 'card-img-right flex-auto img-fluid', alt: "#{product.name}"), controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case) unless product.main_image.medium.blank? %>
               <% end %>
             </div>
           </div>

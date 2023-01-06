@@ -1,9 +1,9 @@
-class CreateAdvertisingCampaigns < ActiveRecord::Migration
+class CreateAdvertisingCampaigns < ActiveRecord::Migration[4.2]
   def self.up
     create_table :advertising_campaigns do |t|
       t.integer :partner_id
-      t.string :reference_code, :limit => 10
-      t.boolean :campaign_live, :default => false
+      t.string :reference_code, limit: 10
+      t.boolean :campaign_live, default: false
       t.string :description
 
       t.timestamps

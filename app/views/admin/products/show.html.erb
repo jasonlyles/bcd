@@ -178,7 +178,7 @@
                     <%= "#{@product.discount_percentage.to_i}%" %>
                   </td>
                 </tr>
-                <% if @product.is_physical_product? %>
+                <% if @product.physical_product? %>
                 <tr>
                   <td>
                     <b>Quantity:</b>
@@ -205,11 +205,7 @@
       </div>
       <div class="card-body">
         <% @product.images.each do |image| %>
-          <% if image.url_processing? %>
-            Image available soon...
-          <% else %>
-            <%= image_tag(image.url.thumb.url) %>
-          <% end %>
+          <%= image_tag(image.url.thumb.url) unless image.url.thumb.url.blank? %>
         <% end %>
       </div>
     </div>

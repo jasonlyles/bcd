@@ -1,9 +1,11 @@
-class Part < ActiveRecord::Base
+# frozen_string_literal: true
+
+class Part < ApplicationRecord
   has_many :elements, dependent: :restrict_with_error
   has_many :colors, through: :elements
 
-  attr_accessible :name, :ldraw_id, :bl_id, :lego_id, :check_bricklink, :check_rebrickable,
-    :alternate_nos, :is_obsolete, :year_from, :year_to, :brickowl_ids, :is_lsynth
+  # attr_accessible :name, :ldraw_id, :bl_id, :lego_id, :check_bricklink, :check_rebrickable,
+  # :alternate_nos, :is_obsolete, :year_from, :year_to, :brickowl_ids, :is_lsynth
 
   validates :name, presence: true
   validates :name, uniqueness: { scope: :ldraw_id }
@@ -12,8 +14,8 @@ class Part < ActiveRecord::Base
     part_id = part_key.split('_').first
     part = Part.find_or_create_by(ldraw_id: part_id)
 
-    PartInteractions::UpdateFromBricklink.run(part: part) if part.check_bricklink?
-    PartInteractions::UpdateFromRebrickable.run(part: part) if part.check_rebrickable?
+    PartInteractions::UpdateFromBricklink.run(part:) if part.check_bricklink?
+    PartInteractions::UpdateFromRebrickable.run(part:) if part.check_rebrickable?
 
     part
   end

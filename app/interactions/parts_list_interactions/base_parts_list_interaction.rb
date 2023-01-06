@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module PartsListInteractions
   class BasePartsListInteraction
-
     attr_accessor :error
 
     def initialize(options)
@@ -19,8 +20,5 @@ module PartsListInteractions
     end
 
     private_class_method :new
-
-    private
-
   end
 end

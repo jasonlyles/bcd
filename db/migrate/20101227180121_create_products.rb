@@ -1,4 +1,4 @@
-class CreateProducts < ActiveRecord::Migration
+class CreateProducts < ActiveRecord::Migration[4.2]
   def self.up
     create_table :products do |t|
       t.string :name
@@ -7,14 +7,14 @@ class CreateProducts < ActiveRecord::Migration
       t.integer :subcategory_id
       t.string :product_code
       t.text :description
-      t.decimal :discount_percentage, :default => 0
+      t.decimal :discount_percentage, default: 0
       t.decimal :price
-      t.boolean :ready_for_public, :default => false
+      t.boolean :ready_for_public, default: false
       t.string :pdf
       t.string :tweet
-      t.boolean :free, :default => false
-      t.integer :quantity, :default => 1
-      t.boolean :alternative_build, :default => false
+      t.boolean :free, default: false
+      t.integer :quantity, default: 1
+      t.boolean :alternative_build, default: false
       t.string :youtube_url
 
       t.timestamps

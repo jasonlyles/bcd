@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::PartsController < AdminController
-  before_filter :get_part, only: [:show, :edit, :update, :destroy, :update_via_bricklink, :update_via_rebrickable]
+  before_action :assign_part, only: %i[show edit update destroy update_via_bricklink update_via_rebrickable]
 
   def index
     search = if params[:term].present?
@@ -9,21 +11,21 @@ class Admin::PartsController < AdminController
                # This is used by the autocomplete so I can search by name or Ldraw/BL/Lego ID
                if params[:term].to_i.to_s == params[:term]
                  {
-                  "ldraw_id_or_bl_id_or_lego_id_or_alternate_nos_cont" => params[:term]
+                   'ldraw_id_or_bl_id_or_lego_id_or_alternate_nos_cont' => params[:term]
                  }
                else
                  {
-                  "name_cont" => params[:term]
+                   'name_cont' => params[:term]
                  }
                end
              else
                params[:q]
              end
     @q = Part.ransack(search)
-    @parts = @q.result.order("name").page(params[:page]).per(20)
+    @parts = @q.result.order('name').page(params[:page]).per(20)
     respond_to do |format|
       format.html
-      format.json { render json: @parts.map { |p| p.name_and_ids } }
+      format.json { render json: @parts.map(&:name_and_ids) }
     end
   end
 
@@ -33,34 +35,32 @@ class Admin::PartsController < AdminController
   end
 
   # GET /parts/1/edit
-  def edit
-  end
+  def edit; end
 
-  def show
-  end
+  def show; end
 
   # POST /parts
   def create
-    @part = Part.new(params[:part])
+    @part = Part.new(part_params)
     if @part.save
       PartInteractions::UpdateFromBricklink.run(part: @part) if @part.check_bricklink?
       PartInteractions::UpdateFromRebrickable.run(part: @part) if @part.check_rebrickable?
       redirect_to([:admin, @part], notice: 'Part was successfully created.')
     else
-      flash[:alert] = "Part was NOT created"
-      render "new"
+      flash[:alert] = 'Part was NOT created'
+      render 'new'
     end
   end
 
   # PUT /parts/1
   def update
-    if @part.update_attributes(params[:part])
+    if @part.update(part_params)
       PartInteractions::UpdateFromBricklink.run(part: @part) if @part.check_bricklink?
       PartInteractions::UpdateFromRebrickable.run(part: @part) if @part.check_rebrickable?
       redirect_to([:admin, @part], notice: 'Part was successfully updated.')
     else
-      flash[:alert] = "Part was NOT updated"
-      render "edit"
+      flash[:alert] = 'Part was NOT updated'
+      render 'edit'
     end
   end
 
@@ -84,7 +84,7 @@ class Admin::PartsController < AdminController
       flash[:alert] = interaction.error
     end
 
-    redirect_to :back
+    redirect_back(fallback_location: '/admin/parts')
   end
 
   def update_via_rebrickable
@@ -95,12 +95,17 @@ class Admin::PartsController < AdminController
       flash[:alert] = interaction.error
     end
 
-    redirect_to :back
+    redirect_back(fallback_location: '/admin/parts')
   end
 
   private
 
-  def get_part
+  def assign_part
     @part = Part.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def part_params
+    params.require(:part).permit(:name, :ldraw_id, :bl_id, :lego_id, :check_bricklink, :check_rebrickable, :alternate_nos, :is_obsolete, :year_from, :year_to, :brickowl_ids, :is_lsynth)
   end
 end

@@ -28,7 +28,7 @@
               <td class="align-middle text-center">
                 <div class="d-flex justify-content-around">
                   <% if lot.element&.image&.thumb&.url %>
-                    <%= link_to image_tag(lot.element.image.thumb.url, alt: 'View on BrickLink.com', title: 'View on BrickLink.com', class: 'grow parts-list-image'), "https://www.bricklink.com/v2/catalog/catalogitem.page?P=#{part.bl_id}", target: '_blank' %>
+                    <%= link_to image_tag(lot.element.image.thumb.url, alt: 'View on BrickLink.com', title: 'View on BrickLink.com', class: 'grow parts-list-image'), "https://www.bricklink.com/v2/catalog/catalogitem.page?P=#{part.bl_id}", target: '_blank' unless lot.element.image.thumb.url.blank? %>
                   <% else %>
                     <%= link_to 'View on BrickLink.com', "https://www.bricklink.com/v2/catalog/catalogitem.page?P=#{part.bl_id}", target: '_blank' %>
                   <% end %>
@@ -38,7 +38,7 @@
                 </div>
               </td>
               <td class="align-middle text-center" style='<%= "background-color: ##{color.ldraw_rgb};" %>'>
-                <div class="kaffee" style='color: <%= set_text_color(color.ldraw_rgb) %>;'>
+                <div class="kaffee" style='color: <%= assign_text_color(color.ldraw_rgb) %>;'>
                   <%= color.bl_name %>
                 </div>
               </td>

@@ -2,8 +2,11 @@ require 'spec_helper'
 
 describe Admin::ImagesController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
-    @product_type = FactoryGirl.create(:product_type)
+    @radmin ||= FactoryBot.create(:radmin)
+    @product_type = FactoryBot.create(:product_type)
+    @category = FactoryBot.create(:category, id: 1)
+    @subcategory = FactoryBot.create(:subcategory)
+    @product = FactoryBot.create(:product, id: 2, category: @category, subcategory: @subcategory, product_code: 'ZZ001')
   end
 
   before(:each) do |example|
@@ -41,7 +44,7 @@ describe Admin::ImagesController do
   describe "GET #show" do
     it "assigns the requested image as @image" do
       image = Image.create! valid_attributes
-      get :show, id: image.to_param
+      get :show, params: { id: image.to_param }
 
       expect(assigns(:image)).to eq(image)
     end
@@ -50,7 +53,7 @@ describe Admin::ImagesController do
   describe "GET #edit" do
     it "assigns the requested image as @image" do
       image = Image.create! valid_attributes
-      get :edit, id: image.to_param
+      get :edit, params: { id: image.to_param }
 
       expect(assigns(:image)).to eq(image)
     end
@@ -65,10 +68,7 @@ describe Admin::ImagesController do
     end
 
     it "gets some default values for a new image if :product_id is passed in the params" do
-      category = FactoryGirl.create(:category)
-      subcategory = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product, :product_code => 'ZZ001')
-      get :new, :product_id => product.id
+      get :new, params: { product_id: @product.id }
 
       expect(assigns(:image).product.product_code).to eq('ZZ001')
     end
@@ -78,19 +78,19 @@ describe Admin::ImagesController do
     context "with valid params" do
       it "creates a new Image" do
         expect {
-          post :create, image: valid_attributes
+          post :create, params: { image: valid_attributes }
         }.to change(Image, :count).by(1)
       end
 
       it "assigns a newly created image as @image" do
-        post :create, image: valid_attributes
+        post :create, params: { image: valid_attributes }
 
         expect(assigns(:image)).to be_a(Image)
         expect(assigns(:image)).to be_persisted
       end
 
       it "redirects to the created image" do
-        post :create, image: valid_attributes
+        post :create, params: { image: valid_attributes }
 
         expect(response).to redirect_to([:admin, Image.last])
       end
@@ -127,7 +127,7 @@ describe Admin::ImagesController do
 
       it "updates the requested image" do
         image = Image.create! valid_attributes
-        put :update, id: image.to_param, image: new_attributes
+        put :update, params: { id: image.to_param, image: new_attributes }
         image.reload
 
         expect(assigns(:image)[:category_id]).to eq(2)
@@ -136,14 +136,14 @@ describe Admin::ImagesController do
 
       it "assigns the requested image as @image" do
         image = Image.create! valid_attributes
-        put :update, id: image.to_param, image: valid_attributes
+        put :update, params: { id: image.to_param, image: valid_attributes }
 
         expect(assigns(:image)).to eq(image)
       end
 
       it "redirects to the image" do
         image = Image.create! valid_attributes
-        put :update, id: image.to_param, image: valid_attributes
+        put :update, params: { id: image.to_param, image: valid_attributes }
 
         expect(response).to redirect_to([:admin, image])
       end
@@ -152,7 +152,7 @@ describe Admin::ImagesController do
     context "with invalid params" do
       it "assigns the image as @image" do
         image = Image.create! valid_attributes
-        put :update, id: image.to_param, image: invalid_attributes
+        put :update, params: { id: image.to_param, image: invalid_attributes }
 
         expect(assigns(:image)).to eq(image)
       end
@@ -172,13 +172,13 @@ describe Admin::ImagesController do
     it "destroys the requested image" do
       image = Image.create! valid_attributes
       expect {
-        delete :destroy, id: image.to_param
+        delete :destroy, params: { id: image.to_param }
       }.to change(Image, :count).by(-1)
     end
 
     it "redirects to the images list" do
       image = Image.create! valid_attributes
-      delete :destroy, id: image.to_param
+      delete :destroy, params: { id: image.to_param }
 
       expect(response).to redirect_to(admin_images_url)
     end
@@ -191,14 +191,11 @@ describe Admin::ImagesController do
     end
   end
 
-  describe "get_products" do
+  describe "assign_products" do
     it "should return a list of products in a nice format" do
-      category = FactoryGirl.create(:category)
-      subcat = FactoryGirl.create(:subcategory)
-      product = FactoryGirl.create(:product)
-      controller.send(:get_products)
+      controller.send(:assign_products)
 
-      expect(assigns(:products)).to eq([["Colonial Revival House", 1]])
+      expect(assigns(:products)).to eq([["Colonial Revival House", 2]])
     end
   end
 end

@@ -16,7 +16,7 @@
                 data-trigger="focus"
                 data-placement="bottom"
                 title="Why is my order messed up?"
-                data-content="We're not sure, but we want to fix it. Please email us at service@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if
+                data-content="We're not sure, but we want to fix it. Please email us at sales@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if
               available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.">
                 <i class="fa fa-question-circle"></i>
               </a>
@@ -74,9 +74,9 @@
                   <tr>
                     <% product = item.product %>
                       <% image = product.images %>
-                        <% image_url = image[0].url.thumb if !image.blank? %>
+                        <% image_url = image[0].url.thumb unless image.blank? %>
                           <td>
-                            <%= image_tag(image_url.url) if !image_url.nil? %>
+                            <%= image_tag(image_url.url) unless image_url.blank? %>
                           </td>
                           <td class="align-middle">
                             <%= "#{product.product_code} #{product.name}" %>

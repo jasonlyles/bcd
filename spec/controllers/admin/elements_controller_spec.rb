@@ -2,7 +2,9 @@ require 'spec_helper'
 
 describe Admin::ElementsController do
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
+    @radmin ||= FactoryBot.create(:radmin)
+    @part = FactoryBot.create(:part)
+    @color = FactoryBot.create(:color)
   end
 
   before(:each) do |example|
@@ -15,8 +17,8 @@ describe Admin::ElementsController do
   # Element. As you add validations to Element, be sure to adjust the attributes here as well.
   let(:valid_attributes) {
     {
-        part_id: 1,
-        color_id: 2
+        part_id: @part.id,
+        color_id: @color.id
     }
   }
 
@@ -39,7 +41,7 @@ describe Admin::ElementsController do
   describe "GET #show" do
     it "assigns the requested element as @element" do
       element = Element.create! valid_attributes
-      get :show, id: element.to_param
+      get :show, params: { id: element.to_param }
 
       expect(assigns(:element)).to eq(element)
     end
@@ -56,7 +58,7 @@ describe Admin::ElementsController do
   describe "GET #edit" do
     it "assigns the requested element as @element" do
       element = Element.create! valid_attributes
-      get :edit, id: element.to_param
+      get :edit, params: { id: element.to_param }
 
       expect(assigns(:element)).to eq(element)
     end
@@ -66,19 +68,19 @@ describe Admin::ElementsController do
     context "with valid params" do
       it "creates a new Element" do
         expect {
-          post :create, element: valid_attributes
+          post :create, params: { element: valid_attributes }
         }.to change(Element, :count).by(1)
       end
 
       it "assigns a newly created element as @element" do
-        post :create, element: valid_attributes
+        post :create, params: { element: valid_attributes }
 
         expect(assigns(:element)).to be_a(Element)
         expect(assigns(:element)).to be_persisted
       end
 
       it "redirects to the created element" do
-        post :create, element: valid_attributes
+        post :create, params: { element: valid_attributes }
 
         expect(response).to redirect_to([:admin, Element.last])
       end
@@ -86,13 +88,13 @@ describe Admin::ElementsController do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved element as @element" do
-        post :create, element: invalid_attributes
+        post :create, params: { element: invalid_attributes }
 
         expect(assigns(:element)).to be_a_new(Element)
       end
 
       it "re-renders the 'new' template" do
-        post :create, element: invalid_attributes
+        post :create, params: { element: invalid_attributes }
 
         expect(response).to render_template("new")
       end
@@ -109,7 +111,7 @@ describe Admin::ElementsController do
 
       it "updates the requested element" do
         element = Element.create! valid_attributes
-        put :update, id: element.to_param, element: new_attributes
+        put :update, params: { id: element.to_param, element: new_attributes }
         element.reload
 
         expect(assigns(:element)[:part_id]).to eq(2)
@@ -117,14 +119,14 @@ describe Admin::ElementsController do
 
       it "assigns the requested element as @element" do
         element = Element.create! valid_attributes
-        put :update, id: element.to_param, element: valid_attributes
+        put :update, params: { id: element.to_param, element: valid_attributes }
 
         expect(assigns(:element)).to eq(element)
       end
 
       it "redirects to the element" do
         element = Element.create! valid_attributes
-        put :update, id: element.to_param, element: valid_attributes
+        put :update, params: { id: element.to_param, element: valid_attributes }
 
         expect(response).to redirect_to([:admin, element])
       end
@@ -133,14 +135,14 @@ describe Admin::ElementsController do
     context "with invalid params" do
       it "assigns the element as @element" do
         element = Element.create! valid_attributes
-        put :update, id: element.to_param, element: invalid_attributes
+        put :update, params: { id: element.to_param, element: invalid_attributes }
 
         expect(assigns(:element)).to eq(element)
       end
 
       it "re-renders the 'edit' template" do
         element = Element.create! valid_attributes
-        put :update, id: element.to_param, element: invalid_attributes
+        put :update, params: { id: element.to_param, element: invalid_attributes }
 
         expect(response).to render_template("edit")
       end
@@ -149,24 +151,20 @@ describe Admin::ElementsController do
 
   describe "DELETE #destroy" do
     it "destroys the requested element" do
-      FactoryGirl.create(:part, id: 1, name: 'Fake Part')
-      FactoryGirl.create(:color, id: 2, bl_name: 'Fake Color')
       element = Element.create! valid_attributes
       expect {
-        delete :destroy, id: element.to_param
+        delete :destroy, params: { id: element.to_param }
       }.to change(Element, :count).by(-1)
 
-      expect(flash[:notice]).to eq('Fake Color Fake Part deleted')
+      expect(flash[:notice]).to eq('Black Brick deleted')
     end
 
     it "redirects to the elements list" do
-      FactoryGirl.create(:part, id: 1, name: 'Fake Part')
-      FactoryGirl.create(:color, id: 2, bl_name: 'Fake Color')
       element = Element.create! valid_attributes
-      delete :destroy, id: element.to_param
+      delete :destroy, params: { id: element.to_param }
 
       expect(response).to redirect_to(admin_elements_url)
-      expect(flash[:notice]).to eq('Fake Color Fake Part deleted')
+      expect(flash[:notice]).to eq('Black Brick deleted')
     end
   end
 
@@ -182,17 +180,15 @@ describe Admin::ElementsController do
     context 'where the element already exists' do
       it 'should find the existing element and return it' do
         allow_any_instance_of(ImageUploader).to receive(:present?).and_return(true)
-        color = FactoryGirl.create(:color)
-        part = FactoryGirl.create(:part, name: 'Brick 1 x 1')
-        element = FactoryGirl.create(:element, color_id: color.id, part_id: part.id, image: 'fake.jpg')
+        element = FactoryBot.create(:element, color_id: @color.id, part_id: @part.id, image: 'fake.jpg')
 
         params = {
-          part_name: 'Brick 1 x 1',
-          color_id: color.id
+          part_name: @part.name,
+          color_id: @color.id
         }
 
         expect {
-          post :find_or_create, params
+          post :find_or_create, params: params
         }.not_to change(Element, :count)
 
         expect(response.status).to eq(200)

@@ -1,14 +1,14 @@
 require "#{Rails.root}/lib/config/amazon_config.rb"
 
 AmazonConfig.configure do |config|
-  config.instruction_bucket = ENV['BCD_S3_INSTRUCTION_BUCKET']
-  config.image_bucket = ENV['BCD_S3_IMAGE_BUCKET']
-  config.asset_bucket = ENV['BCD_S3_ASSET_BUCKET']
-  config.access_key = ENV['BCD_S3_KEY']
-  config.secret = ENV['BCD_S3_SECRET']
+  config.instruction_bucket = Rails.application.credentials.aws.instruction_bucket
+  config.image_bucket = Rails.application.credentials.aws.image_bucket
+  config.asset_bucket = Rails.application.credentials.aws.asset_bucket
+  config.access_key = Rails.application.credentials.aws.access_key_id
+  config.secret = Rails.application.credentials.aws.secret_access_key
 end
 
 Aws.config.update({
-    region: 'us-east-1',
-    credentials: Aws::Credentials.new(ENV['BCD_S3_KEY'], ENV['BCD_S3_SECRET'])
-})
+                    region: 'us-east-1',
+                    credentials: Aws::Credentials.new(Rails.application.credentials.aws.access_key_id, Rails.application.credentials.aws.secret_access_key)
+                  })

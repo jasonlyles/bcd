@@ -1,17 +1,17 @@
 <div class="card mb-4 mt-4">
   <div class="product-header">
-    <%= link_to(image_tag(product.main_image.medium, class: 'card-img-top img-fluid'), {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case}) unless product.main_image.blank? %>
+    <%= link_to(image_tag(product.main_image.medium, class: 'card-img-top img-fluid'), { action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case}) if product&.main_image&.medium.present? %>
   </div>
   <div class="card-body">
-    <h5 class="card-title"><%= link_to product.code_and_name, {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case} %></h5>
+    <h5 class="card-title"><%= link_to product.code_and_name, { action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case } %></h5>
     <p class="card-text">
       <%= snippet(product.description, word_count: 20) %>
       <br/>
-      <%= link_to "learn more", {action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case} %>
+      <%= link_to "learn more", { action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case } %>
     </p>
   </div>
   <div class="card-footer card-footer-no-border bg-transparent">
-    <% if product.is_free? %>
+    <% if product.free? %>
       <span class="h4">
         <strong>FREE</strong>
       </span>

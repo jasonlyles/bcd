@@ -1,13 +1,12 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 class PdfUploader < CarrierWave::Uploader::Base
-  include ::CarrierWave::Backgrounder::Delay
   # Include RMagick or ImageScience support:
   # include CarrierWave::RMagick
   # include CarrierWave::ImageScience
 
   # Choose what kind of storage to use for this uploader:
-  #storage :fog
+  # storage :fog
 
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
@@ -17,7 +16,7 @@ class PdfUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    @name ||= "#{uuid}-#{super}" if original_filename.present? and super.present?
+    @name ||= "#{uuid}-#{super}" if original_filename.present? && super.present?
   end
 
   def uuid
@@ -29,7 +28,7 @@ class PdfUploader < CarrierWave::Uploader::Base
   end
 
   def fog_attributes
-    {'Content-Disposition' => "attachment"}
+    { 'Content-Disposition' => 'attachment' }
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -54,12 +53,11 @@ class PdfUploader < CarrierWave::Uploader::Base
   # def extension_white_list
   #   %w(jpg jpeg gif png)
   # end
-  def extension_white_list
-    %w(pdf)
+  def extension_allowlist
+    %w[pdf]
   end
   # Override the filename of the uploaded files:
   # def filename
   #   "something.jpg" if original_filename
   # end
-
 end

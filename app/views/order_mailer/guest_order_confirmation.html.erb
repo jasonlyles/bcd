@@ -30,7 +30,7 @@ If you are new to custom Lego instructions or Brick City Depot, check out our
 <%= link_to 'New User Tutorial', "#{@host}/new_user_tutorial" %>
 to help you get started. Let's get building!
 <br/>
-<% if @order.has_physical_item? %>
+<% if @order.includes_physical_item? %>
   We will be packaging up and getting your order ready to ship within the next 1-2 days. The address we have for you is:
   <br/>
   <br/>
@@ -38,10 +38,10 @@ to help you get started. Let's get building!
   <br/>
   <%= "#{@order.first_name} #{@order.last_name}" %>
   <br/>
-  <%= @order.address_street_1 %>
+  <%= @order.address_street1 %>
   <br/>
-  <% if @order.address_street_2? %>
-    <%= @order.address_street_2 %>
+  <% if @order.address_street2? %>
+    <%= @order.address_street2 %>
     <br/>
   <% end %>
   <%= "#{@order.address_city}, #{@order.address_state} #{@order.address_zip}" %>
@@ -49,7 +49,7 @@ to help you get started. Let's get building!
   <%= @order.address_country %>
   <br/>
   <br/>
-  If this is not correct, please email us immediately at service@brickcitydepot.com Please give us your order confirmation number, your email address, and your correct shipping address.
+  If this is not correct, please email us immediately at sales@brickcitydepot.com Please give us your order confirmation number, your email address, and your correct shipping address.
   <br/>
   <% if @order.address_country != 'United States' %>
     <br/>
@@ -59,7 +59,7 @@ to help you get started. Let's get building!
 <% end %>
 
 <br/>
-We strive to bring you quality products. Please let us know what we can do to improve our service. If you find any errors or need any help with the instructions or parts lists, email us at service@brickcitydepot.com and let us know how we can help
+We strive to bring you quality products. Please let us know what we can do to improve our service. If you find any errors or need any help with the instructions or parts lists, email us at sales@brickcitydepot.com and let us know how we can help
 you.
 <br/>
 <br/>

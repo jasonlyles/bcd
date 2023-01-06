@@ -1,5 +1,7 @@
-class Lot < ActiveRecord::Base
-  audited except: [:created_at, :updated_at]
+# frozen_string_literal: true
+
+class Lot < ApplicationRecord
+  audited except: %i[created_at updated_at]
 
   belongs_to :parts_list
   belongs_to :element
@@ -10,7 +12,7 @@ class Lot < ActiveRecord::Base
   validates :parts_list_id, :element_id, :quantity, presence: true
   validates :note, length: { maximum: 255 }
 
-  attr_accessible :parts_list_id, :element_id, :quantity, :note, :_destroy
+  # attr_accessible :parts_list_id, :element_id, :quantity, :note, :_destroy
 
   def part_name
     part.name

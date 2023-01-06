@@ -1,11 +1,12 @@
-class Category < ActiveRecord::Base
+# frozen_string_literal: true
+
+class Category < ApplicationRecord
   has_many :subcategories, dependent: :destroy
   has_many :products
   has_one :image
-  mount_uploader :image, ImageUploader
-  process_in_background :image
+  mount_uploader :image, ImageUploader, validate_integrity: true
 
-  attr_accessible :name, :description, :ready_for_public, :image, :image_cache, :remove_image
+  # attr_accessible :name, :description, :ready_for_public, :image, :image_cache, :remove_image
 
   validates :name, uniqueness: true, presence: true
   validates :description, presence: true, length: { maximum: 350, minimum: 100 }

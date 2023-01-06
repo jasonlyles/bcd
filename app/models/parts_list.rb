@@ -1,4 +1,6 @@
-class PartsList < ActiveRecord::Base
+# frozen_string_literal: true
+
+class PartsList < ApplicationRecord
   mount_uploader :file, PartsListUploader
   belongs_to :product
   has_many :lots
@@ -14,7 +16,7 @@ class PartsList < ActiveRecord::Base
   validates :ldr, presence: { if: -> { bricklink_xml.blank? } }
   validates :original_filename, presence: true
 
-  attr_accessible :name, :product_id, :approved, :lots_attributes, :file, :file_cache, :remove_file, :original_filename, :bricklink_xml, :ldr
+  # attr_accessible :name, :product_id, :approved, :lots_attributes, :file, :file_cache, :remove_file, :original_filename, :bricklink_xml, :ldr
 
   def product_name
     product.name
@@ -24,7 +26,9 @@ class PartsList < ActiveRecord::Base
     lots.inject(0) { |sum, p| sum + p.quantity }
   end
 
+  # rubocop:disable Naming/PredicateName
   def has_obsolete_part?
-    lots.includes(:part).map(&:part).select { |part| part.is_obsolete? }.present?
+    elements.includes(:part).map(&:part).select(&:is_obsolete?).present?
   end
+  # rubocop:enable Naming/PredicateName
 end

@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 class HerokuOauthToken
-  def self.get_token
-    uri = URI.parse("https://api.heroku.com/oauth/authorizations")
+  def self.retrieve_token
+    uri = URI.parse('https://api.heroku.com/oauth/authorizations')
     request = Net::HTTP::Post.new(uri)
-    request.basic_auth(ENV['BCD_HEROKU_EMAIL'], ENV['HEROKU_API_KEY'])
+    request.basic_auth(Rails.application.credentials.herokua.email, Rails.application.credentials.heroku.api_key)
     request.body = JSON.dump({
-                                 "scope" => [
-                                     "global"
-                                 ]
+                               'scope' => [
+                                 'global'
+                               ]
                              })
-    request['Content-Type'] = "application/json"
-    request['Accept'] = "application/vnd.heroku+json; version=3"
+    request['Content-Type'] = 'application/json'
+    request['Accept'] = 'application/vnd.heroku+json; version=3'
 
     req_options = {
-        use_ssl: uri.scheme == "https"
+      use_ssl: uri.scheme == 'https'
     }
 
     response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|

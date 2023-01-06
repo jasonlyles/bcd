@@ -1,4 +1,4 @@
-class CreateSalesSummaries < ActiveRecord::Migration
+class CreateSalesSummaries < ActiveRecord::Migration[4.2]
   def up
     create_table :sales_summaries do |t|
       t.integer :sales_report_id

@@ -1,6 +1,6 @@
-class LdrParser
-  LSYNTH = YAML.load_file("#{Rails.root}/config/lsynth.yml")
+# frozen_string_literal: true
 
+class LdrParser
   attr_accessor :submodels, :lsynthed_parts
 
   def initialize(ldr)
@@ -11,6 +11,9 @@ class LdrParser
     @lsynthed_parts = []
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def parse
     # TODO: Try to convert lsynth parts, maybe flag parts that are troublesome for manual editing,
     # look up to see if I've stored a conversion from ldraw ID to Bricklink ID,
@@ -23,7 +26,7 @@ class LdrParser
       break if line.match(/0 FILE/) && i > 15
 
       @submodels << line.match(/\w+\.ldr/).to_s.downcase if line.match(/^1/) && line.match(/\.ldr$/)
-      @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split(' ') if line =~ /^0 SYNTH BEGIN/
+      @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split if line =~ /^0 SYNTH BEGIN/
       next unless line.match(/^1/) && line.match(/.dat$/)
 
       part = line.match(/\w+\.dat/).to_s.gsub!('.dat', '')
@@ -52,15 +55,18 @@ class LdrParser
 
     parts
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   private
 
   def translate_lsynth_part(name)
-    LSYNTH['lsynth']['translations'][name]
+    LSynth[:translations][name]
   end
 
   def lsynth_part?(part)
-    lsynth_parts = LSYNTH['lsynth']['parts']
+    lsynth_parts = LSynth[:parts]
     lsynth_parts.include?(part.to_s)
   end
 
@@ -68,6 +74,9 @@ class LdrParser
     Part.find_by_ldraw_id(part)&.bl_id || part
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def handle_submodels(temp_parts)
     @submodels.each do |submodel|
       count = 0
@@ -78,7 +87,7 @@ class LdrParser
         next unless store_lines == true
 
         @submodels << line.match(/\w+\.ldr/).to_s.downcase if line.match(/^1/) && (line.match(/\.ldr#{@line_break}$/) || line.match(/\.ldr$/))
-        @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split(' ') if line =~ /^0 SYNTH BEGIN/
+        @lsynthed_parts << line.gsub('0 SYNTH BEGIN', '').split if line =~ /^0 SYNTH BEGIN/
         break if line.match(/0 FILE/) && i > 5	&& (line.downcase != "0 file #{submodel.downcase}#{@line_break}" && line.downcase != "0 file #{submodel.downcase}")
         next unless line.match(/^1/) && (line.match(/.dat#{@line_break}$/) || line.match(/.dat$/))
 
@@ -93,24 +102,27 @@ class LdrParser
       # puts "#{submodel} has #{count} parts"
     end
 
-    return temp_parts
+    temp_parts
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   # TODO
   # def handle_lsynthed_parts(temp_parts)
-    # @lsynthed_parts.each do |lp|
-    #   puts "LSYNTHED PART: #{lp.inspect}"
-    #   tp = translate_lsynth_part(lp[0])
-    #   if tp.nil?
-    #     puts "Translated lsynth part coming back nil for #{lp[0]}. Trying to select from list."
-    #     # TODO: Mark the part as needing some help, which will show up after the upload, when
-    #     # the user has the chance to fix parts.
-    #     tp = select_part_from_list(lp[0], lp[1])
-    #     puts "Still can't find a match for #{lp[0]}. Abandoning all hope." if tp.nil?
-    #   end
-    #   temp_parts << [tp, lp[1], tp] unless tp.nil?
-    # end
-    # temp_parts
+  #  @lsynthed_parts.each do |lp|
+  #    puts "LSYNTHED PART: #{lp.inspect}"
+  #    tp = translate_lsynth_part(lp[0])
+  #    if tp.nil?
+  #      puts "Translated lsynth part coming back nil for #{lp[0]}. Trying to select from list."
+  #      # TODO: Mark the part as needing some help, which will show up after the upload, when
+  #      # the user has the chance to fix parts.
+  #      tp = select_part_from_list(lp[0], lp[1])
+  #      puts "Still can't find a match for #{lp[0]}. Abandoning all hope." if tp.nil?
+  #    end
+  #    temp_parts << [tp, lp[1], tp] unless tp.nil?
+  #  end
+  #  temp_parts
   # end
 
   # TODO

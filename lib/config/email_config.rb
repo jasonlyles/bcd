@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'active_support/configurable'
 
+# rubocop:disable all
 module EmailConfig
-  def self.configure(&block)
+  def self.configure(*)
     yield @config ||= EmailConfig::Configuration.new
   end
 
@@ -10,7 +13,7 @@ module EmailConfig
   end
 
   def self.config=(hash)
-    @config=hash
+    @config = hash
   end
 
   class Configuration
@@ -20,3 +23,4 @@ module EmailConfig
     config_accessor :contact
   end
 end
+# rubocop:enable all

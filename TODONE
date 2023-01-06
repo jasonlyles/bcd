@@ -35,7 +35,7 @@ Brian wants to sell physical items. Accommodate it.
     p. Capture street addresses in order record for orders that include a physical item.
 
 EMAIL
-       1. Set up email addresses for staging and prod. lylesjt@yahoo.com for staging sales@ and service@brickcitydepot.com for prod.
+       1. Set up email addresses for staging and prod. lylesjt@yahoo.com for staging, sales@brickcitydepot.com for prod.
 
 
 
@@ -77,7 +77,7 @@ DOWNLOADS:
             so user can see updated download count.
 
 DEV CONVENIENCES:
-        1. After submitting cart, I have an after_filter that updates the order with what a successful transaction would
+        1. After submitting cart, I have an after_action that updates the order with what a successful transaction would
             update the record with after hearing from paypal. This allows me to mock out the paypal flow somewhat.
 
 ADMIN FEATURES:

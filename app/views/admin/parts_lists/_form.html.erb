@@ -44,7 +44,7 @@
             Lots
           </div>
           <div class="card-body">
-            <%= form.fields_for :lots, form.object.lots.includes(:part, :color, element: :part).order("parts.name ASC, colors.bl_name ASC") %>
+            <%= form.fields_for :lots, form.object.lots.includes(:part, :color, element: [:part, :color]).order("parts.name ASC, colors.bl_name ASC") %>
             <%= form.link_to_add "Add Lot", :lots, class: "btn btn-primary mt-2" %>
           </div>
         </div>

@@ -1,10 +1,10 @@
 AssetSync.configure do |config|
   config.fog_provider = 'AWS'
-  config.aws_access_key_id = ENV['BCD_S3_KEY']
-  config.aws_secret_access_key = ENV['BCD_S3_SECRET']
+  config.aws_access_key_id = Rails.application.credentials.aws.access_key_id
+  config.aws_secret_access_key = Rails.application.credentials.aws.secret_access_key
   # To use AWS reduced redundancy storage.
   # config.aws_reduced_redundancy = true
-  config.fog_directory = ENV['BCD_S3_ASSET_BUCKET']
+  config.fog_directory = Rails.application.credentials.aws.asset_bucket
 
   # Invalidate a file on a cdn after uploading files
   # config.cdn_distribution_id = "12345"
@@ -14,7 +14,7 @@ AssetSync.configure do |config|
   # config.fog_region = 'eu-west-1'
   #
   # Don't delete files from the store
-  config.existing_remote_files = "keep"
+  config.existing_remote_files = 'keep'
   #
   # Automatically replace files with their equivalent gzip compressed version
   config.gzip_compression = true

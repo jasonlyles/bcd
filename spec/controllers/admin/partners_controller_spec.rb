@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Admin::PartnersController do
 
   before do
-    @radmin ||= FactoryGirl.create(:radmin)
+    @radmin ||= FactoryBot.create(:radmin)
   end
 
   before(:each) do
@@ -39,7 +39,7 @@ describe Admin::PartnersController do
   describe "GET #show" do
     it "assigns the requested partner as @partner" do
       partner = Partner.create! valid_attributes
-      get :show, id: partner.to_param
+      get :show, params: { id: partner.to_param }
 
       expect(assigns(:partner)).to eq(partner)
     end
@@ -56,7 +56,7 @@ describe Admin::PartnersController do
   describe "GET #edit" do
     it "assigns the requested partner as @partner" do
       partner = Partner.create! valid_attributes
-      get :edit, id: partner.to_param
+      get :edit, params: { id: partner.to_param }
 
       expect(assigns(:partner)).to eq(partner)
     end
@@ -66,19 +66,19 @@ describe Admin::PartnersController do
     context "with valid params" do
       it "creates a new Partner" do
         expect {
-          post :create, partner: valid_attributes
+          post :create, params: { partner: valid_attributes }
         }.to change(Partner, :count).by(1)
       end
 
       it "assigns a newly created partner as @partner" do
-        post :create, partner: valid_attributes
+        post :create, params: { partner: valid_attributes }
 
         expect(assigns(:partner)).to be_a(Partner)
         expect(assigns(:partner)).to be_persisted
       end
 
       it "redirects to the created partner" do
-        post :create, partner: valid_attributes
+        post :create, params: { partner: valid_attributes }
 
         expect(response).to redirect_to([:admin, Partner.last])
       end
@@ -115,7 +115,7 @@ describe Admin::PartnersController do
 
       it "updates the requested partner" do
         partner = Partner.create! valid_attributes
-        put :update, id: partner.to_param, partner: new_attributes
+        put :update, params: { id: partner.to_param, partner: new_attributes }
         partner.reload
 
         expect(assigns(:partner)[:name]).to eq('Bob 2')
@@ -124,14 +124,14 @@ describe Admin::PartnersController do
 
       it "assigns the requested partner as @partner" do
         partner = Partner.create! valid_attributes
-        put :update, id: partner.to_param, partner: valid_attributes
+        put :update, params: { id: partner.to_param, partner: valid_attributes }
 
         expect(assigns(:partner)).to eq(partner)
       end
 
       it "redirects to the partner" do
         partner = Partner.create! valid_attributes
-        put :update, id: partner.to_param, partner: valid_attributes
+        put :update, params: { id: partner.to_param, partner: valid_attributes }
 
         expect(response).to redirect_to([:admin, partner])
       end
@@ -140,7 +140,7 @@ describe Admin::PartnersController do
     context "with invalid params" do
       it "assigns the partner as @partner" do
         partner = Partner.create! valid_attributes
-        put :update, id: partner.to_param, partner: invalid_attributes
+        put :update, params: { id: partner.to_param, partner: invalid_attributes }
 
         expect(assigns(:partner)).to eq(partner)
       end
@@ -160,13 +160,13 @@ describe Admin::PartnersController do
     it "destroys the requested partner" do
       partner = Partner.create! valid_attributes
       expect {
-        delete :destroy, id: partner.to_param
+        delete :destroy, params: { id: partner.to_param }
       }.to change(Partner, :count).by(-1)
     end
 
     it "redirects to the partners list" do
       partner = Partner.create! valid_attributes
-      delete :destroy, id: partner.to_param
+      delete :destroy, params: { id: partner.to_param }
 
       expect(response).to redirect_to(admin_partners_url)
     end
@@ -174,7 +174,7 @@ describe Admin::PartnersController do
     it "should redirect to the partners list if partner can't be deleted due to an advertising campaign with that partner that went live" do
       expect(Partner).to receive(:find).with("1") {Partner.new}
       expect_any_instance_of(Partner).to receive(:destroy).and_return(nil)
-      delete :destroy, :id => '1'
+      delete :destroy, params: { id: '1' }
 
       expect(flash[:alert]).to eq("Sorry. You can't delete a partner that has advertising campaigns that have been used.")
       expect(response).to redirect_to(admin_partners_url)

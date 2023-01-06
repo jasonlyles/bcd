@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module PartsListHelper
-  def set_text_color(hex)
+  def assign_text_color(hex)
     # Separate the hex out into the 3 sections
     result = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i)
     # convert to rgb

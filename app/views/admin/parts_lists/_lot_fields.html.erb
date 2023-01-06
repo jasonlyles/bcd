@@ -3,7 +3,7 @@
 <div class="card mt-2 p-2" data-lot-form="true">
   <section class="row no-gutters">
     <div class="col-3 element-image-wrapper">
-      <%= image_tag(lot.thumb_image, class: 'image-fluid') if lot.element.present? %>
+      <%= image_tag(lot.thumb_image, class: 'image-fluid') unless lot.element.blank? %>
     </div>
     <div class="col-9 px-2">
       <div class="card-block px-2">

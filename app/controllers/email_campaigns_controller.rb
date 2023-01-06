@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class EmailCampaignsController < ApplicationController
   def register_click_through_and_redirect
-    @email_campaign = EmailCampaign.find_by_guid(params[:guid])
+    @email_campaign = EmailCampaign.find_by(['guid = ?', params[:guid]])
     if @email_campaign
       @email_campaign.click_throughs += 1
       @email_campaign.save

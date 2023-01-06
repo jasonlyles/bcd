@@ -1,8 +1,8 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
+# Read about factories at https://github.com/thoughtbot/factory_bot
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :sales_summary do
-    quantity 1
-    total_revenue 10
+    quantity { 1 }
+    total_revenue { 10 }
   end
 end

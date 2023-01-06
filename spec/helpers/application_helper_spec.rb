@@ -9,11 +9,11 @@ describe ApplicationHelper do
 
   describe 'featured_items' do
     it 'should get a random product for featuring' do
-      @product_type = FactoryGirl.create(:product_type)
-      @category = FactoryGirl.create(:category)
-      @subcategory = FactoryGirl.create(:subcategory)
-      @products = [FactoryGirl.create(:product, featured: 't'),
-                   FactoryGirl.create(:product,
+      @product_type = FactoryBot.create(:product_type)
+      @category = FactoryBot.create(:category)
+      @subcategory = FactoryBot.create(:subcategory)
+      @products = [FactoryBot.create(:product, featured: 't'),
+                   FactoryBot.create(:product,
                                       name: 'Grader',
                                       product_type_id: @product_type.id,
                                       product_code: 'WC002',

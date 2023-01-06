@@ -1,12 +1,16 @@
+# frozen_string_literal: true
+
+# Temporarily disable rubocop for this file since it's still very much a WIP
+# rubocop:disable all
 # TODO: This is a work in progress that I'll get back to once the backend is
 # functional and the new parts list v1 is deployed.
 class BrickOwl
-  BRICKOWL_URL = 'https://api.brickowl.com'.freeze
+  BRICKOWL_URL = 'https://api.brickowl.com'
 
   # For GETs
   # Pass in args as: '&thing=1&other_thing=2'
   def self.get_request(path, args = nil)
-    key = ENV['BRICKOWL_API_KEY']
+    key = Rails.application.credentials.brickowl.api_key
     uri = URI.parse("#{BRICKOWL_URL}/v1/#{path}?key=#{key}#{args}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
@@ -17,7 +21,7 @@ class BrickOwl
 
   # Pass in args as: '&thing=1&other_thing=2'
   def self.post_request(path, body)
-    key = ENV['BRICKOWL_API_KEY']
+    key = Rails.application.credentials.brickowl.api_key
     uri = URI.parse("#{BRICKOWL_URL}/v1/#{path}")
     request = Net::HTTP::Post.new(uri)
     request.content_type = 'application/json'
@@ -46,7 +50,7 @@ class BrickOwl
   end
 
   # Not sure I need this, but it works to prove I can hit the API
-  def self.get_wishlists
+  def self.retrieve_wishlists
     response = get_request('wishlist/lists')
     JSON.parse(response.body)
   end
@@ -78,7 +82,7 @@ class BrickOwl
       # json['error']['status']
     end
     if json.keys.include?('status') && json['status'].casecmp('success').zero?
-      lot_id = json['lot_id']
+      # TODO: Do something with this: lot_id = json['lot_id']
     else
       # TODO: bubble up some error to the user
     end
@@ -122,3 +126,4 @@ class BrickOwl
     wishlist_id
   end
 end
+# rubocop:enable all

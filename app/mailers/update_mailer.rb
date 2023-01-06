@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class UpdateMailer < AsyncMailer
-  default :from => "Brick City Depot <sales@brickcitydepot.com>"
+  default from: 'Brick City Depot <sales@brickcitydepot.com>'
   layout 'base_email'
 
   def updated_instructions(user_id, model_id, message)
@@ -19,16 +21,16 @@ class UpdateMailer < AsyncMailer
     @message = message
     @hide_unsubscribe = true
 
-    mail(to: @user.email, subject: "Parts lists for instructions you own have been updated")
+    mail(to: @user.email, subject: 'Parts lists for instructions you own have been updated')
   end
 
-#:nocov
+  # :nocov:
   def queue_name
-    "batchmailer"
+    'batchmailer'
   end
-#:nocov
+  # :nocov:
 end
-#:nocov:
+# :nocov:
 if Rails.env.development?
   class UpdateMailer::Preview < MailView
     def updated_instructions
@@ -48,4 +50,4 @@ if Rails.env.development?
     end
   end
 end
-#:nocov:
+# :nocov:

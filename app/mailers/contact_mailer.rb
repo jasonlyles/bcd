@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class ContactMailer < AsyncMailer
-  default from: "Brick City Depot <sales@brickcitydepot.com>"
+  default from: 'Brick City Depot <sales@brickcitydepot.com>'
   default to: EmailConfig.config.contact
   layout 'admin_email'
 
@@ -9,16 +11,17 @@ class ContactMailer < AsyncMailer
     @name = name
     @body = body
 
-    mail(:reply_to => @email, :subject => "New Contact Form")
+    mail(reply_to: @email, subject: 'New Contact Form')
   end
-#:nocov
+
+  # :nocov:
   def queue_name
-    "mailer"
+    'mailer'
   end
-#:nocov
+  # :nocov:
 end
 
-#:nocov:
+# :nocov:
 if Rails.env.development?
   class ContactMailer::Preview < MailView
     def new_contact_email
@@ -27,4 +30,4 @@ if Rails.env.development?
     end
   end
 end
-#:nocov:
+# :nocov:

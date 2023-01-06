@@ -8,22 +8,21 @@ SimpleCov.start 'rails' do
   add_filter 'lib/http_accept_language.rb'
 end
 
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+ENV['RAILS_ENV'] ||= 'test'
+require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 
 Resque.redis = MockRedis.new
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
-
   # TODO: Need to get rid of this by making my specs better.
   config.before(:suite) do
     DatabaseCleaner[:active_record].strategy = :truncation
-    DatabaseCleaner[:active_record].clean_with(:truncation, pre_count: true, reset_ids: true)
+    DatabaseCleaner[:active_record].clean_with(:truncation, pre_count: true)
   end
 
   config.around(:each) do |example|
@@ -54,7 +53,7 @@ RSpec.configure do |config|
   config.raise_errors_for_deprecations!
 
   config.after(:all) do
-    #Clean up test artifacts
+    # Clean up test artifacts
     if Rails.env.test? || Rails.env.cucumber?
       FileUtils.rm_rf(Dir["#{Rails.root}/public/pdfs/test/[^.]*"])
       FileUtils.rm_rf(Dir["#{Rails.root}/public/uploads/tmp/[^.]*"])

@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'active_support/configurable'
 
+# rubocop:disable all
 module AmazonConfig
-  def self.configure(&block)
+  def self.configure(*)
     yield @config ||= AmazonConfig::Configuration.new
   end
 
@@ -10,7 +13,7 @@ module AmazonConfig
   end
 
   def self.config=(hash)
-    @config=hash
+    @config = hash
   end
 
   class Configuration
@@ -22,3 +25,4 @@ module AmazonConfig
     config_accessor :secret
   end
 end
+# rubocop:enable all

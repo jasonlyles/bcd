@@ -1,7 +1,7 @@
+# frozen_string_literal: true
+
 class PriceIsZeroForFreebiesValidator < ActiveModel::EachValidator
   def validate_each(object, attribute, value)
-    if object.free == true && value.to_i > 0
-      object.errors[attribute] << (options[:message] || " Freebies should be $0")
-    end
+    object.errors.add(attribute, message: options[:message] || ' Freebies should be $0') if object.free == true && value.to_i.positive?
   end
 end

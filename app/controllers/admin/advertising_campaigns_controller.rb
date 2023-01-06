@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Admin::AdvertisingCampaignsController < AdminController
-  before_filter :get_partners, only: [:new, :create, :edit, :update]
-  before_filter :get_advertising_campaign, only: [:show, :edit, :update, :destroy]
+  before_action :assign_partners, only: %i[new create edit update]
+  before_action :assign_advertising_campaign, only: %i[show edit update destroy]
 
   # GET /advertising_campaigns
-  def get_partners
+  def assign_partners
     @partners = Partner.all.collect { |partner| [partner.name, partner.id] }
   end
 
@@ -13,8 +15,7 @@ class Admin::AdvertisingCampaignsController < AdminController
   end
 
   # GET /advertising_campaigns/1
-  def show
-  end
+  def show; end
 
   # GET /advertising_campaigns/new
   def new
@@ -22,27 +23,26 @@ class Admin::AdvertisingCampaignsController < AdminController
   end
 
   # GET /advertising_campaigns/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /advertising_campaigns
   def create
-    @advertising_campaign = AdvertisingCampaign.new(params[:advertising_campaign])
+    @advertising_campaign = AdvertisingCampaign.new(advertising_campaign_params)
     if @advertising_campaign.save
       redirect_to([:admin, @advertising_campaign], notice: 'Advertising campaign was successfully created.')
     else
-      flash[:alert] = "Advertising Campaign was NOT created"
-      render "new"
+      flash[:alert] = 'Advertising Campaign was NOT created'
+      render 'new'
     end
   end
 
   # PUT /advertising_campaigns/1
   def update
-    if @advertising_campaign.update_attributes(params[:advertising_campaign])
+    if @advertising_campaign.update(advertising_campaign_params)
       redirect_to([:admin, @advertising_campaign], notice: 'Advertising campaign was successfully updated.')
     else
-      flash[:alert] = "Advertising Campaign was NOT updated"
-      render "edit"
+      flash[:alert] = 'Advertising Campaign was NOT updated'
+      render 'edit'
     end
   end
 
@@ -54,7 +54,12 @@ class Admin::AdvertisingCampaignsController < AdminController
 
   private
 
-  def get_advertising_campaign
+  def assign_advertising_campaign
     @advertising_campaign = AdvertisingCampaign.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def advertising_campaign_params
+    params.require(:advertising_campaign).permit(:campaign_live, :description, :partner_id, :reference_code)
   end
 end

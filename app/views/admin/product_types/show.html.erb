@@ -68,7 +68,7 @@
         <b class="mt-2">Image</b>
       </div>
       <div class="card-body">
-        <%= image_tag(@product_type.image.medium.url) %>
+        <%= image_tag(@product_type.image.medium.url) unless @product_type.image.medium.url.blank? %>
       </div>
     </div>
   </div>

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Admin::ElementsController < AdminController
-  before_filter :get_element, only: [:show, :edit, :update, :destroy]
+  before_action :assign_element, only: %i[show edit update destroy]
 
   def index
     @q = Element.includes(:part, :color).ransack(params[:q])
-    @elements = @q.result.references(:part, :color).order("parts.name, colors.name").page(params[:page]).per(20)
+    @elements = @q.result.references(:part, :color).order('parts.name, colors.name').page(params[:page]).per(20)
   end
 
   # GET /elements/new
@@ -12,8 +14,7 @@ class Admin::ElementsController < AdminController
   end
 
   # GET /elements/1/edit
-  def edit
-  end
+  def edit; end
 
   def show
     @parts_list_count = @element.lots.count
@@ -21,27 +22,27 @@ class Admin::ElementsController < AdminController
 
   # POST /elements
   def create
-    @element = Element.new(params[:element])
+    @element = Element.new(element_params)
     if @element.save
       redirect_to([:admin, @element], notice: 'Element was successfully created.')
     else
-      flash[:alert] = "Element was NOT created"
-      render "new"
+      flash[:alert] = 'Element was NOT created'
+      render 'new'
     end
   end
 
   # PUT /elements/1
   def update
-    if @element.update_attributes(params[:element])
+    if @element.update(element_params)
       if params['element']['remove_image'].present? && params['element']['remove_image'] == '1'
         flash[:notice] = 'Element was successfully updated.'
-        render "edit"
+        render 'edit'
       else
         redirect_to([:admin, @element], notice: 'Element was successfully updated.')
       end
     else
-      flash[:alert] = "Element was NOT updated"
-      render "edit"
+      flash[:alert] = 'Element was NOT updated'
+      render 'edit'
     end
   end
 
@@ -71,7 +72,12 @@ class Admin::ElementsController < AdminController
 
   private
 
-  def get_element
+  def assign_element
     @element = Element.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def element_params
+    params.require(:element).permit(:part_id, :color_id, :image, :image_cache, :remove_image, :original_image_url)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def snippet(text, options = {})
     opts = { word_count: 20 }.merge(options)
@@ -5,7 +7,7 @@ module ApplicationHelper
   end
 
   def featured_items
-    Product.find_products_for_sale.featured.order('random()').first(1)
+    Product.find_products_for_sale.featured.order(Arel.sql('random()')).first(1)
   end
 
   def current_month
@@ -32,7 +34,7 @@ module ApplicationHelper
     { image: asset_url('logo_200x200.png'),
       title: "Brick City Depot. The internets' best source for custom Lego instructions.",
       description: 'Brick City Depot sells custom Lego instructions, models and kits. Featuring models based on the Lego Modular Buildings line.',
-      app_id: ENV['BCD_FACEBOOK_APP_ID'],
+      app_id: Rails.application.credentials.facebook.app_id,
       site_name: 'Brick City Depot',
       url: request.original_url }
   end

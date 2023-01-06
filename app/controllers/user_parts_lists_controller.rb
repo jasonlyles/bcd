@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class UserPartsListsController < ApplicationController
-  before_filter :authenticate_user!, unless: -> { is_valid_guest? }
-  skip_before_filter :find_cart
+  before_action :authenticate_user!, unless: -> { valid_guest? }
+  skip_before_action :find_cart
 
   def update
     user = find_user
@@ -28,11 +30,13 @@ class UserPartsListsController < ApplicationController
 
   private
 
-  def is_valid_guest?
+  def valid_guest?
     session[:guest_user_id].present? ? User.find(session[:guest_user_id]).present? : false
   end
 
+  # rubocop:disable Style/RedundantCondition
   def find_user
     current_user ? current_user : User.find(session[:guest_user_id])
   end
+  # rubocop:enable Style/RedundantCondition
 end

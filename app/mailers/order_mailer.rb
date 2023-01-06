@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderMailer < AsyncMailer
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
   layout 'base_email', except: [:physical_item_purchased]
@@ -29,6 +31,7 @@ class OrderMailer < AsyncMailer
     mail(to: EmailConfig.config.physical_order, subject: 'Physical Item Purchased')
   end
 
+  # rubocop:disable Metrics/AbcSize
   def follow_up(order_id)
     number_of_products = 3
     @host = Rails.application.config.web_host
@@ -39,18 +42,13 @@ class OrderMailer < AsyncMailer
     subcategories = order.products.pluck(:subcategory_id).uniq
     @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and subcategory_id IN (?) and id NOT IN (?)", categories, subcategories, products_bought]).limit(number_of_products)
     # If there's not enough products, ditch the subcategory clause
-    if @products_to_recommend.length < number_of_products
-      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and id NOT IN (?)", categories, products_bought]).limit(number_of_products)
-    end
+    @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and category_id IN (?) and id NOT IN (?)", categories, products_bought]).limit(number_of_products) if @products_to_recommend.length < number_of_products
     # If there's still not enough products, ditch the category clause
-    if @products_to_recommend.length < number_of_products
-      @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and id NOT IN (?)", products_bought]).limit(number_of_products)
-    end
+    @products_to_recommend = Product.ready.where(["free != 't' and quantity >= 1 and id NOT IN (?)", products_bought]).limit(number_of_products) if @products_to_recommend.length < number_of_products
 
-    unless @products_to_recommend.blank?
-      mail(to: @user.email, subject: 'Thanks for your recent order')
-    end
+    mail(to: @user.email, subject: 'Thanks for your recent order') unless @products_to_recommend.blank?
   end
+  # rubocop:enable Metrics/AbcSize
 
   def issue(order_id, comment, name)
     @order = Order.where(['id=?', order_id]).first
@@ -59,17 +57,17 @@ class OrderMailer < AsyncMailer
     @name = name
     @hide_unsubscribe = true
 
-    mail(reply_to: user.email, to: [user.email, 'service@brickcitydepot.com'], subject: "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}")
+    mail(reply_to: user.email, to: [user.email, 'sales@brickcitydepot.com'], subject: "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}")
   end
 
-  #:nocov
+  # :nocov:
   def queue_name
     'mailer'
   end
-  #:nocov
+  # :nocov:
 end
 
-#:nocov:
+# :nocov:
 if Rails.env.development?
   class OrderMailer::Preview < MailView
     def order_confirmation
@@ -109,4 +107,4 @@ if Rails.env.development?
     end
   end
 end
-#:nocov:
+# :nocov:

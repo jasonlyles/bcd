@@ -1,5 +1,66 @@
-LDRAW color reference: https://www.ldraw.org/article/547.html
+Ruby/Rails upgrade notes:
+* Test everything via the website.
+* Start tracking the various errors I get emails for and figure out how to repro and fix them.
+  1. Fail on /auth/twitter
+     An OAuth::Unauthorized occurred in #:
+     403 Forbidden
+  2. Possible roboto/sitemap misconfiguration:
+     An ActionView::MissingTemplate occurred in static#index:
+     Missing template static/index, application/index with {:locale=>[:en], :formats=>["image/*"], :variants=>[], :handlers=>[:erb, :builder, :raw, :ruby]}. Searched in:
+     * "/app/app/views"
+     * "/app/vendor/bundle/ruby/2.4.0/gems/roboto-0.2.0/app/views"
+     * "/app/vendor/bundle/ruby/2.4.0/gems/kaminari-0.17.0/app/views"
+     * "/app/vendor/bundle/ruby/2.4.0/gems/devise-3.5.10/app/views"
+* Update the images in the new user tutorial, and possibly some of the text to reflect
+  the changes with the new parts list.
+* Make sure the places in the code using `only_path: true` are doing what I think they're doing.
+* Honeybadger is trying to get me back as a customer. Apparently I can use it for
+  free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
+  that instead of ExceptionNotifier
+* Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
+  count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
+  RAILS_LOG_TO_STDOUT, which are set in the staging and production config files.
+  A note from the rails_12factor gem I'm removing for being on Rails 5+:
+  Make sure to add both the RAILS_SERVE_STATIC_FILES and RAILS_LOG_TO_STDOUT ENV
+  vars and set them to true. (This is done for you on Heroku)
+* Element#store_image: I think I forgot to set this up to work with S3.
+* Push the Amazon, Paypal and Email configs to initializers and get rid of those files.
+  Move others to a special config file via something like:
+  https://blog.saeloun.com/2019/02/23/rails-config-for-secrets-credentials.html
 
+* Might have to set up separately from Heroku:
+  1. Papertrail
+  2. Redis (Rediscloud?)
+  3. New Relic
+  4. Postgres
+* Set up database config apart from Heroku
+
+* If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
+* Work on additional test coverage
+* Switch to google analytics 4
+* As part of moving off Heroku, I can get rid of TempAgency, and any other Heroku-specific code.
+* Clean up lib dir, moving stuff into services when appropriate.
+* Look at moving from carrierwave to ActiveStorage. Is it worth the trouble?
+* Upgrade bootstrap to 5.3, or maybe just move to tailwind.
+* Get this thing using importmaps
+* Get staging env vars from bcd-stg and then delete that app.
+* Add the cookie message for GDRP
+* Review sitemap_generator
+
+OAUTH stuff:
+* Test FB login + developer account: old juno, vestal virgins
+* Test Twitter login: cj, midget ninjas
+* Twitter BCD sleepz
+* For BCD prod, Twitter allows me to login, but I have to go there twice before it will redirect back correctly.
+* For BCD prod, Facebook oauth is just busted. Looks like the app was found in violation of some policy.
+
+* I seem to have lost access to my twitter oauth apps. Re-create them.
+
+  0500 Unexpected error while processing request: can't convert nil into Integer
+  	/Users/jasonlyles/.rbenv/versions/2.6.10/lib/ruby/gems/2.6.0/gems/rack-mini-profiler-3.0.0/lib/mini_profiler/timer_struct/page.rb:130:in `%'
+
+
+LDRAW color reference: https://www.ldraw.org/article/547.html
 
 PARTS LIST REBUILD:
 Steps:
@@ -41,7 +102,7 @@ DONE 15. Add ability to add notes to a lot. See the flex hoses on
 DONE 16. Should have a job that checks parts that are not marked obsolete and see if
     that status has changed. If it has, send a notification to the notification center.
     This doesn't have to run very often. Monthly maybe?
-DONE 17. I'm not sure the has_access_to_parts_list? method takes into account free instructions.
+DONE 17. I'm not sure the access_to_parts_list? method takes into account free instructions.
 DONE 18. Show user a maintenance message for any parts lists that are missing during
      the time period we're uploading new parts lists.
 DONE 19. Dismissing notifications should be ajax-y.
@@ -313,10 +374,6 @@ or just nice to have?
     and I don't have to give the impression that they need to check the TOS box again. Just a thought.
 
 * Maybe make a fun maintenance page, or image for maintenance mode. Probably want to redo my 404, 422 and 500 pages.
-
-* I just added the protected_attributes gem for trying to get on rails 4 quickly. Work on removing that by removing
-attr_accessible and setting up strong params. After I've done this, try to remove this line from
-config/initializers/session_store.rb: ActiveRecord::SessionStore::Session.attr_accessible :data, :session_id
 
 * Had to comment out brakeman in Gemfile. Try adding it back periodically to see if it will play nice with the version
 of tilt I have installed
