@@ -45,7 +45,7 @@ Ruby/Rails upgrade notes:
 * Get this thing using importmaps
 * Get staging env vars from bcd-stg and then delete that app.
 * Add the cookie message for GDRP
-* Review sitemap_generator
+* Add data deletion info to make facebook happy
 
 OAUTH stuff:
 * Test FB login + developer account: old juno, vestal virgins
@@ -56,9 +56,8 @@ OAUTH stuff:
 
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 
-  0500 Unexpected error while processing request: can't convert nil into Integer
-  	/Users/jasonlyles/.rbenv/versions/2.6.10/lib/ruby/gems/2.6.0/gems/rack-mini-profiler-3.0.0/lib/mini_profiler/timer_struct/page.rb:130:in `%'
-
+* When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
+* Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 
 LDRAW color reference: https://www.ldraw.org/article/547.html
 

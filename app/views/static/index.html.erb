@@ -72,38 +72,36 @@
 <section id="features" class="pt-5 background">
   <div class="container">
     <div class="row">
-      <% featured = featured_items %>
-        <% featured.each do |product| %>
-          <div class="col-md-10 col-lg-6 offset-md-3">
-            <h2 class="text-center text-white">Featured Product</h2>
-            <div class="card flex-md-row mb-4 box-shadow">
-              <div class="card-body d-flex flex-column align-items-start">
-                <strong class="d-inline-block mb-2 text-success">Instructions</strong>
-                <h3 class="mb-0">
-                  On Sale All
-                  <%= current_month %>!
-                </h3>
+      <% featured_items.each do |product| %>
+        <div class="col-md-10 col-lg-6 offset-md-3">
+          <h2 class="text-center text-white">Featured Product</h2>
+          <div class="card flex-md-row mb-4 box-shadow">
+            <div class="card-body d-flex flex-column align-items-start">
+              <strong class="d-inline-block mb-2 text-success">Instructions</strong>
+              <h3 class="mb-0">
+                On Sale All
+                <%= current_month %>!
+              </h3>
 
-                <% unless product.nil? %>
-                  <p class="text-muted"><%= "#{product.product_code} #{product.name}" %></p>
-                  <p class="card-text mb-auto"><%= snippet(product.description, word_count: 15) %></p>
-                  <%= link_to "Continue Reading", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case} %>
-                <% end %>
-              </div>
-              <% unless product.nil? || product.main_image.blank? %>
-                <%= link_to(image_tag(product.main_image.medium, class: 'card-img-right flex-auto img-fluid', alt: "#{product.name}"), controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case) unless product.main_image.medium.blank? %>
+              <% unless product.nil? %>
+                <p class="text-muted"><%= "#{product.product_code} #{product.name}" %></p>
+                <p class="card-text mb-auto"><%= snippet(product.description, word_count: 15) %></p>
+                <%= link_to "Continue Reading", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case} %>
               <% end %>
             </div>
+            <% unless product.nil? || product.main_image.blank? %>
+              <%= link_to(image_tag(product.main_image.medium, class: 'card-img-right flex-auto img-fluid', alt: "#{product.name}"), controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case) unless product.main_image.medium.blank? %>
+            <% end %>
           </div>
-        <% end %>
-      </div>
-      <section class="section-spacer background" style="height: 40px;"></section>
-      <div class="row">
-        <div class="col-md-5">
-          <h2 class="text-center text-white">Free instructions!</h2>
-          <div class="card">
-            <%= link_to(image_tag('adventure_truck_banner.jpg', class: "img-fluid object-fit-contain", style: 'height: 248px', alt: "Adventure Truck"), account_path) %>
-          </div>
+        </div>
+      <% end %>
+    </div>
+    <section class="section-spacer background" style="height: 40px;"></section>
+    <div class="row">
+      <div class="col-md-5">
+        <h2 class="text-center text-white">Free instructions!</h2>
+        <div class="card">
+          <%= link_to(image_tag('adventure_truck_banner.jpg', class: "img-fluid object-fit-contain", style: 'height: 248px', alt: "Adventure Truck"), account_path) %>
         </div>
       </div>
     </div>
