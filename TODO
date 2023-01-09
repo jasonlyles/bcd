@@ -11,8 +11,6 @@ Ruby/Rails upgrade notes:
      * "/app/vendor/bundle/ruby/2.4.0/gems/roboto-0.2.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/kaminari-0.17.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/devise-3.5.10/app/views"
-* Update the images in the new user tutorial, and possibly some of the text to reflect
-  the changes with the new parts list.
 * Make sure the places in the code using `only_path: true` are doing what I think they're doing.
 * Honeybadger is trying to get me back as a customer. Apparently I can use it for
   free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
