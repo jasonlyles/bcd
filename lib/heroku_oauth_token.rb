@@ -4,7 +4,7 @@ class HerokuOauthToken
   def self.retrieve_token
     uri = URI.parse('https://api.heroku.com/oauth/authorizations')
     request = Net::HTTP::Post.new(uri)
-    request.basic_auth(Rails.application.credentials.herokua.email, Rails.application.credentials.heroku.api_key)
+    request.basic_auth(Rails.application.credentials.heroku.email, Rails.application.credentials.heroku.api_key)
     request.body = JSON.dump({
                                'scope' => [
                                  'global'
