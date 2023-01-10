@@ -38,7 +38,6 @@ Ruby/Rails upgrade notes:
 * Upgrade bootstrap to 5.3, or maybe just move to tailwind.
 * Get this thing using importmaps
 * Get staging env vars from bcd-stg and then delete that app.
-* Add the cookie message for GDRP
 * Add data deletion info to make facebook happy
 
 OAUTH stuff:

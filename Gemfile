@@ -15,6 +15,7 @@ gem 'aws-sdk-s3'
 gem 'aws-sdk-ses'
 gem 'bootsnap', require: false
 gem 'carrierwave'
+gem 'cookies_eu'
 gem 'devise'
 gem 'exception_notification'
 gem 'ffi'

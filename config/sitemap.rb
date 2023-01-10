@@ -34,6 +34,7 @@ SitemapGenerator::Sitemap.create do
   add terms_of_service_path, changefreq: 'yearly'
   add privacy_policy_path, changefreq: 'yearly'
   add coppa_policy_path, changefreq: 'yearly'
+  add cookies_path, changefreq: 'yearly'
   add faq_path, priority: 0.8, changefreq: 'monthly'
   add new_user_tutorial_path, changefreq: 'yearly'
   add store_instructions_path, priority: 0.8, changefreq: 'monthly'
