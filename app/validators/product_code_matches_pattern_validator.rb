@@ -2,13 +2,15 @@
 
 class ProductCodeMatchesPatternValidator < ActiveModel::EachValidator
   def validate_each(object, attribute, value)
-    case object.product_type.name
+    case object.product_type&.name
     when 'Instructions'
       object.errors.add(attribute, message: options[:message] || 'Instruction product codes must follow the pattern CB002.') unless value.match(/^[A-Z]{2}\d{3}$/)
     when 'Models'
       check_model_code(object, attribute, value, 'Model', 'M')
     when 'Kits'
       check_model_code(object, attribute, value, 'Kit', 'K')
+    else
+      object.errors.add(attribute, message: options[:message] || 'Invalid Product Type')
     end
   end
 
