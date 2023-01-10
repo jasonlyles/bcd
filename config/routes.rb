@@ -131,6 +131,7 @@ Rails.application.routes.draw do
   get 'terms_of_service', to: 'static#terms_of_service'
   get 'privacy_policy', to: 'static#privacy_policy'
   get 'coppa_policy', to: 'static#coppa_policy'
+  get 'cookies', to: 'static#cookies'
   get 'faq', to: 'static#faq'
   get 'new_user_tutorial', to: 'static#new_user_tutorial'
   get 'exception_notification_test', to: 'static#test_exception_notification_delivery'

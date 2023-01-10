@@ -6,6 +6,7 @@
 //= require jquery.carousel
 //= require nested_form
 //= require easing
+//= require cookies_eu
 //= require_tree .
 
 $(window).scroll(function() {

@@ -157,6 +157,8 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.1.10)
     connection_pool (2.3.0)
+    cookies_eu (1.7.8)
+      js_cookie_rails (~> 2.2.0)
     crass (1.0.6)
     daemons (1.4.1)
     database_cleaner (2.0.1)
@@ -255,6 +257,8 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    js_cookie_rails (2.2.0)
+      railties (>= 3.1)
     json (2.6.3)
     jwt (2.6.0)
     kaminari (1.2.2)
@@ -596,6 +600,7 @@ DEPENDENCIES
   brakeman
   bullet
   carrierwave
+  cookies_eu
   database_cleaner
   devise
   exception_notification
