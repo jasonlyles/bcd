@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# :nocov:
 class InteractorGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('templates', __dir__)
 
@@ -18,3 +19,4 @@ class InteractorGenerator < Rails::Generators::NamedBase
     end
   end
 end
+# :nocov:

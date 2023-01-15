@@ -19,7 +19,11 @@ Based on your purchase, here are some other items we think you might like:
           <% @products_to_recommend.each do |product| %>
             <td align="center" style="vertical-align:top" valign="top" width="180">
               <a href="<%= @host %>/<%= product.product_code %>/<%= product.name.to_snake_case %>">
-                <img alt="<%= product.name %>" border="0" hspace="0" src="<%= @host %><%= product.images[0].url.thumb %>" style="vertical-align:top; padding-bottom: 25px;" vspace="0"/>
+                <% if product.images[0].present? %>
+                  <img alt="<%= product.name %>" border="0" hspace="0" src="<%= @host %><%= product.images[0].url.thumb %>" style="vertical-align:top; padding-bottom: 25px;" vspace="0"/>
+                <% else %>
+                  <%= product.code_and_name %>
+                <% end %>
               </a>
               <br/>
             <a href="<%= "{@host}/#{product.product_code}/#{product.name.to_snake_case}" %>" <%= product.name %></a>

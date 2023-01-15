@@ -28,7 +28,37 @@ describe PartsListInteractions::CreatePartsList do
 
         expect(interaction.succeeded?).to be true
         expect(parts_list.lots.count).to eq(3)
-        expect(parts_list.parts.keys.sort).to eq(['3030_71', '3065_40', '4162_4'])
+        expect(parts_list.parts.keys.sort).to eq(%w[3030_71 3065_40 4162_4])
+      end
+
+      context 'when a call to Part.find_or_create_via_external fails' do
+        it 'should rescue, log, add the error to errors and mark the interaction a failure' do
+          parts_list = FactoryBot.create(:parts_list, name: 'Test', product: @product, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
+          allow(Part).to receive(:find_or_create_via_external).and_raise(StandardError.new('Some Error'))
+          expect_any_instance_of(ActiveSupport::Logger).to receive(:error).with(/PartsList::CreatePartsList::Part::1\nERROR: Some Error\nBACKTRACE: /).exactly(3).times
+
+          interaction = PartsListInteractions::CreatePartsList.run(parts_list_id: parts_list.id)
+
+          expect(interaction.succeeded?).to be false
+          expect(interaction.errors.length).to eq(3)
+          expect(interaction.errors[0].message).to match('Some Error')
+        end
+      end
+
+      context 'when a call to save! on a parts_list fails' do
+        it 'should rescue, log, add the error to errors and mark the interaction a failure' do
+          parts_list = FactoryBot.create(:parts_list, name: 'Test', product: @product, original_filename: 'test.xml', bricklink_xml: File.read(File.join(Rails.root, 'spec', 'support', 'parts_lists', 'test.xml')))
+          allow(Part).to receive(:find_or_create_via_external).and_return(Part.first)
+          allow(Element).to receive(:find_or_create_via_external).and_return(Element.first)
+          allow_any_instance_of(PartsList).to receive(:save!).and_raise(StandardError.new('Some Error'))
+          expect_any_instance_of(ActiveSupport::Logger).to receive(:error).with(/PartsList::CreatePartsList::Save::1\nERROR: Some Error\nBACKTRACE: /).exactly(1).time
+
+          interaction = PartsListInteractions::CreatePartsList.run(parts_list_id: parts_list.id)
+
+          expect(interaction.succeeded?).to be false
+          expect(interaction.errors.length).to eq(0)
+          expect(interaction.error.message).to match('Some Error')
+        end
       end
     end
 
@@ -45,7 +75,7 @@ describe PartsListInteractions::CreatePartsList do
 
         expect(interaction.succeeded?).to be true
         expect(parts_list.lots.count).to eq(4)
-        expect(parts_list.parts.keys.sort).to eq(["3030_71", "3065_40", "4162_4", "4162_71"])
+        expect(parts_list.parts.keys.sort).to eq(%w[3030_71 3065_40 4162_4 4162_71])
       end
     end
   end

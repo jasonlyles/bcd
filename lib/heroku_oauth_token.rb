@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# nocov on this since this is about to go away
+# :nocov:
 class HerokuOauthToken
   def self.retrieve_token
     uri = URI.parse('https://api.heroku.com/oauth/authorizations')
@@ -23,3 +25,4 @@ class HerokuOauthToken
     JSON.parse(response.body)['access_token']['token']
   end
 end
+# :nocov:
