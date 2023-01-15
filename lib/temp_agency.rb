@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# nocov for now because I'm about to get rid of this file
+# :nocov:
 # An auto-scaler for Heroku workers, which borrows heavily from the example here:
 # http://verboselogging.com/2010/07/30/auto-scale-your-resque-workers-on-heroku
 # I mostly just tweaked it to use the platform-api gem and be able to handle different queues
@@ -55,3 +57,4 @@ module TempAgency
     @scaler.workers = 1 if @scaler.job_count.positive? && @scaler.workers.zero?
   end
 end
+# :nocov:

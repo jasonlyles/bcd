@@ -48,24 +48,6 @@ class Product < ApplicationRecord
     Product.ready_instructions.where(['price=?', price.to_f])
   end
 
-  def self.sort_by_price
-    blk = ->(hash, key) { hash[key] = Hash.new(&blk) }
-    price_groups = Hash.new(&blk)
-    products = Product.ready_instructions.order(:price)
-    products.each do |product|
-      if price_groups.key?(product.price.to_i.to_s)
-        price_groups[product.price.to_i.to_s]['count'] += 1
-      else
-        price_groups[product.price.to_i.to_s]['count'] = 1
-      end
-    end
-    array = []
-    price_groups.each do |price_group|
-      array << [price_group[0].to_i, price_group[1]['count']]
-    end
-    array
-  end
-
   def self.alternative_builds
     Product.sellable_instructions.where("alternative_build = 't'")
   end

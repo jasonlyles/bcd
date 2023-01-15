@@ -9,8 +9,10 @@ class ProductCodeMatchesPatternValidator < ActiveModel::EachValidator
       check_model_code(object, attribute, value, 'Model', 'M')
     when 'Kits'
       check_model_code(object, attribute, value, 'Kit', 'K')
-    else
-      object.errors.add(attribute, message: options[:message] || 'Invalid Product Type')
+      # Keep this around in case I want to enforce that products of a certain product
+      # type have a product_code with a prefix that matches the products subcategory code.
+      # else
+      #   object.errors.add(attribute, message: options[:message] || "#{object.product_type&.name} product codes must follow the pattern #{object.subcategory.code}001") unless object.subcategory.code.match(/#{object.subcategory.code}\d+/)
     end
   end
 

@@ -20,9 +20,10 @@ describe OrderMailer do
       expect(@mail.subject).to eq('Brick City Depot Order Confirmation')
       expect(@mail.to).to eq([@user.email])
       expect(@mail.from).to eq(['sales@brickcitydepot.com'])
-      # This doesn't work. It seems like it should, but it doesnt.
-      # @mail.body.parts.find {|p| p.content_type.match /html/}.body.to_s.should match("Hello charlie_brown@peanuts.com")
-      # @mail.body.parts.find {|p| p.content_type.match /plain/}.body.to_s.should match("Hello charlie_brown@peanuts.com")
+      @mail.body.parts.each do |part|
+        expect(part.body).to match('Thank you for placing an order')
+        expect(part.body).to match('charlie_brown@peanuts.com')
+      end
     end
   end
 
@@ -30,16 +31,16 @@ describe OrderMailer do
     it 'should send guest an email for the order they placed' do
       link = '/guest_download?id=blar'
       @guest_mail = OrderMailer.guest_order_confirmation(@user.id, @order.id, link)
+
       expect(@guest_mail.subject).to eq('Your Brick City Depot Order')
       expect(@guest_mail.to).to eq([@user.email])
       expect(@guest_mail.from).to eq(['sales@brickcitydepot.com'])
-      # Also not working... but why?!?!?
-      # @guest_mail.body.parts.each do |part|
-      #  part.body.should match("Thank you for placing an order with Brick City Depot")
-      #  part.body.should match("Hello charlie_brown@peanuts.com")
-      #  part.body.should match("To access instructions, follow this link")
-      #  part.body.should match(/<a href=\"\/guest_download\?id=blar\">Downloads<\/a>/)
-      # end
+      @guest_mail.body.parts.each do |part|
+        expect(part.body).to match('Thank you for placing an order')
+        expect(part.body).to match('charlie_brown@peanuts.com')
+        expect(part.body).to match('To access instructions')
+        expect(part.body).to match('guest_download\?id=blar')
+      end
     end
   end
 
@@ -53,6 +54,37 @@ describe OrderMailer do
         expect(part.body).to match(@product.name)
         expect(part.body).to match('Just wanted to let you know you sold a physical item and need to be thinking about boxing up that junk and shipping it out!')
       end
+    end
+  end
+
+  describe 'follow_up' do
+    it 'should email recommended products to a user who has recently purchased' do
+      FactoryBot.create(:product, product_type_id: @product_type1.id, category_id: @category.id, subcategory_id: @subcategory.id, product_code: 'CB002', name: 'Something')
+      mail = OrderMailer.follow_up(@order.id)
+
+      expect(mail.subject).to eq('Thanks for your recent order')
+      expect(mail.from).to eq(['sales@brickcitydepot.com'])
+      expect(mail.to).to eq(['charlie_brown@peanuts.com'])
+
+      mail.body.parts.each do |part|
+        expect(part.body).to match('Thank you for your recent order')
+        expect(part.body).to match('XX111/fake_product')
+        expect(part.body).to match('CB002/something')
+      end
+    end
+  end
+
+  describe 'issue' do
+    it 'should email a reported issue about an order to admins' do
+      mail = OrderMailer.issue(@order.id, 'I have an issue', 'Bob')
+
+      expect(mail.subject).to eq('Issue with Brick City Depot Order #blar')
+      expect(mail.from).to eq(['sales@brickcitydepot.com'])
+      expect(mail.to).to eq(['charlie_brown@peanuts.com', 'sales@brickcitydepot.com'])
+
+      expect(mail.body).to match('I had an issue with this order')
+      expect(mail.body).to match('I have an issue')
+      expect(mail.body).to match('Bob')
     end
   end
 end

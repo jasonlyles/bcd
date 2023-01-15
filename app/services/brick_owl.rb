@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-# Temporarily disable rubocop for this file since it's still very much a WIP
+# Temporarily disable rubocop and simplecov for this file since it's still very much a WIP
 # rubocop:disable all
+# :nocov:
 # TODO: This is a work in progress that I'll get back to once the backend is
 # functional and the new parts list v1 is deployed.
 class BrickOwl
@@ -127,3 +128,4 @@ class BrickOwl
   end
 end
 # rubocop:enable all
+# :nocov:

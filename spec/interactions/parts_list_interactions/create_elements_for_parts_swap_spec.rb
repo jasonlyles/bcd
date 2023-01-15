@@ -60,7 +60,7 @@ describe PartsListInteractions::CreateElementsForPartsSwap do
         lot3 = FactoryBot.create(:lot, element_id: element2.id, parts_list_id: parts_list3.id)
 
         interaction = PartsListInteractions::CreateElementsForPartsSwap.run(old_part_name: 'part1', new_part_name: 'part2')
-
+        # TODO: Set up vcr gem so I'm not hitting rebrickable all the time.
         expect(interaction.succeeded?).to be true
         expect(interaction.affected_parts_lists).to eq([[parts_list2.id, 'Colonial Revival House', parts_list2.name], [parts_list1.id, 'Colonial Revival House', parts_list1.name]])
       end

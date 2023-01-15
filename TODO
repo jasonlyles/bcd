@@ -1,6 +1,57 @@
 Ruby/Rails upgrade notes:
+
+BEFORE STAGING:
+* Add data deletion info to make facebook happy
+* Switch to google analytics 4
+* Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
+
+SETTING UP STAGING:
+* Set up app on fly.io. Make sure everything is working, scheduled tasks are running, etc.
+* Set up the NEW ObsoletePartsCheck job to run.
+* Get staging env vars from bcd-stg and then delete that app.
+* As part of moving off Heroku, I can get rid of TempAgency, and any other Heroku-specific code.
+* Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
+  count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
+  RAILS_LOG_TO_STDOUT, which are set in the staging and production config files.
+  A note from the rails_12factor gem I'm removing for being on Rails 5+:
+  Make sure to add both the RAILS_SERVE_STATIC_FILES and RAILS_LOG_TO_STDOUT ENV
+  vars and set them to true. (This is done for you on Heroku)
+  * Might have to set up separately from Heroku:
+    1. Papertrail
+    2. Redis (Rediscloud?)
+    3. New Relic
+    4. Postgres
+  * Set up database config apart from Heroku
+
+ONCE STAGING IS SET UP:
 * Test everything via the website.
-* Start tracking the various errors I get emails for and figure out how to repro and fix them.
+* If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
+* Make sure the places in the code using `only_path: true` are doing what I think they're doing.
+* Element#store_image: I think I forgot to set this up to work with S3. Test.
+* Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
+OAUTH stuff:
+* Test FB login + developer account: old juno, vestal virgins
+* Test Twitter login: cj, midget ninjas
+* Twitter BCD sleepz
+* For BCD prod, Twitter allows me to login, but I have to go there twice before it will redirect back correctly.
+* For BCD prod, Facebook oauth is just busted. Looks like the app was found in violation of some policy.
+* Once I've fixed up FB and Twitter logins, maybe add Google? https://developers.google.com/identity/sign-in/web/sign-in
+* I seem to have lost access to my twitter oauth apps. Re-create them.
+
+ONCE IN PROD:
+* Test user flows via the website.
+* When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
+
+Nice to haves:
+* Honeybadger is trying to get me back as a customer. Apparently I can use it for
+  free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
+  that instead of ExceptionNotifier
+* Look at moving from carrierwave to ActiveStorage. Is it worth the trouble?
+* Upgrade bootstrap to 5.3, or maybe just move to tailwind.
+* Get this thing using importmaps
+  * add Stimulus
+  * Reorg my existing js
+* Start tracking the various errors I get emails for and figure out how to repro and fix them. (Might have fixed these already)
   1. Fail on /auth/twitter
      An OAuth::Unauthorized occurred in #:
      403 Forbidden
@@ -11,47 +62,7 @@ Ruby/Rails upgrade notes:
      * "/app/vendor/bundle/ruby/2.4.0/gems/roboto-0.2.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/kaminari-0.17.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/devise-3.5.10/app/views"
-* Make sure the places in the code using `only_path: true` are doing what I think they're doing.
-* Honeybadger is trying to get me back as a customer. Apparently I can use it for
-  free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
-  that instead of ExceptionNotifier
-* Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
-  count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
-  RAILS_LOG_TO_STDOUT, which are set in the staging and production config files.
-  A note from the rails_12factor gem I'm removing for being on Rails 5+:
-  Make sure to add both the RAILS_SERVE_STATIC_FILES and RAILS_LOG_TO_STDOUT ENV
-  vars and set them to true. (This is done for you on Heroku)
-* Element#store_image: I think I forgot to set this up to work with S3.
 
-* Might have to set up separately from Heroku:
-  1. Papertrail
-  2. Redis (Rediscloud?)
-  3. New Relic
-  4. Postgres
-* Set up database config apart from Heroku
-
-* If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
-* Work on additional test coverage
-* Switch to google analytics 4
-* As part of moving off Heroku, I can get rid of TempAgency, and any other Heroku-specific code.
-* Look at moving from carrierwave to ActiveStorage. Is it worth the trouble?
-* Upgrade bootstrap to 5.3, or maybe just move to tailwind.
-* Get this thing using importmaps
-* Get staging env vars from bcd-stg and then delete that app.
-* Add data deletion info to make facebook happy
-
-OAUTH stuff:
-* Test FB login + developer account: old juno, vestal virgins
-* Test Twitter login: cj, midget ninjas
-* Twitter BCD sleepz
-* For BCD prod, Twitter allows me to login, but I have to go there twice before it will redirect back correctly.
-* For BCD prod, Facebook oauth is just busted. Looks like the app was found in violation of some policy.
-* Once I've fixed up FB and Twitter logins, maybe add Google? https://developers.google.com/identity/sign-in/web/sign-in
-
-* I seem to have lost access to my twitter oauth apps. Re-create them.
-
-* When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
-* Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 
 
 LDRAW color reference: https://www.ldraw.org/article/547.html

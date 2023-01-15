@@ -78,6 +78,7 @@ module PartsListInteractions
         parts_list.parts = parts
         parts_list.save!
       rescue StandardError => e
+        self.error = e
         Rails.logger.error("PartsList::CreatePartsList::Save::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
       end
     end
