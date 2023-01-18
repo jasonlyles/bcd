@@ -1,9 +1,6 @@
 Ruby/Rails upgrade notes:
 
-BEFORE STAGING:
-* Add data deletion info to make facebook happy
-* Switch to google analytics 4
-* Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
+BEFORE STAGING: ALL DONE (maybe)
 
 SETTING UP STAGING:
 * Set up app on fly.io. Make sure everything is working, scheduled tasks are running, etc.
@@ -41,6 +38,8 @@ OAUTH stuff:
 ONCE IN PROD:
 * Test user flows via the website.
 * When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
+* Delete email addresses of all cancelled accounts
+* Generate and submit sitemap to google and then review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 
 Nice to haves:
 * Honeybadger is trying to get me back as a customer. Apparently I can use it for
