@@ -106,9 +106,10 @@ class RegistrationsController < Devise::RegistrationsController
   # rubocop:enable Metrics/PerceivedComplexity
 
   def destroy
-    # Am overriding the destroy method because I don't actually want to destroy the user, I want to set them to cancelled.
-    # This will come in handy if I have to restore someones account, or someone claims they accidentally deleted their
-    # account and had bought a bunch of pdfs they didn't really buy. Jerks
+    # Am overriding the destroy method because I don't actually want to destroy
+    # the user, I want to set them to cancelled so I can retain the account for
+    # reporting in aggregate. Also, set the email to an empty string so we can no
+    # longer see a users email address.
     resource.cancel_account
     set_flash_message :notice, :destroyed
     sign_out(resource_name)
