@@ -24,14 +24,14 @@ describe User do
 
   it 'should not delete orders when user is deleted' do
     user = FactoryBot.create(:user)
-    FactoryBot.create(:order, user: user)
+    FactoryBot.create(:order, user:)
 
     expect(-> { user.destroy }).to_not change(Order, :count)
   end
 
   it 'should not delete downloads when user is deleted' do
     user = FactoryBot.create(:user)
-    FactoryBot.create(:download, user: user)
+    FactoryBot.create(:download, user:)
 
     expect(-> { user.destroy }).to_not change(Download, :count)
   end
@@ -79,13 +79,19 @@ describe User do
       expect { user.cancel_account }.to change(user, :account_status).from('A').to('C')
     end
 
-    it 'should not delete a users authentications' do
+    it 'should set email to an empty string' do
       user = FactoryBot.create(:user)
-      FactoryBot.create(:authentication, user: user)
-      FactoryBot.create(:authentication, provider: 'Facebook', user: user)
+
+      expect { user.cancel_account }.to change(user, :email).from('charlie_brown@peanuts.com').to('')
+    end
+
+    it 'should delete a users authentications' do
+      user = FactoryBot.create(:user)
+      FactoryBot.create(:authentication, user:)
+      FactoryBot.create(:authentication, provider: 'Facebook', user:)
       user = User.find(user.id)
 
-      expect(-> { user.cancel_account }).to_not change(Authentication, :count)
+      expect { user.cancel_account }.to change(Authentication, :count).from(2).to(0)
     end
   end
 

@@ -33,7 +33,7 @@
         <blockquote>The email address you provide for order processing, may be used to send you information and updates pertaining to your order, in addition to receiving occasional company news, updates, related product or service information, etc.</blockquote>
         <br/>
         Note: If at any time you would like to unsubscribe from receiving future emails, login to your account at
-        <%= link_to "https://brickcitydepot.com/account/edit", :controller => :registrations, :action => :edit %>
+        <%= link_to "https://brickcitydepot.com/account/edit", controller: :registrations, action: :edit %>
         and change your email preferences.
       </ul>
       <br/>
@@ -51,10 +51,30 @@
       After a transaction, your private information (credit card numbers, etc.) will not be stored on our servers. The only data of yours that we store is the email address you provided when signing up.
       <br/>
       <br/>
+      <b>How to have your data deleted from our service.</b>
+      <br />
+      <br />
+      If at any time you would like to cancel your account and have your Personally Identifiable Information deleted from our service, login to your account and go to
+      <%= link_to 'https://brickcitydepot.com/account/edit', account_edit_path %>
+      and click on the "Cancel my account" link at the bottom of the page. If you cancel your account:
+      <br />
+      <br />
+      <ul>
+        <li>
+          You will lose access to any instructions you have purchased that you have not yet downloaded.
+        </li>
+        <li>
+          You will lose access to the online parts lists that accompany any instructions you purchased.
+        </li>
+        <li>
+          Your account will be retained for aggregate reporting purposes, but your email address will have been deleted from the account and you will have no way to login and we will have no way to look up your account.
+        </li>
+      </ul>
+      <br />
       <b>Do we use cookies?</b>
       <br/>
       <br/>
-      We do not use cookies.
+      We do use encrypted cookies for basic session tracking.
       <br/>
       <br/>
       <b>Do we disclose any information to outside parties?</b>
@@ -100,7 +120,7 @@
       If we decide to change our privacy policy, we will post those changes on this page, and/or update the Privacy Policy modification date below.
       <br/>
       <br/>
-      This policy was last modified on 05/22/2012
+      This policy was last modified on 01/14/2023
       <br/>
       <br/>
       <b>Contacting Us</b>
