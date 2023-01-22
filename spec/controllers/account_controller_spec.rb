@@ -59,7 +59,7 @@ describe AccountController do
           get :unsubscribe_from_emails, params: { id: @user.guid, token: @user.unsubscribe_token }
 
           @user.reload
-          expect(@user.email_preference).to eq(2)
+          expect(@user.email_preference).to eq('all_emails')
           expect(response).to render_template(:still_subscribed)
         end
       end
@@ -70,7 +70,7 @@ describe AccountController do
           get :unsubscribe_from_emails, params: { id: @user.guid, token: @user.unsubscribe_token }
 
           @user.reload
-          expect(@user.email_preference).to eq(0)
+          expect(@user.email_preference).to eq('no_emails')
           expect(response).to render_template(:unsubscribed)
         end
       end

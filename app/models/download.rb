@@ -17,15 +17,11 @@ class Download < ApplicationRecord
     download.save
   end
 
-  def self.add_download_to_user_and_model(user, model_id)
-    download = Download.find_by_user_id_and_product_id(user.id, model_id)
-    if download.remaining < MAX_DOWNLOADS
-      download.remaining += 1
-      download.save
-    else
-      download = nil
-    end
-    download
+  def self.reset_downloads(user, product_id)
+    download = Download.find_by_user_id_and_product_id(user.id, product_id)
+    return nil if download.blank?
+
+    download.update(remaining: MAX_DOWNLOADS, count: 0)
   end
 
   def self.update_all_users_who_have_downloaded_at_least_once(product_id)
@@ -35,7 +31,7 @@ class Download < ApplicationRecord
       download.remaining += 1
       download.save
       # Don't return the user if the user doesn't want emails. The users being returned will be sent emails
-      users << download.user unless download.user.email_preference.zero?
+      users << download.user unless download.user.email_preference == 'no_emails'
     end
     users
   end

@@ -55,6 +55,13 @@ Rails.application.routes.draw do
       end
     end
     resources :updates
+    resources :users, only: %i[index show] do
+      member do
+        post :change_user_status
+        post :become
+        post :reset_users_downloads
+      end
+    end
   end
 
   if Rails.env.development?
@@ -92,7 +99,6 @@ Rails.application.routes.draw do
   resources :admin, path: :woofay do
     member do
       get :index
-      get :become
       get :admin_profile
       patch :update_admin_profile
     end
@@ -105,9 +111,7 @@ Rails.application.routes.draw do
   get '/featured_products' => 'admin#featured_products'
   post '/gift_instructions' => 'admin#gift_instructions'
   post '/woofay/switch_maintenance_mode' => 'admin#switch_maintenance_mode'
-  match '/woofay/:email/find_user' => 'admin#find_user', constraints: { email: /.*/ }, via: :post
-  post '/woofay/:email/change_user_status' => 'admin#change_user_status', constraints: { email: /.*/ }
-  post '/woofay/update_downloads_for_user', to: 'admin#update_downloads_for_user'
+  post '/woofay/update_downloads_for_users', to: 'admin#update_downloads_for_users'
   get '/maintenance_mode', to: 'admin#maintenance_mode', as: :maintenance_mode
   get '/account_info' => 'admin#account_info', as: :account_info
   get '/new_product_notification' => 'admin#new_product_notification', as: :new_product_notification

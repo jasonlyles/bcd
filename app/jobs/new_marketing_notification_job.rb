@@ -3,9 +3,9 @@
 class NewMarketingNotificationJob < BaseJob
   @queue = :batchmailer
 
-  def self.perform(options)
-    email_campaign = EmailCampaign.find(options['email_campaign'])
-    users = options['preview_only'] ? Radmin.pluck(:email, :sign_in_count, :failed_attempts) : User.who_get_all_emails
+  def perform(options)
+    email_campaign = EmailCampaign.find(options[:email_campaign])
+    users = options[:preview_only] ? Radmin.pluck(:email, :sign_in_count, :failed_attempts) : User.who_get_all_emails
     recipient = Struct.new(:email, :guid, :unsubscribe_token)
     actual_sent = 0
     users.each do |user|
@@ -16,7 +16,7 @@ class NewMarketingNotificationJob < BaseJob
       sleep 0.2
     end
   ensure
-    unless options['preview_only']
+    unless options[:preview_only]
       email_campaign.emails_sent = actual_sent
       email_campaign.save
     end

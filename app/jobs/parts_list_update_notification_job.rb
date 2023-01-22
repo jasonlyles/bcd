@@ -4,9 +4,9 @@ class PartsListUpdateNotificationJob < BaseJob
   @queue = :batchmailer
 
   # rubocop:disable Metrics/AbcSize
-  def self.perform(options)
-    message = options['message']
-    product_ids = options['product_ids']
+  def perform(options)
+    message = options[:message]
+    product_ids = options[:product_ids]
     # Translate these product_ids into a hash with product names that I can look
     # up from, and not have to keep hitting the database.
     product_hash = {}

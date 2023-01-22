@@ -276,28 +276,3 @@ $(function(){
     $('#alert_wrapper').delay(2000).fadeOut(1000);
 });
 */
-/* Replaced this method, but thought I'd leave it here briefly as reference for getting values from ID'd fields, and how to pick up a button click
-$(document).ready(function(){
-  $("#account_info_user_search_submit").click(function(event){
-    var email = $("#account_info_user_email").val();
-    alert("yo yo yo!"+ email);
-    if (email == "") {
-      alert("Must enter an email address!");
-    }
-    else {
-      $.ajax({
-        dataType: "json",
-        cache: false,
-        url: '/admin/'+email+'/find_user.json',
-        timeout: 2000,
-        error: function(XMLHttpRequest, errorTextStatus, error){
-          alert("Failed to submit : "+ errorTextStatus+" ;"+error);
-        },
-        success: function(data){
-          alert("He-yi!");
-        }
-      });
-    };
-  });
-});
-*/

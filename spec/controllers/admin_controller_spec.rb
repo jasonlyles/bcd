@@ -156,25 +156,6 @@ describe AdminController do
     end
   end
 
-  describe 'become' do
-    it "should login the user given the user's ID" do
-      sign_in @radmin
-      get :become, params: { id: @user.id }
-
-      @user = User.find(@user.id)
-      expect(@user.sign_in_count).to eq(1)
-    end
-  end
-
-  describe 'find_user' do
-    it "should find the user given the user's email address" do
-      sign_in @radmin
-      get :find_user, params: { email: @user.email, user: { email: @user.email } }, format: :js, xhr: true
-
-      expect(assigns(:user).id).to eq(@user.id)
-    end
-  end
-
   describe 'admin_profile' do
     it "should return the admin's profile given the radmin's ID" do
       sign_in @radmin
@@ -209,16 +190,6 @@ describe AdminController do
     end
   end
 
-  describe 'change_user_status' do
-    it "should change user's status" do
-      sign_in @radmin
-      get :change_user_status, params: { email: @user.email, user: { email: @user.email, account_status: 'C' } }, format: :js, xhr: true
-      @user = User.find(@user.id)
-
-      expect(@user.account_status).to eq('C')
-    end
-  end
-
   describe 'updates_users_download_count' do
     it 'should set up products in a useful way' do
       sign_in @radmin
@@ -228,11 +199,11 @@ describe AdminController do
     end
   end
 
-  describe 'update_downloads_for_user' do
+  describe 'update_downloads_for_users' do
     it 'should flash a happy message if Resque.enqueue returns true' do
       sign_in @radmin
       expect(ProductUpdateNotificationJob).to receive(:perform_later)
-      get :update_downloads_for_user, params: { user: { model: 1 } }
+      get :update_downloads_for_users, params: { user: { model: 1 } }
 
       expect(flash[:notice]).to eq('Sending product update emails')
     end
