@@ -11,7 +11,6 @@
             If this order is ok in Paypal, and just didn't complete on our side for whatever reason, if you click the "Complete Order" button, the user will be able to access their downloads.
           </p>
           <%= form_for(:order, url: { action: :complete_order }) do |f| %>
-            <%= f.hidden_field :id, value: order.id %>
             <%= f.submit 'Complete Order', data: { disable_with: 'Completing...' }, class: 'btn btn-primary' %>
           <% end %>
         <% end %>
@@ -74,7 +73,7 @@
             </td>
             <td></td>
             <td class="pl-4">
-              <%= @order.created_at.to_s(:date_time12) %>
+              <%= @order.created_at.to_fs(:date_time12) %>
             </td>
           </tr>
           <tr>
@@ -83,7 +82,7 @@
             </td>
             <td></td>
             <td class="pl-4">
-              <%= @order.updated_at.to_s(:date_time12) %>
+              <%= @order.updated_at.to_fs(:date_time12) %>
             </td>
           </tr>
 
@@ -182,10 +181,10 @@
                   <% end %>
                 </td>
                 <td class="align-middle text-center">
-                  <%= line_item.created_at.to_s(:date_time12) %>
+                  <%= line_item.created_at.to_fs(:date_time12) %>
                 </td>
                 <td class="align-middle text-center">
-                  <%= line_item.updated_at.to_s(:date_time12) %>
+                  <%= line_item.updated_at.to_fs(:date_time12) %>
                 </td>
               </tr>
             <% end %>

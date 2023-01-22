@@ -1,6 +1,23 @@
 Ruby/Rails upgrade notes:
 
-BEFORE STAGING: ALL DONE (maybe)
+BEFORE STAGING:
+* Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
+* Remove user lookup in favor of /users
+* Move sales order reporting to the orders index page.
+
+Is this a problem?
+# rails app:update removed these:
+# ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
+#   unless html_tag =~ /^<label/
+#     %{<span class="field_with_errors">#{html_tag}<label for="#{instance.send(:tag_id)}" class="message"> #{instance.error_message.first}</label></span>}.html_safe
+#   else
+#     %{#{html_tag}}.html_safe
+#   end
+# end
+# config.generators do |g|
+#   g.test_framework :rspec, :fixture => true, :views => false
+#   g.integration_tool :rspec, :fixture => true, :views => true
+# end
 
 SETTING UP STAGING:
 * Set up app on fly.io. Make sure everything is working, scheduled tasks are running, etc.
@@ -144,7 +161,7 @@ RESKIN:
   the various store pages to see everything. We don't have enough products to justify that.
   This could maybe be in order of popularity, but be sure to account for showing the newest models also.
   This might be a good opportunity for infinite scroll.
-* Need to set some validation to not let a user create more than the max number of authentications allowed.
+* Need to set some validation to not let a user create more than the max number of authentications allowed. (Be sure MAX_AUTHS_ALLOWED is being enforced.)
 * need to style devise validation messages?
 * need to confirm password edit page looks good by getting an email sent for forgotten password
 * Category images need to be scaled down once I figure out which images I'm using.
@@ -160,7 +177,6 @@ RESKIN:
 * At roughly 564px wide, something is having over to the right, causing the screen to be scrollable to the right.
 * Work on narrower than 480px
 * Make sure it looks good on your phone
-* Determine what the various statuses can be in the orders table and document it somewhere.
 * I think total_price is not getting set correctly for some line_items: LineItem.where("total_price = '0.0'").count is higher than I'm expecting.
 
 * I have a few things to clean up that I found here: https://www.webpagetest.org/result/180716_JE_1b44040e7869b3e871c5154eeb6bec12/
