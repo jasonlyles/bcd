@@ -5,29 +5,27 @@ describe Download do
     @product = FactoryBot.create(:product_with_associations)
   end
 
-  describe "add_download_to_user_and_model" do
-    it "should add download to user/product if the user has downloaded at least once" do
+  describe 'reset_downloads' do
+    it 'should add download to user/product if the user has downloaded at least once' do
       @user = FactoryBot.create(:user)
-      @download = Download.new(user_id: @user.id, product_id: @product.id, remaining: MAX_DOWNLOADS-1)
-      @download.save!
-      Download.add_download_to_user_and_model(@user, @product.id)
-      @download2 = Download.last
+      @download = FactoryBot.create(:download, user_id: @user.id, product_id: @product.id, count: 1, remaining: MAX_DOWNLOADS - 1)
+      Download.reset_downloads(@user, @product.id)
+      @download.reload
 
-      expect(@download2.remaining).to eq(MAX_DOWNLOADS)
+      expect(@download.remaining).to eq(MAX_DOWNLOADS)
     end
 
-    it "should not add download to user/product if the user has not downloaded at least once" do
+    it 'should not add download to user/product if the user has not downloaded at least once' do
       @user = FactoryBot.create(:user)
-      @download = Download.new(user_id: @user.id, product_id: @product.id)
-      @download.save!
+      @download = FactoryBot.create(:download, user_id: @user.id, product_id: @product.id, count: 0, remaining: MAX_DOWNLOADS)
 
-      download = Download.add_download_to_user_and_model(@user, @product.id)
-      expect(download).to be_nil
+      Download.reset_downloads(@user, @product.id)
+      expect(@download.remaining).to eq(MAX_DOWNLOADS)
     end
   end
 
-  describe "update_all_users_who_have_downloaded_at_least_once" do
-    it "should update all users who have downloaded at least once" do
+  describe 'update_all_users_who_have_downloaded_at_least_once' do
+    it 'should update all users who have downloaded at least once' do
       @user = FactoryBot.create(:user)
       @user2 = FactoryBot.create(:user, email: 'blah@blah.blah')
       @download1 = FactoryBot.create(:download, user_id: @user.id)
@@ -39,7 +37,7 @@ describe Download do
       end
     end
 
-    it "should return the users who had their download remaining counts updated" do
+    it 'should return the users who had their download remaining counts updated' do
       @user = FactoryBot.create(:user)
       @user2 = FactoryBot.create(:user, email: 'blah@blah.blah')
       @download1 = FactoryBot.create(:download, user_id: @user.id)
@@ -61,7 +59,7 @@ describe Download do
 
         @decremented_download = Download.find(@download.id)
 
-        expect(@decremented_download.remaining).to eq(MAX_DOWNLOADS-1)
+        expect(@decremented_download.remaining).to eq(MAX_DOWNLOADS - 1)
         expect(@decremented_download.count).to eq(1)
       end
     end
@@ -76,7 +74,7 @@ describe Download do
 
         @decremented_download = Download.find(@download.id)
 
-        expect(@decremented_download.remaining).to eq(MAX_DOWNLOADS-1)
+        expect(@decremented_download.remaining).to eq(MAX_DOWNLOADS - 1)
         expect(@decremented_download.count).to eq(1)
       end
     end
@@ -88,11 +86,11 @@ describe Download do
       @download = FactoryBot.create(:download, remaining: 1)
       @download.restock
 
-      expect(@download.remaining).to eq MAX_DOWNLOADS+1
+      expect(@download.remaining).to eq MAX_DOWNLOADS + 1
     end
   end
 
-  describe "self.restock_for_order" do
+  describe 'self.restock_for_order' do
     it 'should restock downloads if downloads already existed' do
       @user = FactoryBot.create(:user)
       @order = FactoryBot.create(:order)
@@ -101,7 +99,7 @@ describe Download do
       @order.line_items << li1
       Download.restock_for_order(@order)
 
-      expect(@download.reload.remaining).to eq MAX_DOWNLOADS+1
+      expect(@download.reload.remaining).to eq MAX_DOWNLOADS + 1
     end
 
     it 'should not restock downloads if the app cannot find an existing download record' do

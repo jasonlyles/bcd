@@ -25,6 +25,8 @@ class User < ApplicationRecord
     email.downcase!
   end
 
+  enum email_preference: %i[no_emails important_emails all_emails]
+
   def apply_omniauth(omniauth)
     self.email = omniauth['info']['email'] if omniauth['info'] && omniauth['info']['email']
     authentications.build(provider: omniauth['provider'], uid: omniauth['uid'])
@@ -94,11 +96,11 @@ class User < ApplicationRecord
   end
 
   def gets_important_emails?
-    [1, 2].include?(email_preference)
+    %w[important_emails all_emails].include?(email_preference)
   end
 
   def gets_all_emails?
-    email_preference == 2
+    email_preference == 'all_emails'
   end
 
   def set_up_guids

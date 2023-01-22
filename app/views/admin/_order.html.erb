@@ -149,8 +149,8 @@
               <th class="align-middle text-center">Paid</th>
               <th class="align-middle text-center">Downloaded/Remaining</th>
               <th class="align-middle text-center">DL Link</th>
-              <th class="align-middle text-center">Created</th>
-              <th class="align-middle text-center">Updated</th>
+              <th class="align-middle text-center">Created/Updated</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -182,9 +182,14 @@
                 </td>
                 <td class="align-middle text-center">
                   <%= line_item.created_at.to_fs(:date_time12) %>
+                  <br />
+                  <%= line_item.updated_at.to_fs(:date_time12) %>
                 </td>
                 <td class="align-middle text-center">
-                  <%= line_item.updated_at.to_fs(:date_time12) %>
+                  <%= form_for(:download, url: reset_users_downloads_admin_user_path(@order.user)) do |f| %>
+                    <%= f.hidden_field :product_id, value: line_item.product_id %>
+                    <%= f.submit 'Reset Downloads', data: { disable_with: 'Resetting...' }, class: 'btn btn-primary', disabled: download.blank? %>
+                  <% end %>
                 </td>
               </tr>
             <% end %>

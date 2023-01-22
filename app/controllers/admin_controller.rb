@@ -50,19 +50,6 @@ class AdminController < ApplicationController
     redirect_to action: :maintenance_mode
   end
 
-  def become
-    return unless current_radmin
-
-    sign_in(:user, User.find(params[:id]))
-    redirect_to root_path
-  end
-
-  def find_user
-    @user = User.find_by_email(params[:user][:email].downcase)
-    @products = Product.ready_instructions.order('category_id').order('product_code')
-    respond_to(&:js)
-  end
-
   def admin_profile
     @radmin = Radmin.find(params[:id])
   end
@@ -84,15 +71,6 @@ class AdminController < ApplicationController
       @radmin.errors.add(:current_password, 'is invalid.')
       render 'admin_profile'
     end
-  end
-
-  # TODO: Change this action to accept users ID. Will make for a cleaner action and test.
-  def change_user_status
-    user = params[:user]
-    @user = User.find_by_email(user[:email].downcase)
-    @user.update(account_status: user[:account_status])
-    @products = Product.ready_instructions.order('category_id').order('product_code')
-    respond_to(&:js)
   end
 
   def update_users_download_counts; end
@@ -179,7 +157,7 @@ class AdminController < ApplicationController
     redirect_to :new_product_notification
   end
 
-  def update_downloads_for_user
+  def update_downloads_for_users
     ProductUpdateNotificationJob.perform_later(product_id: params[:user][:model], message: params[:user][:message])
     flash[:notice] = 'Sending product update emails'
     redirect_to :update_users_download_counts

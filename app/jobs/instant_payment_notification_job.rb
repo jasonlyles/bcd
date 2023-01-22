@@ -9,8 +9,8 @@ class InstantPaymentNotificationJob < BaseJob
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
-  def self.perform(options)
-    ipn = InstantPaymentNotification.find(options['ipn_id'])
+  def perform(options)
+    ipn = InstantPaymentNotification.find(options[:ipn_id])
     params = ipn.params
     order = Order.find_by_request_id(params['custom'])
     ipn.update(
@@ -84,7 +84,7 @@ class InstantPaymentNotificationJob < BaseJob
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/PerceivedComplexity
 
-  def self.handle_physical_items(order)
+  def handle_physical_items(order)
     physical_items = []
     order.line_items.each do |item|
       next unless item.product.physical_product?

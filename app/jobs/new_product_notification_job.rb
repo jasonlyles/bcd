@@ -3,9 +3,9 @@
 class NewProductNotificationJob < BaseJob
   @queue = :batchmailer
 
-  def self.perform(options)
-    product_id = options['product_id']
-    message = options['message']
+  def perform(options)
+    product_id = options[:product_id]
+    message = options[:message]
     users = User.who_get_all_emails
     product = Product.find(product_id)
     product_type = product.product_type.name

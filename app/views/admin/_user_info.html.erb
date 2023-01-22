@@ -123,15 +123,13 @@
               <span class="font-weight-bold">Account Status:</span>
               <% if user.account_status == 'A' %>
                 <b class="text-success">Active</b>
-                <%= form_for(:user, url: { action: :change_user_status, email: /.*/ }, remote: true) do |f| %>
-                  <%= f.hidden_field :email, value: user.email %>
+                <%= form_for(:user, url: { action: :change_user_status }, remote: true) do |f| %>
                   <%= f.hidden_field :account_status, value: 'C' %>
                 <%= f.submit 'Cancel Account', confirm: "Are you sure you want to CANCEL this account?", class: 'btn btn-danger' %>
               <% end %>
               <% elsif user.account_status == 'C' %>
                 <b class="text-danger">Cancelled</b>
-                <%= form_for(:user, :url => {:action => :change_user_status, :email => /.*/},:remote => true) do |f| %>
-                  <%= f.hidden_field :email, :value => user.email %>
+                <%= form_for(:user, :url => {:action => :change_user_status},:remote => true) do |f| %>
                   <%= f.hidden_field :account_status, :value => "A" %>
                 <%= f.submit 'Activate Account', confirm: "Are you sure you want to ACTIVATE this account?", class: 'btn btn-success' %>
               <% end %>
@@ -141,7 +139,7 @@
               <br/>
               <span class='font-weight-bold'>User email: </span><%= user.email %>
               <br />
-              <%= link_to "Sign in as #{user.email}", become_admin_path(user.id), class: 'btn btn-primary' %>
+              <%= link_to "Sign in as #{user.email}", become_admin_user_path(user), class: 'btn btn-primary', method: :post %>
             </div>
           </div>
         </div>

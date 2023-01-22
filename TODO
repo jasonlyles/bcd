@@ -2,8 +2,8 @@ Ruby/Rails upgrade notes:
 
 BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
-* Remove user lookup in favor of /users
 * Move sales order reporting to the orders index page.
+* Jobs are not running in background since the Rails update. They are processing without me running resque or redis.
 
 Is this a problem?
 # rails app:update removed these:
