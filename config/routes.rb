@@ -27,6 +27,11 @@ Rails.application.routes.draw do
     resources :email_campaigns
     resources :images
     resources :instant_payment_notifications, only: %i[index show]
+    resources :orders, only: %i[index show] do
+      member do
+        post :complete_order
+      end
+    end
     resources :partners
     resources :parts do
       member do
@@ -101,11 +106,8 @@ Rails.application.routes.draw do
   post '/gift_instructions' => 'admin#gift_instructions'
   post '/woofay/switch_maintenance_mode' => 'admin#switch_maintenance_mode'
   match '/woofay/:email/find_user' => 'admin#find_user', constraints: { email: /.*/ }, via: :post
-  post '/woofay/find_order' => 'admin#find_order'
-  get '/order_info' => 'admin#order_info', as: :order_info
   post '/woofay/:email/change_user_status' => 'admin#change_user_status', constraints: { email: /.*/ }
   post '/woofay/update_downloads_for_user', to: 'admin#update_downloads_for_user'
-  post '/woofay/complete_order', to: 'admin#complete_order'
   get '/maintenance_mode', to: 'admin#maintenance_mode', as: :maintenance_mode
   get '/account_info' => 'admin#account_info', as: :account_info
   get '/new_product_notification' => 'admin#new_product_notification', as: :new_product_notification
@@ -115,7 +117,6 @@ Rails.application.routes.draw do
   patch 'update_order_shipping_status' => 'admin#update_order_shipping_status', as: :update_order_shipping_status
   get 'sales_report' => 'admin#sales_report', as: :sales_report
   post 'sales_report_monthly_stats' => 'admin#sales_report_monthly_stats', as: :sales_report_monthly_stats
-  get '/order/:id', to: 'admin#order'
   get '/transactions_by_month', to: 'admin#transactions_by_month'
 
   post '/retire_product', to: 'admin/products#retire_product'

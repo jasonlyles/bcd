@@ -70,18 +70,6 @@ describe AdminController do
     end
   end
 
-  describe 'complete_order' do
-    it 'should set the orders status to COMPLETED and redirect back' do
-      order = FactoryBot.create(:order, status: 'incomplete')
-      request.env['HTTP_REFERER'] = '/'
-      sign_in @radmin
-      post :complete_order, params: { order: { id: order.id } }
-
-      expect(assigns(:order).status).to eq('COMPLETED')
-      expect(response).to redirect_to('/')
-    end
-  end
-
   describe 'maintenance_mode' do
     it 'should render the maintenance mode page' do
       @switch = FactoryBot.create(:switch)
@@ -228,16 +216,6 @@ describe AdminController do
       @user = User.find(@user.id)
 
       expect(@user.account_status).to eq('C')
-    end
-  end
-
-  describe 'order' do
-    it "should return an order given the order's ID" do
-      order = FactoryBot.create(:order)
-      sign_in @radmin
-      get :order, params: { id: order.id }
-
-      expect(assigns(:order).id).to eq(order.id)
     end
   end
 

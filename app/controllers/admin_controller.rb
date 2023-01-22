@@ -63,16 +63,6 @@ class AdminController < ApplicationController
     respond_to(&:js)
   end
 
-  def find_order
-    find_by_method = if params[:order][:lookup_field] == 'request_id'
-                       :find_by_request_id
-                     else
-                       :find_by_transaction_id
-                     end
-    @order = Order.send(find_by_method, params[:order][:lookup_id])
-    respond_to(&:js)
-  end
-
   def admin_profile
     @radmin = Radmin.find(params[:id])
   end
@@ -105,19 +95,7 @@ class AdminController < ApplicationController
     respond_to(&:js)
   end
 
-  def order
-    @order = Order.find(params[:id])
-  end
-
   def update_users_download_counts; end
-
-  def complete_order
-    @order = Order.find(params[:order][:id])
-    @order.status = 'COMPLETED'
-    @order.save
-    flash[:notice] = 'Order was marked COMPLETED'
-    redirect_back(fallback_location: '/order_info')
-  end
 
   # Shipping status = 0 then completed
   # Shipping status = 1 then shipped

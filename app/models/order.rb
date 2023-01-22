@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Available statuses: [nil, 'Failed', 'INVALID', 'COMPLETED', 'Completed', 'GIFT']
 class Order < ApplicationRecord
   has_many :line_items, dependent: :destroy
   has_many :products, through: :line_items
@@ -19,6 +20,21 @@ class Order < ApplicationRecord
             :address_zip, presence: true, if: -> { :address_submission_method == 'form' }
   validates :address_zip, length: { is: 5 }, if: -> { :address_submission_method == 'form' }
   validates :address_zip, numericality: { only_integer: true }, if: -> { :address_submission_method == 'form' }
+
+  ransacker :belongs_to_user,
+            formatter: proc { |email|
+              User.find_by(email:)&.orders&.map(&:id)
+            }, splat_params: true do |parent|
+    parent.table[:id]
+  end
+
+  ransacker :created_at_month, type: :date do
+    Arel.sql("DATE_PART('month', created_at)")
+  end
+
+  ransacker :created_at_year, type: :date do
+    Arel.sql("DATE_PART('year', created_at)")
+  end
 
   def includes_physical_item?
     line_items.includes(product: [:product_type]).each do |item|

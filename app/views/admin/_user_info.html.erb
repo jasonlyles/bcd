@@ -20,9 +20,9 @@
         <div class="col-10">
           <div class="card">
             <div class="card-body">
-              Account created: <%= user.created_at.to_s(:date_time12) %>
+              Account created: <%= user.created_at.to_fs(:date_time12) %>
               <br />
-              Last updated: <%= user.updated_at.to_s(:date_time12) %>
+              Last updated: <%= user.updated_at.to_fs(:date_time12) %>
               <% unless user.account_status == 'G' %>
                 <table class="table table-bordered">
                   <thead>
@@ -40,10 +40,10 @@
                         <%= user.sign_in_count %>
                       </td>
                       <td class="align-middle text-center">
-                        <%= user.current_sign_in_at&.to_s(:date_time12) %>
+                        <%= user.current_sign_in_at&.to_fs(:date_time12) %>
                       </td>
                       <td class="align-middle text-center">
-                        <%= user.last_sign_in_at&.to_s(:date_time12) %>
+                        <%= user.last_sign_in_at&.to_fs(:date_time12) %>
                       </td>
                       <td class="align-middle text-center">
                         <%= user.current_sign_in_ip %>
@@ -77,10 +77,10 @@
                           <%= auth.uid %>
                         </td>
                         <td class="align-middle text-center">
-                          <%= auth.created_at&.to_s(:date_time12) %>
+                          <%= auth.created_at&.to_fs(:date_time12) %>
                         </td>
                         <td class="align-middle text-center">
-                          <%= auth.updated_at&.to_s(:date_time12) %>
+                          <%= auth.updated_at&.to_fs(:date_time12) %>
                         </td>
                       </tr>
                     <% end %>
@@ -103,7 +103,7 @@
                         <%= user.reset_password_token %>
                       </td>
                       <td class="align-middle text-center">
-                        <%= user.remember_created_at&.to_s(:date_time12) %>
+                        <%= user.remember_created_at&.to_fs(:date_time12) %>
                       </td>
                     </tr>
                   </tbody>
@@ -164,7 +164,7 @@
           <% user.orders.each do |order| %>
             <tr>
               <td class="align-middle text-center">
-                <%= link_to order.id, { controller: :admin, action: :order, id: order.id} %>
+                <%= link_to order.id, admin_order_path(order) %>
               </td>
               <td class="align-middle text-center">
                 <%= order.request_id %>
@@ -182,10 +182,10 @@
                 </td>
               <% end %>
               <td class="align-middle text-center">
-                <%= order.created_at.to_s(:date_time12) %>
+                <%= order.created_at.to_fs(:date_time12) %>
               </td>
               <td class="align-middle text-center">
-                <%= order.updated_at.to_s(:date_time12) %>
+                <%= order.updated_at.to_fs(:date_time12) %>
               </td>
             </tr>
           <% end %>
