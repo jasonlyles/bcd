@@ -3,7 +3,9 @@ Ruby/Rails upgrade notes:
 BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 * Move sales order reporting to the orders index page.
-* Jobs are not running in background since the Rails update. They are processing without me running resque or redis.
+* I think I can probably move some of my rake tasks to scheduled jobs via something like https://github.com/resque/resque-scheduler
+  * I can also move the order follow up rake task to a job, and trigger it via set
+    to run 3 days after an order has completed: https://edgeguides.rubyonrails.org/active_job_basics.html#enqueue-the-job
 
 Is this a problem?
 # rails app:update removed these:
@@ -23,7 +25,6 @@ SETTING UP STAGING:
 * Set up app on fly.io. Make sure everything is working, scheduled tasks are running, etc.
 * Set up the NEW ObsoletePartsCheck job to run.
 * Get staging env vars from bcd-stg and then delete that app.
-* As part of moving off Heroku, I can get rid of TempAgency, and any other Heroku-specific code.
 * Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
   count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
   RAILS_LOG_TO_STDOUT, which are set in the staging and production config files.

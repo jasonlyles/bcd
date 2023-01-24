@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class NewMarketingNotificationJob < BaseJob
-  @queue = :batchmailer
+class NewMarketingNotificationJob < ApplicationJob
+  queue_as :batchmailer
 
   def perform(options)
     email_campaign = EmailCampaign.find(options[:email_campaign])
