@@ -2,8 +2,8 @@
 
 class InvalidIPNException < StandardError; end
 
-class InstantPaymentNotificationJob < BaseJob
-  @queue = :ipns
+class InstantPaymentNotificationJob < ApplicationJob
+  queue_as :ipns
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/CyclomaticComplexity

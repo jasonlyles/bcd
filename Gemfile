@@ -32,7 +32,6 @@ gem 'omniauth-facebook'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-twitter'
 gem 'pg'
-gem 'platform-api' # For Heroku's API
 gem 'rack-protection'
 gem 'rake'
 gem 'ransack'

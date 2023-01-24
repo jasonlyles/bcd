@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class PartsListUpdateNotificationJob < BaseJob
-  @queue = :batchmailer
+class PartsListUpdateNotificationJob < ApplicationJob
+  queue_as :batchmailer
 
   # rubocop:disable Metrics/AbcSize
   def perform(options)

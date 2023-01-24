@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class NewProductNotificationJob < BaseJob
-  @queue = :batchmailer
+class NewProductNotificationJob < ApplicationJob
+  queue_as :batchmailer
 
   def perform(options)
     product_id = options[:product_id]
