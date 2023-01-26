@@ -1,22 +1,12 @@
-<% unless report.multiple_months? %>
-  <h2>
-    <%= report.single_month_display %>
-  </h2>
-  <br/>
-  <i>
-    (Last generated
-    <%= report.created_at.strftime("%m/%d/%Y") %>)
-  </i>
-  <br/>
-  <br/>
-  Download:
-  <%= link_to 'CSV', transactions_by_month_path(format: "csv", date: report.report_date) %>
-  <br/>
-<% else %>
-  <h2>
-    <%= report.multiple_months_display %>
-  </h2>
-<% end %>
+<h2>
+  <%= report.single_month_display %>
+</h2>
+<br/>
+<br/>
+<br/>
+Download:
+<%= link_to 'CSV', transactions_by_month_admin_sales_reports_path(format: "csv", date: report.report_date) %>
+<br/>
 <% total_revenue, total_quantity = 0,0 %>
   <br/>
   <table class="table table-bordered">

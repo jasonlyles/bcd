@@ -1,0 +1,24 @@
+<h1>Sales Report</h1>
+<div class="card">
+  <div class="card-header">
+
+  </div>
+  <div class="card-body">
+    <%= form_with(url: admin_sales_reports_path, local: false) do |f| %>
+      Report Month
+      <br/>
+      <div class="form-group d-inline-block">
+        <%= select_month(Date.today, { field_name: 'month', use_short_month: true, prefix: 'report' }, class: 'form-control') %>
+      </div>
+      <div class="form-group d-inline-block">
+        <%= select_year(Date.today, { field_name: 'year', start_year: 2010, prefix: 'report' }, class: 'form-control') %>
+      </div>
+      <br/>
+      <div class="form-group">
+        <%= f.submit 'Generate Report', data: { disable_with: 'Generating...' }, class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+    <br/>
+    <div id="sales_report"></div>
+  </div>
+</div>

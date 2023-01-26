@@ -93,63 +93,6 @@ class AdminController < ApplicationController
     redirect_to action: :order_fulfillment
   end
 
-  def sales_report
-    @report = SalesReport.new
-  end
-
-  # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/PerceivedComplexity
-  def sales_report_monthly_stats
-    start_date = params[:start_date]
-    start_month = start_date['month']
-    start_year = start_date['year']
-    end_date = params[:end_date]
-    @report = SalesReport.new(start_date:, end_date:)
-    @report.report_date = "#{start_year}-#{start_month}-01"
-
-    if @report.multiple_months?
-      @summaries = SalesReport.get_sweet_stats(start_month, start_year, end_date['month'], end_date['year'])
-    else
-      report = SalesReport.find_by_report_date(@report.report_date.to_s)
-      if params['commit'] == 'Force Regeneration'
-        report&.destroy
-        report = nil
-      end
-      if report.blank?
-        # Can't find one, let's create one
-        @report.save
-        @summaries = @report.generate_sales_report
-      else
-        if report.completed == false
-          # The sales report isn't for a complete month, so destroy all sales_summaries, and lets start fresh.
-          report.sales_summaries.destroy_all
-          @summaries = report.generate_sales_report
-        else
-          @summaries = SalesReport.get_sweet_stats(start_month, start_year, nil, nil)
-        end
-        @report = report
-      end
-      if @report.report_date < Date.today.beginning_of_month
-        @report.completed = true
-        @report.save
-      end
-    end
-    respond_to(&:js)
-  end
-  # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/PerceivedComplexity
-
-  def transactions_by_month
-    date = Date.parse(params[:date])
-    @transactions = Order.all_transactions_for_month(date.month, date.year)
-    respond_to do |format|
-      format.html
-      format.csv { send_data Order.transaction_csv(@transactions), { filename: "#{date.strftime('%Y')}_#{date.strftime('%m')}_transactional_detail.csv" } }
-    end
-  end
-
   def send_new_product_notification
     email = params[:email]
     NewProductNotificationJob.perform_later(product_id: email['product_id'], message: email['optional_message'])
