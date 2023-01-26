@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_28_143113) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_26_020709) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -331,24 +331,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_28_143113) do
     t.datetime "updated_at", precision: nil
     t.index ["email"], name: "index_radmins_on_email", unique: true
     t.index ["reset_password_token"], name: "index_radmins_on_reset_password_token", unique: true
-  end
-
-  create_table "sales_reports", id: :serial, force: :cascade do |t|
-    t.date "report_date"
-    t.boolean "completed", default: false
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-  end
-
-  create_table "sales_summaries", id: :serial, force: :cascade do |t|
-    t.integer "sales_report_id"
-    t.integer "product_id"
-    t.integer "quantity"
-    t.decimal "total_revenue"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.index ["product_id"], name: "index_sales_summaries_on_product_id"
-    t.index ["sales_report_id"], name: "index_sales_summaries_on_sales_report_id"
   end
 
   create_table "sessions", id: :serial, force: :cascade do |t|

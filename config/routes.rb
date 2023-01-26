@@ -24,6 +24,13 @@ Rails.application.routes.draw do
         post :find_or_create
       end
     end
+
+    resources :sales_reports, only: %i[new create] do
+      collection do
+        get 'transactions_by_month'
+      end
+    end
+
     resources :email_campaigns
     resources :images
     resources :instant_payment_notifications, only: %i[index show]
@@ -119,9 +126,6 @@ Rails.application.routes.draw do
   get 'update_users_download_counts' => 'admin#update_users_download_counts', as: :update_users_download_counts
   get 'order_fulfillment' => 'admin#order_fulfillment', as: :order_fulfillment
   patch 'update_order_shipping_status' => 'admin#update_order_shipping_status', as: :update_order_shipping_status
-  get 'sales_report' => 'admin#sales_report', as: :sales_report
-  post 'sales_report_monthly_stats' => 'admin#sales_report_monthly_stats', as: :sales_report_monthly_stats
-  get '/transactions_by_month', to: 'admin#transactions_by_month'
 
   post '/retire_product', to: 'admin/products#retire_product'
   patch '/send_marketing_emails' => 'admin/email_campaigns#send_marketing_emails'
