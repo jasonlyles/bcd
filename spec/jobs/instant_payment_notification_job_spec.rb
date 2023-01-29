@@ -15,7 +15,7 @@ describe InstantPaymentNotificationJob do
       expect(order).to receive(:includes_physical_item?).at_least(:once).and_return(true)
       expect(order).to receive(:save).at_least(1).times
 
-      InstantPaymentNotificationJob.perform_now(ipn_id: ipn.id)
+      InstantPaymentNotificationJob.perform_sync(ipn.id)
 
       expect(order.address_city).to eq('Richmond')
     end
@@ -29,7 +29,7 @@ describe InstantPaymentNotificationJob do
       expect(order).to receive(:includes_physical_item?).at_least(:once).and_return(false)
       expect(order).to receive(:save).at_least(1).times
 
-      InstantPaymentNotificationJob.perform_now(ipn_id: ipn.id)
+      InstantPaymentNotificationJob.perform_sync(ipn.id)
 
       expect(order.address_city).to be_nil
     end
@@ -43,7 +43,7 @@ describe InstantPaymentNotificationJob do
       expect(order).to receive(:save).at_least(1).times
       expect(OrderMailer).to receive(:order_confirmation)
 
-      InstantPaymentNotificationJob.perform_now(ipn_id: ipn.id)
+      InstantPaymentNotificationJob.perform_sync(ipn.id)
     end
 
     it 'should send a guest order confirmation email and save details to the order if the IPN is valid' do
@@ -55,7 +55,7 @@ describe InstantPaymentNotificationJob do
       expect(order).to receive(:save).at_least(1).times
       expect(OrderMailer).to receive(:guest_order_confirmation)
 
-      InstantPaymentNotificationJob.perform_now(ipn_id: ipn.id)
+      InstantPaymentNotificationJob.perform_sync(ipn.id)
     end
 
     it 'should not send an order confirmation email, but save details to the order if the IPN is invalid' do
@@ -66,7 +66,7 @@ describe InstantPaymentNotificationJob do
       expect(order).to receive(:save).at_least(1).times
       expect(OrderMailer).to_not receive(:order_confirmation)
 
-      InstantPaymentNotificationJob.perform_now(ipn_id: ipn.id)
+      InstantPaymentNotificationJob.perform_sync(ipn.id)
     end
 
     it 'should stop processing and notify if an order can not be found by request_id' do
@@ -75,7 +75,7 @@ describe InstantPaymentNotificationJob do
       expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(nil)
       expect(ExceptionNotifier).to receive(:notify_exception).with(InvalidIPNException, data: { message: "IPN #{ipn.id} cannot be associated with an Order" })
 
-      InstantPaymentNotificationJob.perform_now(ipn_id: ipn.id)
+      InstantPaymentNotificationJob.perform_sync(ipn.id)
     end
 
     it 'should stop processing and notify if the orders status is already set as COMPLETED' do
@@ -84,7 +84,7 @@ describe InstantPaymentNotificationJob do
       expect(Order).to receive(:find_by_request_id).at_least(:once).and_return(order)
       expect(ExceptionNotifier).to receive(:notify_exception).with(InvalidIPNException, data: { message: "IPN #{ipn.id} seems to have been sent more than once, as the Order was already marked completed." })
 
-      InstantPaymentNotificationJob.perform_now(ipn_id: ipn.id)
+      InstantPaymentNotificationJob.perform_sync(ipn.id)
     end
   end
 end

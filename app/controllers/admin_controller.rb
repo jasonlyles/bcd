@@ -95,13 +95,13 @@ class AdminController < ApplicationController
 
   def send_new_product_notification
     email = params[:email]
-    NewProductNotificationJob.perform_later(product_id: email['product_id'], message: email['optional_message'])
+    NewProductNotificationJob.perform_async(email['product_id'], email['optional_message'])
     flash[:notice] = 'Sending new product emails'
     redirect_to :new_product_notification
   end
 
   def update_downloads_for_users
-    ProductUpdateNotificationJob.perform_later(product_id: params[:user][:model], message: params[:user][:message])
+    ProductUpdateNotificationJob.perform_async(params[:user][:model], params[:user][:message])
     flash[:notice] = 'Sending product update emails'
     redirect_to :update_users_download_counts
   end

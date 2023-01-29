@@ -4,15 +4,15 @@ require 'mock_redis'
 require 'database_cleaner'
 SimpleCov.start 'rails' do
   add_filter 'app/uploaders/'
-  add_filter 'vendor/gems/'
   add_filter 'lib/http_accept_language.rb'
 end
+
+require 'sidekiq/testing'
+Sidekiq::Testing.inline!
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
-
-Resque.redis = MockRedis.new
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

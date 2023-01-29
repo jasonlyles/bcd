@@ -1,38 +1,38 @@
-<%= "#{@product.code_and_name} #{@product_type}" %>
+<%= "#{@product['code_and_name']} #{@product_type}" %>
 \
-<%= @product.description %>
+<%= @product['description'] %>
 \
 <% if @message %>
   <%= @message %>
   \
 <% end %>
-<% if @product.youtube_url? %>
-  Check out the Youtube video: https://www.youtube.com/watch?v=<%= @product.youtube_url %>
+<% if @product['youtube_url'].present? %>
+  Check out the Youtube video: https://www.youtube.com/watch?v=<%= @product['youtube_url'] %>
 <% end %>
 \
 <% if @product_type.downcase != 'instructions' %>
   Currently, we have
-  <%= @product.quantity %>
+  <%= @product['quantity'] %>
   in stock. \
 <% end %>
-<% if @product.free? %>
+<% if @product['free?'] %>
   These
   <%= @product_type.name %>
   are completely FREE!
 <% else %>
-  <% if @product.discount_percentage? %>
+  <% if @product['discount_percentage'].to_f.positive? %>
     Special introductory price! Normally
-    <%= number_to_currency(@product.price) %>, but only
-    <%= number_to_currency(@product.discounted_price) %>
+    <%= number_to_currency(@product['price']) %>, but only
+    <%= number_to_currency(@product['discounted_price']) %>
     for a limited time!
   <% else %>
     Only
-    <%= number_to_currency(@product.price) %>!
+    <%= number_to_currency(@product['price']) %>!
   <% end %>
 <% end %>
 
 \ \ Check it out on Brick City Depot:
-<%= "#{@host}/#{@product.product_code}/#{@product.name.to_snake_case}" %>
+<%= "#{@host}/#{@product['product_code']}/#{@product['name'].to_snake_case}" %>
 \
 \
 \

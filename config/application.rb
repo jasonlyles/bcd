@@ -44,7 +44,7 @@ module BrickCity
 
     config.assets.precompile += ['ie.css', 'admin.css']
 
-    config.active_job.queue_adapter = :resque
+    config.active_job.queue_adapter = :sidekiq
 
     # Running rails app:update removed these things from the config I added when
     # moving to Rails 5.0. Adding them back, commented out, in case I need them.

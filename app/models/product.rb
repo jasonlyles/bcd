@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Product < ApplicationRecord
+  include ActiveModel::Serialization
+
   belongs_to :category
   belongs_to :subcategory
   belongs_to :product_type
@@ -38,6 +40,26 @@ class Product < ApplicationRecord
   scope :in_stock, -> { where('quantity > 0') } # Maybe set up to use only physical products, and not digital products
   scope :ready_instructions, -> { ready.instructions }
   scope :sellable_instructions, -> { ready_instructions.where(free: false) }
+
+  # TODO: Change this to super.merge like in the email_campaign model.
+  def attributes
+    {
+      'id' => id,
+      'name' => name,
+      'product_type' => product_type.name,
+      'category' => category.name,
+      'subcategory' => subcategory.name,
+      'description' => description,
+      'youtube_url' => youtube_url,
+      'quantity' => quantity,
+      'free?' => free,
+      'discount_percentage' => discount_percentage,
+      'price' => price,
+      'discounted_price' => discounted_price,
+      'product_code' => product_code,
+      'code_and_name' => code_and_name
+    }
+  end
 
   def self.instructions
     Product.joins(:product_type).where("product_types.name='Instructions'")

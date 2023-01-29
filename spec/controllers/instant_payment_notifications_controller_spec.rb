@@ -20,14 +20,14 @@ describe InstantPaymentNotificationsController do
   describe "POST #create" do
     context "with valid params" do
       it "creates a new InstantPaymentNotification", :skip_before do
-        allow(InstantPaymentNotificationJob).to receive(:perform_later)
+        allow(InstantPaymentNotificationJob).to receive(:perform_async)
         expect {
           post :create, params: { instant_payment_notification: valid_attributes }
         }.to change(InstantPaymentNotification, :count).by(1)
       end
 
       it "returns a 204", :skip_before do
-        allow(InstantPaymentNotificationJob).to receive(:perform_later)
+        allow(InstantPaymentNotificationJob).to receive(:perform_async)
         post :create, params: { instant_payment_notification: valid_attributes }
         expect(response.status).to eq(204)
       end

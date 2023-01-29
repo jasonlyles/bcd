@@ -48,14 +48,14 @@ describe Admin::UsersController do
   end
 
   describe 'reset_users_downloads' do
-    it 'should reset a users downloads' do
+    it 'should reset a users downloads remaining' do
       sign_in @radmin
       product = FactoryBot.create(:product_with_associations)
       download = FactoryBot.create(:download, user_id: @user.id, product_id: product.id, count: 2, remaining: 3)
       post :reset_users_downloads, params: { id: @user.id, download: { product_id: product.id } }
       download.reload
 
-      expect(download.count).to eq(0)
+      expect(download.count).to eq(2)
       expect(download.remaining).to eq(MAX_DOWNLOADS)
     end
   end

@@ -235,7 +235,7 @@ describe Admin::PartsListsController do
     context 'PartsListUpdateNotificationJob queued' do
       it 'should return a happy message' do
         parts_list = FactoryBot.create(:xml_parts_list)
-        allow(PartsListUpdateNotificationJob).to receive(:perform_later)
+        allow(PartsListUpdateNotificationJob).to receive(:perform_async)
 
         post :notify_customers_of_parts_list_update, params: { parts_lists: { parts_list_ids: parts_list.id, message: 'Test' } }, format: :js
 

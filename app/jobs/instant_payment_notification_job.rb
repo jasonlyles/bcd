@@ -2,15 +2,16 @@
 
 class InvalidIPNException < StandardError; end
 
-class InstantPaymentNotificationJob < ApplicationJob
-  queue_as :ipns
+class InstantPaymentNotificationJob
+  include Sidekiq::Job
+  sidekiq_options queue: 'critical'
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
-  def perform(options)
-    ipn = InstantPaymentNotification.find(options[:ipn_id])
+  def perform(ipn_id)
+    ipn = InstantPaymentNotification.find(ipn_id)
     params = ipn.params
     order = Order.find_by_request_id(params['custom'])
     ipn.update(
@@ -62,9 +63,9 @@ class InstantPaymentNotificationJob < ApplicationJob
       begin
         if order.user.guest?
           link_to_downloads = order.retrieve_link_to_downloads
-          OrderMailer.guest_order_confirmation(order.user_id, order.id, link_to_downloads).deliver
+          OrderMailer.guest_order_confirmation(order.user_id, order.id, link_to_downloads).deliver_later
         else
-          OrderMailer.order_confirmation(order.user_id, order.id).deliver
+          OrderMailer.order_confirmation(order.user_id, order.id).deliver_later
         end
       rescue StandardError => e
         Rails.logger.debug('could not send order confirmation email')
@@ -100,7 +101,7 @@ class InstantPaymentNotificationJob < ApplicationJob
       # add to string that gets sent in email
     end
     begin
-      OrderMailer.physical_item_purchased(order.user_id, order.id).deliver
+      OrderMailer.physical_item_purchased(order.user_id, order.id).deliver_later
     rescue StandardError => e
       ExceptionNotifier.notify_exception(ActiveRecord::ActiveRecordError.new(self), env: request.env, data: { message: "Failed trying to send physical product order email for #{order.to_yaml}: #{e.message}" })
     end

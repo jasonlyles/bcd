@@ -119,7 +119,7 @@ class Admin::PartsListsController < AdminController
   def notify_customers_of_parts_list_update
     parts_list_ids = params[:parts_lists][:parts_list_ids].split
     product_ids = PartsList.where(id: parts_list_ids).pluck(:product_id)
-    PartsListUpdateNotificationJob.perform_later(product_ids:, message: params[:parts_lists][:message])
+    PartsListUpdateNotificationJob.perform_async(product_ids, params[:parts_lists][:message])
     @message = 'Sending parts list update emails'
 
     respond_to(&:js)
