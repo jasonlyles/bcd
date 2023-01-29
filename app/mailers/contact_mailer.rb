@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ContactMailer < AsyncMailer
+class ContactMailer < ActionMailer::Base
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
   default to: EmailConfig.config.contact
   layout 'admin_email'

@@ -163,7 +163,7 @@
       <a href="<%= @host %>">Brick City Depot</a> |
       <a href="<%= "#{@host}/account/edit" %>">Account Preferences</a>
       <% unless defined?(@hide_unsubscribe) %>
-          <a href="<%= "#{@host}/unsubscribe?id=#{@user.guid}&token=#{@user.unsubscribe_token}" %>"
+          <a href="<%= "#{@host}/unsubscribe?id=#{@user['guid']}&token=#{@user['unsubscribe_token']}" %>"
              target="_blank">Unsubscribe</a>
       <% end %>
     </td>

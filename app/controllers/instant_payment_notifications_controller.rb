@@ -7,7 +7,7 @@ class InstantPaymentNotificationsController < ApplicationController
   def create
     # All I need to do in here is save the params to an IPN and pass the ID to the job
     ipn = InstantPaymentNotification.create(params: paypal_params)
-    InstantPaymentNotificationJob.perform_later(ipn_id: ipn.id)
+    InstantPaymentNotificationJob.perform_async(ipn.id)
   rescue StandardError => e
     ExceptionNotifier.notify_exception(e, env: request.env, data: { message: e.message })
   ensure

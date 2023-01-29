@@ -2,20 +2,6 @@ Ruby/Rails upgrade notes:
 
 BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
-* Maybe move from resque to sidekiq or sucker punch
-  * I think I can probably move some of my rake tasks to scheduled jobs via something like https://github.com/resque/resque-scheduler
-    * I can also move the order follow up rake task to a job, and trigger it via set
-      to run 3 days after an order has completed: https://edgeguides.rubyonrails.org/active_job_basics.html#enqueue-the-job
-* Write a thing for Brian to add emails from other sales channels, or a thing to parse his sales tracking Word docs.
-  * It should not add emails that exist in the current system.
-  * Emails we send that we got from users from other sales channels should let them
-    know where we got their emails from, and that this is a one-time email if they choose, and they
-    can select an 'Unsubscribe' button, or a 'Keep sending me emails' or 'Convert me to a BCD user'
-    button or something like that.
-* Think of a way for Brian to get links to parts lists for ebay sales that he can send to the users.
-  Maybe if I tapped into ebay's API, I could pull orders and have them in our system,
-  waiting for Brian to click a button to send out emails with links. Maybe this
-  isn't worth the time if ebay isn't really letting us sell much.
 
 Is this a problem?
 # rails app:update removed these:
@@ -89,6 +75,16 @@ Nice to haves:
      * "/app/vendor/bundle/ruby/2.4.0/gems/roboto-0.2.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/kaminari-0.17.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/devise-3.5.10/app/views"
+ * Write a thing for Brian to add emails from other sales channels, or a thing to parse his sales tracking Word docs.
+   * It should not add emails that exist in the current system.
+   * Emails we send that we got from users from other sales channels should let them
+     know where we got their emails from, and that this is a one-time email if they choose, and they
+     can select an 'Unsubscribe' button, or a 'Keep sending me emails' or 'Convert me to a BCD user'
+     button or something like that.
+ * Think of a way for Brian to get links to parts lists for ebay sales that he can send to the users.
+   Maybe if I tapped into ebay's API, I could pull orders and have them in our system,
+   waiting for Brian to click a button to send out emails with links. Maybe this
+   isn't worth the time if ebay isn't really letting us sell much.
 
 
 

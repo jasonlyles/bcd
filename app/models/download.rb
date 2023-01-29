@@ -21,7 +21,7 @@ class Download < ApplicationRecord
     download = Download.find_by_user_id_and_product_id(user.id, product_id)
     return nil if download.blank?
 
-    download.update(remaining: MAX_DOWNLOADS, count: 0)
+    download.update(remaining: MAX_DOWNLOADS)
   end
 
   def self.update_all_users_who_have_downloaded_at_least_once(product_id)

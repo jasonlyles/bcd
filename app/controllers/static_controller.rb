@@ -40,7 +40,7 @@ class StaticController < ApplicationController
 
     if @email.valid?
       # begin
-      ContactMailer.new_contact_email(@email.name, @email.email_address, @email.body).deliver
+      ContactMailer.new_contact_email(@email.name, @email.email_address, @email.body).deliver_later
       # @email = nil
       flash[:notice] = "Thanks for your email. We'll get back with you shortly."
       redirect_to :contact

@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-class PartsListUpdateNotificationJob < ApplicationJob
-  queue_as :batchmailer
+class PartsListUpdateNotificationJob
+  include Sidekiq::Job
+  sidekiq_options queue: 'mailer'
 
   # rubocop:disable Metrics/AbcSize
-  def perform(options)
-    message = options[:message]
-    product_ids = options[:product_ids]
+  def perform(product_ids, message)
     # Translate these product_ids into a hash with product names that I can look
     # up from, and not have to keep hitting the database.
     product_hash = {}
@@ -28,7 +27,7 @@ class PartsListUpdateNotificationJob < ApplicationJob
         product_ids_user_owns.each { |product_id| product_names << product_hash[product_id] }
         product_names.compact!
 
-        UpdateMailer.updated_parts_lists(user.id, product_names, message).deliver
+        UpdateMailer.updated_parts_lists(user.id, product_names, message).deliver_later
       end
     rescue StandardError => e
       message = "PartsListUpdateNotificationJob could not send an email to user #{user_id} about products #{product_ids.join(',')}"

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateMailer < AsyncMailer
+class UpdateMailer < ActionMailer::Base
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
   layout 'base_email'
 

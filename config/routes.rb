@@ -1,7 +1,11 @@
-require 'resque/server'
-
+require 'sidekiq/web'
+require 'sidekiq/cron/web'
 Rails.application.routes.draw do
   mount_roboto
+
+  authenticate :radmin, ->(radmin) { radmin } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # For PayPal to send to us, sits outside the admin namespace
   resources :instant_payment_notifications, only: %i[create]
@@ -80,10 +84,6 @@ Rails.application.routes.draw do
   end
 
   devise_for :radmins
-  authenticate :radmin do
-    mount Resque::Server.new, at: '/jobs', as: 'jobs'
-    get '/jobs/bcd_admin', to: redirect('/woofay') # Trick for adding a link back to BCD admin from Resque dashboard
-  end
 
   devise_for :users, controllers: { registrations: 'registrations', sessions: 'sessions', passwords: 'passwords' }
   devise_scope :user do

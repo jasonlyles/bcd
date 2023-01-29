@@ -1,0 +1,14 @@
+reap_stale_carts:
+  cron:               "0 0 * * *"
+  class:              "ReapStaleCartsJob"
+  queue:              low
+
+reap_stale_sessions:
+  cron:               "0 23 * * *"
+  class:              "ReapStaleSessionsJob"
+  queue:              low
+
+order_follow_up:
+  cron:               "0 19 * * *"
+  class:              "OrderFollowUpJob"
+  queue:              low

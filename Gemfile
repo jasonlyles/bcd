@@ -23,10 +23,10 @@ gem 'fog-aws'
 gem 'hpricot'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'json'
 gem 'kaminari'
 gem 'mini_magick'
 gem 'nested_form'
+gem 'oj'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-rails_csrf_protection'
@@ -35,11 +35,10 @@ gem 'pg'
 gem 'rack-protection'
 gem 'rake'
 gem 'ransack'
-gem 'resque'
-gem 'resque_mailer'
 gem 'roboto'
 gem 'ruby_parser'
-gem 'sinatra'
+gem 'sidekiq'
+gem 'sidekiq-cron'
 gem 'sitemap_generator'
 gem 'twitter'
 
@@ -84,7 +83,6 @@ end
 
 group :test do
   gem 'database_cleaner'
-  gem 'mock_redis'
 end
 
 group :profile do

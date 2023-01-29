@@ -1,0 +1,13 @@
+---
+:concurrency:   5
+development:
+  :verbose:     true
+staging:
+  :concurrency: 10
+production:
+  :concurrency: 10
+:queues:
+  - critical
+  - mailer
+  - default
+  - low

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OrderMailer < AsyncMailer
+class OrderMailer < ActionMailer::Base
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
   layout 'base_email', except: [:physical_item_purchased]
 

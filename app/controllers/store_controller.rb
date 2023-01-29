@@ -236,14 +236,14 @@ class StoreController < ApplicationController
   def order_confirmation_email_test
     @order = Order.find_by_user_id 5 # Jason
     download_links = @order.retrieve_link_to_downloads
-    OrderMailer.guest_order_confirmation(@order.user_id, @order.id, download_links).deliver
+    OrderMailer.guest_order_confirmation(@order.user_id, @order.id, download_links).deliver_now
   end
   # :nocov:
 
   # :nocov:
   def physical_order_email_test
     @order = Order.find 9
-    OrderMailer.physical_item_purchased(@order.user_id, @order.id).deliver
+    OrderMailer.physical_item_purchased(@order.user_id, @order.id).deliver_now
   end
   # :nocov:
 
@@ -322,9 +322,9 @@ class StoreController < ApplicationController
     Download.restock_for_order(@order) if @order.includes_digital_item?
     if @order.user.guest?
       link_to_downloads = @order.retrieve_link_to_downloads
-      OrderMailer.guest_order_confirmation(@order.user_id, @order.id, link_to_downloads).deliver
+      OrderMailer.guest_order_confirmation(@order.user_id, @order.id, link_to_downloads).deliver_later
     else
-      OrderMailer.order_confirmation(@order.user_id, @order.id).deliver
+      OrderMailer.order_confirmation(@order.user_id, @order.id).deliver_later
     end
   end
   # :nocov:

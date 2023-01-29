@@ -128,9 +128,9 @@ describe AdminController do
   end
 
   describe 'update_downloads_for_users' do
-    it 'should flash a happy message if Resque.enqueue returns true' do
+    it 'should flash a happy message if jobs are enqueued' do
       sign_in @radmin
-      expect(ProductUpdateNotificationJob).to receive(:perform_later)
+      expect(ProductUpdateNotificationJob).to receive(:perform_async)
       get :update_downloads_for_users, params: { user: { model: 1 } }
 
       expect(flash[:notice]).to eq('Sending product update emails')
@@ -138,9 +138,9 @@ describe AdminController do
   end
 
   describe 'send_new_product_notification' do
-    it 'should flash a happy message if Resque.enqueue returns true' do
+    it 'should flash a happy message if jobs are enqueued' do
       sign_in @radmin
-      expect(NewProductNotificationJob).to receive(:perform_later)
+      expect(NewProductNotificationJob).to receive(:perform_async)
       post :send_new_product_notification, params: { email: { 'product_id' => 1, 'optional_message' => 'Hi!' } }
 
       expect(flash[:notice]).to eq('Sending new product emails')

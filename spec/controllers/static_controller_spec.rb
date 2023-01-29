@@ -42,6 +42,8 @@ describe StaticController do
 
   describe 'POST send_contact_email' do
     it 'should send a contact email if email has valid params' do
+      expect(ContactMailer).to receive(:new_contact_email).once.and_return(Mail::Message.new(from: 'fake', to: 'fake'))
+      expect_any_instance_of(Mail::Message).to receive(:deliver_later).once.and_return(true)
       post 'send_contact_email', params: { email: { name: 'Charlie Brown', email_address: 'charlie_brown@peanuts.com', body: 'I have too much money. Please help.' } }
 
       expect(assigns(:email)).to_not be_nil

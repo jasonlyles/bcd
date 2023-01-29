@@ -60,14 +60,14 @@ class Admin::EmailCampaignsController < AdminController
       return
     end
 
-    NewMarketingNotificationJob.perform_later(email_campaign: @email_campaign.id)
+    NewMarketingNotificationJob.perform_async(@email_campaign.id)
     flash[:notice] = 'Sending marketing emails'
     redirect_to admin_email_campaigns_path
   end
 
   def send_marketing_email_preview
     @email_campaign = EmailCampaign.find(params[:email_campaign][:id])
-    NewMarketingNotificationJob.perform_later(email_campaign: @email_campaign.id, preview_only: true)
+    NewMarketingNotificationJob.perform_async(@email_campaign.id, true)
     flash[:notice] = 'Sending marketing email preview'
     redirect_to admin_email_campaign_path(@email_campaign)
   end
