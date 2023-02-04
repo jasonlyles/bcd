@@ -49,7 +49,7 @@ gem 'sass-rails'
 gem 'sprockets-rails'
 gem 'uglifier'
 
-gem 'thin'
+gem 'puma'
 
 group :development, :test do
   gem 'better_errors'
