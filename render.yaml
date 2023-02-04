@@ -1,8 +1,3 @@
-databases:
-  - name:             mysite
-    databaseName:     mysite
-    user:             mysite
-
 services:
   - type:             web
     name:             bcd-stg
