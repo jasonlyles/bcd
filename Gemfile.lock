@@ -613,6 +613,7 @@ DEPENDENCIES
   rake
   ransack
   reek
+  rexml
   roboto
   rspec-activemodel-mocks
   rspec-rails

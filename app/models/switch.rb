@@ -2,6 +2,7 @@
 
 class Switch < ApplicationRecord
   # attr_accessible :switch, :switch_on
+  validates :switch, uniqueness: true, presence: true
 
   def on?
     switch_on
