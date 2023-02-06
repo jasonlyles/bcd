@@ -129,7 +129,8 @@ class Admin::PartsListsController < AdminController
 
   # Only allow a trusted parameter "white list" through.
   def parts_list_params
-    params.require(:parts_list).permit(:name, :product_id, :approved, :lots_attributes, :file, :file_cache, :remove_file, :original_filename, :bricklink_xml, :ldr)
+    # Be sure to add nested attributes at the end of the list.
+    params.require(:parts_list).permit(:name, :product_id, :approved, :file, :file_cache, :remove_file, :original_filename, :bricklink_xml, :ldr, lots_attributes: {})
   end
 
   def cleanup_uploaded_file_params
