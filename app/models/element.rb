@@ -115,12 +115,13 @@ class Element < ApplicationRecord
     # Be sure to add /* to the end of the resource name for the generated policy
     return unless original_image_url
 
-    root_local_dir = "#{Rails.root}/tmp"
-    parts_image_dir = "#{root_local_dir}/parts_images"
-    Dir.mkdir(root_local_dir) unless Dir.exist?(root_local_dir)
-    Dir.mkdir(parts_image_dir) unless Dir.exist?(parts_image_dir)
+    # root_local_dir = "#{Rails.root}/tmp"
+    # parts_image_dir = "#{root_local_dir}/parts_images"
+    # Dir.mkdir(root_local_dir) unless Dir.exist?(root_local_dir)
+    # Dir.mkdir(parts_image_dir) unless Dir.exist?(parts_image_dir)
     extension = File.extname(original_image_url)
-    file = "#{parts_image_dir}/#{guid}#{extension}"
+    # file = "#{parts_image_dir}/#{guid}#{extension}"
+    file = "#{guid}#{extension}"
     begin
       File.open(file, 'wb') do |fo|
         fo.write URI.parse(original_image_url).open.read
