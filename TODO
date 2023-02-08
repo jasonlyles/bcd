@@ -16,10 +16,6 @@ SETTING UP STAGING:
   vars and set them to true. (This is done for you on Heroku)
   * Might have to set up separately from Heroku:
     1. Papertrail
-    2. Redis (Rediscloud?)
-    3. New Relic
-    4. Postgres
-  * Set up database config apart from Heroku
 
 ONCE STAGING IS SET UP:
 * Test everything via the website. (Write up a more complete list.)

@@ -93,6 +93,4 @@ end
 
 group :production, :staging do
   gem 'lograge'
-  # best to keep this at the bottom:
-  gem 'newrelic_rpm'
 end

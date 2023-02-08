@@ -36,18 +36,19 @@ class Admin::PartsListsController < AdminController
       redis = RedisClient.new
       @total_count = redis.call('GET', redis_total_key)
       @current_count = redis.call('GET', redis_counter_key)
-    end
+      @lots = []
+    else
+      @lots = @parts_list.lots.includes(:part, :color, element: %i[part color]).order('parts.name ASC, colors.bl_name ASC')
 
-    @lots = @parts_list.lots.includes(:part, :color, element: %i[part color]).order('parts.name ASC, colors.bl_name ASC')
-
-    if @parts_list.bricklink_xml?
-      xml_doc = Nokogiri::XML(@parts_list.bricklink_xml)
-      @source_lot_count = xml_doc.xpath('//ITEM').count
-      @source_total_quantity = xml_doc.xpath('//ITEM//MINQTY').collect { |c| c.text.to_i }.sum
-    elsif @parts_list.ldr?
-      # TODO: Get this figured out for LDRs after done with LdrParser class
-      @source_lot_count = 0
-      @source_total_quantity = 0
+      if @parts_list.bricklink_xml?
+        xml_doc = Nokogiri::XML(@parts_list.bricklink_xml)
+        @source_lot_count = xml_doc.xpath('//ITEM').count
+        @source_total_quantity = xml_doc.xpath('//ITEM//MINQTY').collect { |c| c.text.to_i }.sum
+      elsif @parts_list.ldr?
+        # TODO: Get this figured out for LDRs after done with LdrParser class
+        @source_lot_count = 0
+        @source_total_quantity = 0
+      end
     end
   end
 
