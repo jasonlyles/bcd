@@ -33,12 +33,12 @@ class User < ActiveRecord::Base
   end
 
   def cancel_account
-    self.update_attributes(:account_status => "C")
-    #I had been destroying the authentications, but if I do this, if a Twitter/FB-only user comes back and wants to
-    #re-enable their account, they can't because I destroyed the authentication. This fails because if they try to add
-    #their auth back, they can't because their email exists in the database (albeit for a cancelled account) and can't be
-    #used again.
-    #self.authentications.destroy_all
+    update_attributes(account_status: 'C', email: '')
+    # I had been destroying the authentications, but if I do this, if a Twitter/FB-only user comes back and wants to
+    # re-enable their account, they can't because I destroyed the authentication. This fails because if they try to add
+    # their auth back, they can't because their email exists in the database (albeit for a cancelled account) and can't be
+    # used again.
+    authentications.destroy_all
   end
 
   def completed_orders
