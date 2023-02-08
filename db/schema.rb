@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_26_020709) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_08_033938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -274,6 +274,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_26_020709) do
     t.text "ldr"
     t.string "original_filename"
     t.string "file"
+    t.string "jid"
     t.index ["product_id"], name: "index_parts_lists_on_product_id"
   end
 

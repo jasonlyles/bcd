@@ -6,124 +6,134 @@
     <% end %>
   </div>
 </div>
-<div class="row">
-  <div class="col-7">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between">
-        <b class="mt-2">
-          Parts List
-          <% if @parts_list.approved? %>
-            <span class='text-success'>APPROVED</span>
-          <% else %>
-            <span class='text-danger'>NOT APPROVED</span>
-          <% end %>
-        </b>
-        <%= link_to 'Edit', edit_admin_parts_list_path(@parts_list), class: 'btn btn-primary' %>
-      </div>
-      <div class="card-body">
-        <% if @parts_list.bricklink_xml.present? %>
-          <div class="card">
-            <div class="card-header">
-              <p>
-                <span class='font-weight-bold'>Initial BL XML</span> (for troubleshooting) NOT THE FINAL XML!!!
-                <a data-toggle="collapse" href="#bricklink_xml" role="button" aria-expanded="false" aria-controls="bricklink_xml">
-                  Toggle
-                </a>
-              </p>
-            </div>
-            <div id="bricklink_xml" class="card-body collapse hide">
-              <pre>
-                <%= Nokogiri::XML(@parts_list.bricklink_xml).root %>
-              </pre>
-            </div>
-            <input type="text" value="<%= @parts_list.bricklink_xml %>" id="hidden-bricklink-xml" hidden />
-          </div>
-        <% end %>
-
-        <% if @parts_list.ldr.present? %>
-          <div class="card">
-            <div class="card-header">
-              <p class='font-weight-bold'>
-                LDR
-                <a data-toggle="collapse" href="#ldr" role="button" aria-expanded="false" aria-controls="ldr">
-                  Toggle
-                </a>
-              </p>
-            </div>
-            <div id="ldr" class="card-body collapse hide">
-              <%= simple_format(@parts_list.ldr) %>
-            </div>
-          </div>
-        <% end %>
-
-        <% if @parts_list.elements.exists? %>
-          <div class="card">
-            <div class="card-header">
-              <p>
-                <span class='font-weight-bold'>Initial Parts Hash</span> (for troubleshooting) NOT FINAL!!!
-                <a data-toggle="collapse" href="#parts" role="button" aria-expanded="false" aria-controls="parts">
-                  Toggle
-                </a>
-              </p>
-            </div>
-            <div id="parts" class="card-body collapse hide">
-              <%== ap(@parts_list.parts, indent: -2, plain: true) %>
-            </div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-    <%= link_to 'Back to Index', admin_parts_lists_path %>
+<% if @parts_list.jid? %>
+  <div align="center">
+    Working on Lot <%= @current_count.to_i + 1 %> of <%= @total_count %>
   </div>
-  <div class="col-5">
-    <div class="card">
-      <div class="card-header">
-        <p>
-          If "Source" and "Parsed" numbers don't match, there's a problem and you shouldn't approve this parts list yet.
-        </p>
-        <p>
-          <span class='font-weight-bold<%= ' text-danger' if @source_lot_count != @parts_list.lots.count %>'>Total Lots (Source/Parsed): <%= "(#{@source_lot_count}/#{@parts_list.lots.count})" %></span><br />
-          <span class='font-weight-bold<%= ' text-danger' if @source_total_quantity != @parts_list.parts_quantity %>'>Total Parts (Source/Parsed): <%= "(#{@source_total_quantity}/#{@parts_list.parts_quantity})" %></span>
-        </p>
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="<%= @current_count.to_f + 1 %>" aria-valuemin="0" aria-valuemax="<%= @total_count.to_i %>" style="width: <%= ((@current_count.to_f + 1) / @total_count.to_f) * 100.0 %>%"></div>
+  </div>
+  <script>
+    function setIntervalWithTurboLinks(intervalFunction, milliseconds) {
+      var interval = setInterval(intervalFunction, milliseconds);
+
+      $(document).on('turbolinks:before-cache turbolinks:before-render', function() {
+        clearTimeout(interval);
+      });
+    }
+
+    function pollPartsListJobStatus() {
+      $.ajax('/admin/parts_lists/' + <%= @parts_list.id %> + '/parts_list_job_status')
+    }
+
+    setIntervalWithTurboLinks(pollPartsListJobStatus, 3000)
+  </script>
+<% else %>
+  <div class="row">
+    <div class="col-7">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+          <b class="mt-2">
+            Parts List
+            <% if @parts_list.approved? %>
+              <span class='text-success'>APPROVED</span>
+            <% else %>
+              <span class='text-danger'>NOT APPROVED</span>
+            <% end %>
+          </b>
+          <%= link_to 'Edit', edit_admin_parts_list_path(@parts_list), class: 'btn btn-primary' %>
+        </div>
+        <div class="card-body">
+          <% if @parts_list.bricklink_xml.present? %>
+            <div class="card">
+              <div class="card-header">
+                <p>
+                  <span class='font-weight-bold'>Initial BL XML</span> (for troubleshooting) NOT THE FINAL XML!!!
+                  <a data-toggle="collapse" href="#bricklink_xml" role="button" aria-expanded="false" aria-controls="bricklink_xml">
+                    Toggle
+                  </a>
+                </p>
+              </div>
+              <div id="bricklink_xml" class="card-body collapse hide">
+                <pre>
+                  <%= Nokogiri::XML(@parts_list.bricklink_xml).root %>
+                </pre>
+              </div>
+              <input type="text" value="<%= @parts_list.bricklink_xml %>" id="hidden-bricklink-xml" hidden />
+            </div>
+          <% end %>
+
+          <% if @parts_list.ldr.present? %>
+            <div class="card">
+              <div class="card-header">
+                <p class='font-weight-bold'>
+                  LDR
+                  <a data-toggle="collapse" href="#ldr" role="button" aria-expanded="false" aria-controls="ldr">
+                    Toggle
+                  </a>
+                </p>
+              </div>
+              <div id="ldr" class="card-body collapse hide">
+                <%= simple_format(@parts_list.ldr) %>
+              </div>
+            </div>
+          <% end %>
+
+          <% if @parts_list.elements.exists? %>
+            <div class="card">
+              <div class="card-header">
+                <p>
+                  <span class='font-weight-bold'>Initial Parts Hash</span> (for troubleshooting) NOT FINAL!!!
+                  <a data-toggle="collapse" href="#parts" role="button" aria-expanded="false" aria-controls="parts">
+                    Toggle
+                  </a>
+                </p>
+              </div>
+              <div id="parts" class="card-body collapse hide">
+                <%== ap(@parts_list.parts, indent: -2, plain: true) %>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
-      <div class="card-body">
-        <% @lots.each do |lot| %>
-          <div class="card mt-2 p-2 <%= 'border-danger border-2' if lot.part_obsolete? %>">
-              <div class="row no-gutters">
-                <div class="col-3">
-                  <%= image_tag(lot.thumb_image, class: 'image-fluid') unless lot.thumb_image.blank? %>
-                </div>
-                <div class="col-9 px-2">
-                  <div class="card-block px-2">
-                    <% if lot.part_obsolete? %>
-                      <h4 class="card-title text-danger">OBSOLETE</h4>
-                    <% end %>
-                    <h4 class="card-title"><%= "#{lot.part_ldraw_id} :: #{lot.part_name}" %></h4>
-                    <p class="card-text"><span class="font-weight-bold">Color:</span> <%= "#{lot.color_ldraw_id} :: #{lot.color_bl_name}" %></p>
-                    <p class="card-text"><span class="font-weight-bold">Quantity:</span> <%= lot.quantity %></p>
-                    <% if lot.note.present? %>
-                      <p class="card-text"><span class="font-weight-bold">Note:</span> <%= lot.note %></p>
-                    <% end %>
+      <%= link_to 'Back to Index', admin_parts_lists_path %>
+    </div>
+    <div class="col-5">
+      <div class="card">
+        <div class="card-header">
+          <p>
+            If "Source" and "Parsed" numbers don't match, there's a problem and you shouldn't approve this parts list yet.
+          </p>
+          <p>
+            <span class='font-weight-bold<%= ' text-danger' if @source_lot_count != @parts_list.lots.count %>'>Total Lots (Source/Parsed): <%= "(#{@source_lot_count}/#{@parts_list.lots.count})" %></span><br />
+            <span class='font-weight-bold<%= ' text-danger' if @source_total_quantity != @parts_list.parts_quantity %>'>Total Parts (Source/Parsed): <%= "(#{@source_total_quantity}/#{@parts_list.parts_quantity})" %></span>
+          </p>
+        </div>
+        <div class="card-body">
+          <% @lots.each do |lot| %>
+            <div class="card mt-2 p-2 <%= 'border-danger border-2' if lot.part_obsolete? %>">
+                <div class="row no-gutters">
+                  <div class="col-3">
+                    <%= image_tag(lot.thumb_image, class: 'image-fluid') unless lot.thumb_image.blank? %>
+                  </div>
+                  <div class="col-9 px-2">
+                    <div class="card-block px-2">
+                      <% if lot.part_obsolete? %>
+                        <h4 class="card-title text-danger">OBSOLETE</h4>
+                      <% end %>
+                      <h4 class="card-title"><%= "#{lot.part_ldraw_id} :: #{lot.part_name}" %></h4>
+                      <p class="card-text"><span class="font-weight-bold">Color:</span> <%= "#{lot.color_ldraw_id} :: #{lot.color_bl_name}" %></p>
+                      <p class="card-text"><span class="font-weight-bold">Quantity:</span> <%= lot.quantity %></p>
+                      <% if lot.note.present? %>
+                        <p class="card-text"><span class="font-weight-bold">Note:</span> <%= lot.note %></p>
+                      <% end %>
+                    </div>
                   </div>
                 </div>
-              </div>
-          </div>
-        <% end %>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<!-- <a href="#" onclick="copyToClipboard(); $(this).text('Copied!');">Copy to Clipboard</a> -->
-<script type="text/javascript">
-  function copyToClipboard() {
-    /* Get the text field */
-    var copyText = document.getElementById("hidden-bricklink-xml");
-
-    /* Select the text field */
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-    /* Copy the text inside the text field */
-    navigator.clipboard.writeText(copyText.value);
-  }
-</script>
+<% end %>

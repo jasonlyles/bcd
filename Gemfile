@@ -40,6 +40,7 @@ gem 'roboto'
 gem 'ruby_parser'
 gem 'sidekiq'
 gem 'sidekiq-cron'
+# gem 'sidekiq-status' Want to use this, but it's not currently working with Sidekiq 7
 gem 'sitemap_generator'
 gem 'twitter'
 

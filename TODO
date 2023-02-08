@@ -2,24 +2,11 @@ Ruby/Rails upgrade notes:
 
 BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
-
-Is this a problem?
-# rails app:update removed these:
-# ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-#   unless html_tag =~ /^<label/
-#     %{<span class="field_with_errors">#{html_tag}<label for="#{instance.send(:tag_id)}" class="message"> #{instance.error_message.first}</label></span>}.html_safe
-#   else
-#     %{#{html_tag}}.html_safe
-#   end
-# end
-# config.generators do |g|
-#   g.test_framework :rspec, :fixture => true, :views => false
-#   g.integration_tool :rspec, :fixture => true, :views => true
-# end
+* Update paypal callback urls for staging.
+* Update facebook/twitter oauth staging urls.
 
 SETTING UP STAGING:
 * Set up app on fly.io. Make sure everything is working, scheduled tasks are running, etc.
-* Set up the NEW ObsoletePartsCheck job to run.
 * Get staging env vars from bcd-stg and then delete that app.
 * Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
   count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
@@ -35,10 +22,19 @@ SETTING UP STAGING:
   * Set up database config apart from Heroku
 
 ONCE STAGING IS SET UP:
-* Test everything via the website.
+* Test everything via the website. (Write up a more complete list.)
+  * Parts List creation
+  * Scheduled Sidekiq jobs
+  * Paypal
+  * Logging to Papertrail/somewhere
+  * Various email jobs
+  * Facebook/Twitter Oauth
+  * User creation/cancellation
+  * Email unsubscribe
+  * PDF Upload/Download
+  * User parts lists
 * If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
 * Make sure the places in the code using `only_path: true` are doing what I think they're doing.
-* Element#store_image: I think I forgot to set this up to work with S3. Test.
 * Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
 OAUTH stuff:
 * Test FB login + developer account: old juno, vestal virgins
@@ -56,6 +52,8 @@ ONCE IN PROD:
 * Generate and submit sitemap to google and then review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 
 Nice to haves:
+* https://threejs.org/docs/#examples/en/loaders/LDrawLoader See what it would take to render instructions in the browser.
+  Might only be able to do smaller instructions. Models would probably be better to render.
 * Honeybadger is trying to get me back as a customer. Apparently I can use it for
   free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
   that instead of ExceptionNotifier

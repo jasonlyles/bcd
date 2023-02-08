@@ -51,6 +51,9 @@ Rails.application.routes.draw do
       end
     end
     resources :parts_lists do
+      member do
+        get :parts_list_job_status
+      end
       collection do
         get :part_swap
         post :create_new_elements

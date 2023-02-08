@@ -28,6 +28,16 @@ class Admin::PartsListsController < AdminController
 
   def show
     @parts_list = PartsList.find(params[:id])
+
+    # This will be the case if the parts list is still being processed.
+    if @parts_list.jid?
+      redis_total_key = "#{@parts_list.jid}_total"
+      redis_counter_key = "#{@parts_list.jid}_counter"
+      redis = RedisClient.new
+      @total_count = redis.call('GET', redis_total_key)
+      @current_count = redis.call('GET', redis_counter_key)
+    end
+
     @lots = @parts_list.lots.includes(:part, :color, element: %i[part color]).order('parts.name ASC, colors.bl_name ASC')
 
     if @parts_list.bricklink_xml?
@@ -45,12 +55,14 @@ class Admin::PartsListsController < AdminController
   def create
     @parts_list = PartsList.new(parts_list_params.except(:file))
     if @parts_list.save
-      interaction = PartsListInteractions::CreatePartsList.run(parts_list_id: @parts_list.id)
+      jid = CreatePartsListJob.perform_async(@parts_list.id)
 
-      if interaction.succeeded?
-        redirect_to([:admin, @parts_list], notice: 'Parts List was successfully created.')
+      if jid.present?
+        @parts_list.update(jid:)
+        redirect_to([:admin, @parts_list], notice: 'Parts List is being created.')
       else
-        redirect_to([:admin, @parts_list], alert: interaction.errors.present? ? interaction.errors.join('<br/>') : interaction.error.to_s)
+        # redirect_to([:admin, @parts_list], alert: interaction.errors.present? ? interaction.errors.join('<br/>') : interaction.error.to_s)
+        redirect_to([:admin, @parts_list], alert: 'The job was not scheduled. Please wait and try again.')
       end
     else
       flash[:alert] = 'Parts List was NOT created'
@@ -123,6 +135,11 @@ class Admin::PartsListsController < AdminController
     @message = 'Sending parts list update emails'
 
     respond_to(&:js)
+  end
+
+  # This serves just to redirect to the show page, where the right vars are set.
+  def parts_list_job_status
+    render js: "window.location = '#{admin_parts_list_path(params[:id])}'"
   end
 
   private
