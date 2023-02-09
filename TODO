@@ -6,7 +6,6 @@ BEFORE STAGING:
 * Update facebook/twitter oauth staging urls.
 
 SETTING UP STAGING:
-* Set up app on fly.io. Make sure everything is working, scheduled tasks are running, etc.
 * Get staging env vars from bcd-stg and then delete that app.
 * Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
   count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
@@ -53,7 +52,6 @@ Nice to haves:
 * Honeybadger is trying to get me back as a customer. Apparently I can use it for
   free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
   that instead of ExceptionNotifier
-* Look at moving from carrierwave to ActiveStorage. Is it worth the trouble?
 * Upgrade bootstrap to 5.3, or maybe just move to tailwind.
 * Get this thing using importmaps
   * add Stimulus
@@ -75,10 +73,17 @@ Nice to haves:
      know where we got their emails from, and that this is a one-time email if they choose, and they
      can select an 'Unsubscribe' button, or a 'Keep sending me emails' or 'Convert me to a BCD user'
      button or something like that.
+   * Does it make sense to add a source column to users, and push users in there from other sources?
+     I wonder if maybe it's better to have a separate table for users from other sources.
  * Think of a way for Brian to get links to parts lists for ebay sales that he can send to the users.
    Maybe if I tapped into ebay's API, I could pull orders and have them in our system,
    waiting for Brian to click a button to send out emails with links. Maybe this
    isn't worth the time if ebay isn't really letting us sell much.
+ * Could maybe start selling on Etsy and Amazon and use their APIs to pull in order
+   data for generating parts list links. Could possibly also send things the other way,
+   where we create a product in BCD and then click a 'Send to Etsy' button to create
+   a listing there. Can maybe pull feedback/comments on the product that users have
+   left and display it on our product page.
 
 
 

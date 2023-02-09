@@ -101,7 +101,7 @@ Rails.application.configure do
   config.action_controller.asset_host = 'dkki5p6pvm5jx.cloudfront.net' # "assets.brickcitydepot.com"
 
   # Devise needs a default url
-  config.action_mailer.default_url_options = { host: 'bcd-stg.herokuapp.com' }
+  config.action_mailer.default_url_options = { host: 'bcd-stg2.onrender.com' }
 
   # Set to use Amazon ses via aws-sdk gem
   config.action_mailer.delivery_method = :aws_sdk
@@ -121,5 +121,5 @@ Rails.application.configure do
                                                  exception_recipients: ['lylesjt@gmail.com']
                                                }
 
-  config.web_host = 'http://bcd-stg.herokuapp.com'
+  config.web_host = 'http://bcd-stg2.onrender.com'
 end
