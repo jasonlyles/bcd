@@ -37,7 +37,7 @@ class User < ApplicationRecord
   end
 
   def cancel_account
-    update(account_status: 'C', email: '')
+    update(account_status: 'C', email: guid)
     authentications.destroy_all
   end
 

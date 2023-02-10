@@ -33,10 +33,11 @@ ONCE STAGING IS SET UP:
 * Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
 OAUTH stuff:
 * Test FB login + developer account: old juno, vestal virgins
+  * Staging works
+  * Prod works
 * Test Twitter login: cj, midget ninjas
 * Twitter BCD sleepz
 * For BCD prod, Twitter allows me to login, but I have to go there twice before it will redirect back correctly.
-* For BCD prod, Facebook oauth is just busted. Looks like the app was found in violation of some policy.
 * Once I've fixed up FB and Twitter logins, maybe add Google? https://developers.google.com/identity/sign-in/web/sign-in
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 
