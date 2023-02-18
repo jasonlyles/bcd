@@ -60,7 +60,7 @@ class SessionsController < Devise::SessionsController
   private
 
   def guest_params
-    params[:guest].permit(:email, :email_preference)
+    params[:guest].permit(:email, :email_preference, :tos_accepted)
   end
 
   def kill_guest_checkout_flag
