@@ -9,6 +9,8 @@ class User < ApplicationRecord
   # Setup accessible (or protected) attributes for your model
   # attr_accessible :email, :password, :password_confirmation, :remember_me, :email_preference, :account_status, :tos_accepted, :referrer_code
 
+  attr_accessor :skip_tos_accepted
+
   has_many :orders
   has_many :line_items, through: :orders
   has_many :products, through: :line_items
@@ -18,7 +20,8 @@ class User < ApplicationRecord
   has_many :user_parts_lists
   has_many :parts_lists, through: :user_parts_lists
 
-  validates :tos_accepted, acceptance: { accept: true }
+  validates :tos_accepted, acceptance: { accept: true }, unless: :skip_tos_accepted
+  validates :email, uniqueness: true, presence: true
 
   before_create :set_up_guids
   before_save do
@@ -26,6 +29,8 @@ class User < ApplicationRecord
   end
 
   enum email_preference: %i[no_emails important_emails all_emails]
+
+  enum source: %i[brick_city_depot ebay bricklink]
 
   def apply_omniauth(omniauth)
     self.email = omniauth['info']['email'] if omniauth['info'] && omniauth['info']['email']

@@ -17,6 +17,7 @@ gem 'bootsnap', require: false
 gem 'carrierwave'
 gem 'cookies_eu'
 gem 'devise'
+gem 'docx'
 gem 'exception_notification'
 gem 'ffi'
 gem 'fog-aws'

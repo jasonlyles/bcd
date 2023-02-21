@@ -3,7 +3,8 @@ Ruby/Rails upgrade notes:
 BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 * Update paypal callback urls for staging.
-* Update facebook/twitter oauth staging urls.
+* Do I have something for a user to convert themselves from a guest to a regular user, and if so,
+  do they still have access to things they bought?
 
 SETTING UP STAGING:
 * Get staging env vars from bcd-stg and then delete that app.
@@ -36,8 +37,10 @@ OAUTH stuff:
   * Staging works
   * Prod works
 * Test Twitter login: cj, midget ninjas
+  * Dev works
+  * Staging works
+  * Need to recreate prod app, or share dev and staging.
 * Twitter BCD sleepz
-* For BCD prod, Twitter allows me to login, but I have to go there twice before it will redirect back correctly.
 * Once I've fixed up FB and Twitter logins, maybe add Google? https://developers.google.com/identity/sign-in/web/sign-in
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 

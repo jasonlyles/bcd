@@ -176,6 +176,9 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.0)
     docile (1.4.0)
+    docx (0.7.0)
+      nokogiri (~> 1.13, >= 1.13.0)
+      rubyzip (~> 2.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.11)
@@ -471,6 +474,7 @@ GEM
     ruby2_keywords (0.0.5)
     ruby_parser (3.19.2)
       sexp_processor (~> 4.16)
+    rubyzip (2.3.2)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -569,6 +573,7 @@ DEPENDENCIES
   cookies_eu
   database_cleaner
   devise
+  docx
   exception_notification
   factory_bot_rails
   faker
