@@ -18,6 +18,6 @@ class InstantPaymentNotificationsController < ApplicationController
   private
 
   def paypal_params
-    params.require(:instant_payment_notification).permit(:payment_status, :notify_version, :custom, :verify_sign, :payer_email, :txn_id)
+    params.permit(:payment_status, :notify_version, :custom, :verify_sign, :payer_email, :txn_id)
   end
 end
