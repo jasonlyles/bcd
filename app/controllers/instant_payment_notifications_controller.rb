@@ -2,6 +2,7 @@
 
 class InstantPaymentNotificationsController < ApplicationController
   skip_before_action :find_cart
+  skip_before_action :verify_authenticity_token, only: [:create]
 
   # POST /instant_payment_notifications
   def create
