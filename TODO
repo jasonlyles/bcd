@@ -41,6 +41,8 @@ OAUTH stuff:
   * Staging works
   * Need to recreate prod app, or share dev and staging.
 * Twitter BCD sleepz
+* Paypal sandbox/dev is my yahoo
+
 * Once I've fixed up FB and Twitter logins, maybe add Google? https://developers.google.com/identity/sign-in/web/sign-in
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 
