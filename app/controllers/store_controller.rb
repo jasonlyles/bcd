@@ -56,12 +56,11 @@ class StoreController < ApplicationController
       @products = Product.find_all_by_price(params[:price]).page(params[:page]).per(12)
     else
       @category = Category.find_by_name(params[:category_name])
-      if @category
-        @products = @category.products.find_instructions_for_sale.includes(:images).order('product_code ASC').page(params[:page]).per(12)
-      else
-        flash[:notice] = 'Sorry. That product category does not exist.'
-        redirect_to action: :index
-      end
+      @products = if @category
+                    @category.products.find_instructions_for_sale.includes(:images).order('product_code ASC').page(params[:page]).per(12)
+                  else
+                    Product.none
+                  end
     end
   end
   # rubocop:enable Metrics/AbcSize
@@ -209,10 +208,12 @@ class StoreController < ApplicationController
 
   def assemble_paypal_uri_item_hash
     item_hash = {}
-    @order.line_items.each_with_index do |item, index|
-      item_hash["item_name_#{index + 1}".to_sym] = item.product.code_and_name
-      item_hash["amount_#{index + 1}".to_sym] = item.product.price.to_f * item.quantity
-      item_hash["quantity_#{index + 1}".to_sym] = item.quantity
+    index = 0
+    @order.line_items.each do |item|
+      index += 1
+      item_hash["item_name_#{index}".to_sym] = item.product.code_and_name
+      item_hash["amount_#{index}".to_sym] = item.product.price.to_f * item.quantity
+      item_hash["quantity_#{index}".to_sym] = item.quantity
     end
 
     item_hash
