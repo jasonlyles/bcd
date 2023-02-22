@@ -16,8 +16,7 @@ class StoreController < ApplicationController
   def products
     @product_type = ProductType.where('name=?', params[:product_type_name])[0]
     if @product_type.blank?
-      # TODO: Figure out why favicon requests are coming here. But for now, just don't flash this confusing message for those requests
-      flash[:notice] = "Sorry. We don't have any of those." unless params[:product_type_name] == 'favicon'
+      flash[:notice] = "Sorry. We don't have any of those."
       redirect_to(root_path)
     elsif params[:product_type_name].casecmp('instructions').positive?
       @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
@@ -56,11 +55,12 @@ class StoreController < ApplicationController
       @products = Product.find_all_by_price(params[:price]).page(params[:page]).per(12)
     else
       @category = Category.find_by_name(params[:category_name])
-      @products = if @category
-                    @category.products.find_instructions_for_sale.includes(:images).order('product_code ASC').page(params[:page]).per(12)
-                  else
-                    Product.none
-                  end
+      if @category
+        @products = @category.products.find_instructions_for_sale.includes(:images).order('product_code ASC').page(params[:page]).per(12)
+      else
+        flash[:notice] = 'Sorry. That product category does not exist.'
+        redirect_to action: :index
+      end
     end
   end
   # rubocop:enable Metrics/AbcSize
