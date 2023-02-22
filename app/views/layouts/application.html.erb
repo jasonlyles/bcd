@@ -13,8 +13,8 @@
     <meta content="<%= opengraph_metadata[:app_id] %>" property="fb:app_id"/>
     <meta content="<%= opengraph_metadata[:site_name] %>" property="og:site_name"/>
     <meta content="<%= opengraph_metadata[:url] %>" property="og:url"/>
-    <%= favicon_link_tag '/favicon.ico' %>
-    <link rel="apple-touch-icon" href="/favicon.ico"/>
+    <%= favicon_link_tag 'favicon.ico' %>
+    <link rel="apple-touch-icon" href="favicon.ico"/>
     <title><%= content_for?(:title) ? yield(:title) : "Brick City Depot" %></title>
     <%= stylesheet_link_tag 'application' %>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
