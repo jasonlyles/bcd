@@ -2,7 +2,6 @@ Ruby/Rails upgrade notes:
 
 BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
-* Update paypal callback urls for staging.
 * Do I have something for a user to convert themselves from a guest to a regular user, and if so,
   do they still have access to things they bought?
 

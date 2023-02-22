@@ -114,7 +114,8 @@ class Order < ApplicationRecord
   def retrieve_download_links
     return unless status.casecmp('COMPLETED').zero?
 
-    links = []
+    pdf_links = []
+    parts_list_links = []
     line_items.each do |line_item|
       product = Product.find(line_item.product_id)
       next unless product.includes_instructions?
@@ -123,11 +124,11 @@ class Order < ApplicationRecord
       guid = user.guid
       download = Download.where(['user_id=? and product_id=?', user_id, product.id])
                          .first_or_create(download_token: SecureRandom.hex(20), product_id: product.id, user_id:)
-      product.parts_lists.each { |pl| links << ["#{product_name} Parts List", "/parts_lists/#{pl.id}?user_guid=#{guid}&token=#{download.download_token}"] }
+      product.parts_lists.each { |pl| parts_list_links << ["#{product_name} #{pl.name} Parts List", "/parts_lists/#{pl.id}?user_guid=#{guid}&token=#{download.download_token}"] }
 
-      links << ["#{product_name} PDF", "/guest_download?id=#{guid}&token=#{download.download_token}"]
+      pdf_links << ["#{product_name} PDF", "/guest_download?id=#{guid}&token=#{download.download_token}"]
     end
-    links
+    [pdf_links, parts_list_links]
   end
 
   def retrieve_link_to_downloads

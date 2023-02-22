@@ -79,10 +79,10 @@ describe User do
       expect { user.cancel_account }.to change(user, :account_status).from('A').to('C')
     end
 
-    it 'should set email to an empty string' do
+    it 'should set email to the users guid because we dont want an empty string' do
       user = FactoryBot.create(:user)
 
-      expect { user.cancel_account }.to change(user, :email).from('charlie_brown@peanuts.com').to('')
+      expect { user.cancel_account }.to change(user, :email).from('charlie_brown@peanuts.com').to(user.guid)
     end
 
     it 'should delete a users authentications' do

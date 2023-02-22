@@ -61,7 +61,7 @@ describe Order do
 
     it "should return an empty array if the order doesn't include digital products" do
       product_type = FactoryBot.create(:product_type, name: 'Models', digital_product: false)
-      product = FactoryBot.create(:physical_product, product_type: product_type)
+      product = FactoryBot.create(:physical_product, product_type:)
       li1 = LineItem.new product: product, quantity: 1, total_price: 5
       order = Order.new
       order.line_items << li1
@@ -150,11 +150,11 @@ describe Order do
     context 'the product in question includes instructions' do
       it 'should return an array of urls with query strings, paired with descriptive titles for each link' do
         user = FactoryBot.create(:user)
-        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user: user)
+        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user:)
         expect(SecureRandom).to receive(:hex).and_return('fake_hex')
 
         links = order.retrieve_download_links
-        expect(links).to eq([['CB001 Colonial Revival House PDF', "/guest_download?id=#{user.guid}&token=fake_hex"]])
+        expect(links).to eq([[['CB001 Colonial Revival House PDF', "/guest_download?id=#{user.guid}&token=fake_hex"]], []])
       end
     end
 
@@ -162,13 +162,13 @@ describe Order do
       it 'should return an empty array' do
         product_type = FactoryBot.create(:product_type, name: 'Crafts', digital_product: false)
         user = FactoryBot.create(:user)
-        product = FactoryBot.create(:product, product_type: product_type, name: 'Crafty', product_code: 'CR001')
+        product = FactoryBot.create(:product, product_type:, name: 'Crafty', product_code: 'CR001')
         li = LineItem.new product: product, quantity: 1, total_price: 10
-        order = FactoryBot.create(:order, created_at: Date.today, user: user)
+        order = FactoryBot.create(:order, created_at: Date.today, user:)
         order.line_items << li
 
         links = order.retrieve_download_links
-        expect(links).to eq([])
+        expect(links).to eq([[], []])
       end
     end
   end
@@ -177,7 +177,7 @@ describe Order do
     context 'there is no transaction ID in the order record' do
       it 'should return a link to the download_error_page' do
         user = FactoryBot.create(:user)
-        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user: user)
+        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user:)
         order.transaction_id = nil
         link = order.retrieve_link_to_downloads
 
@@ -188,7 +188,7 @@ describe Order do
     context 'there is no request ID in the order record' do
       it 'should return a link to the download_error_page' do
         user = FactoryBot.create(:user)
-        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user: user)
+        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user:)
         order.request_id = nil
         link = order.retrieve_link_to_downloads
 
@@ -199,7 +199,7 @@ describe Order do
     context 'there is a transaction ID and request ID in the order record' do
       it 'should return a link to guest_downloads with a query string' do
         user = FactoryBot.create(:user)
-        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user: user)
+        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user:)
         link = order.retrieve_link_to_downloads
 
         expect(link).to eq('http://localhost:3000/guest_downloads?tx_id=blarney&conf_id=blar')
