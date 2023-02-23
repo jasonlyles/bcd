@@ -82,5 +82,8 @@ module BrickCity
       g.test_framework :rspec, fixture: true, views: false
       g.integration_tool :rspec, fixture: true, views: true
     end
+
+    # Send errors to our own defined routes instead of the public static html pages.
+    config.exceptions_app = routes
   end
 end
