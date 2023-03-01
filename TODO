@@ -46,6 +46,7 @@ OAUTH stuff:
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 
 ONCE IN PROD:
+* The database and twitter sections of the prod credentials need to be updated.
 * Test user flows via the website.
 * When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
 * Delete email addresses of all cancelled accounts
