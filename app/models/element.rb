@@ -108,19 +108,14 @@ class Element < ApplicationRecord
 
   # TODO: Maybe in here: # Try to add alpha channel to images via RMagick: take
   # their white background and make it transparent.
-  # TODO: This seems to be incomplete.
   def store_image
     # To make the bucket public read:
     # https://stackoverflow.com/questions/19176926/how-to-make-all-objects-in-aws-s3-bucket-public-by-default/23102551#23102551
     # Be sure to add /* to the end of the resource name for the generated policy
     return unless original_image_url
 
-    root_local_dir = "#{Rails.root}/tmp"
-    parts_image_dir = "#{root_local_dir}/parts_images"
-    Dir.mkdir(root_local_dir) unless Dir.exist?(root_local_dir)
-    Dir.mkdir(parts_image_dir) unless Dir.exist?(parts_image_dir)
     extension = File.extname(original_image_url)
-    file = "#{parts_image_dir}/#{guid}#{extension}"
+    file = "#{guid}#{extension}"
     begin
       File.open(file, 'wb') do |fo|
         fo.write URI.parse(original_image_url).open.read
@@ -128,7 +123,6 @@ class Element < ApplicationRecord
     rescue StandardError => e
       logger.error "There was a problem getting an image for #{original_image_url}: #{e.message}"
     end
-    # s3_file = "parts_images/#{color_id}/#{guid}#{extension}"
     self.image = File.open(file)
     save
   end

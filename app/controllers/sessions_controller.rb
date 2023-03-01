@@ -28,7 +28,7 @@ class SessionsController < Devise::SessionsController
       # See if I can convert these next few lines to find_or_create_by, making sure to still
       # set account_status to 'G'. Pay attention to the block below looking to see if @user is valid
       @user = Guest.find_by_email(params[:guest][:email].downcase)
-      @user ||= Guest.new(guest_params)
+      @user ||= Guest.new(guest_params.merge(account_status: 'G'))
       # Doing the 'unless' condition so a user can't then make himself a guest and break his account
       @user.account_status = 'G' unless @user.account_status == 'A'
 
@@ -60,7 +60,7 @@ class SessionsController < Devise::SessionsController
   private
 
   def guest_params
-    params[:guest].permit(:email, :email_preference)
+    params[:guest].permit(:email, :email_preference, :tos_accepted)
   end
 
   def kill_guest_checkout_flag

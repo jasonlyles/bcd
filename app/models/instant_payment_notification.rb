@@ -29,7 +29,7 @@ class InstantPaymentNotification < ApplicationRecord
   # all the variables that I got from paypal, in the same order I received them.
   def valid_ipn_url?
     http = Net::HTTP.new(PaypalConfig.config.host, 443)
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.use_ssl = true
     path = '/cgi-bin/webscr'
     query = 'cmd=_notify-validate'

@@ -70,17 +70,20 @@ module BrickCity
     # When using Ruby 2.4, you can preserve the timezone of the receiver when calling to_time.
     # ActiveSupport.to_time_preserves_timezone = false
 
-    # rails app:update removed these:
-    # ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-    #   unless html_tag =~ /^<label/
-    #     %{<span class="field_with_errors">#{html_tag}<label for="#{instance.send(:tag_id)}" class="message"> #{instance.error_message.first}</label></span>}.html_safe
-    #   else
-    #     %{#{html_tag}}.html_safe
-    #   end
-    # end
-    # config.generators do |g|
-    #   g.test_framework :rspec, :fixture => true, :views => false
-    #   g.integration_tool :rspec, :fixture => true, :views => true
-    # end
+    ActionView::Base.field_error_proc = proc do |html_tag, instance|
+      if html_tag =~ /^<label/
+        %(#{html_tag}).html_safe
+      else
+        %(<span class="field_with_errors">#{html_tag}<label for="#{instance.send(:tag_id)}" class="message"> #{instance.error_message.first}</label></span>).html_safe
+      end
+    end
+
+    config.generators do |g|
+      g.test_framework :rspec, fixture: true, views: false
+      g.integration_tool :rspec, fixture: true, views: true
+    end
+
+    # Send errors to our own defined routes instead of the public static html pages.
+    config.exceptions_app = routes
   end
 end

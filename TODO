@@ -2,24 +2,10 @@ Ruby/Rails upgrade notes:
 
 BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
-
-Is this a problem?
-# rails app:update removed these:
-# ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
-#   unless html_tag =~ /^<label/
-#     %{<span class="field_with_errors">#{html_tag}<label for="#{instance.send(:tag_id)}" class="message"> #{instance.error_message.first}</label></span>}.html_safe
-#   else
-#     %{#{html_tag}}.html_safe
-#   end
-# end
-# config.generators do |g|
-#   g.test_framework :rspec, :fixture => true, :views => false
-#   g.integration_tool :rspec, :fixture => true, :views => true
-# end
+* Do I have something for a user to convert themselves from a guest to a regular user, and if so,
+  do they still have access to things they bought?
 
 SETTING UP STAGING:
-* Set up app on fly.io. Make sure everything is working, scheduled tasks are running, etc.
-* Set up the NEW ObsoletePartsCheck job to run.
 * Get staging env vars from bcd-stg and then delete that app.
 * Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
   count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
@@ -29,37 +15,49 @@ SETTING UP STAGING:
   vars and set them to true. (This is done for you on Heroku)
   * Might have to set up separately from Heroku:
     1. Papertrail
-    2. Redis (Rediscloud?)
-    3. New Relic
-    4. Postgres
-  * Set up database config apart from Heroku
 
 ONCE STAGING IS SET UP:
-* Test everything via the website.
+* Test everything via the website. (Write up a more complete list.)
+  * Parts List creation
+  * Scheduled Sidekiq jobs
+  * Paypal
+  * Logging to Papertrail/somewhere
+  * Various email jobs
+  * Facebook/Twitter Oauth
+  * User creation/cancellation
+  * Email unsubscribe
+  * PDF Upload/Download
+  * User parts lists
 * If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
 * Make sure the places in the code using `only_path: true` are doing what I think they're doing.
-* Element#store_image: I think I forgot to set this up to work with S3. Test.
 * Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
 OAUTH stuff:
 * Test FB login + developer account: old juno, vestal virgins
+  * Staging works
+  * Prod works
 * Test Twitter login: cj, midget ninjas
+  * Dev works
+  * Staging works
+  * Need to recreate prod app, or share dev and staging.
 * Twitter BCD sleepz
-* For BCD prod, Twitter allows me to login, but I have to go there twice before it will redirect back correctly.
-* For BCD prod, Facebook oauth is just busted. Looks like the app was found in violation of some policy.
+* Paypal sandbox/dev is my yahoo
+
 * Once I've fixed up FB and Twitter logins, maybe add Google? https://developers.google.com/identity/sign-in/web/sign-in
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 
 ONCE IN PROD:
+* The database and twitter sections of the prod credentials need to be updated.
 * Test user flows via the website.
 * When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
 * Delete email addresses of all cancelled accounts
 * Generate and submit sitemap to google and then review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 
 Nice to haves:
+* https://threejs.org/docs/#examples/en/loaders/LDrawLoader See what it would take to render instructions in the browser.
+  Might only be able to do smaller instructions. Models would probably be better to render.
 * Honeybadger is trying to get me back as a customer. Apparently I can use it for
   free. See the email I got from them at 11:59 AM on Dec 20th. Might be nice to use
   that instead of ExceptionNotifier
-* Look at moving from carrierwave to ActiveStorage. Is it worth the trouble?
 * Upgrade bootstrap to 5.3, or maybe just move to tailwind.
 * Get this thing using importmaps
   * add Stimulus
@@ -81,10 +79,17 @@ Nice to haves:
      know where we got their emails from, and that this is a one-time email if they choose, and they
      can select an 'Unsubscribe' button, or a 'Keep sending me emails' or 'Convert me to a BCD user'
      button or something like that.
+   * Does it make sense to add a source column to users, and push users in there from other sources?
+     I wonder if maybe it's better to have a separate table for users from other sources.
  * Think of a way for Brian to get links to parts lists for ebay sales that he can send to the users.
    Maybe if I tapped into ebay's API, I could pull orders and have them in our system,
    waiting for Brian to click a button to send out emails with links. Maybe this
    isn't worth the time if ebay isn't really letting us sell much.
+ * Could maybe start selling on Etsy and Amazon and use their APIs to pull in order
+   data for generating parts list links. Could possibly also send things the other way,
+   where we create a product in BCD and then click a 'Send to Etsy' button to create
+   a listing there. Can maybe pull feedback/comments on the product that users have
+   left and display it on our product page.
 
 
 

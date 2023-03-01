@@ -51,6 +51,9 @@ Rails.application.routes.draw do
       end
     end
     resources :parts_lists do
+      member do
+        get :parts_list_job_status
+      end
       collection do
         get :part_swap
         post :create_new_elements
@@ -185,6 +188,11 @@ Rails.application.routes.draw do
 
   # misc routes
   get '/campaign/:guid' => 'email_campaigns#register_click_through_and_redirect'
+
+  # error routes
+  get '/404', to: 'errors#not_found'
+  get '/500', to: 'errors#internal_server'
+  get '/422', to: 'errors#unprocessable'
 
   get ':product_code/:product_name', to: 'store#product_details'
 

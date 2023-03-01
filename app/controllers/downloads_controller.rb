@@ -92,7 +92,7 @@ class DownloadsController < ApplicationController
     return redirect_to download_link_error_path if @order.blank?
 
     session[:guest_has_arrived_for_downloads] = true
-    @download_links = @order.retrieve_download_links
+    @download_links, @parts_list_links = @order.retrieve_download_links
   end
 
   def guest_download

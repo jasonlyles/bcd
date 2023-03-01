@@ -39,7 +39,7 @@ class Product < ApplicationRecord
   scope :featured, -> { where(featured: true) }
   scope :in_stock, -> { where('quantity > 0') } # Maybe set up to use only physical products, and not digital products
   scope :ready_instructions, -> { ready.instructions }
-  scope :sellable_instructions, -> { ready_instructions.where(free: false) }
+  scope :sellable_instructions, -> { where(ready_for_public: true).instructions.where(free: false) }
 
   # TODO: Change this to super.merge like in the email_campaign model.
   def attributes
@@ -90,7 +90,7 @@ class Product < ApplicationRecord
   end
 
   def find_live_products_from_same_category
-    Product.ready.where(["free != 't' and quantity >= 1 and category_id = ? and id <> ?", category_id, id]).limit(4)
+    Product.sellable_instructions.where(['category_id = ? and products.id <> ?', category_id, id]).limit(4)
   end
 
   def orders?
@@ -173,6 +173,4 @@ class Product < ApplicationRecord
     # Assumes discount_percentage is stored as an integer. i.e. 25, which means 25%
     discount_percentage? ? (price * (100 - discount_percentage) / 100.to_f) : price
   end
-
-  # TODO: Make sure that removing a product not only deletes the image in the database, but also in Amazon S3
 end

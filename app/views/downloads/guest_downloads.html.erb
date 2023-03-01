@@ -3,14 +3,14 @@
     <h1>Downloads</h1>
     <br/>
     <p>
-      Here you go! You can download parts lists as many times as you need to. PDFs can be downloaded a max of
+      Here you go! PDFs can be downloaded a max of
       <%= MAX_DOWNLOADS %>
-      times, unless we have to update the PDF, in which case you'll get more downloads free. If you click on a PDF download link below, it will count towards your download count, even if you choose to cancel the download.
+      times, unless we have to update the PDF, in which case you'll get more downloads free. If you click on a PDF download link below, it will count towards your download count, even if you choose to cancel the download. You can access your parts lists as many times as you need to.
     </p>
     <br/>
     <br/>
     <strong>
-      Download Links
+      PDFs
     </strong>
     <br/>
     <br/>
@@ -21,7 +21,17 @@
       <% end %>
     </p>
     <br/>
+    <strong>
+      Parts Lists
+    </strong>
     <br/>
+    <br/>
+    <p>
+      <% @parts_list_links.each do |dl| %>
+        <%= link_to dl[0], dl[1], target: '_blank' %>
+        <br/>
+      <% end %>
+    </p>
     <br/>
     <br/>
   </div>

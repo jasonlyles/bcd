@@ -16,8 +16,7 @@ class StoreController < ApplicationController
   def products
     @product_type = ProductType.where('name=?', params[:product_type_name])[0]
     if @product_type.blank?
-      # TODO: Figure out why favicon requests are coming here. But for now, just don't flash this confusing message for those requests
-      flash[:notice] = "Sorry. We don't have any of those." unless params[:product_type_name] == 'favicon'
+      flash[:notice] = "Sorry. We don't have any of those."
       redirect_to(root_path)
     elsif params[:product_type_name].casecmp('instructions').positive?
       @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
@@ -209,10 +208,12 @@ class StoreController < ApplicationController
 
   def assemble_paypal_uri_item_hash
     item_hash = {}
-    @order.line_items.each_with_index do |item, index|
-      item_hash["item_name_#{index + 1}".to_sym] = item.product.code_and_name
-      item_hash["amount_#{index + 1}".to_sym] = item.product.price.to_f * item.quantity
-      item_hash["quantity_#{index + 1}".to_sym] = item.quantity
+    index = 0
+    @order.line_items.each do |item|
+      index += 1
+      item_hash["item_name_#{index}".to_sym] = item.product.code_and_name
+      item_hash["amount_#{index}".to_sym] = item.product.price.to_f * item.quantity
+      item_hash["quantity_#{index}".to_sym] = item.quantity
     end
 
     item_hash

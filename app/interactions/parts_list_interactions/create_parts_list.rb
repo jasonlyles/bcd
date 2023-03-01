@@ -36,6 +36,12 @@ module PartsListInteractions
   class CreatePartsList < BasePartsListInteraction
     attr_accessor :errors
 
+    def initialize(options)
+      super(options)
+      @redis_total_key = "#{options[:jid]}_total"
+      @redis_counter_key = "#{options[:jid]}_counter"
+    end
+
     # rubocop:disable Metrics/AbcSize
     # rubocop:disable Metrics/MethodLength
     def run
@@ -46,6 +52,9 @@ module PartsListInteractions
               else
                 LdrParser.new(parts_list.ldr).parse
               end
+      redis = RedisClient.new
+      redis.call('SET', @redis_total_key, parts.length)
+      redis.call('SET', @redis_counter_key, 0)
 
       parts.each do |key, values|
         # TODO: In here, (or before if possible, after if necessary) assign the following values:
@@ -66,6 +75,7 @@ module PartsListInteractions
         parts[key]['image_url'] = element.image.url
 
         Lot.create(parts_list_id: parts_list.id, element_id: element.id, quantity: values['quantity'])
+        redis.call('INCR', @redis_counter_key)
       rescue StandardError => e
         self.error = e
         errors << e
@@ -80,6 +90,12 @@ module PartsListInteractions
       rescue StandardError => e
         self.error = e
         Rails.logger.error("PartsList::CreatePartsList::Save::#{@parts_list_id}\nERROR: #{e}\nBACKTRACE: #{e.backtrace}")
+      ensure
+        # We're done, set jid to nil so the poller will know the job is done.
+        parts_list.update(jid: nil)
+        # Delete the keys as they're not needed any more.
+        redis.call('DEL', @redis_total_key)
+        redis.call('DEL', @redis_counter_key)
       end
     end
     # rubocop:enable Metrics/AbcSize
