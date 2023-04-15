@@ -2,7 +2,7 @@
 
 class OrderMailer < ActionMailer::Base
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
-  layout 'base_email', except: [:physical_item_purchased]
+  layout 'base_email', except: %i[physical_item_purchased pass_along_buyer_message]
 
   def order_confirmation(user_id, order_id)
     @host = Rails.application.config.web_host
@@ -21,6 +21,21 @@ class OrderMailer < ActionMailer::Base
     @hide_unsubscribe = true
 
     mail(to: @user.email, subject: 'Your Brick City Depot Order')
+  end
+
+  def third_party_guest_order_confirmation(order_id)
+    @host = Rails.application.config.web_host
+    @order = Order.find(order_id)
+    @user = @order.user
+    @link_to_downloads = @order.retrieve_link_to_downloads
+    # If a customer exists in the database already as an active user, email
+    # them to welcome them back and tell them to go to their
+    # account, but also give them a guest link in case they can't get back
+    # into their account, or don't want to.
+    @active_user = @user.active?
+    @hide_unsubscribe = true
+
+    mail(to: @user.email, subject: "Your #{@order.source.capitalize} Order with Brick City Depot")
   end
 
   def physical_item_purchased(user_id, order_id)
@@ -50,14 +65,31 @@ class OrderMailer < ActionMailer::Base
   end
   # rubocop:enable Metrics/AbcSize
 
+  def pass_along_buyer_message(source, order_id, user_email, buyer_message)
+    @host = Rails.application.config.web_host
+    @source = source
+    @order_id = order_id
+    @user_email = user_email
+    @buyer_message = buyer_message
+    @hide_unsubscribe = true
+
+    mail(to: EmailConfig.config.physical_order, subject: "Brick City Depot message from #{source.capitalize} buyer")
+  end
+
   def issue(order_id, comment, name)
     @order = Order.where(['id=?', order_id]).first
+    @third_party_receipt = @order.third_party_receipt
     user = @order.user
     @comment = comment
     @name = name
     @hide_unsubscribe = true
+    subject = if @third_party_receipt.present?
+                "Issue with Brick City Depot #{@third_party_receipt.source.capitalize} Order##{@third_party_receipt.third_party_receipt_identifier}"
+              else
+                "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}"
+              end
 
-    mail(reply_to: user.email, to: [user.email, 'sales@brickcitydepot.com'], subject: "Issue with Brick City Depot Order ##{@order.request_id? ? @order.request_id : @order.transaction_id}")
+    mail(reply_to: user.email, to: [user.email, 'sales@brickcitydepot.com'], subject:)
   end
 
   # :nocov:

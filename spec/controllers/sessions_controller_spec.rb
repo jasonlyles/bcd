@@ -172,4 +172,62 @@ describe SessionsController do
       end
     end
   end
+
+  describe 'third_party_guest_registration' do
+    it 'should assign a source, order_id and user' do
+      request.env['devise.mapping'] = Devise.mappings[:user]
+      user = FactoryBot.create(:user)
+      get :third_party_guest_registration, params: { source: 'etsy', order_id: '1234', u: user.guid }
+
+      expect(assigns(:source)).to eq('etsy')
+      expect(assigns(:order_id)).to eq('1234')
+      expect(assigns(:user)).to eq(user)
+    end
+  end
+
+  describe 'register_third_party_guest' do
+    context 'someone is altering params' do
+      it 'should just say it cannot find the order' do
+        request.env['devise.mapping'] = Devise.mappings[:user]
+        order = FactoryBot.create(:order)
+        FactoryBot.create(:third_party_receipt, order:, source: 'etsy', third_party_receipt_identifier: '1234')
+        user = FactoryBot.create(:user, skip_tos_accepted: true, tos_accepted: false)
+
+        post :register_third_party_guest, params: { source: 'etsy', order_id: '123455534343', user: { id: user.id, tos_accepted: false, email_preference: 'no_emails' } }
+
+        expect(flash[:alert]).to eq('Sorry, there was a problem finding your order. If you feel this is in error, please contact us at sales@brickcitydepot.com')
+        expect(response).to render_template('third_party_guest_registration')
+      end
+    end
+
+    context 'where user record is not valid' do
+      it 'should render third_party_guest_registration and flash an alert' do
+        request.env['devise.mapping'] = Devise.mappings[:user]
+        order = FactoryBot.create(:order)
+        FactoryBot.create(:third_party_receipt, order:, source: 'etsy', third_party_receipt_identifier: '1234')
+        user = FactoryBot.create(:user, skip_tos_accepted: true, tos_accepted: false)
+
+        post :register_third_party_guest, params: { source: 'etsy', order_id: '1234', user: { id: user.id, tos_accepted: false, email_preference: 'no_emails' } }
+
+        expect(flash[:alert]).to eq('You must accept the terms of service before you can proceed.')
+        expect(response).to render_template('third_party_guest_registration')
+      end
+    end
+
+    context 'where user record is valid' do
+      it 'should find the user record and update it' do
+        request.env['devise.mapping'] = Devise.mappings[:user]
+        order = FactoryBot.create(:order)
+        FactoryBot.create(:third_party_receipt, order:, source: 'etsy', third_party_receipt_identifier: '1234')
+        user = FactoryBot.create(:user, skip_tos_accepted: true, tos_accepted: false, email_preference: 'important_emails')
+
+        post :register_third_party_guest, params: { source: 'etsy', order_id: '1234', user: { id: user.id, tos_accepted: true, email_preference: 'no_emails' } }
+
+        user.reload
+        expect(user.email_preference).to eq('no_emails')
+        expect(user.tos_accepted).to eq(true)
+        expect(response).to redirect_to("/guest_downloads?source=etsy&order_id=1234&u=#{user.guid}")
+      end
+    end
+  end
 end

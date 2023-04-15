@@ -2,7 +2,7 @@
 
 class Admin::ImagesController < AdminController
   before_action :assign_products
-  before_action :assign_image, only: %i[show edit update destroy]
+  before_action :assign_image, only: %i[show edit update destroy reposition]
 
   # GET /images
   def index
@@ -29,7 +29,12 @@ class Admin::ImagesController < AdminController
   def create
     @image = Image.new(image_params)
     if @image.save
-      redirect_to([:admin, @image], notice: 'Image was successfully created.')
+      redirect_target = if params['image']['from_modal'] == 'true'
+                          [:admin, Product.find(params['image']['product_id'])]
+                        else
+                          [:admin, @image]
+                        end
+      redirect_to(redirect_target, notice: 'Image was successfully created.')
     else
       flash[:alert] = 'Image was NOT created'
       render 'new'
@@ -48,16 +53,21 @@ class Admin::ImagesController < AdminController
 
   # DELETE /images/1
   def destroy
+    flash[:notice] = 'Image deleted'
     @image.destroy
-    redirect_to(admin_images_url)
+    redirect_back(fallback_location: '/admin/products')
+  end
+
+  # PATCH /images/1/reposition
+  def reposition
+    @image.insert_at(params[:position].to_i)
+    head :ok
   end
 
   private
 
   def assign_products
-    products = Product.all.order('name')
-    @products = []
-    products.each { |product| @products << [product.name, product.id] }
+    @products = Product.all.order('name').pluck(:name, :id)
   end
 
   def assign_image
@@ -66,6 +76,6 @@ class Admin::ImagesController < AdminController
 
   # Only allow a trusted parameter "white list" through.
   def image_params
-    params.require(:image).permit(:category_id, :location, :product_id, :url, :url_cache, :remove_url)
+    params.require(:image).permit(:category_id, :location, :product_id, :url, :url_cache, :remove_url, :from_modal)
   end
 end

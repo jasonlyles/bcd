@@ -13,32 +13,48 @@
         <table class="table table-bordered table-hover">
           <thead>
             <tr class="table-secondary">
-              <th class="align-middle text-center"><%= sort_link(@q, :status) %></th>
+              <th class="align-middle text-center">Source</th>
+              <th class="align-middle text-center">
+                <%= sort_link(@q, :status) %>
+                <a
+                  tabindex="0"
+                  role="button"
+                  class="btn-lg text-info"
+                  data-toggle="popover"
+                  data-trigger="focus"
+                  data-placement="right"
+                  data-html=true
+                  title="Meaning of Statuses"
+                  data-content="<%= status_explanation %>">
+                  <i class="fa fa-question-circle"></i>
+                </a>
+              </th>
               <th class="align-middle text-center"><%= sort_link(@q, :created_at, 'Trans. Date') %></th>
-              <th class="align-middle text-center">Request ID / Transaction ID</th>
+              <th class="align-middle text-center">Req ID / Trans ID or 3rd Party ID</th>
               <th class="align-middle text-center">User</th>
               <th class="align-middle text-center">Total Price</th>
             </tr>
           </thead>
           <tbody>
             <% @orders.each do |order| %>
-              <tr>
+              <tr class="<%= order.third_party_order_incomplete_for_more_than_a_day? ? 'table-danger' : '' %>">
                 <td class="align-middle text-center">
-                  <% if order.status && (order.status.upcase == 'COMPLETED' || order.status.upcase == 'GIFT') %>
-                    <span class="text-success">
-                  <% else %>
-                    <span class="text-danger">
-                  <% end %>
-                    <%= order.status %>
-                  </span>
+                  <%= decorate_source(order.source) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_order_status(order.status) %>
                 </td>
                 <td class="align-middle text-center">
                   <%= order.created_at.to_fs(:date_time12) %>
                 </td>
                 <td class="align-middle text-center" style="font-size: 75%;">
-                  <%= link_to order.request_id.truncate(25), admin_order_path(order) %>
-                  <br />
-                  <%= link_to order.transaction_id.truncate(25), admin_order_path(order) %>
+                  <% if order.third_party_order_identifier.present? %>
+                    <%= link_to order.third_party_order_identifier, admin_order_path(order) %>
+                  <% else %>
+                    <%= link_to order.request_id.truncate(15), admin_order_path(order) if order.request_id %>
+                    <br />
+                    <%= link_to order.transaction_id.truncate(15), admin_order_path(order) if order.transaction_id %>
+                  <% end %>
                 </td>
                 <td class="align-middle text-center">
                   <%= order.user.email %>
@@ -70,7 +86,16 @@
               </div>
               <div class="form-group">
                 <%= f.label :status_eq %>
-                <%= f.select :status_eq, ['COMPLETED', 'Completed', 'INVALID', 'Failed', 'GIFT'], { include_blank: true }, class: 'form-control' %>
+                <%= f.select :status_eq, Order::ALL_ORDER_STATUSES, { include_blank: true }, class: 'form-control' %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:unknown_status_in, { class: "form-check-input", checked: params['q'] && params['q']['unknown_status_in'] == '1' }) %>
+                <%= f.label :unknown_status_in, 'Unknown Statuses', class: "form-check-label" %>
+              </div>
+              <br />
+              <div class="form-group">
+                <%= f.label :source_eq %>
+                <%= f.select :source_eq, [['Brick City Depot', '0'], ['Etsy', '1']], { include_blank: true }, class: 'form-control' %>
               </div>
               <p>
                 Trans ID vs Req ID
@@ -95,6 +120,27 @@
                 <%= f.label :request_id_eq, 'Request ID' %>
                 <%= f.search_field :request_id_eq, class: "form-control" %>
               </div>
+              <div class="form-group">
+                <%= f.label :third_party_order_identifier_eq, '3rd Party Order ID' %>
+                <%= f.search_field :third_party_order_identifier_eq, class: "form-control" %>
+              </div>
+              <div class="form-check">
+                <%= f.check_box(:is_concerning_third_party_order_in, { class: "form-check-input", checked: params['q'] && params['q']['is_concerning_third_party_order_in'] == '1' }) %>
+                <%= f.label :is_concerning_third_party_order_in, 'Bad 3P Orders', class: "form-check-label" %>
+                  <a
+                    tabindex="0"
+                    role="button"
+                    class="btn-lg text-blue"
+                    data-toggle="popover"
+                    data-trigger="focus"
+                    data-placement="left"
+                    title="Concerning (or bad) 3rd Party Orders"
+                    data-html="true"
+                    data-content="These are orders that have one of the following statuses: (<%= Order::PENDING_ORDER_STATUSES.to_sentence %>) and have not been updated for more than a day. Especially in the early days of integrating with a 3rd Party, we should keep an eye on these to make sure the system is behaving correctly.">
+                    <i class="fa fa-question-circle"></i>
+                  </a>
+              </div>
+              <br />
               <div class="form-group">
                 <%= f.label :belongs_to_user_in, 'User Email' %>
                 <%= f.search_field :belongs_to_user_in, class: "form-control" %>

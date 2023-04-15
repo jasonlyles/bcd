@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class EmailCampaign < ApplicationRecord
+  audited except: %i[created_at updated_at]
   include ActiveModel::Serialization
 
   before_create :generate_guid

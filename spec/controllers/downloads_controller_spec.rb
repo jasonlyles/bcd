@@ -9,8 +9,8 @@ describe DownloadsController do
     @user = FactoryBot.create(:user, email: 'charliebrown@peanuts.com')
   end
 
-  describe "download_parts_list" do
-    it "should not let someone off the street download a parts list" do
+  describe 'download_parts_list' do
+    it 'should not let someone off the street download a parts list' do
       # get "download_parts_list", :parts_list_id => 1
       #
       # expect(response).to redirect_to '/users/sign_in'
@@ -32,7 +32,7 @@ describe DownloadsController do
       # expect(response).to redirect_to '/GG001/green_giant'
     end
 
-    it "should allow a user to download a freebie parts list, if they have ordered something" do
+    it 'should allow a user to download a freebie parts list, if they have ordered something' do
       # @user ||= FactoryBot.create(:user)
       # sign_in(@user)
       # @category = FactoryBot.create(:category)
@@ -56,7 +56,7 @@ describe DownloadsController do
       # expect(response.header["Location"]).to include ".html"
     end
 
-    it "should allow a user to download a parts list for a product they have paid for" do
+    it 'should allow a user to download a parts list for a product they have paid for' do
       # @user ||= FactoryBot.create(:user)
       # sign_in(@user)
       # @category = FactoryBot.create(:category)
@@ -79,7 +79,7 @@ describe DownloadsController do
     end
   end
 
-  describe "guest_download_parts_list" do
+  describe 'guest_download_parts_list' do
     context 'user has not arrived at this url legitimately' do
       # it 'should flash them a notice and move them along' do
       #   get :guest_download_parts_list, :parts_list_id => '4', :order_id => '4545'
@@ -174,14 +174,22 @@ describe DownloadsController do
     end
   end
 
-  describe "guest_downloads" do
-    context 'transaction ID and/or request ID  params are blank' do
+  describe 'guest_downloads' do
+    context 'params are not complete to identify as a BCD order or a 3rd party order' do
       it 'should redirect to download_link_error' do
         get :guest_downloads, params: { tx_id: '12344' }
 
         expect(response).to redirect_to('/download_link_error')
 
         get :guest_downloads, params: { conf_id: '12344' }
+
+        expect(response).to redirect_to('/download_link_error')
+
+        get :guest_downloads, params: { u: '12344', order_id: '123456' }
+
+        expect(response).to redirect_to('/download_link_error')
+
+        get :guest_downloads, params: { source: 'etsy', order_id: '123456' }
 
         expect(response).to redirect_to('/download_link_error')
       end
@@ -196,18 +204,50 @@ describe DownloadsController do
       end
     end
 
-    context 'everything is happy' do
+    context 'cannot find order by source and order_id' do
+      it 'should redirect to download_link_error' do
+        get :guest_downloads, params: { source: 'etsy', order_id: '344124', u: @user.guid }
+        expect(assigns(:order)).to be_nil
+
+        expect(response).to redirect_to('/download_link_error')
+      end
+    end
+
+    context 'can find order by BCD params' do
       it 'should render guest_downloads' do
-        @order = FactoryBot.create(:order, transaction_id: '12345', request_id: '67890', user_id: @user.id)
+        FactoryBot.create(:order_with_line_items, transaction_id: '12345', request_id: '67890', user_id: @user.id)
         get :guest_downloads, params: { tx_id: '12345', conf_id: '67890' }
 
         expect(assigns(:download_links)).to_not be_nil
         expect(response).to render_template(:guest_downloads)
       end
     end
+
+    context 'can find an order by 3rd party params' do
+      it 'should render guest_downloads' do
+        order = FactoryBot.create(:order_with_line_items, source: 'etsy', third_party_order_identifier: '67890', user_id: @user.id)
+        FactoryBot.create(:third_party_receipt, source: 'etsy', third_party_receipt_identifier: '67890', order:)
+        get :guest_downloads, params: { source: 'etsy', order_id: '67890', u: @user.guid }
+
+        expect(assigns(:download_links)).to_not be_nil
+        expect(response).to render_template(:guest_downloads)
+      end
+    end
+
+    context '3rd party user has not yet accepted the TOS' do
+      it 'should redirect them to an interstitial page where they can accept TOS' do
+        user = FactoryBot.create(:user, tos_accepted: false, skip_tos_accepted: true)
+        order = FactoryBot.create(:order_with_line_items, source: 'etsy', third_party_order_identifier: '67890', user_id: user.id)
+        FactoryBot.create(:third_party_receipt, source: 'etsy', third_party_receipt_identifier: '67890', order:)
+        get :guest_downloads, params: { source: 'etsy', order_id: '67890', u: user.guid }
+
+        expect(assigns(:download_links)).to be_nil
+        expect(response).to redirect_to("/third_party_guest_registration?source=etsy&order_id=67890&u=#{user.guid}")
+      end
+    end
   end
 
-  describe "guest_download" do
+  describe 'guest_download' do
     context 'user guid and/or download token are blank' do
       it 'should redirect to download_error' do
         get :guest_download, params: { id: '12345' }
@@ -263,18 +303,18 @@ describe DownloadsController do
           allow_any_instance_of(Amazon::Storage).to receive(:disconnect)
           get :guest_download, params: { id: '12345', token: '67890' }
 
-          expect(response.header["Location"]).to include "brickcitydepot-instructions-dev.s3.amazonaws.com"
-          expect(response.header["Location"]).to include "response-content-disposition=attachment%3Bfilename%3D"
-          expect(response.header["Location"]).to include "/#{@product.product_code}/"
-          expect(response.header["Location"]).to include ".pdf"
+          expect(response.header['Location']).to include 'brickcitydepot-instructions-dev.s3.amazonaws.com'
+          expect(response.header['Location']).to include 'response-content-disposition=attachment%3Bfilename%3D'
+          expect(response.header['Location']).to include "/#{@product.product_code}/"
+          expect(response.header['Location']).to include '.pdf'
         end
       end
     end
   end
 
-  describe "download" do
-    it "should not let someone off the street download" do
-      get "download", params: { product_code: 'fake' }
+  describe 'download' do
+    it 'should not let someone off the street download' do
+      get 'download', params: { product_code: 'fake' }
 
       expect(response).to redirect_to '/users/sign_in'
     end
@@ -289,18 +329,18 @@ describe DownloadsController do
       expect(response).to redirect_to '/GG001/green_giant'
     end
 
-    it "should redirect back if user has used up their downloads" do
+    it 'should redirect back if user has used up their downloads' do
       sign_in(@user)
       @order = FactoryBot.create(:order_with_line_items)
       allow_any_instance_of(DownloadsController).to receive(:get_users_downloads_remaining).and_return(0)
-      request.env["HTTP_REFERER"] = '/account'
+      request.env['HTTP_REFERER'] = '/account'
       get 'download', params: { product_code: @product.product_code }
 
       expect(flash[:notice]).to include 'You have already reached your maximum allowed number of downloads'
       expect(response).to redirect_to '/account'
     end
 
-    it "should redirect to an S3 url for a pdf" do
+    it 'should redirect to an S3 url for a pdf' do
       sign_in(@user)
       @order = FactoryBot.create(:order_with_line_items)
       allow_any_instance_of(Amazon::Storage).to receive(:connect)
@@ -308,15 +348,15 @@ describe DownloadsController do
       allow_any_instance_of(Amazon::Storage).to receive(:disconnect)
       get 'download', params: { product_code: @product.product_code }
 
-      #Instead of trying to match where we get redirected to, I'm just matching against response.header["Location"],
+      # Instead of trying to match where we get redirected to, I'm just matching against response.header["Location"],
       # which is where we're getting redirected to anyways
-      expect(response.header["Location"]).to include "brickcitydepot-instructions-dev.s3.amazonaws.com"
-      expect(response.header["Location"]).to include "response-content-disposition=attachment%3Bfilename%3D"
-      expect(response.header["Location"]).to include @product.product_code
-      expect(response.header["Location"]).to include ".pdf"
+      expect(response.header['Location']).to include 'brickcitydepot-instructions-dev.s3.amazonaws.com'
+      expect(response.header['Location']).to include 'response-content-disposition=attachment%3Bfilename%3D'
+      expect(response.header['Location']).to include @product.product_code
+      expect(response.header['Location']).to include '.pdf'
     end
 
-    it "should increment the download count" do
+    it 'should increment the download count' do
       sign_in(@user)
       @order = FactoryBot.create(:order_with_line_items)
       allow_any_instance_of(Amazon::Storage).to receive(:connect)
@@ -324,13 +364,13 @@ describe DownloadsController do
       allow_any_instance_of(Amazon::Storage).to receive(:disconnect)
       get 'download', params: { product_code: @product.product_code }
 
-      download = Download.find_by_user_id_and_product_id(@user.id,@product.id)
+      download = Download.find_by_user_id_and_product_id(@user.id, @product.id)
       expect(download.count).to eq(1)
     end
   end
 
-  describe "get_users_downloads_remaining" do
-    it "should get the number of downloads remaining for the given user" do
+  describe 'get_users_downloads_remaining' do
+    it 'should get the number of downloads remaining for the given user' do
       @order = FactoryBot.create(:order_with_line_items)
       @download = Download.new(user_id: @user.id, product_id: @product.id, remaining: 3)
       @download.save!

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Partner < ApplicationRecord
+  audited except: %i[created_at updated_at]
   has_many :advertising_campaigns, dependent: :destroy
 
   # attr_accessible :contact, :name, :url

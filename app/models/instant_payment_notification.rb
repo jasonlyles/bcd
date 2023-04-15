@@ -3,6 +3,7 @@
 class InvalidIPNException < StandardError; end
 
 class InstantPaymentNotification < ApplicationRecord
+  audited except: %i[created_at updated_at]
   belongs_to :order, optional: true
 
   def valid_business_value?

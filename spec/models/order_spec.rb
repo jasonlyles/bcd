@@ -148,13 +148,13 @@ describe Order do
 
   describe 'retrieve_download_links' do
     context 'the product in question includes instructions' do
-      it 'should return an array of urls with query strings, paired with descriptive titles for each link' do
+      it 'should return an array of urls with query strings, paired with descriptive titles for each link, and the remaining download count' do
         user = FactoryBot.create(:user)
         order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user:)
         expect(SecureRandom).to receive(:hex).and_return('fake_hex')
 
         links = order.retrieve_download_links
-        expect(links).to eq([[['CB001 Colonial Revival House PDF', "/guest_download?id=#{user.guid}&token=fake_hex"]], []])
+        expect(links).to eq([[['CB001 Colonial Revival House PDF', "/guest_download?id=#{user.guid}&token=fake_hex", 5]], []])
       end
     end
 
@@ -204,6 +204,31 @@ describe Order do
 
         expect(link).to eq('http://localhost:3000/guest_downloads?tx_id=blarney&conf_id=blar')
       end
+    end
+
+    context 'with a third party receipt present' do
+      it 'should return a link to guest_downloads for third party users' do
+        user = FactoryBot.create(:user)
+        order = FactoryBot.create(:order_with_line_items, created_at: Date.today, user:)
+        third_party_receipt = FactoryBot.create(:third_party_receipt, order:)
+        link = order.retrieve_link_to_downloads
+
+        expect(link).to eq("http://localhost:3000/guest_downloads?source=etsy&order_id=abcd1234&u=#{user.guid}")
+      end
+    end
+  end
+
+  describe 'third_party_order_incomplete_for_more_than_a_day?' do
+    it 'should return third party orders incomplete for more than a day' do
+      order1 = FactoryBot.create(:order, status: 'THIRD_PARTY_PENDING_PAYMENT', updated_at: Time.now - 2.days)
+      order2 = FactoryBot.create(:order, status: 'THIRD_PARTY_PENDING', updated_at: Time.now - 25.hours)
+      order3 = FactoryBot.create(:order, status: 'THIRD_PARTY_PENDING', updated_at: Time.now - 23.hours)
+      order4 = FactoryBot.create(:order, status: 'THIRD_PARTY_CANCELED', updated_at: Time.now - 25.hours)
+
+      expect(order1.third_party_order_incomplete_for_more_than_a_day?).to eq(true)
+      expect(order2.third_party_order_incomplete_for_more_than_a_day?).to eq(true)
+      expect(order3.third_party_order_incomplete_for_more_than_a_day?).to eq(false)
+      expect(order4.third_party_order_incomplete_for_more_than_a_day?).to eq(false)
     end
   end
 end

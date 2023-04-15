@@ -17,7 +17,8 @@ class AccountController < ApplicationController
 
   def order_issue
     OrderMailer.issue(params['order_id'], params['comment'], params['name']).deliver_later
-    redirect_to :back, notice: "Thanks! We both should have emails in our inboxes soon. If you don't receive an email, check your junk folder, or email us directly."
+    flash[:notice] = "Thanks! We both should have emails in our inboxes soon. If you don't receive an email, check your junk folder, or email us directly at sales@brickcitydepot.com."
+    redirect_back(fallback_location: '/account/order_history')
   end
 
   def unsubscribe_from_emails

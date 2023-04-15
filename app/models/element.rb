@@ -3,6 +3,7 @@
 # An Element is the combination of a part and color. A 2x4 brick is a part, red
 # is a color, a red 2x4 brick is an element.
 class Element < ApplicationRecord
+  audited except: %i[created_at updated_at]
   belongs_to :part
   belongs_to :color
   has_many :lots, dependent: :restrict_with_error

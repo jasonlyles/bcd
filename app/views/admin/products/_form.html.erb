@@ -11,7 +11,7 @@
     <a class="nav-link" id="pricing-tab" data-toggle="tab" href="#pricing" role="tab" aria-controls="pricing" aria-selected="false">Pricing</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" id="images-tab" data-toggle="tab" href="#images" role="tab" aria-controls="images" aria-selected="false">Images</a>
+    <a class="nav-link" id="tags-tab" data-toggle="tab" href="#tags" role="tab" aria-controls="tags" aria-selected="false">Tags</a>
   </li>
 </ul>
 <%= nested_form_for [:admin, product], html: { multipart: true } do |f| %>
@@ -161,30 +161,17 @@
         </div>
       </div>
     </div>
-    <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
+    <div class="tab-pane fade" id="tags" role="tabpanel" aria-labelledby="tags-tab">
       <div class="card mt-4">
         <div class="card-header">
-          <b>Images</b>
+          <b>Tags</b>
         </div>
         <div class="card-body">
           <div class="form-group">
-            <% field_count = 0 %>
-            <%= f.fields_for :images do |image_form| %>
-              <% field_count += 1 %>
-              <p>
-                <%= image_form.label :url, "Image (Images should be 700x700)", class: "form-label" %>
-                <br/>
-                <% if product.images && product.images.length >= field_count %>
-                  <%= image_form.text_field :url, :disabled => true, class: "form-control" %>
-                <% else %>
-                  <%= image_form.file_field :url, class: "form-control-file" %>
-                  <%= image_form.hidden_field :url_cache %>
-                <% end %>
-                <%= image_form.link_to_remove "Remove this image" %>
-              </p>
-            <% end %>
+            <%= f.label :tag_list, "Comma-separated list of tags to make our products more findable. Etsy takes the first 13 of these.", class: 'form-label' %>
+            <br/>
+            <%= f.text_field :tag_list, placeholder: "Lego, Lego Bricks, Chili's", class: 'form-control', value: product.tag_list.present? ? product.tag_list.join(', ') : 'lego, legos, lego bricks, moc, afol, instructions, lego instructions' %>
           </div>
-          <%= f.link_to_add "Add Image", :images, class: "btn btn-primary" %>
         </div>
       </div>
     </div>

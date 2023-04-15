@@ -8,12 +8,18 @@
   <b>Order Status:
   </b><%= @order.status %>
   <br/>
-  <b>Confirmation ID:
-  </b><%= @order.request_id %>
-  <br/>
-  <b>Transaction ID:
-  </b><%= @order.transaction_id %>
-  <br/>
+  <% if @third_party_receipt.present? %>
+    <b><%= @third_party_receipt.source.capitalize %> Order ID:
+    </b><%= @third_party_receipt.third_party_receipt_identifier %>
+    <br/>
+  <% else %>
+    <b>Confirmation ID:
+    </b><%= @order.request_id %>
+    <br/>
+    <b>Transaction ID:
+    </b><%= @order.transaction_id %>
+    <br/>
+  <% end %>
   <b>Order Date:
   </b><%= @order.created_at.to_fs(:long_ordinal) %>
 </p>

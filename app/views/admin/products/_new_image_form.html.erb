@@ -1,0 +1,68 @@
+<div class="modal fade text-dark" id="newImageModal" tabindex="-1" role="dialog" aria-labelledby="newImageModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newImageModalLabel">Add an image!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= nested_form_for [:admin, image] do |f| %>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <b>Image</b>
+                </div>
+                <div class="card-body">
+                  <div class="form-group">
+                    <% if image.persisted? %>
+                      <p>
+                        Product:
+                        <%= image.product.code_and_name %>
+                      </p>
+                    <% else %>
+                      <%= f.label :product_id, class: 'form-label' %>
+                      <%= f.select :product_id, products, class: 'form-control' %>
+                    <% end %>
+                  </div>
+                  <br />
+                  <div class="form-group">
+                    <%= f.hidden_field :from_modal, value: true %>
+                    <% if image.url? && !image.url.blank? %>
+                      <%= f.label :url, "Image", class: "form-label" %>
+                      <br/>
+                      <% if image.url_cache %>
+                        <%= f.text_field :url_cache, disabled: true, class: "form-control" %>
+                      <% else %>
+                        <%= f.text_field :url, disabled: true, class: "form-control" %>
+                      <% end %>
+                      <br />
+                      <%= image_tag(image.url.medium.url) unless image.url.medium.url.blank? %>
+                    <% end %>
+                    <% if image.url? %>
+                      <div class="form-check mt-2">
+                        <%= f.check_box :remove_url, class: "form-check-input" %>
+                        <%= f.label :remove_url, "Delete Image", class: "form-check-label" %>
+                      </div>
+                    <% else %>
+                      <%= f.label :url, "Image", class: "form-label" %>
+                      <br />
+                      <%= f.file_field :url, class: "form-control-file" %>
+                      <%= f.hidden_field :url_cache %>
+                    <% end %>
+                  </div>
+                  <div class="form-group mt-4">
+                    <%= f.submit 'Save', class: 'btn btn-primary' %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

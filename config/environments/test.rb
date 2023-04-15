@@ -66,4 +66,8 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'http://localhost:3000' }
 
   config.web_host = 'http://localhost:3000'
+
+  # This is now needed to load some of the factories because of the bigdecimal values
+  # in the factories, and because Psych has made changes to not allow loading some values by default.
+  config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, BigDecimal]
 end

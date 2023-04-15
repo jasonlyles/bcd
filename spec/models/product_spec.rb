@@ -396,4 +396,55 @@ describe Product do
       expect(@product.discounted_price.to_f).to eq(7.5)
     end
   end
+
+  describe 'assemble_changes_since_last_etsy_update' do
+    context 'with no changes since the last update to etsy' do
+      it 'should return an empty array' do
+        product = FactoryBot.create(:product)
+        sleep 1
+        product.update(etsy_updated_at: Time.now)
+
+        expect(product.assemble_changes_since_last_etsy_update.map(&:first).sort).to eq([])
+      end
+    end
+
+    context 'with no update to etsy' do
+      it 'should return a nil' do
+        product = FactoryBot.create(:product)
+
+        expect(product.assemble_changes_since_last_etsy_update).to be_nil
+      end
+    end
+
+    context 'with changes to everything' do
+      it 'should get all changes since the last update to etsy' do
+        product = FactoryBot.create(:product)
+        FactoryBot.create(:image, product:, position: 1)
+        sleep 1
+        # update name and price so they will show up as changed
+        product.update(name: 'Updated name', price: 4.35, etsy_updated_at: Time.now)
+        # add some tags so tags will show up as changed
+        product.tag_list.add('tag1', 'tag2')
+        product.save
+        # Add an image so that will show up as changed
+        image2 = FactoryBot.create(:image, product:)
+        # Re-position image2 so re-ordered images will show up as changed
+        image2.update(position: 1)
+
+        expect(product.assemble_changes_since_last_etsy_update.map(&:first).sort).to eq(['image added', 'images re-ordered', 'name changed', 'price changed', 'tags changed'])
+      end
+    end
+
+    context 'with only images added' do
+      it 'should show images added, but not reordered' do
+        product = FactoryBot.create(:product)
+        sleep 1
+        product.update(etsy_updated_at: Time.now)
+        # Add an image so that will show up as changed
+        image = FactoryBot.create(:image, product:)
+
+        expect(product.assemble_changes_since_last_etsy_update.map(&:first).sort).to eq(['image added'])
+      end
+    end
+  end
 end

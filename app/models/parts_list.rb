@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class PartsList < ApplicationRecord
+  audited except: %i[created_at updated_at]
   mount_uploader :file, PartsListUploader
   belongs_to :product
-  has_many :lots
+  has_many :lots, dependent: :destroy
   has_many :elements, through: :lots
   has_many :user_parts_lists
   accepts_nested_attributes_for :lots, allow_destroy: true

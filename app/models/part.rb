@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Part < ApplicationRecord
+  audited except: %i[created_at updated_at]
   has_many :elements, dependent: :restrict_with_error
   has_many :colors, through: :elements
 

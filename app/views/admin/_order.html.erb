@@ -16,6 +16,13 @@
         <% end %>
         <br />
         <table>
+          <% if @third_party_receipt.present? %>
+            <tr>
+              <td colspan='3'>
+                <h4>BCD Details:</h4>
+              </td>
+            </tr>
+          <% end %>
           <tr>
             <td>
               <b>User:</b>
@@ -49,24 +56,26 @@
               </span>
             </td>
           </tr>
-          <tr>
-            <td>
-              <b>Request ID:</b>
-            </td>
-            <td></td>
-            <td class="pl-4">
-              <%= @order.request_id %>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <b><%= order.status == 'GIFT' ? '' : 'Paypal' %> Transaction ID:</b>
-            </td>
-            <td></td>
-            <td class="pl-4">
-              <%= @order.transaction_id %>
-            </td>
-          </tr>
+          <% unless @third_party_receipt.present? %>
+            <tr>
+              <td>
+                <b>Request ID:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= @order.request_id %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b><%= order.status == 'GIFT' ? '' : 'Paypal' %> Transaction ID:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= @order.transaction_id %>
+              </td>
+            </tr>
+          <% end %>
           <tr>
             <td>
               <b>Transaction Date:</b>
@@ -128,7 +137,81 @@
               </td>
             </tr>
           <% end %>
+
+          <% if @third_party_receipt.present? %>
+            <tr>
+              <td colspan='3' class="pt-3">
+                <h4><%= @third_party_receipt.source.capitalize %> Details:</h4>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Order ID:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= @third_party_receipt.third_party_receipt_identifier %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Order Status:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= @third_party_receipt.third_party_order_status %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Order is Paid?:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= decorate_boolean(@third_party_receipt.third_party_is_paid) %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Order Created at:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= @third_party_receipt.third_party_created_at.to_fs(:date_time12) %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Order Updated at:</b>
+              </td>
+              <td></td>
+              <td class="pl-4">
+                <%= @third_party_receipt.third_party_updated_at.to_fs(:date_time12) %>
+              </td>
+            </tr>
+          <% end %>
         </table>
+
+        <% if @third_party_receipt.present? %>
+          <div class="card mt-3">
+            <div class="card-header">
+              <p>
+                <span class='font-weight-bold'>Raw response body</span> (for troubleshooting)
+                <a data-toggle="collapse" href="#raw_response_body" role="button" aria-expanded="false" aria-controls="raw_response_body">
+                  Toggle
+                </a>
+              </p>
+            </div>
+            <div id="raw_response_body" class="card-body collapse hide">
+              <pre>
+                <code>
+                  <%= JSON.pretty_generate(JSON.parse(@third_party_receipt.raw_response_body)) %>
+                </code>
+              </pre>
+            </div>
+          </div>
+        <% end %>
+
       </div>
     </div>
   </div>
@@ -188,7 +271,7 @@
                 <td class="align-middle text-center">
                   <%= form_for(:download, url: reset_users_downloads_admin_user_path(@order.user)) do |f| %>
                     <%= f.hidden_field :product_id, value: line_item.product_id %>
-                    <%= f.submit 'Reset Downloads', data: { disable_with: 'Resetting...' }, class: 'btn btn-primary', disabled: download.blank? %>
+                    <%= f.submit 'Reset Downloads', data: { disable_with: 'Resetting...' }, class: 'btn btn-primary', style: download.blank? ? "cursor: not-allowed;" : '', disabled: download.blank? %>
                   <% end %>
                 </td>
               </tr>
