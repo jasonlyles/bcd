@@ -10,7 +10,9 @@ class Admin::OrdersController < AdminController
   end
 
   # GET /orders/1
-  def show; end
+  def show
+    @third_party_receipt = @order.third_party_receipt
+  end
 
   def complete_order
     @order = Order.find(params[:id])

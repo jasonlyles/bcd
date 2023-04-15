@@ -30,7 +30,7 @@ class User < ApplicationRecord
 
   enum email_preference: %i[no_emails important_emails all_emails]
 
-  enum source: %i[brick_city_depot ebay bricklink]
+  enum source: %i[brick_city_depot ebay bricklink etsy]
 
   def apply_omniauth(omniauth)
     self.email = omniauth['info']['email'] if omniauth['info'] && omniauth['info']['email']

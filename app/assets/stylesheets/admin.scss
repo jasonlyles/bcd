@@ -150,3 +150,63 @@ ul.ui-autocomplete {
   max-width: 600px;
   width: auto;
 }
+/* Start of styles for draggable images on admin product show page */
+.draggable-image:hover {
+  cursor: move;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-show-img-container {
+  position: relative;
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: 0.3s ease;
+    background: rgba(0,0,0,0.4);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  a {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+}
+
+.product-show-img-container:hover .overlay {
+  opacity: 1;
+}
+/* End of styles for draggable images on admin product show page */
+/* Beginning of Etsy styles */
+.btn-etsy {
+  background-color: $etsy;
+  color: white;
+}
+
+.btn-etsy:hover {
+  color: white;
+  background-color: darken($etsy, 10%);
+}
+
+.border-etsy {
+  border: 2px solid $etsy;
+}
+/* End of Etsy styles */

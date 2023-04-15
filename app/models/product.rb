@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class Product < ApplicationRecord
+  audited except: %i[created_at updated_at]
+  acts_as_ordered_taggable
   include ActiveModel::Serialization
 
   belongs_to :category
   belongs_to :subcategory
   belongs_to :product_type
   has_many :downloads
-  has_many :images, dependent: :destroy
+  has_many :images, -> { order(position: :asc) }, dependent: :destroy
   has_many :parts_lists, dependent: :destroy
   mount_uploader :pdf, PdfUploader
   accepts_nested_attributes_for :images, allow_destroy: true
@@ -60,6 +62,24 @@ class Product < ApplicationRecord
       'code_and_name' => code_and_name
     }
   end
+
+  ransacker :has_etsy_listing_id,
+            formatter: proc { |boolean|
+              results = Product.has_etsy_listing_for_ransack?(boolean).map(&:id)
+              results.present? ? results : nil
+            }, splat_params: true do |parent|
+    parent.table[:id]
+  end
+
+  # rubocop:disable Naming/PredicateName
+  def self.has_etsy_listing_for_ransack?(boolean)
+    if boolean == '1'
+      where('etsy_listing_id IS NOT NULL')
+    else
+      where('etsy_listing_id IS NULL')
+    end
+  end
+  # rubocop:enable Naming/PredicateName
 
   def self.instructions
     Product.joins(:product_type).where("product_types.name='Instructions'")
@@ -172,5 +192,109 @@ class Product < ApplicationRecord
   def discounted_price
     # Assumes discount_percentage is stored as an integer. i.e. 25, which means 25%
     discount_percentage? ? (price * (100 - discount_percentage) / 100.to_f) : price
+  end
+
+  # :nocov:
+  def etsy_wrapped_title
+    "Custom Lego Instructions: #{name} - No Bricks Included - Please read description"
+  end
+  # :nocov:
+
+  # :nocov:
+  def etsy_wrapped_description
+    <<~TEXT
+      This listing is for a link to download a PDF of instructions and access to an interactive parts list to help you gather the pieces you need to build the model. The PDF that you can download through this listing includes helpful links and email addresses to contact us. No Lego bricks are included.
+
+      The download link will be sent via email to the email address you have registered with Etsy.
+
+      What you will receive:
+      - You will get a link to download the instructions PDF, which you can download up to 5 times.
+      - Unlimited access to an interactive parts list to help assemble the pieces you need to build the model.
+      - Access to a new user tutorial and a frequently asked questions page if you're having trouble getting started.
+      - We also have a contact form on our site you can use to get in direct contact with us if the new user tutorial and frequently asked questions pages aren't enough help.
+
+      Product Description:
+
+      #{description}
+
+      This is NOT a LEGO® product. LEGO® is a trademark of the LEGO Group of companies which does not sponsor, authorize or endorse this listing.
+    TEXT
+  end
+  # :nocov:
+
+  def assemble_changes_since_last_etsy_update
+    return nil if etsy_updated_at.blank?
+
+    changes_since_last_etsy_update = []
+    # First, let's get changes to product attributes
+    assemble_product_attribute_changes_since_last_etsy_update.each do |change|
+      changes_since_last_etsy_update << change
+    end
+
+    # Second, let's see if any tags have changed.
+    changes_since_last_etsy_update << assemble_tag_changes_since_last_etsy_update
+
+    # Next, let's look for new images
+    assemble_new_image_since_last_etsy_update.each do |change|
+      changes_since_last_etsy_update << change
+    end
+
+    # Finally, let's look for image re-ordering
+    changes_since_last_etsy_update << assemble_images_reordered_since_last_etsy_update
+
+    changes_since_last_etsy_update.compact
+  end
+
+  private
+
+  def assemble_product_attribute_changes_since_last_etsy_update
+    changes_since_last_etsy_update = []
+    keys_of_interest = %w[description product_code name price]
+    audits_since_last_etsy_update = audits.where("created_at >= '#{etsy_updated_at}'")
+    audits_since_last_etsy_update.each do |audit|
+      audit.audited_changes.each_key do |key|
+        changes_since_last_etsy_update << ["#{key} changed", audit.created_at] if keys_of_interest.include?(key)
+      end
+    end
+
+    changes_since_last_etsy_update
+  end
+
+  def assemble_tag_changes_since_last_etsy_update
+    changes_since_last_etsy_update = nil
+    updated_taggings = taggings.order(created_at: :desc).limit(13).where("created_at >= '#{etsy_updated_at}'")
+    changes_since_last_etsy_update = ['tags changed', updated_taggings.first.created_at] if updated_taggings.present?
+
+    changes_since_last_etsy_update
+  end
+
+  def assemble_new_image_since_last_etsy_update
+    changes_since_last_etsy_update = []
+    new_images = images.where("etsy_listing_image_id IS NULL AND created_at >= '#{etsy_updated_at}'")
+    new_images.each do |image|
+      changes_since_last_etsy_update << ['image added', image.created_at]
+    end
+
+    changes_since_last_etsy_update
+  end
+
+  def assemble_images_reordered_since_last_etsy_update
+    changes_since_last_etsy_update = nil
+    found_position_change = false
+    images.each do |image|
+      break if found_position_change == true
+
+      audits_since_last_update = image.audits.where("created_at >= '#{etsy_updated_at}'")
+      audits_since_last_update.each do |audit|
+        break if found_position_change == true
+
+        if audit.action == 'update' && audit.audited_changes.keys.include?('position')
+          changes_since_last_etsy_update = ['images re-ordered', audit.created_at]
+          found_position_change = true
+        end
+      end
+    end
+
+    changes_since_last_etsy_update
   end
 end

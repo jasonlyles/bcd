@@ -13,6 +13,8 @@ describe OrderMailer do
     @line_item = FactoryBot.create(:line_item, product_id: @product.id, order_id: @order.id)
     @mail = OrderMailer.order_confirmation(@user.id, @order.id)
     @physical_mail = OrderMailer.physical_item_purchased(@user.id, @order.id)
+    @third_party_order = FactoryBot.create(:order, source: 1, third_party_order_identifier: 'abcd1234')
+    @third_party_receipt = FactoryBot.create(:third_party_receipt, order: @third_party_order)
   end
 
   describe 'sending an order confirmation email to a user' do
@@ -85,6 +87,42 @@ describe OrderMailer do
       expect(mail.body).to match('I had an issue with this order')
       expect(mail.body).to match('I have an issue')
       expect(mail.body).to match('Bob')
+    end
+  end
+
+  describe 'third_party_guest_order_confirmation' do
+    it 'should send guest an email for the order they placed' do
+      @guest_mail = OrderMailer.third_party_guest_order_confirmation(@third_party_order.id)
+
+      expect(@guest_mail.subject).to eq('Your Etsy Order with Brick City Depot')
+      expect(@guest_mail.to).to eq([@user.email])
+      expect(@guest_mail.from).to eq(['sales@brickcitydepot.com'])
+      @guest_mail.body.parts.each do |part|
+        expect(part.body).to match('Thank you for placing an order')
+        expect(part.body).to match('charlie_brown@peanuts.com')
+        expect(part.body).to match('still access the instructions')
+        if part.content_type.match(/text\/plain/)
+          expect(part.body).to match("guest_downloads\\?source=etsy&order_id=#{@third_party_order.third_party_order_identifier}&u=#{@user.guid}")
+        else
+          expect(part.body).to match("guest_downloads\\?source=etsy&amp;order_id=#{@third_party_order.third_party_order_identifier}&amp;u=#{@user.guid}")
+        end
+      end
+    end
+  end
+
+  describe 'pass_along_buyer_message' do
+    it 'should send an email to admins about a message the 3rd party buyer sent' do
+      source = 'etsy'
+      @mail = OrderMailer.pass_along_buyer_message(source, @third_party_order.id, 'ralph@worlddom.mil', 'Just a message')
+
+      expect(@mail.subject).to eq("Brick City Depot message from #{source.capitalize} buyer")
+      expect(@mail.from).to eq(['sales@brickcitydepot.com'])
+      expect(@mail.to).to eq(['lylesjt@gmail.com'])
+
+      expect(@mail.body).to match('Just a message')
+      expect(@mail.body).to match('ralph@worlddom.mil')
+      expect(@mail.body).to match(source.capitalize)
+      expect(@mail.body).to match("\/admin\/orders\/#{@third_party_order.id}")
     end
   end
 end

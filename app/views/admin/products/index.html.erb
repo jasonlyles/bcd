@@ -10,6 +10,9 @@
             <%= paginate @products %>
           </div>
           <div class="col-auto">
+            <div class='d-inline-block'>
+              <%= button_to 'Update All Etsy PDFs', update_all_etsy_pdfs_admin_products_path, data: { confirm: 'Are you sure you want to update all PDFs in Etsy? You only want to do this if a new PDF has been uploaded already.', disable_with: raw("<i class='fa fa-cog fa-spin'></i> Updating Etsy...") }, class: 'btn btn-danger mb-3', method: :post %>
+            </div>
             <%= link_to 'New Product', new_admin_product_path, class: 'btn btn-primary mb-3' %>
           </div>
         </div>
@@ -23,6 +26,7 @@
               <th class="align-middle text-center">Discount%</th>
               <th class="align-middle text-center"><%= sort_link(@q, :price) %></th>
               <th class="align-middle text-center"><%= sort_link(@q, :ready_for_public, 'Live?') %></th>
+              <th class="align-middle text-center">Etsy?</th>
               <th style="width: 10%;"></th>
             </tr>
           </thead>
@@ -49,6 +53,9 @@
                 </td>
                 <td class="align-middle text-center">
                   <%= decorate_boolean(product.ready_for_public?) %>
+                </td>
+                <td class="align-middle text-center">
+                  <%= decorate_boolean(product.etsy_listing_id.present?) %>
                 </td>
                 <td class="align-middle text-center">
                   <%= link_to raw('<i class="far fa-edit"></i>'), edit_admin_product_path(product) %>
@@ -85,12 +92,18 @@
                 <%= f.label :discount_percentage_gt, 'Discounted', class: "form-check-label" %>
               </div>
               <div class="form-check">
+                <%= f.check_box(:free_true, { class: "form-check-input", checked: params['q'] && params['q']['free_true'] == '1' }) %>
+                <%= f.label :free_true, 'Free', class: "form-check-label" %>
+              </div>
+              <br />
+              <div class="form-check">
                 <%= f.check_box(:ready_for_public_true, { class: "form-check-input", checked: params['q'].blank? || (params['q'] && params['q']['ready_for_public_true'] == '1') }) %>
                 <%= f.label :ready_for_public_true, 'Live', class: "form-check-label" %>
               </div>
+              <br />
               <div class="form-check">
-                <%= f.check_box(:free_true, { class: "form-check-input", checked: params['q'] && params['q']['free_true'] == '1' }) %>
-                <%= f.label :free_true, 'Free', class: "form-check-label" %>
+                <%= f.check_box(:has_etsy_listing_id_in, { class: "form-check-input", checked: params['q'] && params['q']['has_etsy_listing_id_in'] == '1' }) %>
+                <%= f.label :has_etsy_listing_id_in, 'On Etsy', class: "form-check-label" %>
               </div>
               <br />
               <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>

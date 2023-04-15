@@ -1,16 +1,69 @@
+<!-- TODO: Move this somewhere proper -->
+<% content_for(:head) do %>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"></script>
+
+  <script type="module">
+    import { Application, Controller } from "https://unpkg.com/@hotwired/stimulus/dist/stimulus.js"
+    window.Stimulus = Application.start()
+
+    Stimulus.register("drag", class extends Controller {
+      connect() {
+        this.sortable = Sortable.create(this.element, {
+          onEnd: this.end.bind(this)
+        })
+      }
+
+      end(event){
+        var id = event.item.dataset.id
+        $.ajax({
+          url: this.data.get('url').replace(':id', id),
+          type: 'PATCH',
+          data: {
+            position: event.newIndex + 1
+          }
+        })
+      }
+    })
+  </script>
+<% end %>
+
+<% if @changes_since_last_etsy_update.present? %>
+  <div class="border-etsy rounded p-3">
+    <h3>Changes since last update to Etsy:</h3>
+    <br />
+    <ul>
+      <% @changes_since_last_etsy_update.each do |change| %>
+        <li>
+          <span class="font-weight-bold"><%= change[1].to_fs(:datetime_12) %></span> <%= change[0] %>
+        </li>
+      <% end %>
+    </ul>
+    <br />
+    <%= button_to 'Update Etsy Listing', update_etsy_listing_admin_product_path(@product), data: { disable_with: raw("<i class='fa fa-cog fa-spin'></i> Updating Listing...") }, class: 'btn btn-etsy' %>
+  </div>
+<% end %>
 <div class="row mt-4 mb-2">
   <div class="col-auto mr-auto">
     <h1><%= @product.code_and_name %></h1>
   </div>
   <div class="col-auto">
-    <%= link_to "Add Image", new_admin_image_path(product_id: @product.id), class: 'btn btn-primary' %>
+    <% if @product.etsy_listing_id.present? %>
+      <div class='d-inline-block'>
+        <%= button_to 'Delete Etsy Listing', destroy_etsy_listing_admin_product_path(@product), data: { confirm: 'Are you sure you want to remove this listing from Etsy?', disable_with: raw("<i class='fa fa-cog fa-spin'></i> Deleting Listing...") }, class: 'btn btn-danger', method: :delete %>
+      </div>
+    <% else %>
+      <div class='d-inline-block'>
+        <%= button_to 'Create Etsy Listing', create_etsy_listing_admin_product_path(@product), data: { disable_with: raw("<i class='fa fa-cog fa-spin'></i> Creating Listing...") }, class: 'btn btn-etsy' %>
+      </div>
+    <% end %>
     <%= link_to 'Edit', edit_admin_product_path(@product), class: 'btn btn-primary' %>
     <%= link_to 'Add Derivative Product', new_admin_product_path(:product_code => @product.product_code), class: 'btn btn-primary' %>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-9 d-flex align-items-stretch">
+  <div class="col-8 d-flex align-items-stretch">
     <div class="card">
       <div class="card-header">
         <b>Basics</b>
@@ -42,6 +95,17 @@
             <td></td>
             <td>
               <%= @product.description %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Tags:</b>
+            </td>
+            <td></td>
+            <td>
+              <% @product.tag_list.each_with_index do |tag, index| %>
+                <span class="badge badge-pill badge-info p-2 my-1"><%= "#{index + 1}: #{tag}" %></span>
+              <% end %>
             </td>
           </tr>
           <tr>
@@ -87,8 +151,9 @@
             <td></td>
             <td>
               <% if @product.youtube_url && !@product.youtube_url.blank? %>
-                <%= @product.youtube_url %>
+                <%= "https://www.youtube.com/watch?v=#{@product.youtube_url}" %>
                 <br/>
+                <br />
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe class="embed-responsive-item" height="315" width="420" frameborder="0" src="https://www.youtube.com/embed/<%= @product.youtube_url %>?rel=0"></iframe>
                 </div>
@@ -99,7 +164,7 @@
       </div>
     </div>
   </div>
-  <div class="col-3">
+  <div class="col-4">
     <div class="row">
       <div class="col">
         <div class="card">
@@ -195,6 +260,70 @@
         </div>
       </div>
     </div>
+    <div class="row mt-4">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <b>Etsy</b>
+          </div>
+          <div class="card-body">
+            <% if @product.etsy_listing_id.present? %>
+              <table>
+                <tr>
+                  <td>
+                    <b>Listing Created:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= @product.etsy_created_at&.to_fs(:date_time12) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Last Updated:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= @product.etsy_updated_at&.to_fs(:date_time12) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Listing State:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= @product.etsy_listing_state %>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>PDF Uploaded?:</b>
+                  </td>
+                  <td></td>
+                  <td>
+                    <%= decorate_boolean(@product.etsy_listing_file_id.present?) %>
+                  </td>
+                </tr>
+                <% if @product.etsy_listing_url.present? %>
+                  <tr>
+                    <td>
+                      <b>Listing:</b>
+                    </td>
+                    <td></td>
+                    <td>
+                      <%= link_to 'Etsy Listing', @product.etsy_listing_url, target: '_blank' %>
+                    </td>
+                  </tr>
+                <% end %>
+              </table>
+            <% else %>
+              N/A
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <div class="row mt-2">
@@ -202,10 +331,19 @@
     <div class="card">
       <div class="card-header">
         <b>Images</b>
+        <%= link_to raw('<i class="fa fa-plus"></i>'), nil, class: 'btn btn-primary', data: { 'toggle' => "modal", 'target' => "#newImageModal" } %>
+        (Only the top 10 images will be sent to Etsy)
       </div>
-      <div class="card-body">
-        <% @product.images.each do |image| %>
-          <%= image_tag(image.url.thumb.url) unless image.url.thumb.url.blank? %>
+      <div class="card-body" data-controller="drag" data-drag-url="/admin/images/:id/reposition">
+        <% @product.images.order(position: :asc).each do |image| %>
+        <!-- Tried using d-inline-block class in here, but the element was no longer draggable -->
+          <div class="draggable-image mx-1 border product-show-img-container" style="display: inline-block;" data-id="<%= image.id %>">
+            <%= image_tag(image.url.thumb.url) unless image.url.thumb.url.blank? %>
+            <span class='fa-layers-counter fa-3x tomato mt-1 mr-1'><%= image.position %></span>
+            <div class="overlay">
+              <%= link_to raw('<i class="far fa-trash-alt"></i>'), [:admin, image], data: {confirm: 'Are you sure?'}, method: :delete %>
+            </div>
+          </div>
         <% end %>
       </div>
     </div>
@@ -222,3 +360,5 @@
     </div>
   <% end %>
 </div>
+
+<%= render partial: 'new_image_form', locals: { image: Image.new(product_id: @product.id), products: Product.all.order('name').pluck(:name, :id) } %>

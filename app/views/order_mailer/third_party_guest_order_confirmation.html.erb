@@ -1,0 +1,51 @@
+Hello
+<%= @user.email %>
+<br/>
+<br/>
+Thank you for placing an order with Brick City Depot through <%= @order.source&.capitalize %>. We're glad you chose to purchase from us and hope we can bring you the best experience possible.
+<br/>
+Order Details:
+<br/>
+<br/>
+<%= @order.source&.capitalize %> Order ID:
+<%= @order.third_party_order_identifier %>
+<br/>
+<br/>
+Items you purchased:
+<br/>
+<ul>
+  <% @order.line_items.each do |line_item| %>
+    <li><%= "#{line_item.product.product_code} #{line_item.product.name}" %></li>
+  <% end %>
+</ul>
+
+<br/>
+<% unless @link_to_downloads.blank? %>
+  <% if @active_user %>
+    Welcome back <%= @user.email %>! If you want, you can just login to your
+    <%= link_to 'Brick City Depot account', "#{@host}/account" %> to access these
+    instructions. If you can't login to your account, or don't want to, you can
+    still access the instructions using the <%= link_to 'guest download link', @link_to_downloads %>.<br /><br />
+  <% else %>
+    To access instructions, follow this link:
+    <%= link_to 'Downloads', @link_to_downloads %>
+    <br/>
+  <% end %>
+<% end %>
+<br/>
+If you are new to custom Lego instructions or Brick City Depot, check out our
+<%= link_to 'New User Tutorial', "#{@host}/new_user_tutorial" %>
+to help you get started. Let's get building!
+<br />
+<br/>
+We strive to bring you quality products. Please let us know what we can do to improve our service. If you find any errors or need any help with the instructions or parts lists, email us at sales@brickcitydepot.com and let us know how we can help
+you.
+<br/>
+<br/>
+<br/>
+Thank you for your business.
+<br/>
+Brick City Depot
+<br/>
+<br/>
+<br/>

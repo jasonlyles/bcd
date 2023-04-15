@@ -9,37 +9,46 @@
       </div>
       <div class="modal-body">
         <%= form_tag("/order_issue", method: "post") do %>
-        <div class="form-group">
-          <%= label_tag(:request_id, "Confirmation ID:") %>
-          <%= text_field(:request_id, nil, value: order.request_id, class: 'form-control', disabled: 'disabled') %>
-          <%= hidden_field_tag(:order_id, order.id) %>
-        </div>
-        <div class="form-group">
-          <%= label_tag(:transaction_id, "Transaction ID:") %>
-          <%= text_field(:transaction_id, nil, value: order.transaction_id, class: 'form-control', disabled: 'disabled') %>
-        </div>
-        <div class="form-group">
-          <%= label_tag(:user, "Your Email:") %>
-          <%= text_field(:user, nil, value: current_user.email, class: 'form-control', disabled: 'disabled') %>
-        </div>
-        <div class="form-group">
-          <%= label_tag(:order_date, "Order Date/Time:") %>
-          <%= text_field(:order_date, nil, value: order.created_at.to_fs(:long_ordinal), class: 'form-control', disabled: 'disabled') %>
-        </div>
-        <div class="form-group">
-          <%= label_tag(:name, "Your Name:") %>
-          <%= text_field_tag(:name, nil, class: 'form-control') %>
-        </div>
-        <div class="form-group">
-          <%= label_tag(:comment, "What's wrong with the order?") %>
-          <%= text_area_tag(:comment, nil, class: 'form-control', required: 'required') %>
-        </div>
-        <hr/>
-        <div class="float-right">
-          <%= submit_tag("Send Email", class: 'btn btn-primary') %>
-        </div>
-      <% end %>
+          <% if third_party_receipt.present? %>
+            <div class="form-group">
+              <%= label_tag(:third_party_order_identifier, "#{third_party_receipt.source.capitalize} Order ID:") %>
+              <%= text_field(:third_party_order_identifier, nil, value: third_party_receipt.third_party_receipt_identifier, class: 'form-control', disabled: 'disabled') %>
+              <%= hidden_field_tag(:order_id, order.id) %>
+              <%= hidden_field_tag(:order_source, third_party_receipt.source) %>
+            </div>
+          <% else %>
+            <div class="form-group">
+              <%= label_tag(:request_id, "Confirmation ID:") %>
+              <%= text_field(:request_id, nil, value: order.request_id, class: 'form-control', disabled: 'disabled') %>
+              <%= hidden_field_tag(:order_id, order.id) %>
+            </div>
+            <div class="form-group">
+              <%= label_tag(:transaction_id, "Transaction ID:") %>
+              <%= text_field(:transaction_id, nil, value: order.transaction_id, class: 'form-control', disabled: 'disabled') %>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <%= label_tag(:user, "Your Email:") %>
+            <%= text_field(:user, nil, value: current_user.email, class: 'form-control', disabled: 'disabled') %>
+          </div>
+          <div class="form-group">
+            <%= label_tag(:order_date, "Order Date/Time:") %>
+            <%= text_field(:order_date, nil, value: order.created_at.to_fs(:long_ordinal), class: 'form-control', disabled: 'disabled') %>
+          </div>
+          <div class="form-group">
+            <%= label_tag(:name, "Your Name:") %>
+            <%= text_field_tag(:name, nil, class: 'form-control') %>
+          </div>
+          <div class="form-group">
+            <%= label_tag(:comment, "What's wrong with the order?") %>
+            <%= text_area_tag(:comment, nil, class: 'form-control', required: 'required') %>
+          </div>
+          <hr/>
+          <div class="float-right">
+            <%= submit_tag("Send Email", class: 'btn btn-primary') %>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
-</div>
 </div>

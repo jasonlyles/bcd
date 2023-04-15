@@ -5,7 +5,7 @@
 <%= @image.url %>
 <br />
 <% if @image.product %>
-  <%= image_tag(@image.url.medium) unless @image.url.medium.blank? %>
+  <%= image_tag(@image.url.medium.url) unless @image.url.medium.url.blank? %>
 <% else %>
   <%= @image.url.to_s.split('.')[0].humanize %>
 <% end %>

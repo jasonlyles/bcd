@@ -34,6 +34,6 @@ task import_ebay_emails: :environment do
     # I expect there could be some emails in here for people who ended up buying
     # through the website at some point, so let's just ignore any that fail validation
     # because it's only going to be due to dupe email addresses.
-    Guest.create(email:, source: 1, email_preference: 0, skip_tos_accepted: true)
+    Guest.create(email:, source: 1, email_preference: 0, skip_tos_accepted: true, account_status: 'G')
   end
 end

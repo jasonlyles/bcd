@@ -3,28 +3,44 @@
     <h1>My Order History</h1>
     <br/>
     <% @orders.each do |order| %>
+      <% third_party_receipt = order.third_party_receipt %>
       <div class="card mb-4 mt-4">
         <% header_style = order.status && ['COMPLETED', 'GIFT'].include?(order.status.upcase) ? 'bg-success text-white' : 'bg-danger text-white' %>
           <div class="card-header <%= header_style %>">
             <%= order.status %>
             <% if (order.status && !['COMPLETED', 'GIFT'].include?(order.status.upcase)) || order.status.blank? %>
-              <a
-                tabindex="0"
-                role="button"
-                class="btn-lg text-white"
-                data-toggle="popover"
-                data-trigger="focus"
-                data-placement="bottom"
-                title="Why is my order messed up?"
-                data-content="We're not sure, but we want to fix it. Please email us at sales@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if
-              available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.">
-                <i class="fa fa-question-circle"></i>
-              </a>
+              <% if third_party_receipt.present? %>
+                <a
+                  tabindex="0"
+                  role="button"
+                  class="btn-lg text-white"
+                  data-toggle="popover"
+                  data-trigger="focus"
+                  data-placement="bottom"
+                  title="Why is my order messed up?"
+                  data-content="We're not sure, but we want to fix it. Please email us at sales@brickcitydepot.com and tell us your <%= third_party_receipt.source.capitalize %> Order ID (if
+                available), email address you use with <%= third_party_receipt.source.capitalize %> and Order Date and we'll figure it out and make sure you get the instructions you paid for.">
+                  <i class="fa fa-question-circle"></i>
+                </a>
+              <% else %>
+                <a
+                  tabindex="0"
+                  role="button"
+                  class="btn-lg text-white"
+                  data-toggle="popover"
+                  data-trigger="focus"
+                  data-placement="bottom"
+                  title="Why is my order messed up?"
+                  data-content="We're not sure, but we want to fix it. Please email us at sales@brickcitydepot.com and tell us your Confirmation ID, Transaction ID (if
+                available), Paypal email address and Order Date and we'll figure it out and make sure you get the instructions you paid for.">
+                  <i class="fa fa-question-circle"></i>
+                </a>
+              <% end %>
               <button type="button" class="btn btn-light btn-sm" data-toggle="modal" data-target="#emailModal">
                 Email us about this order
               </button>
 
-              <%= render partial: 'order_email_form', locals: {order: order} %>
+              <%= render partial: 'order_email_form', locals: {order: order, third_party_receipt: third_party_receipt} %>
             <% end %>
           </div>
           <div class="card-body">
@@ -39,24 +55,36 @@
                     <%= order.created_at.to_fs(:date_time12) %>
                   </td>
                 </tr>
-                <tr>
-                  <td>
-                    <strong>Confirmation ID:</strong>
-                  </td>
-                  <td></td>
-                  <td>
-                    <%= order.request_id %>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Transaction ID:</strong>
-                  </td>
-                  <td class="td_spacer"></td>
-                  <td>
-                    <%= order.transaction_id %>
-                  </td>
-                </tr>
+                <% if third_party_receipt.present? %>
+                  <tr>
+                    <td>
+                      <strong><%= third_party_receipt.source.capitalize %> Order ID:</strong>
+                    </td>
+                    <td></td>
+                    <td>
+                      <%= third_party_receipt.third_party_receipt_identifier %>
+                    </td>
+                  </tr>
+                <% else %>
+                  <tr>
+                    <td>
+                      <strong>Confirmation ID:</strong>
+                    </td>
+                    <td></td>
+                    <td>
+                      <%= order.request_id %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <strong>Transaction ID:</strong>
+                    </td>
+                    <td class="td_spacer"></td>
+                    <td>
+                      <%= order.transaction_id %>
+                    </td>
+                  </tr>
+                <% end %>
               </table>
             </div>
             <strong>Items Purchased:</strong>

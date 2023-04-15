@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class AdvertisingCampaign < ApplicationRecord
+  audited except: %i[created_at updated_at]
   belongs_to :partner
 
   # attr_accessible :campaign_live, :description, :partner_id, :reference_code

@@ -36,7 +36,11 @@ Rails.application.routes.draw do
     end
 
     resources :email_campaigns
-    resources :images
+    resources :images do
+      member do
+        patch :reposition
+      end
+    end
     resources :instant_payment_notifications, only: %i[index show]
     resources :orders, only: %i[index show] do
       member do
@@ -62,7 +66,17 @@ Rails.application.routes.draw do
       end
     end
     resources :product_types
-    resources :products
+    resources :products do
+      member do
+        post :create_etsy_listing
+        post :update_etsy_listing
+        delete :destroy_etsy_listing
+      end
+
+      collection do
+        post :update_all_etsy_pdfs
+      end
+    end
     resources :subcategories do
       member do
         get :model_code
@@ -76,6 +90,8 @@ Rails.application.routes.draw do
         post :reset_users_downloads
       end
     end
+
+    get 'redirect_to_etsy_oauth' => 'etsy#redirect_to_etsy_oauth'
   end
 
   if Rails.env.development?
@@ -93,9 +109,13 @@ Rails.application.routes.draw do
     get 'account/edit' => 'registrations#edit'
     get '/guest_registration' => 'sessions#guest_registration', as: :guest_registration
     post '/register_guest' => 'sessions#register_guest', as: :register_guest
+    get '/third_party_guest_registration' => 'sessions#third_party_guest_registration', as: :third_party_guest_registration
+    post '/register_third_party_guest' => 'sessions#register_third_party_guest', as: :register_third_party_guest
     patch 'passwords/update_password', to: 'passwords#update_password'
   end
 
+  # Not using etsy for authorizing BCD users, at this time.
+  get '/etsy/callback' => 'admin/etsy#callback'
   get '/auth/:provider/callback' => 'authentications#create'
   get '/auth/failure' => 'authentications#failure'
 

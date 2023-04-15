@@ -128,6 +128,11 @@
           <%= link_to 'Sidekiq Dashboard', '/sidekiq', class: 'dropdown-item' %>
         </div>
       </li>
+      <% if !BackendOauthToken.token_current?(:etsy) %>
+        <li class="nav-button">
+          <%= link_to image_tag('etsy_logo.png', alt: 'Login to Etsy', title: 'Login to Etsy', class: 'navbar-logo-button'), admin_redirect_to_etsy_oauth_path %>
+        </li>
+      <% end %>
     </ul>
   </div>
 </nav>

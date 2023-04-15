@@ -83,17 +83,43 @@ class DownloadsController < ApplicationController
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def guest_downloads
-    transaction_id = params[:tx_id]
-    request_id = params[:conf_id]
-    return redirect_to download_link_error_path if transaction_id.blank? || request_id.blank?
+    third_party_guest = false
+    third_party_guest = true if params[:source].present? && params[:order_id].present? && params[:u].present?
 
-    @order = Order.where(['transaction_id=? and request_id=?', transaction_id, request_id]).first
+    bcd_guest = false
+    bcd_guest = true if params[:tx_id].present? && params[:conf_id].present?
+
+    return redirect_to download_link_error_path if third_party_guest == false && bcd_guest == false
+
+    @order = if bcd_guest == true
+               find_bcd_order(params[:tx_id], params[:conf_id])
+             else
+               find_third_party_order(params[:source], params[:order_id], params[:u])
+             end
+
     return redirect_to download_link_error_path if @order.blank?
+
+    # If a user coming to us from a 3rd party has not bought from us yet, they will
+    # not have had a chance to accept our terms of service yet. So, we need to send
+    # them to an interstitial page where they can accept TOS, possibly update their
+    # email preferences, and then they can come back to this route and pass through
+    # to their downloads.
+    user = @order.user
+
+    return redirect_to "/third_party_guest_registration?source=#{params[:source]}&order_id=#{params[:order_id]}&u=#{user.guid}" if params[:source].present? && !user.tos_accepted?
 
     session[:guest_has_arrived_for_downloads] = true
     @download_links, @parts_list_links = @order.retrieve_download_links
+
+    redirect_to download_link_error_path if @download_links.blank?
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def guest_download
     # Look up download record by token and user id, which I get from a ID passed in, which is the users guid
@@ -164,5 +190,15 @@ class DownloadsController < ApplicationController
 
     @download = Download.find_by_user_id_and_product_id(current_user, product_id)
     @download.blank? ? MAX_DOWNLOADS : @download.remaining
+  end
+
+  def find_bcd_order(transaction_id, request_id)
+    Order.where(transaction_id:, request_id:).first
+  end
+
+  def find_third_party_order(source, third_party_receipt_identifier, guid)
+    order = ThirdPartyReceipt.where(source: source.downcase, third_party_receipt_identifier:).first&.order
+    # Before we return the order, make sure the order belongs to the user
+    order&.user&.guid == guid ? order : nil
   end
 end

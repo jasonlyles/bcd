@@ -29,6 +29,10 @@ $(window).scroll(function() {
 $(function() {
   $('[data-toggle="popover"]').popover()
 })
+
+$(function() {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 /*
 $(function() {
   $('.page-scroll a').bind('click', function(e) {

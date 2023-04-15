@@ -4,6 +4,25 @@ BEFORE STAGING:
 * Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 * Do I have something for a user to convert themselves from a guest to a regular user, and if so,
   do they still have access to things they bought?
+* Parts lists for guests/Etsy users/etc should display the users email address on
+  the page so they're less likely to share the link.
+* Create pins on Pinterest that point to the Etsy listings. https://developers.pinterest.com/docs/api/v5/#operation/pins/create
+* I don't think I built in a way to destroy parts lists from the UI.
+* Sending out blocks of emails should have one job that creates individual jobs for sending an email.
+* Heroku is deprecating the stack I'm on on April 30th. Get off!
+* Set up a FAQ for my Etsy store: https://multiorders.com/how-to-add-frequently-asked-questions-on-etsy/
+  An example: https://www.etsy.com/listing/1030405001/ch-46-sea-knight-custom-building?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=lego+instructions&ref=sr_gallery-1-8&organic_search_click=1
+* Set up Etsy after-purchase message: https://www.etsy.com/your/shops/me/appearance#digital-message-to-buyers
+  This is a one-size-fits-all message.
+* Add prod Etsy creds. (create a prod Etsy app)
+* Figure out some watchdog-type jobs that will alert me if the token isn't good
+  any more and another if it's been too long since the getShopReceipts call was
+  made successfully.
+* What happens if a listing on etsy gets pulled by etsy, even if mistakenly? How
+  do we find out, and how do we re-post in such a way that the new listing is the
+  one tied to the product instead of being tied to the old listing?
+* Might want to have an etsy_price column for the product in case we want to support
+  different prices per site.
 
 SETTING UP STAGING:
 * Get staging env vars from bcd-stg and then delete that app.
@@ -18,16 +37,74 @@ SETTING UP STAGING:
 
 ONCE STAGING IS SET UP:
 * Test everything via the website. (Write up a more complete list.)
-  * Parts List creation
-  * Scheduled Sidekiq jobs
-  * Paypal
+  * Product creation
+    * Can create parts list from Bricklink XML for product
+    * Can add PDF to product
+    * Can add images to product
+    * Does not show up for user until made active
+  * Scheduled Sidekiq jobs work (kick them off from the Sidekiq/Cron tab)
+    * ReapStaleCartsJob
+    * ReapStaleSessionsJob
+    * OrderFollowUpJob
+    * ObsoletePartsCheckJob
+  * Cart
+    * Can add items to cart
+    * Can remove items from cart
+    * Can change quantity of physical items
+    * Cannot change quantity of digital items
+  * Can checkout with Paypal
+    * IPN comes back and is stored correctly
+    * Order is marked correctly
+    * Purchased instructions and parts lists are available
   * Logging to Papertrail/somewhere
   * Various email jobs
-  * Facebook/Twitter Oauth
-  * User creation/cancellation
+    * Contact Us email
+    * Marketing mailer
+      * New product notification email
+      * New marketing notification email
+    * Order mailer
+      * BCD user order email
+      * Guest order email
+      * Issue with users order email
+      * Physical item purchased email
+    * Update mailer
+      * Updated instructions email
+      * Updated parts lists email
+  * Facebook Oauth
+    * Can create account
+    * Can log in to account via Facebook
+    * Can remove Twitter authentication
+  * Twitter Oauth
+    * Can create account
+    * Can log in to account via Twitter
+    * Can remove Twitter authentication
+  * BCD account
+    * Cannot access another users account via url manipulation
+    * Can create account
+    * Can log in via BCD account
+    * Can cancel account
+      * Can not log back in with account
+      * User account stays but email is replaced with user guid
   * Email unsubscribe
-  * PDF Upload/Download
+  * PDF Download
   * User parts lists
+    * User can access user parts list
+    * User can save user parts list
+    * User can update parts list
+    * User can generate valid Bricklink XML
+  * Etsy
+    * Can auth to Etsy
+    * Listings
+      * Can post a new listing
+      * Can edit a listing
+      * Re-ranking images updates rank in Etsy
+      * Can update all PDFs at once
+    * Sales
+      * Job picks up new orders
+      * Email is sent to buyer
+      * Buyer can access download link and parts list
+
+
 * If image manipulation doesn't work, check out: https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-storage-now-requires-image-processing
 * Make sure the places in the code using `only_path: true` are doing what I think they're doing.
 * Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
@@ -46,6 +123,13 @@ OAUTH stuff:
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 
 ONCE IN PROD:
+* Get all the fixes in parts_list_fixes.txt sorted with Brian.
+* Import Ebay users. `rake import_ebay_emails`
+* Upcase all existing order statuses: `rake order_statuses:upcase_status`
+* After going to prod, add a single product to Etsy, and then place an order and track how the order status flows.
+* When we go live in prod, images will be ranked according to when they were uploaded.
+  That might not be what we want, so we'll have to look at each product and see how
+  the images have been ordered and re-order if necessary.
 * The database and twitter sections of the prod credentials need to be updated.
 * Test user flows via the website.
 * When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
@@ -53,6 +137,12 @@ ONCE IN PROD:
 * Generate and submit sitemap to google and then review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
 
 Nice to haves:
+* After Etsy: Amazon, Walmart, Gumroad?, import sales data from ebay (and maybe manage ebay listings also):
+  https://blog.payoneer.com/e-sellers/marketplaces/7-killer-marketplaces-for-selling-digital-goods/
+* Once we've started selling in Etsy, maybe we can pull feedback from etsy on our
+  products and say where the feedback came from. Can create a system that pulls
+  feedback from etsy and any other places we may sell instructions (ebay, amazon, etc)
+  https://www.etsy.com/developers/documentation/reference/feedback
 * https://threejs.org/docs/#examples/en/loaders/LDrawLoader See what it would take to render instructions in the browser.
   Might only be able to do smaller instructions. Models would probably be better to render.
 * Honeybadger is trying to get me back as a customer. Apparently I can use it for
@@ -73,24 +163,10 @@ Nice to haves:
      * "/app/vendor/bundle/ruby/2.4.0/gems/roboto-0.2.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/kaminari-0.17.0/app/views"
      * "/app/vendor/bundle/ruby/2.4.0/gems/devise-3.5.10/app/views"
- * Write a thing for Brian to add emails from other sales channels, or a thing to parse his sales tracking Word docs.
-   * It should not add emails that exist in the current system.
-   * Emails we send that we got from users from other sales channels should let them
-     know where we got their emails from, and that this is a one-time email if they choose, and they
-     can select an 'Unsubscribe' button, or a 'Keep sending me emails' or 'Convert me to a BCD user'
-     button or something like that.
-   * Does it make sense to add a source column to users, and push users in there from other sources?
-     I wonder if maybe it's better to have a separate table for users from other sources.
  * Think of a way for Brian to get links to parts lists for ebay sales that he can send to the users.
    Maybe if I tapped into ebay's API, I could pull orders and have them in our system,
    waiting for Brian to click a button to send out emails with links. Maybe this
    isn't worth the time if ebay isn't really letting us sell much.
- * Could maybe start selling on Etsy and Amazon and use their APIs to pull in order
-   data for generating parts list links. Could possibly also send things the other way,
-   where we create a product in BCD and then click a 'Send to Etsy' button to create
-   a listing there. Can maybe pull feedback/comments on the product that users have
-   left and display it on our product page.
-
 
 
 LDRAW color reference: https://www.ldraw.org/article/547.html
@@ -145,7 +221,7 @@ DONE 21. Add tool to be able to update all lots at once for a given part. For ex
     It would be awesome to be able to do that substitution for all parts lists at once.
 DONE 22. Sort through TODOs I've added and see which ones need to be done before this code goes live.
 DONE 23. Make sure that the guest flow works completely and is easy to follow.
-24. Set up the ObsoletePartsCheck job in Heroku
+DONE 24. Set up the ObsoletePartsCheck job in Sidekiq
 25. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
 
 
@@ -212,9 +288,6 @@ HAVE TO GET DONE FOR V1:
 * Instead of forcing Brian to come into the admin UI, maybe have a task that emails
   him the monthly sales CSV at the end of the month.
 
-* Add functionality for Brian to be able to add downloads to someones account for a given product,
-  in case they've had trouble downloading.
-
 * Set up wall art, t-shirts, etc. on Printful: https://www.printful.com/?ref=index
 
 * IPNs come to us for refunds. What should I do with those? Remove the item from the users account? Maybe I can just
@@ -228,17 +301,10 @@ emails were sent.
 * Add Faker gem to generate a lot of orders and customers in the local database to see if I need to add any indexes to
 speed up page load times.
 
-* Try to get this app on Digital Ocean or Fly.io or something similar.
-
 * In order to get Knowledge Panel to show up in google results, set up a wikipedia page, wikidata entry, google+ page
 and verify it, maybe verify my FB and Twitter with google if possible.
 
 * Fix up my specs so I don't have to use database cleaner, and use the truncation strategy, which slows down specs
-
-* MUST GET OFF PEERONS IMAGES!!!!! This means getting/creating images and moving our html parts lists to the website,
-and not distribute them via downloads any more. I wonder if I couldn't create some sprites where I have
-an image that's not colored in, and color in according to a pieces HTML color code. That could allow me to make
-several requests for images instead of hundreds for a single parts list.
 
 * After getting off Peerons images, add network marketing.
     a. Customers who refer other paying customers can get credit towards instructions.
@@ -488,14 +554,6 @@ at public/maintenance_mode.html
 * Have an order fulfillment screen for physical orders in admin area where we can change status of orders. If an item
 stays in a non-shipped status for a couple of days, send a reminder email to let us know to deal with it. (Update May 2014.
 The order fulfillment screen is done, but I don't yet have the reminder email set up.)
-
-* Set up a way to create codes that we can send to buyers from Ebay. Then, as part of the checkout process on ebay, we can send them a
-link to BCD, along with a code that allows them to download from us. This will give us more control over the process, end
-our relationship with yousendit, force the user to learn about our website (which will hopefully lead to future purchases on our website instead of ebay).
-This will entail either an API that can be called via an ebay checkout process, or for Brian to use a tool I set up that generates a
-link with a guid that can be sent to the user. The guid will essentially be a unique identifier that will link a user (presumably with no email)
-to the downloads they purchased. (Update - May 2014. I have this set up, but in order to use it via ebay, I'll have to work on setting up a
-custom ebay checkout.)
 
 * Enhance the basic order reporting. I don't really like the way I did it.
 

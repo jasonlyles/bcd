@@ -63,4 +63,38 @@ describe ApplicationHelper do
       )
     end
   end
+
+  describe 'decorate_source' do
+    it 'should return the correct image' do
+      expect(helper.decorate_source('brick_city_depot')).to match(/logo140x89/)
+      expect(helper.decorate_source('etsy')).to match(/etsy_logo/)
+      expect(helper.decorate_source('unknown')).to eq('Unknown')
+    end
+  end
+
+  describe 'decorate_order_status' do
+    it 'should return the appropriate button for the status' do
+      expect(helper.decorate_order_status('COMPLETED')).to match(/text-success fas fa-check/)
+      expect(helper.decorate_order_status('INVALID')).to match(/text-danger fa fa-ban/)
+      expect(helper.decorate_order_status('FAILED')).to match(/text-danger fas fa-times/)
+      expect(helper.decorate_order_status('GIFT')).to match(/text-success fa fa-gift/)
+      expect(helper.decorate_order_status('THIRD_PARTY_PENDING_PAYMENT')).to match(/text-primary fa fa-credit-card/)
+      expect(helper.decorate_order_status('THIRD_PARTY_PENDING')).to match(/text-primary fa fa-hourglass-start/)
+      expect(helper.decorate_order_status('THIRD_PARTY_CANCELED')).to match(/text-primary fa fa-ban/)
+      expect(helper.decorate_order_status('unknown')).to match(/fa fa-question/)
+    end
+  end
+
+  describe 'status_explanation' do
+    it 'should return a chunk of text explaining statuses' do
+      expect(helper.status_explanation).to match(/COMPLETED/)
+      expect(helper.status_explanation).to match(/INVALID/)
+      expect(helper.status_explanation).to match(/FAILED/)
+      expect(helper.status_explanation).to match(/GIFT/)
+      expect(helper.status_explanation).to match(/THIRD_PARTY_PENDING_PAYMENT/)
+      expect(helper.status_explanation).to match(/THIRD_PARTY_PENDING/)
+      expect(helper.status_explanation).to match(/THIRD_PARTY_CANCELED/)
+      expect(helper.status_explanation).to match(/UNKNOWN/)
+    end
+  end
 end

@@ -44,6 +44,39 @@ class SessionsController < Devise::SessionsController
   end
   # rubocop:enable Metrics/AbcSize
 
+  def third_party_guest_registration
+    @source = params[:source]
+    @order_id = params[:order_id]
+    @user = User.where(guid: params[:u]).first
+  end
+
+  # rubocop:disable Metrics/AbcSize
+  def register_third_party_guest
+    @source = params[:source]
+    @order_id = params[:order_id]
+
+    order = ThirdPartyReceipt.where(source: @source.downcase, third_party_receipt_identifier: @order_id).first&.order
+    @user = User.find(params[:user][:id])
+    if order.blank? || order.user_id != @user.id
+      flash[:alert] = 'Sorry, there was a problem finding your order. If you feel this is in error, please contact us at sales@brickcitydepot.com'
+      return render :third_party_guest_registration
+    end
+
+    @user.email_preference = params[:user][:email_preference]
+    @user.tos_accepted = params[:user][:tos_accepted]
+
+    unless @user.valid?
+      flash[:alert] = 'You must accept the terms of service before you can proceed.'
+      return render :third_party_guest_registration
+    end
+
+    @user.save!
+    # User has accepted the tos and possibly updated their email preference. Now
+    # we can send them back to the guest_download page we interrupted.
+    redirect_to "/guest_downloads?source=#{@source}&order_id=#{@order_id}&u=#{@user.guid}"
+  end
+  # rubocop:enable Metrics/AbcSize
+
   def create
     clean_up_guest if session[:guest] # If I have a guest that has a change of heart and wants to sign in, ditch the guest record
     resource = warden.authenticate!(auth_options)

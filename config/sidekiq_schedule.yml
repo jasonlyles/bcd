@@ -1,19 +1,34 @@
 reap_stale_carts:
-  cron:                "0 0 * * *"
-  class:               "ReapStaleCartsJob"
-  queue:               low
+  cron:                          "0 0 * * *"
+  class:                         "ReapStaleCartsJob"
+  queue:                         low
 
 reap_stale_sessions:
-  cron:                "0 23 * * *"
-  class:               "ReapStaleSessionsJob"
-  queue:               low
+  cron:                          "0 23 * * *"
+  class:                         "ReapStaleSessionsJob"
+  queue:                         low
 
 order_follow_up:
-  cron:                "0 19 * * *"
-  class:               "OrderFollowUpJob"
-  queue:               low
+  cron:                          "0 19 * * *"
+  class:                         "OrderFollowUpJob"
+  queue:                         low
 
 obsolete_parts_check:
-  cron:                "0 5 * * 0"
-  class:               "ObsoletePartsCheckJob"
-  queue:               low
+  cron:                          "0 5 * * 0"
+  class:                         "ObsoletePartsCheckJob"
+  queue:                         low
+
+refresh_etsy_access_token:
+  cron:                          '*/55 * * * *'
+  class:                         'RefreshEtsyAccessTokenJob'
+  queue:                         low
+
+find_new_etsy_orders:
+  cron:                          '*/5 * * * *'
+  class:                         'FindNewEtsyOrdersJob'
+  queue:                         critical
+
+warn_about_active_notification:
+  cron:                          '0 10 * * 1'
+  class:                         'WarnAboutActiveNotificationsJob'
+  queue:                         low

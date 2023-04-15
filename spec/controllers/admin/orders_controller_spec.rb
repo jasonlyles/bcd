@@ -19,12 +19,27 @@ describe Admin::OrdersController do
   end
 
   describe 'GET #show' do
-    it 'should return an order given the orders ID' do
-      order = FactoryBot.create(:order)
-      sign_in @radmin
-      get :show, params: { id: order.id }
+    context 'without a third party receipt' do
+      it 'should return an order given the orders ID' do
+        order = FactoryBot.create(:order)
+        sign_in @radmin
+        get :show, params: { id: order.id }
 
-      expect(assigns(:order).id).to eq(order.id)
+        expect(assigns(:order).id).to eq(order.id)
+        expect(assigns(:third_party_receipt)).to be_nil
+      end
+    end
+
+    context 'with a third party receipt' do
+      it 'should return an order and a third_party_receipt given the orders ID' do
+        order = FactoryBot.create(:order)
+        third_party_receipt = FactoryBot.create(:third_party_receipt, order:)
+        sign_in @radmin
+        get :show, params: { id: order.id }
+
+        expect(assigns(:order).id).to eq(order.id)
+        expect(assigns(:third_party_receipt).id).to eq(third_party_receipt.id)
+      end
     end
   end
 

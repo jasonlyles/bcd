@@ -5,5 +5,5 @@ class BackendNotification < ApplicationRecord
 
   validates :message, presence: true
 
-  scope :active_notifications, -> { where('dismissed_by_id IS NULL').order(created_at: :asc) }
+  scope :active_notifications, -> { where('dismissed_by_id IS NULL').order(created_at: :desc) }
 end

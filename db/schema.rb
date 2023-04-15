@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_03_185355) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,7 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.string "user_type"
     t.string "username"
     t.string "action"
-    t.text "audited_changes"
+    t.jsonb "audited_changes"
     t.integer "version", default: 0
     t.string "comment"
     t.string "remote_address"
@@ -89,6 +89,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["dismissed_by_id"], name: "index_backend_notifications_on_dismissed_by_id"
+  end
+
+  create_table "backend_oauth_tokens", force: :cascade do |t|
+    t.integer "provider"
+    t.string "access_token"
+    t.string "refresh_token"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "cart_items", id: :serial, force: :cascade do |t|
@@ -175,6 +184,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.string "location"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.string "etsy_listing_image_id"
+    t.integer "position"
     t.index ["category_id"], name: "index_images_on_category_id"
     t.index ["product_id"], name: "index_images_on_product_id"
   end
@@ -201,6 +212,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.decimal "total_price"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.string "third_party_line_item_identifier"
+    t.datetime "third_party_line_item_paid_at"
     t.index ["order_id"], name: "index_line_items_on_order_id"
     t.index ["product_id"], name: "index_line_items_on_product_id"
   end
@@ -221,7 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.integer "user_id"
     t.string "transaction_id", limit: 50
     t.string "request_id", limit: 50
-    t.string "status", limit: 10
+    t.string "status", limit: 30
     t.string "address_state"
     t.string "address_street1"
     t.string "address_street2"
@@ -234,6 +247,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.integer "shipping_status"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.integer "source", default: 0
+    t.string "third_party_order_identifier"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -310,6 +325,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.datetime "updated_at", precision: nil
     t.boolean "featured", default: false
     t.string "designer", default: "brian_lyles"
+    t.string "etsy_listing_id"
+    t.string "etsy_listing_file_id"
+    t.string "etsy_listing_state"
+    t.string "etsy_listing_url"
+    t.datetime "etsy_created_at", precision: nil
+    t.datetime "etsy_updated_at", precision: nil
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["product_type_id"], name: "index_products_on_product_type_id"
     t.index ["subcategory_id"], name: "index_products_on_subcategory_id"
@@ -361,6 +382,53 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.datetime "updated_at", precision: nil
   end
 
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "tag_id"
+    t.string "taggable_type"
+    t.bigint "taggable_id"
+    t.string "tagger_type"
+    t.bigint "tagger_id"
+    t.string "context", limit: 128
+    t.datetime "created_at", precision: nil
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "taggings_taggable_context_idx"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type", "taggable_id"], name: "index_taggings_on_taggable_type_and_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+    t.index ["tagger_type", "tagger_id"], name: "index_taggings_on_tagger_type_and_tagger_id"
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "third_party_receipts", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.integer "source", null: false
+    t.string "third_party_receipt_identifier", null: false
+    t.string "third_party_order_status", null: false
+    t.boolean "third_party_is_paid"
+    t.datetime "third_party_created_at"
+    t.datetime "third_party_updated_at"
+    t.text "raw_response_body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_third_party_receipts_on_order_id"
+    t.index ["source"], name: "index_third_party_receipts_on_source"
+    t.index ["third_party_is_paid"], name: "index_third_party_receipts_on_third_party_is_paid"
+    t.index ["third_party_order_status"], name: "index_third_party_receipts_on_third_party_order_status"
+    t.index ["third_party_receipt_identifier"], name: "index_third_party_receipts_on_third_party_receipt_identifier"
+  end
+
   create_table "updates", id: :serial, force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -406,10 +474,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_030721) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.integer "source", default: 0
+    t.string "third_party_user_identifier"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "taggings", "tags"
 end
