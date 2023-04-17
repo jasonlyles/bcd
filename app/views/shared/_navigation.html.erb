@@ -61,8 +61,8 @@
                       <%= link_to("Sign Out", destroy_user_session_path, class: 'dropdown-item', method: :delete) %>
                     <% end %>
                     <% if current_radmin %>
-                      <%= link_to("Sign Out Admin", destroy_radmin_session_path, class: 'dropdown-item') %>
-                      <%= link_to("Admin Stuff", admin_index_path, class: 'dropdown-item', method: :delete) %>
+                      <%= link_to("Admin Stuff", admin_index_path, class: 'dropdown-item') %>
+                      <%= link_to("Sign Out Admin", destroy_radmin_session_path, class: 'dropdown-item', method: :delete) %>
                     <% end %>
                   <% else %>
                     <%= link_to("Sign In",new_user_session_path, class: 'dropdown-item') %>
