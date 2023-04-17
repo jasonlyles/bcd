@@ -7,7 +7,6 @@ BEFORE STAGING:
 * Parts lists for guests/Etsy users/etc should display the users email address on
   the page so they're less likely to share the link.
 * Create pins on Pinterest that point to the Etsy listings. https://developers.pinterest.com/docs/api/v5/#operation/pins/create
-* I don't think I built in a way to destroy parts lists from the UI.
 * Sending out blocks of emails should have one job that creates individual jobs for sending an email.
 * Heroku is deprecating the stack I'm on on April 30th. Get off!
 * Set up a FAQ for my Etsy store: https://multiorders.com/how-to-add-frequently-asked-questions-on-etsy/
@@ -23,6 +22,8 @@ BEFORE STAGING:
   one tied to the product instead of being tied to the old listing?
 * Might want to have an etsy_price column for the product in case we want to support
   different prices per site.
+* Might want to add Etsy OAuth for users so they can log in if they'd prefer.
+* Trying to sign out of admin on the user side gets a 404.
 
 SETTING UP STAGING:
 * Get staging env vars from bcd-stg and then delete that app.

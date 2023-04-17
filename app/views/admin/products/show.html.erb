@@ -74,8 +74,7 @@
             <td>
               <b>Type:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <%= @product.product_type.name %>
             </td>
           </tr>
@@ -83,8 +82,7 @@
             <td>
               <b>Cat/Subcat:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <%= "#{@product.category.name}/#{@product.subcategory.name}" %>
             </td>
           </tr>
@@ -92,8 +90,7 @@
             <td>
               <b>Description:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <%= @product.description %>
             </td>
           </tr>
@@ -101,8 +98,7 @@
             <td>
               <b>Tags:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <% @product.tag_list.each_with_index do |tag, index| %>
                 <span class="badge badge-pill badge-info p-2 my-1"><%= "#{index + 1}: #{tag}" %></span>
               <% end %>
@@ -112,8 +108,7 @@
             <td>
               <b>Designer:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <%= @product.designer %>
             </td>
           </tr>
@@ -121,8 +116,7 @@
             <td>
               <b>Featured:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <%= decorate_boolean(@product.featured?) %>
             </td>
           </tr>
@@ -130,8 +124,7 @@
             <td>
               <b>Alternative Build:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <%= decorate_boolean(@product.alternative_build?) %>
             </td>
           </tr>
@@ -139,17 +132,15 @@
             <td>
               <b>Ready for Public:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <%= decorate_boolean(@product.ready_for_public?) %>
             </td>
           </tr>
           <tr>
             <td>
-              <b>YouTube Url:</b>
+              <b>YouTube:</b>
             </td>
-            <td></td>
-            <td>
+            <td class="pl-3">
               <% if @product.youtube_url && !@product.youtube_url.blank? %>
                 <%= "https://www.youtube.com/watch?v=#{@product.youtube_url}" %>
                 <br/>
@@ -177,8 +168,7 @@
                 <td>
                   <b>PDF:</b>
                 </td>
-                <td></td>
-                <td>
+                <td class="pl-2">
                   <% if @product.pdf? && !@product.pdf.blank? %>
                     <b class="happy">Present</b>
                   <% else %>
@@ -191,14 +181,15 @@
                 <td>
                   <b>Parts List(s):</b>
                 </td>
-                <td></td>
-                <td>
+                <td class="pl-2">
                   <% @product.parts_lists.each do |parts_list| %>
                     <%= decorate_boolean(parts_list.approved) %>
                     <%= link_to parts_list.name, admin_parts_list_path(parts_list) %>
+                    <span class="ml-2">
+                      <%= link_to raw('<i class="far fa-trash-alt"></i>'), [:admin, parts_list], data: {confirm: 'Are you sure?'}, method: :delete %>
+                    </span>
                     <br />
                   <% end %>
-                  <%= link_to 'Add Parts List', new_admin_parts_list_path(product_id: @product.id), class: 'btn btn-success mt-2' %>
                 </td>
               </tr>
             </table>
@@ -219,8 +210,7 @@
                   <td>
                     <b>Price:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <b class="text-success">Free!</b>
                   </td>
                 </tr>
@@ -229,8 +219,7 @@
                   <td>
                     <b>Price:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <%= number_to_currency(@product.price) %>
                   </td>
                 </tr>
@@ -238,8 +227,7 @@
                   <td>
                     <b>Discount %:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <%= "#{@product.discount_percentage.to_i}%" %>
                   </td>
                 </tr>
@@ -248,8 +236,7 @@
                   <td>
                     <b>Quantity:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <%= @product.quantity %>
                   </td>
                 </tr>
@@ -273,8 +260,7 @@
                   <td>
                     <b>Listing Created:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <%= @product.etsy_created_at&.to_fs(:date_time12) %>
                   </td>
                 </tr>
@@ -282,8 +268,7 @@
                   <td>
                     <b>Last Updated:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <%= @product.etsy_updated_at&.to_fs(:date_time12) %>
                   </td>
                 </tr>
@@ -291,8 +276,7 @@
                   <td>
                     <b>Listing State:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <%= @product.etsy_listing_state %>
                   </td>
                 </tr>
@@ -300,8 +284,7 @@
                   <td>
                     <b>PDF Uploaded?:</b>
                   </td>
-                  <td></td>
-                  <td>
+                  <td class="pl-2">
                     <%= decorate_boolean(@product.etsy_listing_file_id.present?) %>
                   </td>
                 </tr>
@@ -310,8 +293,7 @@
                     <td>
                       <b>Listing:</b>
                     </td>
-                    <td></td>
-                    <td>
+                    <td class="pl-2">
                       <%= link_to 'Etsy Listing', @product.etsy_listing_url, target: '_blank' %>
                     </td>
                   </tr>

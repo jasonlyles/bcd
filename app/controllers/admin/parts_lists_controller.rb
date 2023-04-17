@@ -87,7 +87,9 @@ class Admin::PartsListsController < AdminController
   def destroy
     @parts_list = PartsList.find(params[:id])
     @parts_list.destroy
-    redirect_to(admin_parts_lists_url)
+
+    flash[:notice] = 'Deleted parts list'
+    redirect_back(fallback_location: admin_parts_lists_url)
   end
 
   # GET /admin/parts_lists/part_swap
