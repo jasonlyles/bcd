@@ -14,6 +14,7 @@ BEFORE STAGING:
 * Set up Etsy after-purchase message: https://www.etsy.com/your/shops/me/appearance#digital-message-to-buyers
   This is a one-size-fits-all message.
 * Add prod Etsy creds. (create a prod Etsy app)
+* Set up Etsy staging callback urls
 * Figure out some watchdog-type jobs that will alert me if the token isn't good
   any more and another if it's been too long since the getShopReceipts call was
   made successfully.
@@ -22,8 +23,6 @@ BEFORE STAGING:
   one tied to the product instead of being tied to the old listing?
 * Might want to have an etsy_price column for the product in case we want to support
   different prices per site.
-* Might want to add Etsy OAuth for users so they can log in if they'd prefer.
-* Trying to sign out of admin on the user side gets a 404.
 
 SETTING UP STAGING:
 * Get staging env vars from bcd-stg and then delete that app.

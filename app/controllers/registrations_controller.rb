@@ -4,7 +4,7 @@ class RegistrationsController < Devise::RegistrationsController
   before_action :assign_authentications, except: %i[new build_resource]
   before_action :authenticate_user!, only: %i[update destroy]
 
-  MAX_AUTHS_ALLOWED = 2 # Right now, just Facebook and Twitter
+  MAX_AUTHS_ALLOWED = 3 # Facebook, Twitter and Etsy
 
   def edit
     @auths = @authentications.collect(&:provider)
@@ -86,7 +86,7 @@ class RegistrationsController < Devise::RegistrationsController
         respond_with resource
       end
     elsif resource.update(resource_params)
-      # This case is for the Twitter/Facebook user who doesn't have a regular account, and hence no password.
+      # This case is for the Twitter/Facebook/Etsy user who doesn't have a regular account, and hence no password.
       if is_navigational_format?
         flash_key = :update_needs_confirmation if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
         set_flash_message :notice, flash_key || :updated

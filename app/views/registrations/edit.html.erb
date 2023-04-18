@@ -11,7 +11,10 @@
             <%= link_to raw("<i class='fab fa-facebook'></i>&nbsp; Login with Facebook"), '/auth/facebook', class: "btn btn-facebook mb-3" %>
           <% end %>
           <% if @auths && !@auths.include?('twitter') %>
-            <%= link_to raw("<i class='fab fa-twitter'></i>&nbsp; Login with Twitter"), '/auth/twitter', class: "btn btn-twitter" %>
+            <%= link_to raw("<i class='fab fa-twitter'></i>&nbsp; Login with Twitter"), '/auth/twitter', class: "btn btn-twitter mb-3" %>
+          <% end %>
+          <% if @auths && !@auths.include?('etsy') %>
+            <%= link_to raw("<i class='fab fa-etsy'></i>&nbsp; Login with Etsy"), '/auth/etsy', class: "btn btn-etsy mb-3" %>
           <% end %>
           <br/>
         </div>

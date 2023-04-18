@@ -17,6 +17,17 @@ class ApplicationController < ActionController::Base
   #   devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
   # end
 
+  # This is for overriding default devise behavior to redirect to / after logging
+  # in. I'm just sending them to their account page instead.
+  def after_sign_in_path_for(resource)
+    stored_location_for(resource) ||
+      if resource.is_a?(User)
+        account_path
+      else
+        super
+      end
+  end
+
   private
 
   def prepare_exception_notifier
