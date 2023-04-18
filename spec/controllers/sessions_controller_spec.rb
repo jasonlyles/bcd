@@ -20,7 +20,7 @@ describe SessionsController do
       request.env['devise.mapping'] = Devise.mappings[:user]
       post :create, params: { user: { email: 'charles@mcwoofay.net', password: 'password' } }
 
-      expect(response).to redirect_to('/')
+      expect(response).to redirect_to('/account')
       expect(flash[:notice]).to eq('Signed in successfully.')
       expect(subject.current_user).to_not be_nil
     end

@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/jasonlyles/omniauth-etsy-oauth2
+  revision: 0113ef74b8fb36a94b5e7bcd90fe4924ff9104df
+  specs:
+    omniauth-etsy-oauth2 (0.2.0)
+      omniauth (~> 1.9.1)
+      omniauth-oauth2 (~> 1.4)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -348,9 +356,6 @@ GEM
     omniauth (1.9.2)
       hashie (>= 3.4.6)
       rack (>= 1.6.2, < 3)
-    omniauth-etsy-oauth2 (0.2.0)
-      omniauth (~> 1.9.1)
-      omniauth-oauth2 (~> 1.4)
     omniauth-facebook (9.0.0)
       omniauth-oauth2 (~> 1.2)
     omniauth-oauth2 (1.7.3)
@@ -616,7 +621,7 @@ DEPENDENCIES
   oauth
   oj
   omniauth
-  omniauth-etsy-oauth2
+  omniauth-etsy-oauth2!
   omniauth-facebook
   omniauth-rails_csrf_protection
   omniauth-twitter2

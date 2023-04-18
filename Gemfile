@@ -60,7 +60,7 @@ gem 'devise'
 # Have to have oauth 1 for Bricklink
 gem 'oauth'
 gem 'omniauth'
-gem 'omniauth-etsy-oauth2'
+gem 'omniauth-etsy-oauth2', git: 'https://github.com/jasonlyles/omniauth-etsy-oauth2'
 gem 'omniauth-facebook'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-twitter2'
