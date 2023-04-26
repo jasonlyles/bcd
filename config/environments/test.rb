@@ -70,4 +70,6 @@ Rails.application.configure do
   # This is now needed to load some of the factories because of the bigdecimal values
   # in the factories, and because Psych has made changes to not allow loading some values by default.
   config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time, BigDecimal]
+
+  config.pinterest_api_url = 'https://api-sandbox.pinterest.com/v5'
 end

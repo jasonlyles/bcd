@@ -7,8 +7,7 @@ module Pinterest
       class PinterestRefreshAccessTokenRetrievalError < StandardError; end
       class PinterestApiError < StandardError; end
 
-      PINTEREST_API_URL = 'https://api.pinterest.com/v5'
-      # PINTEREST_API_URL = 'https://api-sandbox.pinterest.com/v5' # for testing
+      PINTEREST_API_URL = Rails.application.config.pinterest_api_url
 
       private
 

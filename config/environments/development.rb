@@ -101,4 +101,6 @@ Rails.application.configure do
   #     }
 
   config.web_host = 'http://localhost:3000'
+
+  config.pinterest_api_url = 'https://api-sandbox.pinterest.com/v5'
 end
