@@ -447,4 +447,45 @@ describe Product do
       end
     end
   end
+
+  describe 'base_pinterest_pinnable?' do
+    context 'with no base_product board' do
+      it 'should return false' do
+        product = FactoryBot.create(:product)
+
+        expect(product.base_pinterest_pinnable?).to eq(false)
+      end
+    end
+
+    context 'with a base_product board' do
+      context 'with no etsy listing present' do
+        it 'should return false' do
+          FactoryBot.create(:pinterest_board)
+          product = FactoryBot.create(:product)
+
+          expect(product.base_pinterest_pinnable?).to eq(false)
+        end
+      end
+
+      context 'with an etsy listing present' do
+        context 'with an existing pin' do
+          it 'should return false' do
+            product = FactoryBot.create(:product, etsy_listing_url: 'https://google.com')
+            FactoryBot.create(:pin_with_associations, product:)
+
+            expect(product.base_pinterest_pinnable?).to eq(false)
+          end
+        end
+
+        context 'with no existing pin' do
+          it 'should return true' do
+            FactoryBot.create(:pinterest_board)
+            product = FactoryBot.create(:product, etsy_listing_url: 'https://google.com')
+
+            expect(product.base_pinterest_pinnable?).to eq(true)
+          end
+        end
+      end
+    end
+  end
 end

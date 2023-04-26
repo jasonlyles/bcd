@@ -48,6 +48,11 @@
     <h1><%= @product.code_and_name %></h1>
   </div>
   <div class="col-auto">
+    <% if @product.base_pinterest_pinnable? %>
+      <div class='d-inline-block'>
+        <%= button_to 'Create Pinterest Pin', create_pinterest_pin_admin_product_path(@product), data: { disable_with: raw("<i class='fa fa-cog fa-spin'></i> Creating Pin...") }, class: 'btn btn-pinterest' %>
+      </div>
+    <% end %>
     <% if @product.etsy_listing_id.present? %>
       <div class='d-inline-block'>
         <%= button_to 'Delete Etsy Listing', destroy_etsy_listing_admin_product_path(@product), data: { confirm: 'Are you sure you want to remove this listing from Etsy?', disable_with: raw("<i class='fa fa-cog fa-spin'></i> Deleting Listing...") }, class: 'btn btn-danger', method: :delete %>
@@ -306,6 +311,65 @@
         </div>
       </div>
     </div>
+    <% if @product.pinterest_pins.present? %>
+      <div class="row mt-4">
+        <div class="col">
+          <div class="card">
+            <div class="card-header">
+              <b>Pinterest Pins</b>
+            </div>
+            <div class="card-body">
+              <% @product.pinterest_pins.includes(:pinterest_board).order('created_at desc').each do |pin| %>
+                <div class='border rounded p-2 mb-2'>
+                  <table>
+                    <tr>
+                      <td>
+                        <b>Title:</b>
+                      </td>
+                      <td class="pl-2">
+                        <%= pin.title.truncate(30) %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Pinned:</b>
+                      </td>
+                      <td class="pl-2">
+                        <%= pin.created_at&.to_fs(:date_time12) %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Board:</b>
+                      </td>
+                      <td class="pl-2">
+                        <%= pin.pinterest_board.topic %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Link:</b>
+                      </td>
+                      <td class="pl-2">
+                        <%= link_to 'Pin Link', pin.link, target: '_blank' %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Pin Url:</b>
+                      </td>
+                      <td class="pl-2">
+                        <%= link_to 'Pin', "https://www.pinterest.com/pin/#{pin.pinterest_native_id}/", target: '_blank' %>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
 <div class="row mt-2">
@@ -336,7 +400,7 @@
     <%= f.hidden_field :id, :value => @product.id %>
     <div class="actions">
       <%= f.submit 'Retire Product', class: 'btn btn-primary' %>
-      <a tabindex="0" role="button" class="btn-lg" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Retiring a product" data-content="Retiring a product will set 'ready for public' to false and the category and subcategory to the 'Retired' cat/subcats. This leaves it around for reporting, but takes it out of public view. To un-retire a product, edit it, and see notes about un-retiring the product!">
+      <a tabindex="0" role="button" class="btn-lg" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="Retiring a product" data-content="Retiring a product will set 'ready for public' to false and the category and subcategory to the 'Retired' cat/subcats. This leaves it around for reporting, but takes it out of public view. It also deletes the related Etsy listing and Pinterest pins, if applicable. To un-retire a product, edit it, and see notes about un-retiring the product!">
         <i class="fa fa-question-circle"></i>
       </a>
     </div>

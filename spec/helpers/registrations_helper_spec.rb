@@ -13,7 +13,7 @@ describe RegistrationsHelper do
     it 'lets me know if the user has already used all auths available' do
       FactoryBot.create(:user)
 
-      expect(helper.all_auths_taken([FactoryBot.create(:authentication, provider: 'Twitter'), FactoryBot.create(:authentication, provider: 'Facebook')])).to eq(true)
+      expect(helper.all_auths_taken([FactoryBot.create(:authentication, provider: 'Etsy'), FactoryBot.create(:authentication, provider: 'Twitter'), FactoryBot.create(:authentication, provider: 'Facebook')])).to eq(true)
       expect(helper.all_auths_taken([FactoryBot.create(:authentication, provider: 'Twitter')])).to eq(false)
     end
   end

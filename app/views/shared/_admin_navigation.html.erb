@@ -133,6 +133,11 @@
           <%= link_to image_tag('etsy_logo.png', alt: 'Login to Etsy', title: 'Login to Etsy', class: 'navbar-logo-button'), admin_redirect_to_etsy_oauth_path %>
         </li>
       <% end %>
+      <% if !BackendOauthToken.token_current?(:pinterest) %>
+        <li class="nav-button">
+          <%= link_to image_tag('pinterest_logo.png', alt: 'Login to Pinterest', title: 'Login to Pinterest', class: 'navbar-logo-button'), admin_redirect_to_pinterest_oauth_path %>
+        </li>
+      <% end %>
     </ul>
   </div>
 </nav>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_03_185355) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_24_143715) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -291,6 +291,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_03_185355) do
     t.string "file"
     t.string "jid"
     t.index ["product_id"], name: "index_parts_lists_on_product_id"
+  end
+
+  create_table "pinterest_boards", force: :cascade do |t|
+    t.string "topic", null: false
+    t.string "pinterest_native_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pinterest_pins", force: :cascade do |t|
+    t.bigint "pinterest_board_id", null: false
+    t.bigint "product_id", null: false
+    t.bigint "image_id", null: false
+    t.string "pinterest_native_id", null: false
+    t.string "link", null: false
+    t.string "title", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["image_id"], name: "index_pinterest_pins_on_image_id"
+    t.index ["pinterest_board_id"], name: "index_pinterest_pins_on_pinterest_board_id"
+    t.index ["product_id"], name: "index_pinterest_pins_on_product_id"
   end
 
   create_table "product_types", id: :serial, force: :cascade do |t|
