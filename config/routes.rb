@@ -71,6 +71,8 @@ Rails.application.routes.draw do
         post :create_etsy_listing
         post :update_etsy_listing
         delete :destroy_etsy_listing
+
+        post :create_pinterest_pin
       end
 
       collection do
@@ -92,6 +94,7 @@ Rails.application.routes.draw do
     end
 
     get 'redirect_to_etsy_oauth' => 'etsy#redirect_to_etsy_oauth'
+    get 'redirect_to_pinterest_oauth' => 'pinterest#redirect_to_pinterest_oauth'
   end
 
   if Rails.env.development?
@@ -114,8 +117,8 @@ Rails.application.routes.draw do
     patch 'passwords/update_password', to: 'passwords#update_password'
   end
 
-  # Not using etsy for authorizing BCD users, at this time.
   get '/etsy/callback' => 'admin/etsy#callback'
+  get '/pinterest/callback' => 'admin/pinterest#callback'
   get '/auth/:provider/callback' => 'authentications#create'
   get '/auth/failure' => 'authentications#failure'
 

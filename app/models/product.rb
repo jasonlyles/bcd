@@ -11,6 +11,7 @@ class Product < ApplicationRecord
   has_many :downloads
   has_many :images, -> { order(position: :asc) }, dependent: :destroy
   has_many :parts_lists, dependent: :destroy
+  has_many :pinterest_pins, dependent: :destroy
   mount_uploader :pdf, PdfUploader
   accepts_nested_attributes_for :images, allow_destroy: true
   accepts_nested_attributes_for :parts_lists, allow_destroy: true
@@ -115,6 +116,13 @@ class Product < ApplicationRecord
 
   def orders?
     LineItem.where(['product_id = ?', id]).exists?
+  end
+
+  def base_pinterest_pinnable?
+    base_product_board = PinterestBoard.find_by_topic('base_product')
+    return false if base_product_board.blank?
+
+    etsy_listing_url.present? && !pinterest_pins.where(pinterest_board_id: base_product_board.id).present?
   end
 
   def destroy

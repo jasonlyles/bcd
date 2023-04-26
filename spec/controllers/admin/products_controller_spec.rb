@@ -200,6 +200,20 @@ describe Admin::ProductsController do
   end
 
   describe 'retire_product' do
+    context 'for a product with pinterest pins' do
+      it 'should retire the product and delete the pins' do
+        request.env['HTTP_REFERER'] = '/'
+        retired_category = FactoryBot.create(:category, name: 'Retired')
+        retired_subcategory = FactoryBot.create(:subcategory, name: 'Retired', code: 'RT')
+        product = FactoryBot.create(:product, category_id: @category.id, subcategory_id: @subcategory.id)
+        FactoryBot.create(:pin_with_associations, product:)
+
+        expect {
+          post :retire_product, params: { product: { id: product.id } }
+        }.to change(PinterestPin, :count).by(-1)
+      end
+    end
+
     context 'for a product without an etsy listing' do
       it 'should retire the product and not make any calls to etsy' do
         request.env['HTTP_REFERER'] = '/'
@@ -340,6 +354,32 @@ describe Admin::ProductsController do
 
       expect(flash[:notice]).to eq('This will probably take a few minutes to complete. Once it\'s done, a Notification will be created.')
       expect(response).to redirect_to(admin_products_path)
+    end
+  end
+
+  describe 'create_pinterest_pin' do
+    context 'creates a pin' do
+      it 'should flash a nice message' do
+        product = FactoryBot.create(:product)
+        allow_any_instance_of(Pinterest::Client).to receive(:create_pin).and_return(true)
+
+        post :create_pinterest_pin, params: { id: product.id }
+
+        expect(flash[:notice]).to eq('Pinned to Pinterest')
+        expect(response).to redirect_to(admin_products_path)
+      end
+    end
+
+    context 'cannot create a pin' do
+      it 'should flash an alert' do
+        product = FactoryBot.create(:product)
+        allow_any_instance_of(Pinterest::Client).to receive(:create_pin).and_return(false)
+
+        post :create_pinterest_pin, params: { id: product.id }
+
+        expect(flash[:alert]).to eq('There was a problem creating the pin on Pinterest')
+        expect(response).to redirect_to(admin_products_path)
+      end
     end
   end
 end

@@ -210,3 +210,14 @@ ul.ui-autocomplete {
   border: 2px solid $etsy;
 }
 /* End of Etsy styles */
+/* Beginning of Pinterest Styles */
+.btn-pinterest {
+  background-color: $pinterest;
+  color: white;
+}
+
+.btn-pinterest:hover {
+  color: white;
+  background-color: darken($pinterest, 10%);
+}
+/* End of Pinterest Styles */

@@ -32,3 +32,8 @@ warn_about_active_notification:
   cron:                          '0 10 * * 1'
   class:                         'WarnAboutActiveNotificationsJob'
   queue:                         low
+
+refresh_pinterest_access_token:
+  cron:                          '0 0 */29 * *'
+  class:                         'RefreshPinterestAccessTokenJob'
+  queue:                         low
