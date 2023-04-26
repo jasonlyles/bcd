@@ -1,27 +1,12 @@
 Ruby/Rails upgrade notes:
 
 BEFORE STAGING:
-* Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
-* Do I have something for a user to convert themselves from a guest to a regular user, and if so,
-  do they still have access to things they bought?
-* Parts lists for guests/Etsy users/etc should display the users email address on
-  the page so they're less likely to share the link.
-* Heroku is deprecating the stack I'm on on April 30th. Get off!
+* Set up Etsy staging and prod apps with callback urls
+* Set up Pinterest staging and prod apps with callback urls
 * Set up a FAQ for my Etsy store: https://multiorders.com/how-to-add-frequently-asked-questions-on-etsy/
   An example: https://www.etsy.com/listing/1030405001/ch-46-sea-knight-custom-building?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=lego+instructions&ref=sr_gallery-1-8&organic_search_click=1
 * Set up Etsy after-purchase message: https://www.etsy.com/your/shops/me/appearance#digital-message-to-buyers
   This is a one-size-fits-all message.
-* Set up Etsy staging and prod apps with callback urls
-* Figure out some watchdog-type jobs that will alert me if the token isn't good
-  any more and another if it's been too long since the getShopReceipts call was
-  made successfully.
-* What happens if a listing on etsy gets pulled by etsy, even if mistakenly? How
-  do we find out, and how do we re-post in such a way that the new listing is the
-  one tied to the product instead of being tied to the old listing?
-* Might want to have an etsy_price column for the product in case we want to support
-  different prices per site.
-* Maybe add a column to order table to track emails having been sent. Could have
-  one column that tracks if the initial email has been sent.
 * Twitter might have killed my oauth:
   Hello,
   This is a notice that your app - Brick City Depot - has been suspended from accessing the Twitter API.
@@ -29,7 +14,22 @@ BEFORE STAGING:
   More information can be found on our developer community forums.
   Regards,
   Twitter Developer Platform
-* add rel nofollow to my oauth link buttons so robots don't try to follow them.
+
+* Figure out some watchdog-type jobs that will alert me if the token isn't good
+  any more and another if it's been too long since the getShopReceipts call was
+  made successfully.
+
+* Review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
+* Do I have something for a user to convert themselves from a guest to a regular user, and if so,
+  do they still have access to things they bought?
+* Parts lists for guests/Etsy users/etc should display the users email address on
+  the page so they're less likely to share the link.
+* Heroku is deprecating the stack I'm on on April 30th. Get off!
+* What happens if a listing on etsy gets pulled by etsy, even if mistakenly? How
+  do we find out, and how do we re-post in such a way that the new listing is the
+  one tied to the product instead of being tied to the old listing?
+* Might want to have an etsy_price column for the product in case we want to support
+  different prices per site.
 
 SETTING UP STAGING:
 * Get staging env vars from bcd-stg and then delete that app.

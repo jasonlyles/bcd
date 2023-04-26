@@ -11,6 +11,8 @@ class OrderMailer < ActionMailer::Base
     @hide_unsubscribe = true
 
     mail(to: @user.email, subject: 'Brick City Depot Order Confirmation')
+
+    @order.update(confirmation_email_sent: true)
   end
 
   def guest_order_confirmation(user_id, order_id, link_to_downloads)
@@ -21,6 +23,8 @@ class OrderMailer < ActionMailer::Base
     @hide_unsubscribe = true
 
     mail(to: @user.email, subject: 'Your Brick City Depot Order')
+
+    @order.update(confirmation_email_sent: true)
   end
 
   def third_party_guest_order_confirmation(order_id)
@@ -36,6 +40,8 @@ class OrderMailer < ActionMailer::Base
     @hide_unsubscribe = true
 
     mail(to: @user.email, subject: "Your #{@order.source.capitalize} Order with Brick City Depot")
+
+    @order.update(confirmation_email_sent: true)
   end
 
   def physical_item_purchased(user_id, order_id)
