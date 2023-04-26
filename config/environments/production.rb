@@ -120,4 +120,6 @@ Rails.application.configure do
                                                }
 
   config.web_host = 'https://brickcitydepot.com'
+
+  config.pinterest_api_url = 'https://api.pinterest.com/v5'
 end

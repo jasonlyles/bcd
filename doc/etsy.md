@@ -2,15 +2,25 @@
 
 ## App
 
+My apps: https://www.etsy.com/developers/your-apps
+
+Shop manager: https://www.etsy.com/your/shops/me/dashboard?ref=seller-platform-mcnav
+
+### Dev/Staging
+
 name: Brick City Depot
 
 url: https://www.etsy.com/shop/BCDTest
 
 My listings: https://www.etsy.com/your/shops/BCDTest/tools/listings
 
-My apps: https://www.etsy.com/developers/your-apps
+### Prod
 
-Shop manager: https://www.etsy.com/your/shops/me/dashboard?ref=seller-platform-mcnav
+name: Brick City Depot
+
+url: https://www.etsy.com/shop/BrickCityDepot2
+
+My listings: https://www.etsy.com/your/shops/BrickCityDepot2/tools/listings
 
 ## Dev
 

@@ -122,4 +122,6 @@ Rails.application.configure do
                                                }
 
   config.web_host = 'http://bcd-stg2.onrender.com'
+
+  config.pinterest_api_url = 'https://api-sandbox.pinterest.com/v5'
 end
