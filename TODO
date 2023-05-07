@@ -1,12 +1,8 @@
 Ruby/Rails upgrade notes:
 
 BEFORE STAGING:
-* Set up Etsy staging and prod apps with callback urls
-* Set up Pinterest staging and prod apps with callback urls
-* Set up a FAQ for my Etsy store: https://multiorders.com/how-to-add-frequently-asked-questions-on-etsy/
-  An example: https://www.etsy.com/listing/1030405001/ch-46-sea-knight-custom-building?ga_order=most_relevant&ga_search_type=all&ga_view_type=gallery&ga_search_query=lego+instructions&ref=sr_gallery-1-8&organic_search_click=1
-* Set up Etsy after-purchase message: https://www.etsy.com/your/shops/me/appearance#digital-message-to-buyers
-  This is a one-size-fits-all message.
+* Set up Pinterest prod app with callback urls
+* Look more into some of the options for adding more detail to the Etsy store: https://www.etsy.com/shop/BrickCityDepot2/edit?ref=edit_trust_header
 * Twitter might have killed my oauth:
   Hello,
   This is a notice that your app - Brick City Depot - has been suspended from accessing the Twitter API.
