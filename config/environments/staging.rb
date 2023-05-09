@@ -121,7 +121,7 @@ Rails.application.configure do
                                                  exception_recipients: ['lylesjt@gmail.com']
                                                }
 
-  config.web_host = 'http://bcd-stg2.onrender.com'
+  config.web_host = 'https://bcd-stg2.onrender.com'
 
   config.pinterest_api_url = 'https://api-sandbox.pinterest.com/v5'
 end
