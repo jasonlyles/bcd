@@ -86,7 +86,7 @@ describe PartInteractions::ObsoletePartsCheck do
 
         expect { PartInteractions::ObsoletePartsCheck.run({}) }.to change(BackendNotification, :count).from(0).to(1)
 
-        expect(BackendNotification.last.message).to eq('During ObsoletePartsCheck, could not find part in BrickLink by LDraw ID #4276a')
+        expect(BackendNotification.last.message).to match(/ObsoletePartsCheck found 1 parts it could not find in Bricklink/)
       end
     end
   end

@@ -11,6 +11,10 @@ class Part < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: { scope: :ldraw_id }
 
+  enum bricklink_state: %i[normal not_found obsoleted]
+
+  before_save :reset_bricklink_state, if: :will_save_change_to_bl_id?
+
   def self.find_or_create_via_external(part_key)
     part_id = part_key.split('_').first
     part = Part.find_or_create_by(ldraw_id: part_id)
@@ -31,5 +35,12 @@ class Part < ApplicationRecord
 
   def name_and_ids
     "#{name} (#{bl_id}/#{ldraw_id})"
+  end
+
+  # If the BrickLink ID is changing, assume that it's being changed to the correct
+  # BrickLink ID and any states other than 'normal' are no longer correct, so we
+  # reset to 'normal'.
+  def reset_bricklink_state
+    self.bricklink_state = 'normal'
   end
 end

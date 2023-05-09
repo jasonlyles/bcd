@@ -4,6 +4,7 @@ module PartInteractions
   class UpdateFromBricklink < BasePartInteraction
     # rubocop:disable Metrics/AbcSize
     def run
+      # Need to try to retrieve via ldraw ID here because we don't have the BrickLink ID yet.
       bricklink_part = Bricklink.get_part(@part.ldraw_id)
       Rails.logger.info("PartInteractions::UpdateFromBricklink::#{@part.id} Bricklink called")
       if bricklink_part['data'].present?

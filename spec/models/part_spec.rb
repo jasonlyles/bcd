@@ -3,25 +3,25 @@ require 'spec_helper'
 describe Part do
   before do
     @bricklink_results = {
-        "meta" => {
-            "description" => "OK",
-                "message" => "OK",
-                   "code" => 200
-        },
-        "data" => {
-                       "no" => "4276a",
-                     "name" => "Hinge Plate 1 x 2 with 2 Fingers and Solid Studs",
-                     "type" => "PART",
-              "category_id" => 22,
-                "image_url" => "//img.bricklink.com/PL/4276a.jpg",
-            "thumbnail_url" => "//img.bricklink.com/P/9/4276a.jpg",
-                   "weight" => "0.42",
-                    "dim_x" => "0.00",
-                    "dim_y" => "0.00",
-                    "dim_z" => "0.00",
-            "year_released" => 1981,
-              "is_obsolete" => false
-        }
+      'meta' => {
+        'description' => 'OK',
+        'message' => 'OK',
+        'code' => 200
+      },
+      'data' => {
+        'no' => '4276a',
+        'name' => 'Hinge Plate 1 x 2 with 2 Fingers and Solid Studs',
+        'type' => 'PART',
+        'category_id' => 22,
+        'image_url' => '//img.bricklink.com/PL/4276a.jpg',
+        'thumbnail_url' => '//img.bricklink.com/P/9/4276a.jpg',
+        'weight' => '0.42',
+        'dim_x' => '0.00',
+        'dim_y' => '0.00',
+        'dim_z' => '0.00',
+        'year_released' => 1981,
+        'is_obsolete' => false
+      }
     }
   end
 
@@ -47,6 +47,36 @@ describe Part do
           part = Part.find_or_create_via_external(part_key)
         }.to change(Part, :count).by(1)
         expect(part).not_to be_nil
+      end
+    end
+  end
+
+  describe 'reset_bricklink_state' do
+    context 'when the bricklink ID is changing' do
+      it 'should reset bricklink_state to normal' do
+        part = FactoryBot.create(:part, ldraw_id: 3001, bl_id: 3001, name: '2x2 Brick', check_rebrickable: false, check_bricklink: false)
+
+        part.update(bricklink_state: 'obsoleted')
+        part.reload
+        expect(part.bricklink_state).to eq('obsoleted')
+
+        part.update(bl_id: '3002')
+        part.reload
+
+        expect(part.bricklink_state).to eq('normal')
+      end
+    end
+
+    context 'when the bricklink ID is not changing' do
+      it 'should leave the bricklink_state alone' do
+        part = FactoryBot.create(:part, ldraw_id: 3001, bl_id: 3001, name: '2x2 Brick', check_rebrickable: false, check_bricklink: false)
+
+        expect(part.bricklink_state).to eq('normal')
+
+        part.update(ldraw_id: '3002')
+        part.reload
+
+        expect(part.bricklink_state).to eq('normal')
       end
     end
   end
