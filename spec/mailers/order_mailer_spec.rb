@@ -13,7 +13,7 @@ describe OrderMailer do
     @line_item = FactoryBot.create(:line_item, product_id: @product.id, order_id: @order.id)
     @mail = OrderMailer.order_confirmation(@user.id, @order.id)
     @physical_mail = OrderMailer.physical_item_purchased(@user.id, @order.id)
-    @third_party_order = FactoryBot.create(:order, source: 1, third_party_order_identifier: 'abcd1234')
+    @third_party_order = FactoryBot.create(:order, source: 'etsy', third_party_order_identifier: 'abcd1234')
     @third_party_receipt = FactoryBot.create(:third_party_receipt, order: @third_party_order)
   end
 

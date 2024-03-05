@@ -25,7 +25,7 @@ class Order < ApplicationRecord
   validates :address_zip, length: { is: 5 }, if: -> { :address_submission_method == 'form' }
   validates :address_zip, numericality: { only_integer: true }, if: -> { :address_submission_method == 'form' }
 
-  enum source: %i[brick_city_depot etsy]
+  enum source: Rails.application.config.sales_sources
 
   ransacker :belongs_to_user,
             formatter: proc { |email|
@@ -103,7 +103,7 @@ class Order < ApplicationRecord
 
   def total_price
     total = 0.0
-    line_items.each { |item| total += item.total_price }
+    line_items.each { |item| total += item.total_price if item.total_price.present? }
     total
   end
 
@@ -176,7 +176,7 @@ class Order < ApplicationRecord
   def retrieve_link_to_downloads
     web_host = Rails.application.config.web_host
     link = "#{web_host}/download_link_error" # Default to this, and overwrite if there is a transaction ID and request ID
-    link = "#{web_host}/guest_downloads?tx_id=#{transaction_id}&conf_id=#{request_id}" if !transaction_id.blank? && !request_id.blank?
+    link = "#{web_host}/guest_downloads?tx_id=#{transaction_id}&conf_id=#{request_id}" if transaction_id.present? && request_id.present?
     link = "#{web_host}/guest_downloads?source=#{third_party_receipt.source}&order_id=#{third_party_receipt.third_party_receipt_identifier}&u=#{user.guid}" if third_party_receipt.present?
     link
   end

@@ -1,7 +1,11 @@
-Ruby/Rails upgrade notes:
+Ambassador program like I set up with PEERS?
 
 BEFORE STAGING:
+* Start getting together a database migration plan.
+* Fix: ActionController::RoutingError (No route matches [GET] "/favicon.ico"): (I wonder if that's only an admin problem, since that uses a different layout than the public layout)
 * Set up Pinterest prod app with callback urls
+* Maybe add a way to generate the old-style html parts list.
+* In addition to the new style parts list, maybe users can download the html file the way they have before.
 * Look more into some of the options for adding more detail to the Etsy store: https://www.etsy.com/shop/BrickCityDepot2/edit?ref=edit_trust_header
 * Twitter might have killed my oauth:
   Hello,

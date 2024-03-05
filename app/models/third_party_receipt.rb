@@ -6,7 +6,7 @@ class ThirdPartyReceipt < ApplicationRecord
   belongs_to :order
   validates :source, :third_party_receipt_identifier, :third_party_order_status, presence: true
 
-  enum source: %i[etsy]
+  enum source: Rails.application.config.sales_sources - [:brick_city_depot]
 
   # rubocop:disable Metrics/ParameterLists
   def self.create_from_source(source, order_id, third_party_receipt_identifier, status, is_paid, created_at, updated_at, raw_response)
