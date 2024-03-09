@@ -49,7 +49,7 @@
                 </td>
                 <td class="align-middle text-center" style="font-size: 75%;">
                   <% if order.third_party_order_identifier.present? %>
-                    <%= link_to order.third_party_order_identifier, admin_order_path(order) %>
+                    <%= link_to order.third_party_order_identifier.truncate(15), admin_order_path(order) %>
                   <% else %>
                     <%= link_to order.request_id.truncate(15), admin_order_path(order) if order.request_id %>
                     <br />
@@ -95,7 +95,7 @@
               <br />
               <div class="form-group">
                 <%= f.label :source_eq %>
-                <%= f.select :source_eq, [['Brick City Depot', '0'], ['Etsy', '1']], { include_blank: true }, class: 'form-control' %>
+                <%= f.select :source_eq, Rails.application.config.sales_sources.map.with_index { |v, i| [v.to_s.titleize, i.to_s] }, { include_blank: true }, class: 'form-control' %>
               </div>
               <p>
                 Trans ID vs Req ID

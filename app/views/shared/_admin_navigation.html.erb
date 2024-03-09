@@ -103,6 +103,7 @@
         </a>
         <div class="dropdown-menu">
           <%= link_to 'Orders', admin_orders_path, class: 'dropdown-item' %>
+          <%= link_to 'Add 3rd Party Order', new_admin_third_party_order_path, class: 'dropdown-item' %>
           <%= link_to 'Order Fulfillment', order_fulfillment_path, class: 'dropdown-item' %>
           <%= link_to 'PayPal IPNs', admin_instant_payment_notifications_path, class: 'dropdown-item' %>
           <div class="dropdown-divider"></div>
@@ -133,7 +134,7 @@
           <%= link_to image_tag('etsy_logo.png', alt: 'Login to Etsy', title: 'Login to Etsy', class: 'navbar-logo-button'), admin_redirect_to_etsy_oauth_path %>
         </li>
       <% end %>
-      <% if !BackendOauthToken.token_current?(:pinterest) %>
+      <% if false # !BackendOauthToken.token_current?(:pinterest) comment this out for now %>
         <li class="nav-button">
           <%= link_to image_tag('pinterest_logo.png', alt: 'Login to Pinterest', title: 'Login to Pinterest', class: 'navbar-logo-button'), admin_redirect_to_pinterest_oauth_path %>
         </li>

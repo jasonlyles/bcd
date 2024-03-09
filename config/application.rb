@@ -46,6 +46,8 @@ module BrickCity
 
     config.active_job.queue_adapter = :sidekiq
 
+    config.sales_sources = %i[brick_city_depot ebay bricklink etsy]
+
     # Running rails app:update removed these things from the config I added when
     # moving to Rails 5.0. Adding them back, commented out, in case I need them.
     # It may have moved them out to initializers. Will have to check.

@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         post :complete_order
       end
     end
+    resources :third_party_orders, only: %i[new create]
     resources :partners
     resources :parts do
       member do

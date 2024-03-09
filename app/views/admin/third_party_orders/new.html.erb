@@ -1,0 +1,46 @@
+<div class="card">
+  <div class="card-header">
+    <h1>Add a Third Party Order</h1>
+  </div>
+  <div class="card-body">
+    <br />
+    <%= form_for(@form, url: { action: :create }, remote: false) do |f| %>
+      <div class="form-group">
+        <%= f.label :source, class: 'form-label' %>
+        <br/>
+        <%= f.select :source, [['bricklink', 'bricklink'], ['ebay', 'ebay']], {}, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :third_party_order_id, "Order ID", class: 'form-label' %>
+        <br/>
+        <%= f.text_field :third_party_order_id, placeholder: 'abc1234', class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email, "User Email", class: 'form-label' %>
+        <br/>
+        <%= f.text_field :email, placeholder: 'bob@bob.gov', class: 'form-control' %>
+      </div>
+      Products Bought:
+      <table>
+        <% @products.each_with_index do |product, index| %>
+          <% if index % 3 == 0 %>
+            <tr></tr>
+          <% end %>
+          <td style="padding:1px 3px 1px 3px;">
+            <label>
+              <%= f.check_box("product_ids", { multiple: true, checked: @form.product_ids ? @form.product_ids.include?(product.id.to_s) : false }, product.id, nil) %>
+              &nbsp;
+              <%= product.code_and_name %>
+            </label>
+          </td>
+        <% end %>
+      </table>
+      <br />
+      <div class="form-group d-inline-block">
+        <%= f.submit 'Create Third Party Order', data: { disable_with: 'Creating...' }, class: 'btn btn-primary' %>
+      </div>
+    <% end %>
+  </div>
+</div>
