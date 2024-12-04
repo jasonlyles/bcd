@@ -8,6 +8,58 @@ For tailing: `heroku logs --tail --app bcd-stg`
 For updating sitemap manually: `heroku run rake sitemap:refresh --app bcd-stg` (Change to sitemap:refresh:no_ping
     if I don't want to update search engines)
 
+## Deploying to Digital Ocean:
+To be able to deploy to production, you'll need to:
+* add your public key to the server via the DigitalOcean web portal
+* pull the branch you want to deploy
+* be sure you have the production key set up at config/credentials/production.key
+* Run the command:
+```bash
+bundle exec cap production deploy
+```
+After that has run, then run:
+```bash
+bundle exec cap production deploy:restart
+```
+Because I haven't 100% figured out what's going on, in order to deploy the latest
+to production if the preceding doesn't work, after the `cap deploy` command completes,
+you'll need to do the following as well:
+
+* SSH to the server: `ssh root@192.241.140.249`
+* switch to the rails user: `sudo su rails`
+* `cd /home/rails/apps/brick_city_depot/current`
+* run `RAILS_ENV=production bundle exec rake assets:precompile`
+* run `sudo /bin/systemctl restart rails.service`
+Then go check http://192.241.140.249/ in your browser. You may briefly see a 502
+in the browser, try again every few seconds. It should come up.
+## Notes on the production install
+* Redis https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04 and https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+  * cd /tmp
+  * curl -O https://download.redis.io/releases/redis-6.2.14.tar.gz
+  * tar xzvf redis-6.2.14.tar.gz
+  * cd redis-6.2.14
+  * make
+  * make test
+  * make install
+* Postgres: https://www.digitalocean.com/community/tutorials/how-to-install-postgresql-on-ubuntu-20-04-quickstart
+* rbenv https://www.digitalocean.com/community/tutorials/how-to-install-ruby-on-rails-with-rbenv-on-ubuntu-20-04
+* Ruby 3.2.2
+* npm `sudo apt install npm`
+* Passenger/Nginx `sudo apt install curl git-core nginx -y`
+Helpful: https://gist.github.com/deHelden/d18700a0996cd09d9321522c6c6af5a3
+* If the bundle install dies, add some swap: https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04
+
+
+TODO:
+* log rotation
+* database backups
+* something to monitor the various services, and maybe restart them if they crash
+* wipe out traces of heroku in this app so I don't accidentally use some heroku resource
+* Set up redis/sidekiq/etc on the new machine.
+* Fix the config/deploy/production.rb file  So far I just copied over what I have for peers
+* Adjust the database.yml and whatever other files for digital ocean.
+
+
 MAINTENANCE
 
 When putting app in maint mode, use `heroku maintenance:on`

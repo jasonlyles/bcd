@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 
 ruby '3.1.3'
 
-gem 'rails', '7.0.4'
+gem 'rails', '7.0.4.2'
 
 gem 'activerecord-session_store'
 gem 'acts_as_list'
@@ -65,8 +65,10 @@ gem 'omniauth-facebook'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-twitter2'
 
-gem 'puma'
+gem 'puma', '5.6.7'
+gem 'sshkit-sudo'
 
+# rubocop:disable Metrics/BlockLength
 group :development, :test do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -92,7 +94,15 @@ group :development, :test do
   gem 'rails_best_practices'
   gem 'reek'
   gem 'rubocop'
+
+  # Deploying gems
+  gem 'capistrano', require: false
+  gem 'capistrano3-puma', '5.2.0',   require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails',   require: false
+  gem 'capistrano-rbenv',   require: false
 end
+# rubocop:enable Metrics/BlockLength
 
 group :development do
   gem 'web-console'
