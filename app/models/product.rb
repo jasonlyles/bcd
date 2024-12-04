@@ -72,6 +72,15 @@ class Product < ApplicationRecord
     parent.table[:id]
   end
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[has_etsy_listing_id product_code name subcategory_id category_id product_type_id ready_for_public discount_percentage free]
+  end
+
+  # Nothing here yet (if ever), but ransack insists I define it.
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
   # rubocop:disable Naming/PredicateName
   def self.has_etsy_listing_for_ransack?(boolean)
     if boolean == '1'

@@ -11,6 +11,15 @@ class Image < ApplicationRecord
 
   after_destroy :delete_image_from_etsy
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[product_id]
+  end
+
+  # Nothing here yet (if ever), but ransack insists I define it.
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
   def delete_image_from_etsy
     return if etsy_listing_image_id.blank?
 

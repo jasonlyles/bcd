@@ -3,7 +3,7 @@
 class Lot < ApplicationRecord
   audited except: %i[created_at updated_at]
 
-  belongs_to :parts_list
+  belongs_to :parts_list, counter_cache: true
   belongs_to :element
   has_one :color, through: :element
   has_one :part, through: :element

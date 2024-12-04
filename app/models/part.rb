@@ -29,6 +29,14 @@ class Part < ApplicationRecord
     Arel::Nodes::InfixOperation.new('->>', parent.table[:alternate_nos], Arel::Nodes.build_quoted('alternates'))
   end
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name alternate_nos ldraw_id bl_id lego_id bricklink_state]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[]
+  end
+
   def images
     elements.map(&:image)
   end

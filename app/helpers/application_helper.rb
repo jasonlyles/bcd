@@ -53,6 +53,10 @@ module ApplicationHelper
       image_tag('logo140x89.png', style: 'height: 30px;')
     when 'etsy'
       image_tag('etsy_logo.png', style: 'height: 30px;')
+    when 'ebay'
+      image_tag('ebay_logo.gif', style: 'height: 20px;')
+    when 'bricklink'
+      image_tag('bricklink-logo.png', style: 'height: 20px;')
     else
       value.capitalize
     end

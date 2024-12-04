@@ -8,4 +8,12 @@ class Color < ApplicationRecord
   # attr_accessible :name, :ldraw_id, :bl_name, :bl_id, :lego_name, :lego_id, :ldraw_rgb, :rgb
 
   validates :name, uniqueness: true, presence: true
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name bl_name lego_name ldraw_id bl_id lego_id]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[]
+  end
 end

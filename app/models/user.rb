@@ -32,6 +32,15 @@ class User < ApplicationRecord
 
   enum source: Rails.application.config.sales_sources
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[email account_status email_preference referrer_code]
+  end
+
+  # Nothing here yet (if ever), but ransack insists I define it.
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
   def apply_omniauth(omniauth)
     self.email = omniauth['info']['email'] if omniauth['info'] && omniauth['info']['email']
     authentications.build(provider: omniauth['provider'], uid: omniauth['uid'])

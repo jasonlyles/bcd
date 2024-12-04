@@ -10,6 +10,15 @@ class Subcategory < ApplicationRecord
   validates :code, presence: true
   validates :code, uniqueness: true
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name code]
+  end
+
+  # Nothing here yet (if ever), but ransack insists I define it.
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
   def self.find_live_subcategories
     Subcategory.where("ready_for_public = 't'").order('name')
   end

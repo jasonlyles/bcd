@@ -10,6 +10,15 @@ class AdvertisingCampaign < ApplicationRecord
   validates :description, presence: true
   validates :reference_code, presence: true, length: { minimum: 10, maximum: 10 }, uniqueness: true
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[partner_id reference_code]
+  end
+
+  # Nothing here yet (if ever), but ransack insists I define it.
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
   # rubocop:disable Naming/PredicateName
   def has_users?
     User.where(['referrer_code = ?', reference_code]).exists?
