@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_09_120001) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_04_164741) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,7 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_120001) do
     t.text "metadata"
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
+    t.string "checksum"
     t.datetime "created_at", precision: nil, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -292,6 +292,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_09_120001) do
     t.string "original_filename"
     t.string "file"
     t.string "jid"
+    t.integer "lots_count", default: 0, null: false
     t.index ["product_id"], name: "index_parts_lists_on_product_id"
   end
 

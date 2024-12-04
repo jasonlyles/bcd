@@ -7,7 +7,7 @@ class Admin::ProductsController < AdminController
   # GET /products
   def index
     @q = Product.ransack(params[:q])
-    @products = @q.result.includes(:product_type).order('product_code').page(params[:page]).per(20)
+    @products = @q.result.includes(%i[product_type images]).order('product_code').page(params[:page]).per(20)
   end
 
   # GET /products/1

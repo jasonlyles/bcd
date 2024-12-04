@@ -19,6 +19,14 @@ class PartsList < ApplicationRecord
 
   # attr_accessible :name, :product_id, :approved, :lots_attributes, :file, :file_cache, :remove_file, :original_filename, :bricklink_xml, :ldr
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[product]
+  end
+
   def product_name
     product.name
   end

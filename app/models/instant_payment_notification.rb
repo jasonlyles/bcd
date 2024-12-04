@@ -6,6 +6,15 @@ class InstantPaymentNotification < ApplicationRecord
   audited except: %i[created_at updated_at]
   belongs_to :order, optional: true
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[payment_status request_id txn_id order_id payer_email]
+  end
+
+  # Nothing here yet (if ever), but ransack insists I define it.
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
   def valid_business_value?
     Rails.logger.debug("PAYMENT BUSINESS: #{params['business']} and EMAIL: #{PaypalConfig.config.business_email} and #{params['business'] == PaypalConfig.config.business_email}")
     params['business'] == PaypalConfig.config.business_email

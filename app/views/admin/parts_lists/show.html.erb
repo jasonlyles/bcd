@@ -105,7 +105,7 @@
             If "Source" and "Parsed" numbers don't match, there's a problem and you shouldn't approve this parts list yet.
           </p>
           <p>
-            <span class='font-weight-bold<%= ' text-danger' if @source_lot_count != @parts_list.lots.count %>'>Total Lots (Source/Parsed): <%= "(#{@source_lot_count}/#{@parts_list.lots.count})" %></span><br />
+            <span class='font-weight-bold<%= ' text-danger' if @source_lot_count != @parts_list.lots_count %>'>Total Lots (Source/Parsed): <%= "(#{@source_lot_count}/#{@parts_list.lots_count})" %></span><br />
             <span class='font-weight-bold<%= ' text-danger' if @source_total_quantity != @parts_list.parts_quantity %>'>Total Parts (Source/Parsed): <%= "(#{@source_total_quantity}/#{@parts_list.parts_quantity})" %></span>
           </p>
         </div>

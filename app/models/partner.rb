@@ -6,6 +6,15 @@ class Partner < ApplicationRecord
 
   # attr_accessible :contact, :name, :url
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[contact name url]
+  end
+
+  # Nothing here yet (if ever), but ransack insists I define it.
+  def self.ransackable_associations(_auth_object = nil)
+    []
+  end
+
   # I don't want to allow a partner who we've set up an advertising campaign for (that's actually been used) to be
   # deleted. This record should be held on to for historical value, and also because there is a user with a referrer_code
   # that references an advertising campaign that belongs to this partner. Allowing deletion of that partner would leave

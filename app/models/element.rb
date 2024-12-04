@@ -26,6 +26,14 @@ class Element < ApplicationRecord
     parent.table[:id]
   end
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[color_id part_id has_image]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    %w[part color]
+  end
+
   def destroy_image
     dir_to_remove = "#{Rails.root}/public/#{image.store_dir}" # Only needed for local.
     remove_image!
