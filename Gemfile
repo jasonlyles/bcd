@@ -2,9 +2,9 @@
 
 source 'http://rubygems.org'
 
-ruby '3.2.6'
+ruby '3.3.6'
 
-gem 'rails', '7.1.0'
+gem 'rails', '7.2.2'
 
 gem 'activerecord-session_store'
 gem 'acts_as_list'
@@ -92,6 +92,10 @@ group :development, :test do
   gem 'rails_best_practices'
   gem 'reek'
   gem 'rubocop'
+
+  # Used to help upgrading to the next version of Rails. Only need it when doing that.
+  # https://github.com/fastruby/next_rails
+  # gem 'next_rails'
 end
 
 group :development do

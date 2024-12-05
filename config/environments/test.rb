@@ -8,7 +8,9 @@ require 'active_support/core_ext/integer/time'
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.cache_classes = false
+  # While tests run files are not watched, reloading is not necessary.
+  config.enable_reloading = false
+  # config.cache_classes = false
 
   # Eager loading loads your whole application. When running a single test locally,
   # this probably isn't necessary. It's a good idea to do in a continuous integration
@@ -16,6 +18,7 @@ Rails.application.configure do
   config.eager_load = ENV['CI'].present?
 
   # Configure public file server for tests with Cache-Control for performance.
+  # TODO: May be able to remove the public_file_server.enabled line as part of upgrading to Rails 7.2
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
     'Cache-Control' => "public, max-age=#{1.hour.to_i}"
@@ -55,6 +58,9 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  # Raise error when a before_action's only/except options reference missing actions
+  config.action_controller.raise_on_missing_callback_actions = true
 
   # TODO: I think the stuff below this line needs to go into initializers that won't
   # get overwritten when running rails app:update

@@ -28,6 +28,9 @@ class ApplicationController < ActionController::Base
       end
   end
 
+  # Rails 7.2 wants me to define this, even though I'm not doing anything in here with it.
+  def maintenance; end
+
   private
 
   def prepare_exception_notifier
@@ -73,7 +76,8 @@ class ApplicationController < ActionController::Base
 
   def current_customer
     return current_user if current_user
-    return current_guest if current_guest
+
+    current_guest if current_guest
   end
 
   def check_admin_mode

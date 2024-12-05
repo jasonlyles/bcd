@@ -9,7 +9,7 @@ Bundler.require(*Rails.groups)
 module BrickCity
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 7.2
 
     # Settings in config/environments/* take precedence over those specified here.
 
@@ -35,6 +35,8 @@ module BrickCity
     # Enable the asset pipeline
     # config.assets.enabled = true
 
+    config.active_support.cache_format_version = 7.1
+
     # TODO: I think the stuff below this line needs to go into initializers that won't
     # get overwritten when running rails app:update
 
@@ -43,30 +45,6 @@ module BrickCity
     config.active_job.queue_adapter = :sidekiq
 
     config.sales_sources = %i[brick_city_depot ebay bricklink etsy]
-
-    # Running rails app:update removed these things from the config I added when
-    # moving to Rails 5.0. Adding them back, commented out, in case I need them.
-    # It may have moved them out to initializers. Will have to check.
-    # New config values for Rails 5:
-    # Probably don't need this, but if the app needs some autoloading in prod for
-    # things that work in dev, set:
-    # Rails.application.config.enable_dependency_loading = true
-    # belongs_to will now trigger a validation error by default if the association
-    # is not present. This can be turned off per-association with optional: true.
-    # config.active_record.belongs_to_required_by_default = true
-    # forms in your application will each have their own CSRF token that is specific
-    # to the action and method for that form.
-    # config.action_controller.per_form_csrf_tokens = true
-    # You can now configure your application to check if the HTTP Origin header
-    # should be checked against the site's origin as an additional CSRF defense.
-    # config.action_controller.forgery_protection_origin_check = true
-    # The default mailer queue name is mailers. This configuration option allows
-    # you to globally change the queue name.
-    # config.action_mailer.deliver_later_queue_name = :new_queue_name
-    # determine whether your Action Mailer views should support caching.
-    # config.action_mailer.perform_caching = true
-    # When using Ruby 2.4, you can preserve the timezone of the receiver when calling to_time.
-    # ActiveSupport.to_time_preserves_timezone = false
 
     ActionView::Base.field_error_proc = proc do |html_tag, instance|
       if html_tag =~ /^<label/

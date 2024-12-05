@@ -40,7 +40,7 @@
       <% end %>
     </ul>
     <br />
-    <%= button_to 'Update Etsy Listing', update_etsy_listing_admin_product_path(@product), data: { disable_with: raw("<i class='fa fa-cog fa-spin'></i> Updating Listing...") }, class: 'btn btn-etsy' %>
+    <%= button_to 'Update Etsy Listing', update_etsy_listing_admin_product_path(@product), data: { disable_with: raw("<i class='fa fa-cog fa-spin'></i> Updating Listing...") }, class: 'btn admin-btn-etsy' %>
   </div>
 <% end %>
 <div class="row mt-4 mb-2">
@@ -59,7 +59,7 @@
       </div>
     <% else %>
       <div class='d-inline-block'>
-        <%= button_to 'Create Etsy Listing', create_etsy_listing_admin_product_path(@product), data: { disable_with: raw("<i class='fa fa-cog fa-spin'></i> Creating Listing...") }, class: 'btn btn-etsy' %>
+        <%= button_to 'Create Etsy Listing', create_etsy_listing_admin_product_path(@product), data: { disable_with: raw("<i class='fa fa-cog fa-spin'></i> Creating Listing...") }, class: 'btn admin-btn-etsy' %>
       </div>
     <% end %>
     <%= link_to 'Edit', edit_admin_product_path(@product), class: 'btn btn-primary' %>
