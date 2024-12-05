@@ -25,7 +25,7 @@ class Order < ApplicationRecord
   validates :address_zip, length: { is: 5 }, if: -> { :address_submission_method == 'form' }
   validates :address_zip, numericality: { only_integer: true }, if: -> { :address_submission_method == 'form' }
 
-  enum source: Rails.application.config.sales_sources
+  enum :source, Rails.application.config.sales_sources
 
   ransacker :belongs_to_user,
             formatter: proc { |email|

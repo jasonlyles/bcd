@@ -4,7 +4,8 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
-  config.cache_classes = true
+  # config.cache_classes = true
+  config.enable_reloading = false
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
@@ -22,6 +23,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
+  # TODO: May be able to remove the public_file_server.enabled line as part of upgrading to Rails 7.2
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
 
   # Compress JavaScripts and CSS.
@@ -45,6 +47,10 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
+
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # Can be used together with config.force_ssl for Strict-Transport-Security and secure cookies.
+  config.assume_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -89,6 +95,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # Skip DNS rebinding protection for the default health check endpoint.
+  config.host_authorization = { exclude: ->(request) { request.path == '/up' } }
+
   # TODO: I think the stuff below this line needs to go into initializers that won't
   # get overwritten when running rails app:update
   # sharethis url needs to be different from the production url
@@ -113,6 +122,7 @@ Rails.application.configure do
   end
 
   BrickCity::Application.config.middleware.use ExceptionNotification::Rack,
+                                               ignore_crawlers: %w[Googlebot bingbot],
                                                email: {
                                                  deliver_with: :deliver,
                                                  sender_address: %("BrickCityDepot Exception" <sales@brickcitydepot.com>),

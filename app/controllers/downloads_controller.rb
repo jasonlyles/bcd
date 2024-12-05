@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class DownloadsController < ApplicationController
-  before_action :authenticate_user!, only: %i[download download_parts_list]
-  before_action :valid_guest, only: [:guest_download_parts_list]
+  before_action :authenticate_user!, only: %i[download]
+  # before_action :valid_guest, only: [:guest_download_parts_list]
 
   # TODO: Clean up this code once interfaces for adding parts lists and linking
   # customers to parts lists are complete:
@@ -171,9 +171,9 @@ class DownloadsController < ApplicationController
   end
   # :nocov:
 
-  def valid_guest
-    redirect_to '/', notice: 'Sorry, you need to have come to the site legitimately to be able to download parts lists.' if session[:guest_has_arrived_for_downloads].blank?
-  end
+  # def valid_guest
+  #   redirect_to '/', notice: 'Sorry, you need to have come to the site legitimately to be able to download parts lists.' if session[:guest_has_arrived_for_downloads].blank?
+  # end
 
   def increment_download_count(user = nil)
     user ||= current_user

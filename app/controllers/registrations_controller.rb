@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RegistrationsController < Devise::RegistrationsController
-  before_action :assign_authentications, except: %i[new build_resource]
+  before_action :assign_authentications, except: %i[new] # build_resource]
   before_action :authenticate_user!, only: %i[update destroy]
 
   MAX_AUTHS_ALLOWED = 3 # Facebook, Twitter and Etsy
@@ -71,12 +71,10 @@ class RegistrationsController < Devise::RegistrationsController
 
     if params[:user].key?(:current_password)
       if resource.update_with_password(resource_params)
-        # rubocop:disable Metrics/BlockNesting
         if is_navigational_format?
           flash_key = :update_needs_confirmation if resource.respond_to?(:pending_reconfirmation?) && resource.pending_reconfirmation?
           set_flash_message :notice, flash_key || :updated
         end
-        # rubocop:enable Metrics/BlockNesting
         # sign_in resource_name, resource, bypass: true
         bypass_sign_in(resource)
         respond_with resource, location: after_update_path_for(resource)

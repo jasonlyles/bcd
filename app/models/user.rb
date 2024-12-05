@@ -28,9 +28,9 @@ class User < ApplicationRecord
     email.downcase!
   end
 
-  enum email_preference: %i[no_emails important_emails all_emails]
+  enum :email_preference, %i[no_emails important_emails all_emails]
 
-  enum source: Rails.application.config.sales_sources
+  enum :source, Rails.application.config.sales_sources
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[email account_status email_preference referrer_code]

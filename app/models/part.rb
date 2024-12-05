@@ -11,7 +11,7 @@ class Part < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: { scope: :ldraw_id }
 
-  enum bricklink_state: %i[normal not_found obsoleted]
+  enum :bricklink_state, %i[normal not_found obsoleted]
 
   before_save :reset_bricklink_state, if: :will_save_change_to_bl_id?
 

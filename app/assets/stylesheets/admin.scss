@@ -196,12 +196,12 @@ ul.ui-autocomplete {
 }
 /* End of styles for draggable images on admin product show page */
 /* Beginning of Etsy styles */
-.btn-etsy {
+.admin-btn-etsy {
   background-color: $etsy;
   color: white;
 }
 
-.btn-etsy:hover {
+.admin-btn-etsy:hover {
   color: white;
   background-color: darken($etsy, 10%);
 }
