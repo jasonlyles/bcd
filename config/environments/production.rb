@@ -95,6 +95,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  # Only use :id for inspections in production.
+  config.active_record.attributes_for_inspect = [:id]
+
   # Skip DNS rebinding protection for the default health check endpoint.
   config.host_authorization = { exclude: ->(request) { request.path == '/up' } }
 
@@ -105,6 +108,7 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # Using the cloudfront name until I can get prod deployed, switch DNS providers, and get my cname set up again
+  # TODO: This maybe needs to be config.asset_host = x
   config.action_controller.asset_host = 'd1f3s1yrq7p474.cloudfront.net' # "assets.brickcitydepot.com"
 
   # Devise needs a default url
