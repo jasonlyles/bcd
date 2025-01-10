@@ -2,7 +2,7 @@
 
 class AdminMailer < ActionMailer::Base
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
-  default to: EmailConfig.config.contact
+  default to: Rails.application.credentials.email.contact
   layout 'admin_email'
 
   def active_notifications_email(notification_count)

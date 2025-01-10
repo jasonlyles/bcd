@@ -49,7 +49,7 @@ class OrderMailer < ActionMailer::Base
     @order = Order.find(order_id)
     @user = User.find(user_id)
 
-    mail(to: EmailConfig.config.physical_order, subject: 'Physical Item Purchased')
+    mail(to: Rails.application.credentials.email.physical_order, subject: 'Physical Item Purchased')
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -79,7 +79,7 @@ class OrderMailer < ActionMailer::Base
     @buyer_message = buyer_message
     @hide_unsubscribe = true
 
-    mail(to: EmailConfig.config.physical_order, subject: "Brick City Depot message from #{source.capitalize} buyer")
+    mail(to: Rails.application.credentials.email.physical_order, subject: "Brick City Depot message from #{source.capitalize} buyer")
   end
 
   def issue(order_id, comment, name)

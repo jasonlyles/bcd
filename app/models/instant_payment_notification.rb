@@ -16,8 +16,8 @@ class InstantPaymentNotification < ApplicationRecord
   end
 
   def valid_business_value?
-    Rails.logger.debug("PAYMENT BUSINESS: #{params['business']} and EMAIL: #{PaypalConfig.config.business_email} and #{params['business'] == PaypalConfig.config.business_email}")
-    params['business'] == PaypalConfig.config.business_email
+    Rails.logger.debug("PAYMENT BUSINESS: #{params['business']} and EMAIL: #{Rails.application.credentials.paypal.email} and #{params['business'] == Rails.application.credentials.paypal.email}")
+    params['business'] == Rails.application.credentials.paypal.email
   end
 
   def valid_currency?
@@ -38,7 +38,7 @@ class InstantPaymentNotification < ApplicationRecord
   # Make sure IPN is valid by making a call to $config['paypal']['url']/cgi-bin/webscr? cmd=_notify_validate plus
   # all the variables that I got from paypal, in the same order I received them.
   def valid_ipn_url?
-    http = Net::HTTP.new(PaypalConfig.config.host, 443)
+    http = Net::HTTP.new(Rails.application.credentials.paypal.host, 443)
     # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.use_ssl = true
     path = '/cgi-bin/webscr'

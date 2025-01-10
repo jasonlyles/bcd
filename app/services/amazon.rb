@@ -13,7 +13,7 @@ module Amazon
         'xml' => 'application/xml'
       }
 
-      s3_obj = Aws::S3::Object.new(bucket_name: AmazonConfig.config.instruction_bucket, key: file_name)
+      s3_obj = Aws::S3::Object.new(bucket_name: Rails.application.credentials.aws.instruction_bucket, key: file_name)
 
       s3_obj.presigned_url(
         :get,
