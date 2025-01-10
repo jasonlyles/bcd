@@ -1,0 +1,53 @@
+From a brand new Debian server:
+
+SET UP THE RAILS USER:
+* sudo useradd -m -s $(which bash) rails
+* touch /home/rails/.ssh/authorized_keys (Then copy in the contents of the root authorized_keys file)
+* sudo passwd rails (went with sleepy)
+* sudo adduser rails sudo
+
+SET UP RBENV & INSTALL RUBY:
+* sudo apt update
+* sudo apt install git curl libssl-dev libreadline-dev zlib1g-dev autoconf bison build-essential libyaml-dev libreadline-dev libncurses5-dev libffi-dev libgdbm-dev
+* sudo su rails
+* curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
+* echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+* source ~/.bashrc
+* type rbenv (to be sure rbenv is set up correctly)
+* rbenv install 3.1.3
+* rbenv global 3.1.3
+* echo "gem: --no-document" > ~/.gemrc
+* gem install bundler
+
+INSTALL NECESSARY LIBS:
+(as root)
+* sudo apt install --no-install-recommends -y libjemalloc2 libvips pkg-config libpq-dev && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+SET UP NODE:
+* sudo su rails
+* curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+* source ~/.bashrc
+* nvm install v22.13.0
+* (as root user) ln -s /home/rails/.nvm/versions/node/v22.13.0/bin/node /usr/bin/node
+
+SET UP POSTGRES:
+* sudo apt update
+* sudo apt install postgresql postgresql-contrib
+* sudo -u postgres psql
+* (in psql) create database brickcity_production;
+* \q (to exit out of psql)
+
+SET UP SERVICES:
+* vim /etc/systemd/system/puma_brick_city_depot_production.service
+* Paste in the contents of lib/server_files/puma_service
+* vim /etc/systemd/system/sidekiq.service
+* Paste in the contents of lib/server_files/sidekiq_service
+* sudo systemctl enable sidekiq.service
+* systemctl daemon-reload
+
+TODO: Stuck trying to start sidekiq. Keeps failing because it's trying to access a Redis instance it doesn't have access to.
+Also, remove the password from the rails user so I don't have to keep entering it.
+
+* Run `bundle exec cap production deploy:initial` to start setting up the app. It will fail, complaining about no master key...
+* vim /home/rails/apps/brick_city_depot/shared/config/master.key (and add the production key)
+* Add the same key to: /home/rails/apps/brick_city_depot/shared/config/credentials/production.key

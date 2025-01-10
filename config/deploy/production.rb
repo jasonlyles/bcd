@@ -56,18 +56,14 @@
 
 # I added everything below. The above is the default.
 
-# To get puppeteer going:
-# sudo apt install chromium-browser -y
-# sudo apt update && sudo apt install -y gconf-service libgbm-dev libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
-
-server '192.241.140.249', roles: %i[web app db], primary: true
+server '159.65.235.246', roles: %i[web app db], primary: true
 
 set :repo_url,        'git@github.com:jasonlyles/bcd.git'
 set :application,     'brick_city_depot'
 set :user,            'rails'
 set :puma_threads,    [4, 16]
 set :puma_workers,    0
-set :rbenv_ruby,      '3.1.3'
+# set :rbenv_ruby,      '3.2.0'
 
 # Don't change these unless you know what you're doing
 set :pty,             true
@@ -80,7 +76,7 @@ set :puma_state,      "#{shared_path}/tmp/pids/puma.state"
 set :puma_pid,        "#{shared_path}/tmp/pids/puma.pid"
 set :puma_access_log, "#{release_path}/log/puma.error.log"
 set :puma_error_log,  "#{release_path}/log/puma.access.log"
-set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w[~/.ssh/id_rsa.pub] }
+set :ssh_options,     { forward_agent: true, user: fetch(:user), keys: %w[~/.ssh/id_rsa] }
 set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true # Change to false when not using ActiveRecord
@@ -96,7 +92,11 @@ set :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 ## Linked Files & Directories (Default None):
 # set :linked_files, %w{config/database.yml}
 # set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :default_env, { path: '/usr/share/rvm/gems/ruby-3.2.0/bin:/usr/share/rvm/rubies/ruby-3.2.0/bin:$PATH' }
+append :linked_dirs, '.bundle'
 set :linked_files, %w[config/master.key config/credentials/production.key]
+set :puma_service_unit_name, 'rails'
+set :bundle_without, %w[development test].join(':')
 
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
@@ -131,18 +131,11 @@ namespace :deploy do
     end
   end
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke!('puma:restart')
-    end
-  end
-
-  task :restart_sidekiq do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke!('sidekiq:restart')
-    end
-  end
+  # task :restart_sidekiq do
+  #   on roles(:app), in: :sequence, wait: 5 do
+  #     invoke!('sidekiq:restart')
+  #   end
+  # end
 
   # task :yarn_install do
   #   on roles(:app), in: :sequence, wait: 5 do
@@ -155,7 +148,7 @@ namespace :deploy do
   # after  :finishing,    :yarn_install
   after  :finishing,    :cleanup
   after  :finishing,    :restart
-  after  :finishing,    :restart_sidekiq
+  # after  :finishing,    :restart_sidekiq
 end
 
 # namespace :yarn do
@@ -185,27 +178,27 @@ end
 # In order to get this working, I had to set up sidekiq as a service controlled by systemd,
 # https://github.com/sidekiq/sidekiq/blob/main/examples/systemd/sidekiq.service
 # and add the rails user to the /etc/sudoers.d/90-cloud-init-users file
-namespace :sidekiq do
-  task :restart do
-    invoke 'sidekiq:stop'
-    invoke 'sidekiq:start'
-  end
-
-  # before 'deploy:finished', 'sidekiq:restart'
-
-  task :stop do
-    on roles(:app) do
-      within current_path do
-        execute 'sudo /bin/systemctl stop sidekiq'
-      end
-    end
-  end
-
-  task :start do
-    on roles(:app) do
-      within current_path do
-        execute 'sudo /bin/systemctl start sidekiq'
-      end
-    end
-  end
-end
+# namespace :sidekiq do
+#   task :restart do
+#     invoke 'sidekiq:stop'
+#     invoke 'sidekiq:start'
+#   end
+#
+#   # before 'deploy:finished', 'sidekiq:restart'
+#
+#   task :stop do
+#     on roles(:app) do
+#       within current_path do
+#         execute 'sudo /bin/systemctl stop sidekiq'
+#       end
+#     end
+#   end
+#
+#   task :start do
+#     on roles(:app) do
+#       within current_path do
+#         execute 'sudo /bin/systemctl start sidekiq'
+#       end
+#     end
+#   end
+# end

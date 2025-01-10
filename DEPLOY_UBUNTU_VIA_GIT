@@ -1,0 +1,73 @@
+As rails user:
+* cd /home/rails
+* mkdir -p apps/brick_city_depot
+* chown -R rails:rails /home/rails/apps
+
+* echo "alias bcd='cd /home/rails/apps/brick_city_depot/current'" >> ~/.bashrc
+* source ~/.bashrc
+* echo "gem: --no-document" > ~/.gemrc
+
+* cd /home/rails/apps/brick_city_depot
+* git clone https://github.com/jasonlyles/bcd.git
+* mv bcd current
+
+As root user:
+* sudo apt update
+* sudo apt install git curl libssl-dev libreadline-dev zlib1g-dev autoconf bison build-essential libyaml-dev libreadline-dev libncurses5-dev libffi-dev libgdbm-dev
+ADD SOME SWAP MEMORY SO WE CAN BUNDLE INSTALL:
+* sudo fallocate -l 1G /swapfile
+* sudo chmod 600 /swapfile
+* sudo mkswap /swapfile
+* sudo swapon /swapfile
+
+As rails user:
+* curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
+* source ~/.bashrc
+* rbenv install 3.3.6
+* bcd
+* bundle config set without development test
+* bundle
+* echo "<add production key>" > config/credentials/production.key
+* echo "<add production key>" > config/master.key
+
+
+
+
+
+
+Thank you for using DigitalOcean's Rails Application.
+
+The "ufw" firewall is enabled. All ports except for 22, 80, and 443 are BLOCKED.
+
+Let's Encrypt has been pre-installed for you. If you have a domain name, and
+you will be using it with this 1-Click app, please see: https://do.co/2GOFe5J
+
+You can use the following SFTP credentials to upload your files (using FileZilla/WinSCP/Rsync):
+  * Host: 143.244.144.159
+  * User:
+  * Pass:
+If you provided an ssh-key when creating this Droplet, the key should be used for SFTP as well
+
+You can use the following Postgres database credentials:
+  * User:
+  * Pass:
+
+Ruby has been configured to use vendored bundles. Please use the 'rails' user to
+interact with the default project via "su - rails"
+
+Passwords have been saved in /root/.digitalocean.passwords
+
+Nginx is configured to forward requests for rails to a local unix socket
+    Public IP: http://143.244.144.159
+    Access Logs: /var/log/nginx/access.log
+    Error Logs: /var/log/nginx/error.log
+
+Rails using the Puma server is managed via 'systemd'.
+    Proccess management: systemctl {start|stop|restart} rails.service
+    systemd Unit file: /etc/systemd/system/rails.service
+
+Ruby information:
+    All Gems and processes have been installed locally to the 'rails' user. Please
+    'su - rails' to use this environment.
+
+You can learn more about using this image here: https://do.co/2GTOVjB

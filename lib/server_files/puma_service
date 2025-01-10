@@ -1,0 +1,15 @@
+[Unit]
+Description=Puma Rails Server
+After=network.target
+
+[Service]
+Type=simple
+User=rails
+WorkingDirectory=/home/rails/apps/brick_city_depot/current
+ExecStart=/home/rails/.rbenv/bin/rbenv exec bundle exec puma -C /home/rails/apps/brick_city_depot/shared/puma.rb
+ExecStop=/home/rails/.rbenv/bin/rbenv exec bundle exec pumactl -S /home/rails/apps/brick_city_depot/current/tmp/pids/puma.state stop
+TimeoutSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

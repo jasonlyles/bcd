@@ -1,0 +1,155 @@
+From a brand new Ubuntu server on DO, with the Rails image
+
+* Run locally: bundle exec cap production deploy:initial  This starts to set up the app.
+* ssh to server
+* sudo su rails
+* cd /home/rails/apps/brick_city_depot
+* vim shared/config/master.key (copy in the production key)
+* vim shared/config/credentials/production.key (copy in the production key)
+* echo "gem: --no-document" > ~/.gemrc
+* gem install bundler
+* chown -R rails:rails /home/rails/apps/brick_city_depot
+* echo "alias bcd='cd /home/rails/apps/brick_city_depot'" >> ~/.bashrc && source ~/.bashrc
+* Often we can run OOM during the bundle install. This will throw an error like this:
+  SSHKit::Runner::ExecuteError: Exception while executing on host x.x.x.x: bundle exit status: 137 (SSHKit::Runner::ExecuteError)
+  Add some swap memory so the bundle install can run: https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04
+* (As the root user) sudo adduser rails sudo (I don't want to do this, but Capistrano is
+  running sudo on commands I didn't ask it to, and failing since rails wasn't in the sudoers.)
+
+SETTING UP THE DB:
+* exit (to get to the root user)
+* sudo -u postgres psql
+* (in psql) create database brickcity_production;
+* \q (to exit out of psql)
+
+WEB SERVER:
+* As the root user:
+  edit /etc/systemd/system/rails.service and change the WorkingDirectory and ExecStart to include the RAILS_ENV and RAILS_MASTER_KEY
+  systemctl daemon-reload
+  edit /etc/nginx/sites-enabled/rails and change the root (Make sure to include /current/) Also, change localhost to 127.0.0.1
+* (As the rails user) vim ~/.bashrc
+  * Add `RAILS_ENV=production`
+* source ~/.bashrc
+* vim /etc/sudoers.d/rails and add the following:
+  rails ALL=NOPASSWD: /bin/systemctl restart sidekiq.service, /bin/systemctl status sidekiq.service, /bin/systemctl restart rails.service, /bin/systemctl status rails.service, /bin/systemctl restart rails
+* (From the Rails root) mkdir -p shared/tmp/pids
+
+
+
+
+http://159.65.235.246/
+
+After your droplet is created, you can access your Ruby on Rails installation by typing the droplet’s IP address in your browser:
+
+RoR Welcome Page
+
+Note: If you see the Site can’t be reached error, give it 2-3 minutes and reload the page.
+
+Ruby is configured to use vendored bundles. Log in as a rails user to interact with the default project environment:
+
+$ su - rails
+
+All gems are also installed under the rails user environment.
+
+Nginx is configured to forward requests for rails to a local Unix socket. Nginx configuration is located at /etc/nginx/sites-enabled/rails
+
+Ruby-on-Rails Droplet 1-Click uses Puma to host the default website. Puma is managed via systemd service located at /etc/systemd/system/rails.service
+
+You can manage Puma service via:
+
+    Restart:
+
+$ systemctl restart rails.service
+
+    Stop:
+
+$ systemctl stop rails.service
+
+    Start:
+
+$ systemctl start rails.service
+
+Migrating existing Ruby on Rails project
+
+If you already have a Ruby on Rails (further as RoR) project, you can follow the steps below to migrate it to your droplet.
+
+Note: All droplet commands below are intended to be run as the root user
+
+First of all, you should copy your project folder to the droplet, you can do this by either using a VCS like git or simply using scp command:
+
+$ scp -r /root/<your local ror project directory> root@<your droplet IP>:/home/rails/<your ror project name>
+
+Next, ssh into your droplet and make sure to give user rails permissions to your new Ruby on Rails project:
+
+$ chown -R rails:rails /home/rails/<your ror project name>
+
+At this point you can log in as rails user to install necessary dependencies for your project.
+
+After this, you will have to update the Rails service if you wish to run your project as a service. First, open service file:
+
+$ vim /etc/systemd/system/rails.service
+
+Next, locate WorkingDirectory and ExecStart fields. Set WorkingDirectory as the directory of your RoR project and set ExecStart to the command which you use to run your project, in the example below we use the most common command rails s:
+
+...
+WorkingDirectory=/home/rails/<your ror project name>
+ExecStart=/bin/bash -lc 'rails s'
+...
+
+Save file and exit.
+
+Finally, you need to reload and restart the Rails service:
+
+$ systemctl daemon-reload
+$ systemctl restart rails.service
+
+Droplet summary
+
+    UFW firewall allows only SSH (port 22, rate limited), HTTP (port 80), and HTTPS (port 443) access.
+    rails system user is created to deploy the application.
+    rails database user is created for the application to connect to PostgreSQL.
+    Ruby is configured to use vendored bundles and all Gems are installed and processed locally to the rails user.
+    Nginx is configured to forward requests to a local UNIX socket, acting as a reverse proxy for the application server.
+    The message of the day (MOTD) shows the system and database user passwords, which are also saved in /root/.digitalocean.passwords.
+    The MOTD will also show you SFTP credentials that you can use to upload files using software like FileZilla, WinSCP, or rsync.
+    The unit file for Rails is /etc/systemd/system/rails/service.
+
+
+From ssh-ing in, the MOTD:
+
+Thank you for using DigitalOcean's Rails Application.
+
+The "ufw" firewall is enabled. All ports except for 22, 80, and 443 are BLOCKED.
+
+Let's Encrypt has been pre-installed for you. If you have a domain name, and
+you will be using it with this 1-Click app, please see: https://do.co/2GOFe5J
+
+You can use the following SFTP credentials to upload your files (using FileZilla/WinSCP/Rsync):
+  * Host: 159.65.235.246
+  * User:
+  * Pass:
+If you provided an ssh-key when creating this Droplet, the key should be used for SFTP as well
+
+You can use the following Postgres database credentials:
+  * User:
+  * Pass:
+
+Ruby has been configured to use vendored bundles. Please use the 'rails' user to
+interact with the default project via "su - rails"
+
+Passwords have been saved in /root/.digitalocean.passwords
+
+Nginx is configured to forward requests for rails to a local unix socket
+    Public IP: http://159.65.235.246
+    Access Logs: /var/log/nginx/access.log
+    Error Logs: /var/log/nginx/error.log
+
+Rails using the Puma server is managed via 'systemd'.
+    Proccess management: systemctl {start|stop|restart} rails.service
+    systemd Unit file: /etc/systemd/system/rails.service
+
+Ruby information:
+    All Gems and processes have been installed locally to the 'rails' user. Please
+    'su - rails' to use this environment.
+
+You can learn more about using this image here: https://do.co/2GTOVjB
