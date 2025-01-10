@@ -53,7 +53,7 @@ gem 'asset_sync'
 gem 'bootstrap', '~> 4.1'
 gem 'sass-rails'
 gem 'sprockets-rails'
-gem 'uglifier'
+gem 'terser'
 
 # auth
 gem 'devise'
