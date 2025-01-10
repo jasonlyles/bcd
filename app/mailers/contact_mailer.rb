@@ -2,7 +2,7 @@
 
 class ContactMailer < ActionMailer::Base
   default from: 'Brick City Depot <sales@brickcitydepot.com>'
-  default to: EmailConfig.config.contact
+  default to: Rails.application.credentials.email.contact
   layout 'admin_email'
 
   def new_contact_email(name, email, body)
