@@ -21,10 +21,10 @@ CarrierWave.configure do |config|
     config.storage = :fog
     config.fog_credentials = {
       provider: 'AWS',
-      aws_access_key_id: AmazonConfig.config.access_key,
-      aws_secret_access_key: AmazonConfig.config.secret
+      aws_access_key_id: Rails.application.credentials.aws.access_key_id,
+      aws_secret_access_key: Rails.application.credentials.aws.secret_access_key
     }
-    # config.fog_directory = AmazonConfig.config.instruction_bucket
+    # config.fog_directory = Rails.application.credentials.aws.instruction_bucket
     # config.asset_host = 'http://images.brickcitydepot.com'
     config.fog_public = false
     config.cache_dir = "#{Rails.root}/tmp/carrierwave"

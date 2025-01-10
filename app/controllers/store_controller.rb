@@ -191,15 +191,15 @@ class StoreController < ApplicationController
 
   def assemble_paypal_uri
     item_hash = assemble_paypal_uri_item_hash
-    uri = Addressable::URI.parse("https://#{PaypalConfig.config.host}/cgi-bin/webscr")
+    uri = Addressable::URI.parse("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr")
     uri.query_values = {
       cmd: '_cart',
       upload: '1',
       custom: @order.request_id,
-      business: PaypalConfig.config.business_email,
+      business: Rails.application.credentials.paypal.email,
       image_url: "#{Rails.application.config.web_host}/assets/logo140x89.png",
-      return: PaypalConfig.config.return_url,
-      notify_url: PaypalConfig.config.notify_url,
+      return: Rails.application.credentials.paypal.return_url,
+      notify_url: Rails.application.credentials.paypal.notify_url,
       currency_code: 'USD'
     }.merge(item_hash)
 

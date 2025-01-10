@@ -10,14 +10,14 @@ class ImageUploader < CarrierWave::Uploader::Base
   # storage :fog
 
   def fog_directory
-    AmazonConfig.config.image_bucket
+    Rails.application.credentials.aws.image_bucket
   end
 
   def fog_public
     true
   end
   # def s3_bucket
-  #  AmazonConfig.config.image_bucket
+  #  Rails.application.credentials.aws.image_bucket
   # end
 
   # def s3_access_policy

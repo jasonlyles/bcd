@@ -16,7 +16,7 @@ class PartsListUploader < CarrierWave::Uploader::Base
   end
 
   def fog_directory
-    AmazonConfig.config.instruction_bucket
+    Rails.application.credentials.aws.instruction_bucket
   end
 
   def fog_attributes
