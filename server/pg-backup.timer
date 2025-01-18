@@ -1,0 +1,14 @@
+# This file goes at /etc/systemd/system/pg-backup.timer
+# This timer unit is for triggering the postgres backup
+# systemd OnCalendar samples here: https://silentlad.com/systemd-timers-oncalendar-(cron)-format-explained
+
+[Unit]
+Description=Triggers the postgres backup
+Requires=pg-backup.service
+
+[Timer]
+Unit=pg-backup.service
+OnCalendar=*-*-* 05:00:00
+
+[Install]
+WantedBy=timers.target

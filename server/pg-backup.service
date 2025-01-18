@@ -1,0 +1,16 @@
+# This file goes at /etc/systemd/system/pg-backup.service
+# This service unit is for backing up the local pg db to AWS S3
+
+[Unit]
+Description=Backs up the local postgres database to AWS S3
+Wants=pg-backup.timer
+
+[Service]
+Environment="S3_BUCKET_NAME=lyles-pg-database-backups"
+Environment="AWS_REGION=us-east-1"
+Environment="DATABASE_NAME=brickcity_production"
+Type=oneshot
+ExecStart=/bin/su -c "/home/rails/pg_backup.sh" rails
+
+[Install]
+WantedBy=multi-user.target
