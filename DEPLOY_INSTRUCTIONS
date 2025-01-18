@@ -1,0 +1,144 @@
+As rails user:
+* cd /home/rails
+* mkdir -p apps/brick_city_depot
+* chown -R rails:rails /home/rails/apps
+
+* echo "alias bcd='cd /home/rails/apps/brick_city_depot/current'" >> ~/.bashrc
+* source ~/.bashrc
+* echo "gem: --no-document" > ~/.gemrc
+
+* cd /home/rails/apps/brick_city_depot
+* git clone https://github.com/jasonlyles/bcd.git
+* mv bcd current
+
+As root user:
+* sudo apt update
+* sudo apt install git curl libssl-dev libreadline-dev zlib1g-dev autoconf bison build-essential libyaml-dev libreadline-dev libncurses5-dev libffi-dev libgdbm-dev
+ADD SOME SWAP MEMORY SO WE CAN BUNDLE INSTALL:
+* sudo fallocate -l 1G /swapfile
+* sudo chmod 600 /swapfile
+* sudo mkswap /swapfile
+* sudo swapon /swapfile
+
+SETTING UP THE DB:
+* exit (to get to the root user)
+* upgrading postgres (if necessary):
+  * sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+  * wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+  * sudo apt update
+  * sudo apt install postgresql
+  * psql --version (to check we're on the new version)
+* sudo -u postgres psql
+* (in psql) create database brickcity_production; (if the database is being rebuilt)
+* In preparation for pg_restore-ing from the Heroku dump:
+  * \c brickcity_production;
+  * CREATE SCHEMA IF NOT EXISTS heroku_ext;
+  * ALTER database brickcity_production SET search_path TO heroku_ext,public;
+* \q (to exit out of psql)
+
+
+* vim /etc/systemd/system/rails.service
+  * Edit the WorkingDirectory and ExecStart directives
+  * Add the following directive:
+    [Service]
+    Environment="PATH=/home/rails/.rbenv/shims:/home/rails/.rbenv/bin:/usr/local/bin:/usr/bin:/bin"
+* systemctl daemon-reload
+* rvm implode (having rvm in addition to rbenv causes some interference)
+* Remove `source...` rvm line from ~/.bashrc
+
+* vim /etc/sudoers.d/rails
+  Add the following:
+  rails ALL=NOPASSWD: /bin/systemctl status rails, /bin/systemctl status rails.service, /bin/systemctl restart sidekiq.service, /bin/systemctl status sidekiq.service, /bin/systemctl restart puma.service, /bin/systemctl status puma.service, /bin/systemctl restart rails, /bin/systemctl restart rails.service
+* sudo chmod 440 /etc/sudoers.d/rails
+
+SET UP REDIS
+Helpful: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04 and
+           https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+
+* sudo apt install redis-server
+* sudo vim /etc/redis/redis.conf
+  Inside the file, find the supervised directive. Set it to: systemd
+  Uncomment this line: bind 127.0.0.1 ::1
+* sudo systemctl restart redis.service
+
+As rails user:
+* curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
+* source ~/.bashrc
+* rbenv install 3.3.6
+* bcd
+* bundle config set without development test
+* bundle
+* echo "<add production key here>" > config/credentials/production.key
+* echo "<add production key here>" > config/master.key
+* RAILS_ENV=production bundle exec rails db:migrate
+* RAILS_ENV=production bundle exec rails db:seed (if necessary)
+
+* RAILS_ENV=production bundle exec rake assets:precompile
+* sudo systemctl start rails
+
+THINGS TO DO AFTER THE APP IS RUNNING:
+
+logrotate: https://gorails.com/guides/rotating-rails-production-logs-with-logrotate
+* /etc/logrotate.conf
+* Add the following at the bottom of the file:
+  /home/rails/apps/brick_city_depot/current/log/*.log {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    copytruncate
+  }
+* Run `sudo /usr/sbin/logrotate -f /etc/logrotate.conf` a couple of times to make sure
+  it's rotating. Will only work if there is an existing log file. Hit the server in
+  between requests to make sure it's also compressing properly.
+
+DATABASE BACKUPS:
+* sudo apt install awscli
+* mkdir ~/.aws
+* vim ~/.aws/credentials (copy in aws creds from my local machine, and be sure to include the [default] header, and the us-east-1 region)
+* Make sure the following vars are set in .bashrc:
+  * export AWS_REGION="us-east-1"
+  * export S3_BUCKET_NAME="lyles-pg-database-backups"
+  * export DATABASE_NAME="brickcity_production"
+* source ~/.bashrc
+* cd ~
+* vim pg_backup.sh
+* copy in file from here: server/pg_backup.sh
+* chmod +x pg_backup.sh
+* Test by running `./pg_backup.sh` (Confirm in S3 there's an actual backup in there.)
+Set up systemd timer to run the job
+* exit (to get to the root user)
+* cd /etc/systemd/system
+* vim pg-backup.service
+  * paste in the contents of server/pg-backup.service
+* systemctl start pg-backup.service
+* systemctl status pg-backup.service (to confirm it ran properly)
+* vim pg-backup.timer
+  * paste in contents of server/pg-backup.timer
+* systemctl daemon-reload
+* systemctl restart pg-backup.service
+* systemctl restart pg-backup.timer
+
+TO RESTORE FROM A BACKUP:
+* Download the backup from S3
+* scp it to the server
+* unzip it
+* psql -d newdb -f db.sql (where newdb is the name of the new database, and db.sql is the unzipped dump file)
+
+COPY IN LATEST FROM HEROKU DB TO NEW DB:
+On my machine, from bcd root:
+  * heroku pg:backups:capture --app bcd-prod
+  * heroku pg:backups:download --app bcd-prod
+  * scp latest.dump root@143.244.144.159:~/
+On server:
+  * cd /root
+  * pg_restore --verbose --clean --no-acl --no-owner -h localhost -U rails -d brickcity_production latest.dump
+  * sudo su rails
+  * bcd
+  * RAILS_ENV=production bundle exec rails db:migrate
+  * go into rails console and set maintenance_mode to true
+
+SET UP SIDEKIQ:
+* copy in file from server/sidekiq.service to /etc/systemd/system/sidekiq.service and start the service.
