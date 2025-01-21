@@ -6,7 +6,7 @@
     <% end %>
   </div>
 </div>
-<% if @parts_list.jid? %>
+<% if @parts_list.parts.blank? %>
   <div align="center">
     Working on Lot <%= @current_count.to_i + 1 %> of <%= @total_count %>
   </div>
