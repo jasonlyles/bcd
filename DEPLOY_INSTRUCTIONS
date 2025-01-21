@@ -55,7 +55,12 @@ SET UP REDIS
 Helpful: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04 and
            https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
 
-* sudo apt install redis-server
+* curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+* sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
+* echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+* sudo apt-get update
+* sudo apt-get install redis
+
 * sudo vim /etc/redis/redis.conf
   Inside the file, find the supervised directive. Set it to: systemd
   Uncomment this line: bind 127.0.0.1 ::1
@@ -99,9 +104,11 @@ DATABASE BACKUPS:
 * mkdir ~/.aws
 * vim ~/.aws/credentials (copy in aws creds from my local machine, and be sure to include the [default] header, and the us-east-1 region)
 * Make sure the following vars are set in .bashrc:
-  * export AWS_REGION="us-east-1"
-  * export S3_BUCKET_NAME="lyles-pg-database-backups"
-  * export DATABASE_NAME="brickcity_production"
+  * export AWS_REGION=us-east-1
+  * export S3_BUCKET_NAME=lyles-pg-database-backups
+  * export DATABASE_NAME=brickcity_production
+  * export RAILS_SERVE_STATIC_FILES=enabled
+  * export RAILS_LOG_TO_STDOUT=enabled
 * source ~/.bashrc
 * cd ~
 * vim pg_backup.sh

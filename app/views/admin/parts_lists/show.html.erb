@@ -31,16 +31,26 @@
 <% else %>
   <div class="row">
     <div class="col-7">
+      <% if @parts_list.notes? %>
+        <div class="card mb-3">
+          <div class="card-header">
+            <p class="font-weight-bold">Notes to the admin about this parts list</p>
+          </div>
+          <div class="card-body">
+            <p><%= @parts_list.notes %></p>
+          </div>
+        </div>
+      <% end %>
       <div class="card">
         <div class="card-header d-flex justify-content-between">
-          <b class="mt-2">
+          <span class="mt-2 font-weight-bold">
             Parts List
             <% if @parts_list.approved? %>
               <span class='text-success'>APPROVED</span>
             <% else %>
               <span class='text-danger'>NOT APPROVED</span>
             <% end %>
-          </b>
+          </span>
           <%= link_to 'Edit', edit_admin_parts_list_path(@parts_list), class: 'btn btn-primary' %>
         </div>
         <div class="card-body">
@@ -102,7 +112,7 @@
       <div class="card">
         <div class="card-header">
           <p>
-            If "Source" and "Parsed" numbers don't match, there's a problem and you shouldn't approve this parts list yet.
+            If "Source" and "Parsed" numbers don't match, there might be a problem and you should look into it before approving this parts list. If there appears to be an issue and there is none, leave a note on this parts list so we don't wonder later if we need to fix something.
           </p>
           <p>
             <span class='font-weight-bold<%= ' text-danger' if @source_lot_count != @parts_list.lots_count %>'>Total Lots (Source/Parsed): <%= "(#{@source_lot_count}/#{@parts_list.lots_count})" %></span><br />

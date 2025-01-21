@@ -17,8 +17,6 @@ class PartsList < ApplicationRecord
   validates :ldr, presence: { if: -> { bricklink_xml.blank? } }
   validates :original_filename, presence: true
 
-  # attr_accessible :name, :product_id, :approved, :lots_attributes, :file, :file_cache, :remove_file, :original_filename, :bricklink_xml, :ldr
-
   def self.ransackable_attributes(_auth_object = nil)
     %w[name]
   end
