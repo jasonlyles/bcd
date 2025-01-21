@@ -1,6 +1,6 @@
 <%= nested_form_for [:admin, parts_list], html: { multipart: true } do |form| %>
   <div class="row">
-    <div class="col-3">
+    <div class="col-4">
       <div class="card">
         <div class="card-header">
           <b>Parts List</b>
@@ -14,6 +14,10 @@
             <%= form.label :name, "Product", class: 'form-label' %>
             <%= form.collection_select :product_id, Product.instructions.order(:product_code), :id, :code_and_name, { include_blank: true }, class: 'form-control' %>
           </div>
+          <div class="form-group">
+            <%= form.label :notes, "Notes", class: 'form-label' %>
+            <%= form.text_area :notes, rows: 5, class: 'form-control' %>
+          </div>
           <% if parts_list.persisted? %>
             <div class="form-check">
               <%= form.check_box :approved, {checked: parts_list.approved, class: 'form-check-input'},1,0 %>
@@ -26,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="col-9">
+    <div class="col-8">
       <% if parts_list.persisted? %>
         <% if parts_list.errors.present? %>
           <% parts_list.lots.each do |lot| %>

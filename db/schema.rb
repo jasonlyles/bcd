@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_04_164741) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_21_202511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -293,6 +293,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_04_164741) do
     t.string "file"
     t.string "jid"
     t.integer "lots_count", default: 0, null: false
+    t.text "notes"
     t.index ["product_id"], name: "index_parts_lists_on_product_id"
   end
 
