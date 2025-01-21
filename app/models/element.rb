@@ -124,7 +124,7 @@ class Element < ApplicationRecord
     return unless original_image_url
 
     extension = File.extname(original_image_url)
-    file = "#{guid}#{extension}"
+    file = "#{Rails.root}/tmp/#{guid}#{extension}"
     begin
       File.open(file, 'wb') do |fo|
         fo.write URI.parse(original_image_url).open.read
