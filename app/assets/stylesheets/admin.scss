@@ -221,3 +221,15 @@ ul.ui-autocomplete {
   background-color: darken($pinterest, 10%);
 }
 /* End of Pinterest Styles */
+.admin-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  padding: 1.5rem 0;
+  margin-top: 30px;
+  color: #999;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-top: 0.05rem solid #e5e5e5;
+}

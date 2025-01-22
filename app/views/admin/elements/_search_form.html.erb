@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header">
+    Search
+  </div>
+  <div class="card-body">
+    <%= search_form_for(@q, url: 'elements') do |f| %>
+      <div class="form-group">
+        <%= f.label :part_name_cont %>
+        <%= f.search_field :part_name_cont, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :color_bl_name_cont, 'Color Name contains' %>
+        <%= f.search_field :color_bl_name_cont, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :has_image_in, 'Has Image?' %><br />
+        <%= f.select :has_image_in, [true, false], { include_blank: true }, class: 'form-control' %>
+      </div>
+      <br />
+      <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+      <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+    <% end %>
+  </div>
+</div>

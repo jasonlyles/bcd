@@ -532,3 +532,12 @@ Large Devices, Wide Screens
 .parts-list-image {
   max-height: 80px;
 }
+
+.collapse-content {
+  position: relative;
+}
+
+#collapse {
+  position: absolute;
+  z-index: 1;
+}

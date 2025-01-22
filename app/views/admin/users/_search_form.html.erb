@@ -1,0 +1,28 @@
+<div class="card">
+  <div class="card-header">
+    Search
+  </div>
+  <div class="card-body">
+    <%= search_form_for(@q, url: 'users') do |f| %>
+      <div class="form-group">
+        <%= f.label :account_status_eq %>
+        <%= f.select :account_status_eq, [['Active', 'A'], ['Cancelled', 'C'], ['Guest', 'G']], { include_blank: true }, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :email_eq %>
+        <%= f.search_field :email_eq, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :email_preference_eq %>
+        <%= f.select :email_preference_eq, [['No Emails', '0'], ['Important Emails', '1'], ['All Emails', '2']], { include_blank: true }, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :referrer_code_eq %>
+        <%= f.search_field :referrer_code_eq, class: "form-control" %>
+      </div>
+      <br />
+      <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+      <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+    <% end %>
+  </div>
+</div>

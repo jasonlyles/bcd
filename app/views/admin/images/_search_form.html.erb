@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-header">
+    Search
+  </div>
+  <div class="card-body">
+    <%= search_form_for(@q, url: 'images') do |f| %>
+      <div class="form-group">
+        <%= f.label :product_id_eq, 'Product' %>
+        <%= f.collection_select :product_id_eq, Product.all.order(:name), "id", "name", { include_blank: true }, class: 'form-control' %>
+      </div>
+      <br />
+      <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+      <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+    <% end %>
+  </div>
+</div>
