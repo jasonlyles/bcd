@@ -1,0 +1,42 @@
+<div class="card">
+  <div class="card-header">
+    Search
+  </div>
+  <div class="card-body">
+    <%= search_form_for(@q, url: 'products') do |f| %>
+      <div class="form-group">
+        <%= f.label :product_code_or_name_cont %>
+        <%= f.search_field :product_code_or_name_cont, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :subcategory_id_eq, 'Category/Subcategory' %>
+        <%= f.collection_select :subcategory_id_eq, Subcategory.all.includes(:category), "id", "name_and_category_name", { include_blank: true }, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :product_type_id_eq, 'Product Type' %><br />
+        <%= f.collection_select :product_type_id_eq, ProductType.all, :id, :name, { include_blank: true }, class: 'form-control' %>
+      </div>
+      <div class="form-check">
+        <%= f.check_box(:discount_percentage_gt, { class: "form-check-input", checked: params['q'] && params['q']['discount_percentage_gt'] == '0' }, '0', '') %>
+        <%= f.label :discount_percentage_gt, 'Discounted', class: "form-check-label" %>
+      </div>
+      <div class="form-check">
+        <%= f.check_box(:free_true, { class: "form-check-input", checked: params['q'] && params['q']['free_true'] == '1' }) %>
+        <%= f.label :free_true, 'Free', class: "form-check-label" %>
+      </div>
+      <br />
+      <div class="form-check">
+        <%= f.check_box(:ready_for_public_true, { class: "form-check-input", checked: params['q'].blank? || (params['q'] && params['q']['ready_for_public_true'] == '1') }) %>
+        <%= f.label :ready_for_public_true, 'Live', class: "form-check-label" %>
+      </div>
+      <br />
+      <div class="form-check">
+        <%= f.check_box(:has_etsy_listing_id_in, { class: "form-check-input", checked: params['q'] && params['q']['has_etsy_listing_id_in'] == '1' }) %>
+        <%= f.label :has_etsy_listing_id_in, 'On Etsy', class: "form-check-label" %>
+      </div>
+      <br />
+      <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+      <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+    <% end %>
+  </div>
+</div>

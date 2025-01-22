@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">
+    Search
+  </div>
+  <div class="card-body">
+    <%= search_form_for(@q, url: 'instant_payment_notifications') do |f| %>
+      <div class="form-group">
+        <%= f.label :payment_status_eq %>
+        <%= f.search_field :payment_status_eq, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :request_id_eq, 'Request ID equals' %>
+        <%= f.search_field :request_id_eq, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :txn_id_eq, 'Transaction ID equals' %>
+        <%= f.search_field :txn_id_eq, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :order_id_eq, 'Order ID equals' %>
+        <%= f.search_field :order_id_eq, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :payer_email_eq %>
+        <%= f.search_field :payer_email_eq, class: "form-control" %>
+      </div>
+      <br />
+      <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+      <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+    <% end %>
+  </div>
+</div>

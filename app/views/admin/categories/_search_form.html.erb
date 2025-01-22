@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-header">
+    Search
+  </div>
+  <div class="card-body">
+    <%= search_form_for(@q, url: 'categories') do |f| %>
+      <div class="form-group">
+        <%= f.label :name_cont %>
+        <%= f.search_field :name_cont, class: "form-control" %>
+      </div>
+      <br />
+      <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
+      <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
+    <% end %>
+  </div>
+</div>

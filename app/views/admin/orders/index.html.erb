@@ -3,159 +3,81 @@
     Listing Orders
   </div>
   <div class="card-body">
-    <div class="row">
-      <div class="col-9">
-        <div class="row">
-          <div class="col-auto mr-auto">
-            <%= paginate @orders %>
-          </div>
-        </div>
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr class="table-secondary">
-              <th class="align-middle text-center">Source</th>
-              <th class="align-middle text-center">
-                <%= sort_link(@q, :status) %>
-                <a
-                  tabindex="0"
-                  role="button"
-                  class="btn-lg text-info"
-                  data-toggle="popover"
-                  data-trigger="focus"
-                  data-placement="right"
-                  data-html=true
-                  title="Meaning of Statuses"
-                  data-content="<%= status_explanation %>">
-                  <i class="fa fa-question-circle"></i>
-                </a>
-              </th>
-              <th class="align-middle text-center"><%= sort_link(@q, :created_at, 'Trans. Date') %></th>
-              <th class="align-middle text-center">Req ID / Trans ID or 3rd Party ID</th>
-              <th class="align-middle text-center">User</th>
-              <th class="align-middle text-center">Total Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @orders.each do |order| %>
-              <tr class="<%= order.third_party_order_incomplete_for_more_than_a_day? ? 'table-danger' : '' %>">
-                <td class="align-middle text-center">
-                  <%= decorate_source(order.source) %>
-                </td>
-                <td class="align-middle text-center">
-                  <%= decorate_order_status(order.status) %>
-                </td>
-                <td class="align-middle text-center">
-                  <%= order.created_at.to_fs(:date_time12) %>
-                </td>
-                <td class="align-middle text-center" style="font-size: 75%;">
-                  <% if order.third_party_order_identifier.present? %>
-                    <%= link_to order.third_party_order_identifier.truncate(15), admin_order_path(order) %>
-                  <% else %>
-                    <%= link_to order.request_id.truncate(15), admin_order_path(order) if order.request_id %>
-                    <br />
-                    <%= link_to order.transaction_id.truncate(15), admin_order_path(order) if order.transaction_id %>
-                  <% end %>
-                </td>
-                <td class="align-middle text-center">
-                  <%= order.user.email %>
-                </td>
-                <td class="align-middle text-center">
-                  <%= number_to_currency(order.total_price) %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
+    <div class="d-flex justify-content-between">
+      <div>
         <%= paginate @orders %>
       </div>
-      <div class="col-3">
-        <div class="card">
-          <div class="card-header">
+      <div class="d-flex position-relative">
+        <div>
+          <a class="btn btn-primary mb-3" data-toggle="collapse" href="#collapse" aria-expanded="false" aria-controls="collapse">
             Search
+          </a>
+          <div class="collapse position-absolute" id="collapse" style="width: 400px; top: 100%; right: 0;">
+            <%= render 'search_form' %>
           </div>
-          <div class="card-body">
-            <%= search_form_for(@q, url: 'orders') do |f| %>
-              <div class="form-row pb-3">
-                <%= f.label :created_at_month_datepart_equals, 'Transaction Month/Year', class: 'pl-1' %>
-                <div class="col">
-                  <%= f.select :created_at_month_datepart_equals, [['Jan', 1],['Feb', 2],['Mar', 3],['Apr',4],['May',5],['Jun',6],['Jul',7],['Aug',8],['Sep',9],['Oct',10],['Nov',11],['Dec',12]], { include_blank: true }, class: 'form-control' %>
-                </div>
-                <div class="col">
-                  <%= f.select :created_at_year_datepart_equals, (Date.today.year).downto(2010), { include_blank: true }, class: 'form-control' %>
-                </div>
-              </div>
-              <div class="form-group">
-                <%= f.label :status_eq %>
-                <%= f.select :status_eq, Order::ALL_ORDER_STATUSES, { include_blank: true }, class: 'form-control' %>
-              </div>
-              <div class="form-check">
-                <%= f.check_box(:unknown_status_in, { class: "form-check-input", checked: params['q'] && params['q']['unknown_status_in'] == '1' }) %>
-                <%= f.label :unknown_status_in, 'Unknown Statuses', class: "form-check-label" %>
-              </div>
-              <br />
-              <div class="form-group">
-                <%= f.label :source_eq %>
-                <%= f.select :source_eq, Rails.application.config.sales_sources.map.with_index { |v, i| [v.to_s.titleize, i.to_s] }, { include_blank: true }, class: 'form-control' %>
-              </div>
-              <p>
-                Trans ID vs Req ID
-                <a
-                  tabindex="0"
-                  role="button"
-                  class="btn-lg text-blue"
-                  data-toggle="popover"
-                  data-trigger="focus"
-                  data-placement="left"
-                  title="Transaction ID vs Request ID"
-                  data-html="true"
-                  data-content='<%= image_tag('paypal_screen.png', size: '500') %>'>
-                  <i class="fa fa-question-circle"></i>
-                </a>
-              </p>
-              <div class="form-group">
-                <%= f.label :transaction_id_eq, 'Transaction ID' %>
-                <%= f.search_field :transaction_id_eq, class: "form-control" %>
-              </div>
-              <div class="form-group">
-                <%= f.label :request_id_eq, 'Request ID' %>
-                <%= f.search_field :request_id_eq, class: "form-control" %>
-              </div>
-              <div class="form-group">
-                <%= f.label :third_party_order_identifier_eq, '3rd Party Order ID' %>
-                <%= f.search_field :third_party_order_identifier_eq, class: "form-control" %>
-              </div>
-              <div class="form-check">
-                <%= f.check_box(:is_concerning_third_party_order_in, { class: "form-check-input", checked: params['q'] && params['q']['is_concerning_third_party_order_in'] == '1' }) %>
-                <%= f.label :is_concerning_third_party_order_in, 'Bad 3P Orders', class: "form-check-label" %>
-                  <a
-                    tabindex="0"
-                    role="button"
-                    class="btn-lg text-blue"
-                    data-toggle="popover"
-                    data-trigger="focus"
-                    data-placement="left"
-                    title="Concerning (or bad) 3rd Party Orders"
-                    data-html="true"
-                    data-content="These are orders that have one of the following statuses: (<%= Order::PENDING_ORDER_STATUSES.to_sentence %>) and have not been updated for more than a day. Especially in the early days of integrating with a 3rd Party, we should keep an eye on these to make sure the system is behaving correctly.">
-                    <i class="fa fa-question-circle"></i>
-                  </a>
-              </div>
-              <br />
-              <div class="form-group">
-                <%= f.label :belongs_to_user_in, 'User Email' %>
-                <%= f.search_field :belongs_to_user_in, class: "form-control" %>
-              </div>
-              <div class="form-check">
-                <%= f.check_box(:confirmation_email_sent_in, { class: "form-check-input", checked: params['q'] && params['q']['confirmation_email_sent_in'] == '1' }) %>
-                <%= f.label :confirmation_email_sent_in, 'Confirmation Email Sent', class: "form-check-label" %>
-              </div>
-              <br />
-              <%= f.submit 'Search', class: 'btn btn-primary btn-block mb-1' %>
-              <%= link_to "Clear Search", request.path, class:"btn btn-warning btn-block" %>
-            <% end %>
-          </div>
+          <div class="collapse-content"></div>
         </div>
+
       </div>
     </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr class="table-secondary">
+            <th class="align-middle text-center">Source</th>
+            <th class="align-middle text-center">
+              <%= sort_link(@q, :status) %>
+              <a
+                tabindex="0"
+                role="button"
+                class="btn-lg text-info"
+                data-toggle="popover"
+                data-trigger="focus"
+                data-placement="right"
+                data-html=true
+                title="Meaning of Statuses"
+                data-content="<%= status_explanation %>">
+                <i class="fa fa-question-circle"></i>
+              </a>
+            </th>
+            <th class="align-middle text-center"><%= sort_link(@q, :created_at, 'Trans. Date') %></th>
+            <th class="align-middle text-center">Req ID / Trans ID or 3rd Party ID</th>
+            <th class="align-middle text-center">User</th>
+            <th class="align-middle text-center">Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @orders.each do |order| %>
+            <tr class="<%= order.third_party_order_incomplete_for_more_than_a_day? ? 'table-danger' : '' %>">
+              <td class="align-middle text-center">
+                <%= decorate_source(order.source) %>
+              </td>
+              <td class="align-middle text-center">
+                <%= decorate_order_status(order.status) %>
+              </td>
+              <td class="align-middle text-center">
+                <%= order.created_at.to_fs(:date_time12) %>
+              </td>
+              <td class="align-middle text-center" style="font-size: 75%;">
+                <% if order.third_party_order_identifier.present? %>
+                  <%= link_to order.third_party_order_identifier.truncate(15), admin_order_path(order) %>
+                <% else %>
+                  <%= link_to order.request_id.truncate(15), admin_order_path(order) if order.request_id %>
+                  <br />
+                  <%= link_to order.transaction_id.truncate(15), admin_order_path(order) if order.transaction_id %>
+                <% end %>
+              </td>
+              <td class="align-middle text-center">
+                <%= order.user.email %>
+              </td>
+              <td class="align-middle text-center">
+                <%= number_to_currency(order.total_price) %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <%= paginate @orders %>
   </div>
 </div>
