@@ -3,39 +3,44 @@
     <h1>Thank you for your Order!</h1>
     <br/>
     <br/>
-    <b>What's next?</b>
+    <span class="font-bold">What's next?</span>
     <p>
       A confirmation email for this order will be sent to the email address you registered with us. You may log into your
       <a href="https://www.paypal.com">PayPal</a>
       account to view details of this transaction.
     </p>
-    <b>If you checked out as a guest</b>
+    <span class="font-bold">If you checked out as a guest</span>
     <p>
       You will see in your confirmation email a link back to Brick City Depot. That link is especially for your order. When you click the link, you will be taken to a page on Brick City Depot that will have links that you can use to download your PDFs and
       parts lists. If you don't see an email from us, check your junk or spam folders. If you still don't see an email, contact us and we'll get you your download link.
-      <% if @download_link %>
-        <br/>
-        <br/>
-        <br/>
-        Alternatively, you can just use this link to get to your downloads:
-        <%= link_to 'DOWNLOADS', @download_link %>
-        <br/>
-        <br/>
-        <div class="sad">
-          <p>
-            * Note that this link will not be here the next time you load this page, so in the future you'll have to link to your downloads from the email we send you.
-          </p>
-        </div>
-        <br/>
-      <% end %>
     </p>
-    <b>If you checked out using your Twitter, Facebook, Etsy or Brick City Depot account</b>
+    <% if @download_link %>
+      <br/>
+      <br/>
+      <br/>
+      Alternatively, you can just use this link to get to your downloads:
+      <%= link_to 'DOWNLOADS', @download_link %>
+      <br/>
+      <br/>
+      <div class="sad">
+        <p>
+          * Note that this link will not be here the next time you load this page, so in the future you'll have to link to your downloads from the email we send you.
+        </p>
+      </div>
+      <br/>
+    <% end %>
+
+    <% if Feature.social_login_enabled? %>
+      <span class="font-bold">If you checked out using your Twitter, Facebook, Etsy or Brick City Depot account</span>
+    <% else %>
+      <span class="font-bold">If you checked out using your Brick City Depot account</span>
+    <% end %>
     <p>
       Check out your Brick City Depot account by clicking the
       <%= link_to 'Account', account_path %>
       link above. You'll be taken to a page where you can download the files you paid for.
     </p>
-    <b>Ok, I have my instructions. Now what?</b>
+    <span class="font-bold">Ok, I have my instructions. Now what?</span>
     <p>
       If you have any questions about what's next, where to acquire parts to build the model, etc., click on the
       <%= link_to 'FAQ', faq_path %>
