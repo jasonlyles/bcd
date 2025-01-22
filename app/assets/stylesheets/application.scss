@@ -541,3 +541,20 @@ Large Devices, Wide Screens
   position: absolute;
   z-index: 1;
 }
+
+.lego-bullet {
+  position: relative;
+}
+
+.lego-bullet:before {
+  content: '';
+  position: absolute;
+  top: 33%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: #DC1422;
+  margin: 0 5px 0 -23px;
+  width: 16px;
+  height: 16px;
+  clip-path: polygon(1% 100%, 100% 100%, 100% 64%, 78% 64%, 78% 48%, 23% 48%, 23% 64%, 0% 64%);
+}

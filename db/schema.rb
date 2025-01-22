@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_21_202511) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_22_163140) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -175,6 +175,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_21_202511) do
     t.string "guid"
     t.string "image"
     t.string "redirect_link"
+  end
+
+  create_table "features", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description", null: false
+    t.boolean "enabled", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_features_on_name", unique: true
   end
 
   create_table "images", id: :serial, force: :cascade do |t|

@@ -1,15 +1,24 @@
 <section class="contentzz">
   <div class="container">
     <% if resource_name.to_s == "user" %>
-      <%= render partial: 'shared/social_login_buttons' %>
-      <hr/>
-      <br/>
+      <% if Feature.social_login_enabled? %>
+        <%= render partial: 'shared/social_login_buttons' %>
+        <hr/>
+        <br/>
+        <div class="text-center">
+          <b>
+            Or, sign in with a Brick City Depot account
+          </b>
+        </div>
+        <br/>
+      <% else %>
       <div class="text-center">
         <b>
-          Or, sign in with a Brick City Depot account
+          Sign in with a Brick City Depot account
         </b>
       </div>
       <br/>
+      <% end %>
       <div class="row">
         <div class="col-md-6 offset-md-3">
           <%= form_for(@user, url: session_path(resource_name)) do |f| %>
@@ -89,7 +98,11 @@
     <div class="row">
       <div class="col-md-6 offset-md-3">
         <p>
-          Don't worry if you don't want to use a Twitter, Facebook, Etsy or Brick City Depot account; you can still check out as a guest.
+          <% if Feature.social_login_enabled? %>
+            Don't worry if you don't want to use a Twitter, Facebook, Etsy or Brick City Depot account; you can still check out as a guest.
+          <% else %>
+            Don't worry if you don't want to use a Brick City Depot account; you can still check out as a guest.
+          <% end %>
         </p>
       </div>
     </div>

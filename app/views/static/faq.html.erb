@@ -155,23 +155,42 @@
       <hr/>
       <div id="faqNine">
         <h5 class="mb-0">
-          <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-            Do you use my email address or Twitter/Facebook/Etsy info for nefarious purposes?
-          </a>
+          <% if Feature.social_login_enabled? %>
+            <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+              Do you use my email address or Twitter/Facebook/Etsy info for nefarious purposes?
+            </a>
+          <% else %>
+            <a href='#' class="btn-link faq collapsed" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+              Do you use my email address for nefarious purposes?
+            </a>
+          <% end %>
         </h5>
       </div>
       <div id="collapseNine" class="collapse" aria-labelledby="faqNine" data-parent="#accordion">
         <div class="faq-answer">
-          <p>
-            We are not at all nefarious. We have no intentions of selling your information, or using anything from your Twitter/Facebook/Etsy accounts other than your email address. We need your email address as a unique identifier to make sure that you&apos;ll be
-            able to access your instruction downloads. You can choose to receive as much or as little email as you want by setting email preferences
-            <%= link_to 'here', :controller => :registrations, :action => :edit %>. If you decide to use your Twitter, Facebook or Etsy logins to access Brick City Depot, we do not store your Twitter/Facebook/Etsy passwords, only the email address used to identify you. We
-            <strong>DO NOT</strong>
-            share
-            <strong>ANY</strong>
-            of your information with
-            <strong>ANYONE</strong>... unless, you know, you&apos;re a criminal and we have to comply with authorities. So don&apos;t be a criminal and we&apos;ll be cool.
-          </p>
+          <% if Feature.social_login_enabled? %>
+            <p>
+              We are not at all nefarious. We have no intentions of selling your information, or using anything from your Twitter/Facebook/Etsy accounts other than your email address. We need your email address as a unique identifier to make sure that you&apos;ll be
+              able to access your instruction downloads. You can choose to receive as much or as little email as you want by setting email preferences
+              <%= link_to 'here', :controller => :registrations, :action => :edit %>. If you decide to use your Twitter, Facebook or Etsy logins to access Brick City Depot, we do not store your Twitter/Facebook/Etsy passwords, only the email address used to identify you. We
+              <strong>DO NOT</strong>
+              share
+              <strong>ANY</strong>
+              of your information with
+              <strong>ANYONE</strong>... unless, you know, you&apos;re a criminal and we have to comply with authorities. So don&apos;t be a criminal and we&apos;ll be cool.
+            </p>
+          <% else %>
+            <p>
+              We are not at all nefarious. We have no intentions of selling your information, or using anything from your accounts othe than your email address. We need your email address as a unique identifier to make sure that you&apos;ll be
+              able to access your instruction downloads. You can choose to receive as much or as little email as you want by setting email preferences
+              <%= link_to 'here', :controller => :registrations, :action => :edit %>. We
+              <strong>DO NOT</strong>
+              share
+              <strong>ANY</strong>
+              of your information with
+              <strong>ANYONE</strong>... unless, you know, you&apos;re a criminal and we have to comply with authorities. So don&apos;t be a criminal and we&apos;ll be cool.
+            </p>
+          <% end %>
         </div>
       </div>
       <hr/>

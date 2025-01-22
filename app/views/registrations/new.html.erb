@@ -1,8 +1,10 @@
 <section class="content">
   <div class="container">
-    <%= render partial: 'shared/social_login_buttons' %>
-    <hr/>
-    <br/>
+    <% if Feature.social_login_enabled? %>
+      <%= render partial: 'shared/social_login_buttons' %>
+      <hr/>
+      <br/>
+    <% end %>
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <% if session["omniauth"] %>
@@ -43,9 +45,15 @@
       <% else %>
         <div id="regular_signup_div">
           <div>
+            <% if Feature.social_login_enabled? %>
+              <b>
+                Or, create a Brick City Depot account
+              </b>
+            <% else %>
             <b>
-              Or, create a Brick City Depot account
+              Create a Brick City Depot account
             </b>
+            <% end %>
           </div>
           <br/>
           <%= form_for(@user, url: registration_path(resource_name)) do |f| %>
@@ -76,9 +84,15 @@
       <div class="text-center">
         <br/>
         <br/>
-        <p>
-          Don't worry if you don't want to use a Twitter, Facebook, Etsy or Brick City Depot account; you can still check out as a guest.
-        </p>
+        <% if Feature.social_login_enabled? %>
+          <p>
+            Don't worry if you don't want to use a Twitter, Facebook, Etsy or Brick City Depot account; you can still check out as a guest.
+          </p>
+        <% else %>
+          <p>
+            Don't worry if you don't want to use a Brick City Depot account; you can still check out as a guest.
+          </p>
+        <% end %>
       </div>
     <% end %>
   </div>
