@@ -27,6 +27,16 @@ class StaticController < ApplicationController
     1 / 0
   end
 
+  def test_email_delivery
+    order = if Rails.env.production?
+              Order.find(5379)
+            else
+              Order.last
+            end
+    OrderMailer.order_confirmation(order.user_id, order.id).deliver_later
+    redirect_to '/', notice: 'Email sent'
+  end
+
   def send_contact_email
     # Adding this as a simple honeypot to try and stop spambots sending emails
     # through the contact form.

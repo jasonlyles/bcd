@@ -172,6 +172,7 @@ Rails.application.routes.draw do
   get 'faq', to: 'static#faq'
   get 'new_user_tutorial', to: 'static#new_user_tutorial'
   get 'exception_notification_test', to: 'static#test_exception_notification_delivery'
+  get 'test_email_delivery', to: 'static#test_email_delivery'
 
   # download routes
   get 'download/error', to: 'downloads#error'
