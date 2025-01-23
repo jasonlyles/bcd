@@ -28,7 +28,7 @@ Based on your purchase, here are some other items we think you might like:
               <br/>
             <a href="<%= "{@host}/#{product.product_code}/#{product.name.to_snake_case}" %>" <%= product.name %></a>
             <br/>
-            <%= number_to_currency(product.price) %>
+            <%= number_to_currency(product.current_price) %>
           </td>
         <% end %>
       </tr>

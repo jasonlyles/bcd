@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_22_163140) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_22_192555) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -397,6 +397,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_22_163140) do
     t.datetime "updated_at", precision: nil
     t.index ["session_id"], name: "index_sessions_on_session_id"
     t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description", null: false
+    t.text "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_settings_on_name", unique: true
   end
 
   create_table "subcategories", id: :serial, force: :cascade do |t|

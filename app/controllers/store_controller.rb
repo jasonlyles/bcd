@@ -212,7 +212,7 @@ class StoreController < ApplicationController
     @order.line_items.each do |item|
       index += 1
       item_hash["item_name_#{index}".to_sym] = item.product.code_and_name
-      item_hash["amount_#{index}".to_sym] = item.product.price.to_f * item.quantity
+      item_hash["amount_#{index}".to_sym] = item.product.current_price.to_f * item.quantity
       item_hash["quantity_#{index}".to_sym] = item.quantity
     end
 

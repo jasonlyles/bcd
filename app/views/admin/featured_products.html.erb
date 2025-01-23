@@ -40,11 +40,13 @@
       },
       cache: false,
       type: 'PATCH',
-      url: '/products/' + id + '.json',
+      url: '/admin/products/' + id + '/toggle_featured.json',
       error: function (XMLHttpRequest, errorTextStatus, error) {
         alert("Failed to Update : " + errorTextStatus + " ; " + error);
       },
-      success: function (data) {}
+      success: function(data) {
+        alert("Success!")
+      }
     });
   };
 </script>

@@ -11,7 +11,7 @@ class LineItem < ApplicationRecord
     LineItem.new(
       product_id: cart_item.product.id,
       quantity: cart_item.quantity,
-      total_price: cart_item.quantity * cart_item.product.price
+      total_price: cart_item.quantity * cart_item.product.current_price
     )
   end
 end

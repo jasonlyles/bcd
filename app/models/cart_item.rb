@@ -23,6 +23,6 @@ class CartItem < ApplicationRecord
   # end
 
   def price
-    product.price
+    product.current_price
   end
 end

@@ -53,6 +53,26 @@ class Admin::ProductsController < AdminController
     end
   end
 
+  # PATCH /admin/products/1/toggle_featured.json
+  def toggle_featured
+    product = Product.find(params[:id])
+    respond_to do |format|
+      if product.featured?
+        product.featured = false
+        product.discount_percentage = 0.0
+      else
+        product.featured = true
+        product.discount_percentage = Setting.default_discount_percentage_value.to_f
+      end
+
+      if product.save
+        format.json { render json: true }
+      else
+        format.json { render json: product.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /products/1
   def destroy
     @product.destroy

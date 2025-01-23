@@ -166,3 +166,6 @@ end
 
 # Add features
 Feature.create(name: 'social_logins', description: 'This feature allows users to sign-in to BCD using social logins, like Facebook, Twitter, Etsy', enabled: false)
+
+# Add settings
+Setting.create(name: 'default_discount_percentage', value: '25.0', description: 'The default discount percentage a model is set to when featuring it.')

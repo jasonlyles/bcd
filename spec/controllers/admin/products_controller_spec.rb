@@ -167,6 +167,36 @@ describe Admin::ProductsController do
     end
   end
 
+  describe 'PATCH #toggle_featured' do
+    it 'flips a not-featured product to be featured' do
+      FactoryBot.create(:setting)
+      product = Product.create! valid_attributes
+
+      expect(product.featured).to eq(false)
+      expect(product.discount_percentage).to eq(0.0)
+
+      patch :toggle_featured, params: { id: product.id }, format: :json
+      product.reload
+
+      expect(product.featured).to eq(true)
+      expect(product.discount_percentage).to eq(25.0)
+    end
+
+    it 'flips a featured product to not be featured' do
+      FactoryBot.create(:setting)
+      product = Product.create! valid_attributes
+      product.featured = true
+      product.discount_percentage = 50.0
+      product.save
+
+      patch :toggle_featured, params: { id: product.id }, format: :json
+      product.reload
+
+      expect(product.featured).to eq(false)
+      expect(product.discount_percentage).to eq(0.0)
+    end
+  end
+
   describe 'DELETE #destroy' do
     it 'destroys the requested product' do
       product = Product.create! valid_attributes
@@ -203,8 +233,8 @@ describe Admin::ProductsController do
     context 'for a product with pinterest pins' do
       it 'should retire the product and delete the pins' do
         request.env['HTTP_REFERER'] = '/'
-        retired_category = FactoryBot.create(:category, name: 'Retired')
-        retired_subcategory = FactoryBot.create(:subcategory, name: 'Retired', code: 'RT')
+        FactoryBot.create(:category, name: 'Retired')
+        FactoryBot.create(:subcategory, name: 'Retired', code: 'RT')
         product = FactoryBot.create(:product, category_id: @category.id, subcategory_id: @subcategory.id)
         FactoryBot.create(:pin_with_associations, product:)
 

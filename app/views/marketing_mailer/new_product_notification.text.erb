@@ -23,7 +23,7 @@
   <% if @product['discount_percentage'].to_f.positive? %>
     Special introductory price! Normally
     <%= number_to_currency(@product['price']) %>, but only
-    <%= number_to_currency(@product['discounted_price']) %>
+    <%= number_to_currency(@product['current_price']) %>
     for a limited time!
   <% else %>
     Only

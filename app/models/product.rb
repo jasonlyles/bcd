@@ -16,11 +16,6 @@ class Product < ApplicationRecord
   accepts_nested_attributes_for :images, allow_destroy: true
   accepts_nested_attributes_for :parts_lists, allow_destroy: true
 
-  # attr_accessible :category_id, :description, :discount_percentage, :name, :pdf, :pdf_cache,
-  # :price, :product_code, :product_type_id, :ready_for_public, :remove_pdf,
-  # :subcategory_id, :tweet, :free, :quantity, :alternative_build, :youtube_url, :images_attributes,
-  # :parts_lists_attributes, :featured, :designer
-
   validates :product_code, uniqueness: true, presence: true
   validates :product_type_id, presence: true
   validates :subcategory_id, presence: true
@@ -58,7 +53,7 @@ class Product < ApplicationRecord
       'free?' => free,
       'discount_percentage' => discount_percentage,
       'price' => price,
-      'discounted_price' => discounted_price,
+      'current_price' => current_price,
       'product_code' => product_code,
       'code_and_name' => code_and_name
     }
@@ -206,7 +201,7 @@ class Product < ApplicationRecord
     save
   end
 
-  def discounted_price
+  def current_price
     # Assumes discount_percentage is stored as an integer. i.e. 25, which means 25%
     discount_percentage? ? (price * (100 - discount_percentage) / 100.to_f) : price
   end

@@ -336,7 +336,7 @@ describe StoreController do
     end
 
     it 'should return a 404 if the product cannot be found' do
-      product = FactoryBot.create(:product)
+      FactoryBot.create(:product)
       get :product_details, params: { product_code: 'Fake', product_name: 'Fake' }
 
       expect(response.code).to eq('404')
@@ -376,22 +376,24 @@ describe StoreController do
       @user = FactoryBot.create(:user)
       FactoryBot.create(:product)
       @cart = FactoryBot.create(:cart_with_cart_items, user_id: @user.id)
+      total_price = @cart.total_price
       sign_in @user
       post :submit_order, params: { order: { user_id: @user.id } }
 
       # I don't like this, but I'm not sure how else to do it.
-      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=10.0&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=1&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
+      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=#{total_price}&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=1&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
     end
 
     it 'should send the right quantity and amount when sending the order to paypal' do
       @user = FactoryBot.create(:user)
       FactoryBot.create(:product)
       @cart = FactoryBot.create(:cart_with_cart_items_with_multiple_quantity, user_id: @user.id)
+      total_price = @cart.total_price
       sign_in @user
       post :submit_order, params: { order: { user_id: @user.id } }
 
       # I don't like this, but I'm not sure how else to do it.
-      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=20.0&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=2&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
+      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=#{total_price}&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=2&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
     end
 
     it "should redirect to cart with an 'uh-oh' message if the order couldn't be submitted" do
@@ -487,7 +489,7 @@ describe StoreController do
 
   describe 'products' do
     it 'should not get @products if product_type is Instructions' do
-      product = FactoryBot.create(:product)
+      FactoryBot.create(:product)
       get :products, params: { product_type_name: @product_type.name }
       expect(assigns(:product_type).name).to eq('Instructions')
       expect(assigns(:products)).to be_nil
@@ -495,8 +497,8 @@ describe StoreController do
 
     it 'should get @products if product_type is not Instructions' do
       @product_type = FactoryBot.create(:product_type, name: 'Models')
-      product = FactoryBot.create(:product, product_code: 'CB001')
-      product2 = FactoryBot.create(:product, product_type_id: @product_type.id, product_code: 'CB001M', name: 'The Model')
+      FactoryBot.create(:product, product_code: 'CB001')
+      FactoryBot.create(:product, product_type_id: @product_type.id, product_code: 'CB001M', name: 'The Model')
       get :products, params: { product_type_name: 'Models' }
       expect(assigns(:product_type).name).to eq('Models')
       expect(assigns(:products).size).to eq(1)

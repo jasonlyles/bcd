@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     resources :product_types
     resources :products do
       member do
+        patch :toggle_featured
         post :create_etsy_listing
         post :update_etsy_listing
         delete :destroy_etsy_listing

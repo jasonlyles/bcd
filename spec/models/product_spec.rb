@@ -37,13 +37,13 @@ describe Product do
 
   it 'should only find models that are ready for the public' do
     # First product is ready for public, 2nd one is not, so there should only be 1 product
-    products = [FactoryBot.create(:product),
-                FactoryBot.create(:product,
-                                  name: 'Grader',
-                                  product_code: 'WC002',
-                                  description: 'Winter Village Grader... are you kidding? w00t! Plow your winter village to the ground and then flatten it out with this sweet grader.',
-                                  price: '5.00',
-                                  ready_for_public: 'f')]
+    [FactoryBot.create(:product),
+     FactoryBot.create(:product,
+                       name: 'Grader',
+                       product_code: 'WC002',
+                       description: 'Winter Village Grader... are you kidding? w00t! Plow your winter village to the ground and then flatten it out with this sweet grader.',
+                       price: '5.00',
+                       ready_for_public: 'f')]
     @products = Product.find_products_for_sale
     expect(@products.size).to eq(1)
   end
@@ -383,17 +383,17 @@ describe Product do
     end
   end
 
-  describe 'discounted_price' do
+  describe 'current_price' do
     it 'should return the price if there is no discount' do
       @product = FactoryBot.create(:product, discount_percentage: 0)
 
-      expect(@product.discounted_price.to_f).to eq(@product.price.to_f)
+      expect(@product.current_price.to_f).to eq(@product.price.to_f)
     end
 
     it 'should return a discounted price if discount_percentage is set' do
       @product = FactoryBot.create(:product, discount_percentage: 25)
 
-      expect(@product.discounted_price.to_f).to eq(7.5)
+      expect(@product.current_price.to_f).to eq(7.5)
     end
   end
 
@@ -441,7 +441,7 @@ describe Product do
         sleep 1
         product.update(etsy_updated_at: Time.now)
         # Add an image so that will show up as changed
-        image = FactoryBot.create(:image, product:)
+        FactoryBot.create(:image, product:)
 
         expect(product.assemble_changes_since_last_etsy_update.map(&:first).sort).to eq(['image added'])
       end
