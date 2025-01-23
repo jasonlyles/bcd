@@ -6,6 +6,7 @@ class OrderMailer < ActionMailer::Base
 
   def order_confirmation(user_id, order_id)
     @host = Rails.application.config.web_host
+    @asset_host = Rails.application.config.asset_host
     @order = Order.find(order_id)
     @user = User.find(user_id)
     @hide_unsubscribe = true
@@ -17,6 +18,7 @@ class OrderMailer < ActionMailer::Base
 
   def guest_order_confirmation(user_id, order_id, link_to_downloads)
     @host = Rails.application.config.web_host
+    @asset_host = Rails.application.config.asset_host
     @order = Order.find(order_id)
     @user = User.find(user_id)
     @link_to_downloads = link_to_downloads
@@ -29,6 +31,7 @@ class OrderMailer < ActionMailer::Base
 
   def third_party_guest_order_confirmation(order_id)
     @host = Rails.application.config.web_host
+    @asset_host = Rails.application.config.asset_host
     @order = Order.find(order_id)
     @user = @order.user
     @link_to_downloads = @order.retrieve_link_to_downloads
@@ -46,6 +49,7 @@ class OrderMailer < ActionMailer::Base
 
   def physical_item_purchased(user_id, order_id)
     @host = Rails.application.config.web_host
+    @asset_host = Rails.application.config.asset_host
     @order = Order.find(order_id)
     @user = User.find(user_id)
 
@@ -56,6 +60,7 @@ class OrderMailer < ActionMailer::Base
   def follow_up(order_id)
     number_of_products = 3
     @host = Rails.application.config.web_host
+    @asset_host = Rails.application.config.asset_host
     order = Order.where(['id=?', order_id]).includes(:line_items).first
     @user = order.user
     products_bought = @user.products.pluck(:product_id)
@@ -73,6 +78,7 @@ class OrderMailer < ActionMailer::Base
 
   def pass_along_buyer_message(source, order_id, user_email, buyer_message)
     @host = Rails.application.config.web_host
+    @asset_host = Rails.application.config.asset_host
     @source = source
     @order_id = order_id
     @user_email = user_email
