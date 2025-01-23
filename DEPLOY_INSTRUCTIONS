@@ -48,7 +48,7 @@ SETTING UP THE DB:
 
 * vim /etc/sudoers.d/rails
   Add the following:
-  rails ALL=NOPASSWD: /bin/systemctl status rails, /bin/systemctl status rails.service, /bin/systemctl restart sidekiq.service, /bin/systemctl status sidekiq.service, /bin/systemctl restart puma.service, /bin/systemctl status puma.service, /bin/systemctl restart rails, /bin/systemctl restart rails.service
+  rails ALL=NOPASSWD: /bin/systemctl status rails, /bin/systemctl restart sidekiq, /bin/systemctl status sidekiq, /bin/systemctl restart puma, /bin/systemctl status puma, /bin/systemctl restart rails, /bin/systemctl start rails
 * sudo chmod 440 /etc/sudoers.d/rails
 
 SET UP REDIS

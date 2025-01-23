@@ -197,8 +197,6 @@ Rails.application.routes.draw do
   get 'store/kits', to: 'store#kits'
   get 'store/models', to: 'store#models'
   get 'thank_you', to: 'store#thank_you_for_your_order'
-  get 'order_test', to: 'store#order_confirmation_email_test'
-  get 'physical_order_test', to: 'store#physical_order_email_test'
   get 'store', to: 'store#index'
   post 'add_to_cart/:product_code', to: 'store#add_to_cart'
   get 'add_to_cart/:product_code', to: 'store#add_to_cart'
