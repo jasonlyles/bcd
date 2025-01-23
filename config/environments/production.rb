@@ -108,7 +108,7 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and javascripts from an asset server
   # Using the cloudfront name until I can get prod deployed, switch DNS providers, and get my cname set up again
-  config.asset_host = 'd1f3s1yrq7p474.cloudfront.net' # "assets.brickcitydepot.com"
+  config.asset_host = 'https://d1f3s1yrq7p474.cloudfront.net' # "assets.brickcitydepot.com"
 
   # Devise needs a default url
   config.action_mailer.default_url_options = { host: 'brickcitydepot.com' }
