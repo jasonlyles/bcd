@@ -15,6 +15,9 @@ class RegistrationsController < Devise::RegistrationsController
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
   def create
+    # Try to deflect a spambot trying to create accounts
+    return redirect_to '/' if params['user[email]'].present?
+
     signup_params = {}
     user_params = %w[email tos_accepted email_preference password password_confirmation]
     params['user'].each do |key, value|
