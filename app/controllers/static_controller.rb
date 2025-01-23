@@ -29,11 +29,16 @@ class StaticController < ApplicationController
 
   def test_email_delivery
     order = if Rails.env.production?
+              # This is an order that belongs to me
               Order.find(5379)
             else
               Order.last
             end
-    OrderMailer.order_confirmation(order.user_id, order.id).deliver_later
+    if order.user.account_status == 'G'
+      OrderMailer.guest_order_confirmation(order.user_id, order.id, order.retrieve_link_to_downloads).deliver_later
+    else
+      OrderMailer.order_confirmation(order.user_id, order.id).deliver_later
+    end
     redirect_to '/', notice: 'Email sent'
   end
 

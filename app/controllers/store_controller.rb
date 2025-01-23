@@ -233,21 +233,6 @@ class StoreController < ApplicationController
     end
   end
 
-  # :nocov:
-  def order_confirmation_email_test
-    @order = Order.find_by_user_id 5 # Jason
-    download_links = @order.retrieve_link_to_downloads
-    OrderMailer.guest_order_confirmation(@order.user_id, @order.id, download_links).deliver_now
-  end
-  # :nocov:
-
-  # :nocov:
-  def physical_order_email_test
-    @order = Order.find 9
-    OrderMailer.physical_item_purchased(@order.user_id, @order.id).deliver_now
-  end
-  # :nocov:
-
   def thank_you_for_your_order
     cookies.delete :show_thank_you
     return unless session[:guest].is_a?(Integer)
