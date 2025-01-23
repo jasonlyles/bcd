@@ -5,7 +5,7 @@ Thank you for your recent order with Brick City Depot. We just wanted to follow 
 Based on your purchase, here are some other items we think you might like:
 
 <% @products_to_recommend.each do |product| %>
-<%= "#{number_to_currency(product.price)} #{product.name}" %>
+<%= "#{number_to_currency(product.current_price)} #{product.name}" %>
 <%= "#{@host}/#{product.product_code}/#{product.name.to_snake_case}" %>
 <% end %>
 

@@ -5,7 +5,7 @@ describe CartItem do
     @product_type = FactoryBot.create(:product_type)
     @category = FactoryBot.create(:category)
     @subcategory = FactoryBot.create(:subcategory)
-    @product = FactoryBot.create(:product, price: 5.0)
+    @product = FactoryBot.create(:product, price: 5.0, discount_percentage: 0.0)
   end
 
   describe 'price' do

@@ -93,8 +93,19 @@
                   <% else %>
                     <br/>
                     <br/>
-                    <h5 class="d-inline">Price:</h5>
-                    <%= number_to_currency(@product.price) %>
+                    <% if @product.discount_percentage > 0 %>
+                      <h5 class="d-inline">Regular Price:</h5>
+                      <%= number_to_currency(@product.price) %>
+                      <br />
+                      <h5 class="d-inline">Discounted Price:</h5>
+                      <span class="hero-price">
+                        <%= number_to_currency(@product.discounted_price) %>
+                      </span>
+                    <% else %>
+                      <h5 class="d-inline">Price:</h5>
+                      <%= number_to_currency(@product.price) %>
+                    <% end %>
+                    <br />
                   <% end %>
                   <br/>
                   <% unless @product.out_of_stock? || @product.free? %>

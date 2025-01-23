@@ -47,8 +47,8 @@ describe Cart do
   describe 'total_price' do
     it 'should return a total price' do
       @cart = Cart.new
-      @cart.add_product(@product)
-      @cart.add_product(FactoryBot.create(:product, price: 5.0, product_code: 'XX111', name: 'Awesomeness'))
+      @cart.add_product(FactoryBot.create(:product, price: 10.0, discount_percentage: 0.0, product_code: 'XX112', name: 'Awesomeness2'))
+      @cart.add_product(FactoryBot.create(:product, price: 5.0, discount_percentage: 0.0, product_code: 'XX111', name: 'Awesomeness'))
 
       expect(@cart.total_price).to eq(15.0)
     end
@@ -125,7 +125,7 @@ describe Cart do
     it 'should return true if one of the items in the cart is a physical item' do
       @product_type2 = FactoryBot.create(:product_type, name: 'Models', digital_product: false)
       @cart = FactoryBot.create(:cart)
-      product1 = FactoryBot.create(:product, product_code: 'CV900', name: 'Winter Village Road Salt Dome')
+      FactoryBot.create(:product, product_code: 'CV900', name: 'Winter Village Road Salt Dome')
       product2 = FactoryBot.create(:product, product_type_id: @product_type2.id, product_code: 'CV900M', name: 'Winter Village Road Salt Dome Model')
       @cart_item = FactoryBot.create(:cart_item, product_id: product2.id)
       expect(@cart.includes_physical_item?).to eq(true)
