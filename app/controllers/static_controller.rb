@@ -9,7 +9,7 @@ class StaticController < ApplicationController
     # TODO: Sticking with pagination for now, even though the per is greater than the
     # actual number of products. I'm still interested in looking at maybe doing
     # infinite scroll for the products.
-    @products = Product.where('product_type_id=?', @product_type.id).ready_instructions_without_includes.includes([:images]).page(params[:page]).per(80)
+    @products = Product.where('product_type_id=?', @product_type.id).ready_instructions_without_includes.order(Arel.sql('popularity_order ASC NULLS LAST')).includes([:images]).page(params[:page]).per(80)
     @updates = Update.live_updates
   end
 
