@@ -23,9 +23,7 @@ class StaticController < ApplicationController
     redirect_to '/', notice: 'Done with maintenance!'
   end
 
-  # This exists only to confirm that my exception notification delivery is working. Would be nicer to perhaps hook
-  # into heroku deploy to send an email through the exception notification gem to just email me during/after a deploy.
-  # This will do for now.
+  # This exists only to confirm that my exception notification delivery is working.
   # /exception_notification_test
   def test_exception_notification_delivery
     1 / 0

@@ -23,7 +23,7 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   # TODO: May be able to remove the public_file_server.enabled line as part of upgrading to Rails 7.2
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :terser
@@ -102,7 +102,7 @@ Rails.application.configure do
   config.action_controller.asset_host = 'dkki5p6pvm5jx.cloudfront.net' # "assets.brickcitydepot.com"
 
   # Devise needs a default url
-  config.action_mailer.default_url_options = { host: 'bcd-stg2.onrender.com' }
+  config.action_mailer.default_url_options = { host: 'example.com' }
 
   # Set to use Amazon ses via aws-sdk gem
   config.action_mailer.delivery_method = :aws_sdk
@@ -122,7 +122,7 @@ Rails.application.configure do
                                                  exception_recipients: ['lylesjt@gmail.com']
                                                }
 
-  config.web_host = 'https://bcd-stg2.onrender.com'
+  config.web_host = 'example.com'
 
   config.pinterest_api_url = 'https://api-sandbox.pinterest.com/v5'
 end
