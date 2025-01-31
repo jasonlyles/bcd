@@ -5,7 +5,11 @@ class StaticController < ApplicationController
     # session.delete(:guest_has_arrived_for_downloads)
     # session.delete(:guest) #for testing
     # reset_session #for testing
-    # flash[:notice] = 'This is only a test. If this had been the real thing...'
+    @product_type = ProductType.where(name: 'Instructions').first
+    # TODO: Sticking with pagination for now, even though the per is greater than the
+    # actual number of products. I'm still interested in looking at maybe doing
+    # infinite scroll for the products.
+    @products = Product.where('product_type_id=?', @product_type.id).ready_instructions_without_includes.includes([:images]).page(params[:page]).per(80)
     @updates = Update.live_updates
   end
 

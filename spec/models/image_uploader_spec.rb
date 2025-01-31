@@ -33,9 +33,9 @@ describe ImageUploader do
     expect(@uploader).to have_permissions(0o644)
   end
 
-  it 'should only allow jpg, jpeg, gif and png to be uploaded' do
+  it 'should only allow jpg, jpeg, gif, png, avif and webp to be uploaded' do
     expect { @uploader.store!(File.open(File.join(Rails.root, 'spec', 'support', 'pdfs', 'fake_pdf.pdf'))) }.to raise_error(CarrierWave::IntegrityError)
-    expect(@uploader.extension_allowlist).to eq(%w[jpg jpeg gif png])
+    expect(@uploader.extension_allowlist).to eq(%w[jpg jpeg gif png avif webp])
   end
 
   it 'should create a storage dir based on model category, subcategory, product code and model ID' do

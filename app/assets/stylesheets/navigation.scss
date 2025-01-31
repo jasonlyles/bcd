@@ -51,10 +51,10 @@
     right: auto !important;
   }
 }
-@media(max-width: 404px) {
+@media(max-width: 440px) {
   .navbar-brand-logo {
     position: fixed;
-    top: 2px;
+    top: 3px;
     right: 10px;
     height: 80px;
   }

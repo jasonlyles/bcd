@@ -56,7 +56,7 @@ describe ApplicationHelper do
       expect(helper.opengraph_metadata).to eq(
         app_id: 190_041_747_696_738,
         description: 'Brick City Depot sells custom Lego instructions, models and kits. Featuring models based on the Lego Modular Buildings line.',
-        image: 'http://test.host/assets/logo_200x200-31ac55a9f6969519da50b10d2f88d7eadde1e0e1249e3c6fbad5b9c7bc3994e2.png',
+        image: 'http://test.host/assets/logos/logo_200x200-31ac55a9f6969519da50b10d2f88d7eadde1e0e1249e3c6fbad5b9c7bc3994e2.png',
         site_name: 'Brick City Depot',
         title: 'Brick City Depot. The internets\' best source for custom Lego instructions.',
         url: 'http://test.host'
@@ -66,8 +66,8 @@ describe ApplicationHelper do
 
   describe 'decorate_source' do
     it 'should return the correct image' do
-      expect(helper.decorate_source('brick_city_depot')).to match(/logo140x89/)
-      expect(helper.decorate_source('etsy')).to match(/etsy_logo/)
+      expect(helper.decorate_source('brick_city_depot')).to match(/logos\/logo140x89/)
+      expect(helper.decorate_source('etsy')).to match(/third_party_logos\/etsy_logo/)
       expect(helper.decorate_source('unknown')).to eq('Unknown')
     end
   end

@@ -2,7 +2,6 @@
 
 class Update < ApplicationRecord
   mount_uploader :image, ImageUploader, validate_integrity: true
-  # attr_accessible :title, :description, :body, :image, :image_cache, :remove_image, :image_align, :created_at, :live, :link
 
   validates :title, presence: true
   # Taking out the body for now because at first I'm going to keep it simple and just have the updates be 700x250 images.

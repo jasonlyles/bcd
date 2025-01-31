@@ -1,0 +1,21 @@
+<div id="carousel" class="carousel slide" data-ride="carousel" data-pause="hover">
+  <% unless preview %>
+    <ol class="carousel-indicators m-auto p-1 rounded d-none d-md-inline-flex" style="background-color: rgba(0, 0, 0, 0.4); width: fit-content;">
+      <% updates.each_with_index do |update, i| %>
+        <li data-target="#carousel" data-slide-to="<%= i %>" class="<%= 'active' if i == 0 %>"></li>
+      <% end %>
+    </ol>
+  <% end %>
+  <div class="carousel-inner">
+    <% updates.each_with_index do |update, i| %>
+      <div class="carousel-item <%= 'active' if i == 0 %>">
+        <%= image_tag update.image.url, class: 'img-fluid', style: 'width: 100%;' %>
+        <div class="carousel-caption-bcd">
+          <%= link_to 'Learn More', update.link, class: 'btn btn-primary btn-lg d-none d-md-block' %>
+          <%= link_to 'Learn More', update.link, class: 'btn btn-primary btn-sm d-md-none d-block' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <%= picture_tag("figs/lifting.avif", "figs/lifting.png", id: 'lifting-fig', image: { alt: "Lifting Minifig", class: "img-fluid #{preview == true ? 'sigfig-sm mb-4' : 'sigfig-md'} d-none d-md-block" }) %>
+</div>
