@@ -33,11 +33,13 @@ class Product < ApplicationRecord
   # letting this product be made available to the public
   validates :ready_for_public, pdf_exists: true
 
-  scope :ready, -> { where(ready_for_public: true).includes(:category).includes(:subcategory) }
   scope :featured, -> { where(featured: true) }
   scope :in_stock, -> { where('quantity > 0') } # Maybe set up to use only physical products, and not digital products
+  scope :ready, -> { where(ready_for_public: true).includes(%i[category subcategory]) }
   scope :ready_instructions, -> { ready.instructions }
   scope :sellable_instructions, -> { where(ready_for_public: true).instructions.where(free: false) }
+  scope :ready_without_includes, -> { where(ready_for_public: true) }
+  scope :ready_instructions_without_includes, -> { ready_without_includes.instructions }
 
   # TODO: Change this to super.merge like in the email_campaign model.
   def attributes

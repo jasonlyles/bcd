@@ -197,7 +197,7 @@ class StoreController < ApplicationController
       upload: '1',
       custom: @order.request_id,
       business: Rails.application.credentials.paypal.email,
-      image_url: "#{Rails.application.config.web_host}/assets/logo140x89.png",
+      image_url: "#{Rails.application.config.web_host}/assets/logos/logo140x89.png",
       return: Rails.application.credentials.paypal.return_url,
       notify_url: Rails.application.credentials.paypal.notify_url,
       currency_code: 'USD'

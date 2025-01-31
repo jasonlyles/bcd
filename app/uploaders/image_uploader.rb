@@ -70,7 +70,7 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   def extension_allowlist
-    %w[jpg jpeg gif png]
+    %w[jpg jpeg gif png avif webp]
   end
 
   # A content_type_allowlist is the only form of allowlist or denylist supported

@@ -3,7 +3,7 @@
     <h1><%= @update.title %></h1>
   </div>
 </div>
-<div class="row">
+<div class="row" style="margin-bottom: 250px;">
   <div class="col-4">
     <div class="card">
       <div class="card-header d-flex justify-content-between">
@@ -47,10 +47,13 @@
       <div class="card-header">
         <b class="mt-2">Image Preview (If it doesn't look good here. It won't look good on the front page.)</b>
       </div>
-      <div class="card-body">
-        <% if @update.image? %>
-          <%= link_to(image_tag(@update.image.url), @update.link) unless @update.image.blank? %>
-        <% end %>
+      <div class="card-body bg-secondary">
+
+        <div class="p-2">
+          <% if @update.image? %>
+            <%= render partial: 'shared/carousel', locals: { updates: Update.where(id: @update.id), preview: true } %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

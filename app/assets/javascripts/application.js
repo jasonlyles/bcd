@@ -3,23 +3,27 @@
 //= require bootstrap
 //= require jquery-ui/widgets/autocomplete
 //= require jquery_ujs
-//= require jquery.carousel
 //= require nested_form
 //= require easing
 //= require cookies_eu
 //= require_tree .
+
+$('.scroll-to-anchor').click(function() {
+    var sectionTo = $(this).attr('href');
+    $('html, body').animate({
+      scrollTop: $(sectionTo).offset().top
+    }, 1500);
+});
 
 $(window).scroll(function() {
   var navBar = $('.navbar')[0];
   if (typeof navBar !== "undefined") {
     if ($('.navbar').offset().top > 8) {
       $('.fixed-top').addClass('top-nav-collapse');
-      $('#scroll-down').removeClass('d-lg-block');
       $('.navbar-toggler').addClass('white-navbar-toggler');
       $('.navbar-toggler-icon').addClass('white-navbar-toggler-icon');
     } else {
       $('.fixed-top').removeClass('top-nav-collapse');
-      $('#scroll-down').addClass('d-lg-block');
       $('.navbar-toggler').removeClass('white-navbar-toggler');
       $('.navbar-toggler-icon').removeClass('white-navbar-toggler-icon');
     }

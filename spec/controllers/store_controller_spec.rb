@@ -381,7 +381,7 @@ describe StoreController do
       post :submit_order, params: { order: { user_id: @user.id } }
 
       # I don't like this, but I'm not sure how else to do it.
-      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=#{total_price}&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=1&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
+      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=#{total_price}&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logos/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=1&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
     end
 
     it 'should send the right quantity and amount when sending the order to paypal' do
@@ -393,7 +393,7 @@ describe StoreController do
       post :submit_order, params: { order: { user_id: @user.id } }
 
       # I don't like this, but I'm not sure how else to do it.
-      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=#{total_price}&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=2&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
+      expect(response).to redirect_to("https://#{Rails.application.credentials.paypal.host}/cgi-bin/webscr?amount_1=#{total_price}&business=#{Rails.application.credentials.paypal.email}&cmd=_cart&currency_code=USD&custom=#{assigns(:order).request_id}&image_url=#{Rails.application.config.web_host}/assets/logos/logo140x89.png&item_name_1=CB001%20Colonial%20Revival%20House&notify_url=#{Rails.application.credentials.paypal.notify_url}&quantity_1=2&return=#{Rails.application.credentials.paypal.return_url}&upload=1")
     end
 
     it "should redirect to cart with an 'uh-oh' message if the order couldn't be submitted" do

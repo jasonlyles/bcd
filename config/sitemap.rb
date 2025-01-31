@@ -26,7 +26,7 @@ SitemapGenerator.verbose = false
 
 SitemapGenerator::Sitemap.create do
   add '/', priority: 0.9, changefreq: 'daily', images: [{
-    loc: 'https://brickcitydepot-images.s3.amazonaws.com/logo180x115.png',
+    loc: 'https://brickcitydepot-images.s3.amazonaws.com/logos/logo180x115.png',
     title: 'Brick City Depot',
     caption: 'Brick City Depot'
   }]

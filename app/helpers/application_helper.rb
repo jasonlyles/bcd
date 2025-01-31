@@ -7,7 +7,7 @@ module ApplicationHelper
   end
 
   def featured_items
-    Product.find_products_for_sale.featured.order(Arel.sql('random()')).first(1)
+    Product.featured.order(Arel.sql('random()')).first(1)
   end
 
   def current_month
@@ -31,7 +31,7 @@ module ApplicationHelper
   end
 
   def opengraph_metadata
-    { image: asset_url('logo_200x200.png'),
+    { image: asset_url('logos/logo_200x200.png'),
       title: "Brick City Depot. The internets' best source for custom Lego instructions.",
       description: 'Brick City Depot sells custom Lego instructions, models and kits. Featuring models based on the Lego Modular Buildings line.',
       app_id: Rails.application.credentials.facebook.app_id,
@@ -50,13 +50,13 @@ module ApplicationHelper
   def decorate_source(value)
     case value
     when 'brick_city_depot'
-      image_tag('logo140x89.png', style: 'height: 30px;')
+      image_tag('logos/logo140x89.png', style: 'height: 30px;')
     when 'etsy'
-      image_tag('etsy_logo.png', style: 'height: 30px;')
+      image_tag('third_party_logos/etsy_logo.png', style: 'height: 30px;')
     when 'ebay'
-      image_tag('ebay_logo.gif', style: 'height: 20px;')
+      image_tag('third_party_logos/ebay_logo.gif', style: 'height: 20px;')
     when 'bricklink'
-      image_tag('bricklink-logo.png', style: 'height: 20px;')
+      image_tag('third_party_logos/bricklink-logo.png', style: 'height: 20px;')
     else
       value.capitalize
     end

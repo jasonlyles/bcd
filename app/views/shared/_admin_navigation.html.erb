@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-  <%= link_to image_tag('logo140x89.png', alt: "BCD logo", title: "Brick City Depot", class: 'navbar-brand'), root_path %>
+  <%= link_to image_tag('logos/logo140x89.png', alt: "BCD logo", title: "Brick City Depot", class: 'navbar-brand'), root_path %>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -131,12 +131,12 @@
       </li>
       <% if !BackendOauthToken.token_current?(:etsy) %>
         <li class="nav-button">
-          <%= link_to image_tag('etsy_logo.png', alt: 'Login to Etsy', title: 'Login to Etsy', class: 'navbar-logo-button'), admin_redirect_to_etsy_oauth_path %>
+          <%= link_to image_tag('third_party_logos/etsy_logo.png', alt: 'Login to Etsy', title: 'Login to Etsy', class: 'navbar-logo-button'), admin_redirect_to_etsy_oauth_path %>
         </li>
       <% end %>
       <% if false # !BackendOauthToken.token_current?(:pinterest) comment this out for now %>
         <li class="nav-button">
-          <%= link_to image_tag('pinterest_logo.png', alt: 'Login to Pinterest', title: 'Login to Pinterest', class: 'navbar-logo-button'), admin_redirect_to_pinterest_oauth_path %>
+          <%= link_to image_tag('third_party_logos/pinterest_logo.png', alt: 'Login to Pinterest', title: 'Login to Pinterest', class: 'navbar-logo-button'), admin_redirect_to_pinterest_oauth_path %>
         </li>
       <% end %>
     </ul>
