@@ -37,3 +37,8 @@ refresh_pinterest_access_token:
   cron:                          '0 0 */29 * *'
   class:                         'RefreshPinterestAccessTokenJob'
   queue:                         low
+
+set_product_popularity_order:
+  cron:                          '0 6 * * 0'
+  class:                         'SetProductPopularityOrderJob'
+  queue:                         low

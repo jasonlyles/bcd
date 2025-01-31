@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_22_192555) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_31_200427) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -366,6 +366,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_22_192555) do
     t.string "etsy_listing_url"
     t.datetime "etsy_created_at", precision: nil
     t.datetime "etsy_updated_at", precision: nil
+    t.integer "popularity_order"
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["product_type_id"], name: "index_products_on_product_type_id"
     t.index ["subcategory_id"], name: "index_products_on_subcategory_id"
