@@ -1,23 +1,14 @@
 DEPLOYING
 
-When deploying to heroku staging from development branch, `git push --force staging develop:master`
-For prod, from master branch: 'git push production master'
-For deploying the db: 'heroku run rake db:migrate --remote staging --app bcd-stg'
-For restarting: `heroku restart --app bcd-stg`
-For tailing: `heroku logs --tail --app bcd-stg`
-For updating sitemap manually: `heroku run rake sitemap:refresh --app bcd-stg` (Change to sitemap:refresh:no_ping
+(Need to sort through my notes before adding back to this section)
+For updating sitemap manually: `bundle exec rake sitemap:refresh` (Change to sitemap:refresh:no_ping
     if I don't want to update search engines)
 
 MAINTENANCE
 
-When putting app in maint mode, use `heroku maintenance:on`
-Do your work
-Take it back out of maint. mode with `heroku maintenance:off`
+Maintenance mode is activated from the admin portal.
 
 JAVASCRIPT USED:
-
-PrettyPhoto:
-http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/documentation/
 
 NOTES
 
