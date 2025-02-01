@@ -51,7 +51,7 @@
               </p>
               <%= link_to 'Continue reading', '/books' %>
             </div>
-            <%= link_to(image_tag('lego_neighborhood_2.jpg', class: "card-img-right flex-auto img-fluid", alt: "The Lego Neighborhood Book 2"), "/books") %>
+            <%= link_to(image_tag('lego_neighborhood_2.jpg', class: "card-img-right flex-auto img-fluid", alt: "The Lego Neighborhood Book 2", loading: "lazy"), "/books") %>
           </div>
           <%= picture_tag("figs/hanging.avif", "figs/hanging.png", id: 'hanging-fig', image: { alt: "Hanging Minifig", class: "img-fluid sigfig d-none d-md-block" }) %>
         </div>
@@ -72,7 +72,7 @@
                 <% end %>
               </div>
               <% unless product.nil? || product.main_image.blank? %>
-                <%= link_to(image_tag(product.main_image.medium.url, class: 'card-img-right flex-auto img-fluid', alt: "#{product.name}"), controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case) unless product.main_image.medium.blank? %>
+                <%= link_to(image_tag(product.main_image.medium.url, class: 'card-img-right flex-auto img-fluid', alt: "#{product.name}", loading: "lazy"), controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case) unless product.main_image.medium.blank? %>
               <% end %>
             </div>
           </div>
@@ -82,7 +82,7 @@
         <div class="col-lg-5 col-md-6 offset-md-6 offset-lg-4">
           <h2 class="text-center text-white">Free instructions!</h2>
           <div class="card">
-            <a href="/account"><img class="img-fluid object-fit-contain" style="height: 248px" alt="Adventure Truck" src="https://d1f3s1yrq7p474.cloudfront.net/assets/adventure_truck_banner-887c0a0e23cc82f348e84e10e47dc9070ee605e0e37d8fed5f32894dc01c4699.jpg"></a>
+            <a href="/account"><img class="img-fluid object-fit-contain" loading="lazy" style="height: 248px" alt="Adventure Truck" src="https://d1f3s1yrq7p474.cloudfront.net/assets/adventure_truck_banner-887c0a0e23cc82f348e84e10e47dc9070ee605e0e37d8fed5f32894dc01c4699.jpg"></a>
           </div>
         </div>
       </div>

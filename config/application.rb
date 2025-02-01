@@ -61,7 +61,5 @@ module BrickCity
 
     # Send errors to our own defined routes instead of the public static html pages.
     config.exceptions_app = routes
-
-    config.action_view.image_loading = 'lazy'
   end
 end
