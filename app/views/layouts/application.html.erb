@@ -13,6 +13,9 @@
     <meta content="<%= opengraph_metadata[:app_id] %>" property="fb:app_id"/>
     <meta content="<%= opengraph_metadata[:site_name] %>" property="og:site_name"/>
     <meta content="<%= opengraph_metadata[:url] %>" property="og:url"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://www.google-analytics.com">
     <%= favicon_link_tag asset_path('favicon.ico') %>
     <title><%= content_for?(:title) ? yield(:title) : "Brick City Depot" %></title>
     <%= stylesheet_link_tag 'application' %>
