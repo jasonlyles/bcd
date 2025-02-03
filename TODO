@@ -1,10 +1,43 @@
+TODO:
+* Monitoring of some sort.
+
+sudo tail -f /var/log/nginx/error.log  after a bit to see if I'm still getting errors. (Still am. Could be a firewall or IPv6 loopback issue?)
+
+TODONE:
+* Make sure email/paypal working
+* set up logrotate
+* database backup to S3
+* Make backup of current database, and transfer it in. (Will need to do it again when about to switch over to the new server)
+* certbot
+  * certbot --nginx -d brickcitydepot.com -d www.brickcitydepot.com
+* DNS config to point BCD to the new server.
+* Upcase all existing order statuses: `rake order_statuses:upcase_status`
+
+ISSUES:
+* Figure out graceful restarts for Nginx
+* user-facing parts list is ugly on mobile
+
+* Test user flows via the website.
+* When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
+* Generate and submit sitemap to google and then review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
+
+ISSUES FOR ANOTHER DAY:
+* Confirm FB/Twitter/Etsy login abilities (for now I set this as a feature and disabled it since nobody has signed up with a social login in over a year)
+* Can't log in to Etsy from admin. (probably just a matter of registering a new app and getting a new token, or switching the current registration to point to prod)
+* Import Ebay users. `rake import_ebay_emails` (Be sure I haven't done this already)
+* After going to prod, add a single product to Etsy, and then place an order and track how the order status flows.
+* When we go live in prod, images will be ranked according to when they were uploaded.
+  That might not be what we want, so we'll have to look at each product and see how
+  the images have been ordered and re-order if necessary.
+* The database and twitter sections of the prod credentials need to be updated.
+
+
+
 Ambassador program like I set up with PEERS?
 
 BEFORE STAGING:
-* Start getting together a database migration plan.
 * Fix: ActionController::RoutingError (No route matches [GET] "/favicon.ico"): (I wonder if that's only an admin problem, since that uses a different layout than the public layout)
 * Set up Pinterest prod app with callback urls
-* Maybe add a way to generate the old-style html parts list.
 * In addition to the new style parts list, maybe users can download the html file the way they have before.
 * Look more into some of the options for adding more detail to the Etsy store: https://www.etsy.com/shop/BrickCityDepot2/edit?ref=edit_trust_header
 * Twitter might have killed my oauth:
@@ -24,23 +57,11 @@ BEFORE STAGING:
   do they still have access to things they bought?
 * Parts lists for guests/Etsy users/etc should display the users email address on
   the page so they're less likely to share the link.
-* Heroku is deprecating the stack I'm on on April 30th. Get off!
 * What happens if a listing on etsy gets pulled by etsy, even if mistakenly? How
   do we find out, and how do we re-post in such a way that the new listing is the
   one tied to the product instead of being tied to the old listing?
 * Might want to have an etsy_price column for the product in case we want to support
   different prices per site.
-
-SETTING UP STAGING:
-* Get staging env vars from bcd-stg and then delete that app.
-* Since I'm going to be trying to set up staging somewhere other than Heroku, I can't
-  count on env vars that Heroku sets. For example, RAILS_SERVE_STATIC_FILES and
-  RAILS_LOG_TO_STDOUT, which are set in the staging and production config files.
-  A note from the rails_12factor gem I'm removing for being on Rails 5+:
-  Make sure to add both the RAILS_SERVE_STATIC_FILES and RAILS_LOG_TO_STDOUT ENV
-  vars and set them to true. (This is done for you on Heroku)
-  * Might have to set up separately from Heroku:
-    1. Papertrail
 
 ONCE STAGING IS SET UP:
 * Test everything via the website. (Write up a more complete list.)
@@ -135,20 +156,6 @@ OAUTH stuff:
 * Once I've fixed up FB and Twitter logins, maybe add Google? https://developers.google.com/identity/sign-in/web/sign-in
 * I seem to have lost access to my twitter oauth apps. Re-create them.
 
-ONCE IN PROD:
-* Get all the fixes in parts_list_fixes.txt sorted with Brian.
-* Import Ebay users. `rake import_ebay_emails`
-* Upcase all existing order statuses: `rake order_statuses:upcase_status`
-* After going to prod, add a single product to Etsy, and then place an order and track how the order status flows.
-* When we go live in prod, images will be ranked according to when they were uploaded.
-  That might not be what we want, so we'll have to look at each product and see how
-  the images have been ordered and re-order if necessary.
-* The database and twitter sections of the prod credentials need to be updated.
-* Test user flows via the website.
-* When bringing all these new changes to prod, generate and upload new sitemap and be sure it looks correct.
-* Delete email addresses of all cancelled accounts
-* Generate and submit sitemap to google and then review https://search.google.com/search-console?resource_id=https%3A%2F%2Fbrickcitydepot.com%2F&hl=en
-
 Nice to haves:
 * After Etsy: Amazon, Walmart, Gumroad?, import sales data from ebay (and maybe manage ebay listings also):
   https://blog.payoneer.com/e-sellers/marketplaces/7-killer-marketplaces-for-selling-digital-goods/
@@ -235,7 +242,6 @@ DONE 21. Add tool to be able to update all lots at once for a given part. For ex
 DONE 22. Sort through TODOs I've added and see which ones need to be done before this code goes live.
 DONE 23. Make sure that the guest flow works completely and is easy to follow.
 DONE 24. Set up the ObsoletePartsCheck job in Sidekiq
-25. Get all the fixes in parts_list_fixes.txt sorted with Brian before this code goes live.
 
 
 Seem to have left off in LdrParser#parse. Possibly in PartsListInteractions::CreatePartsList#run also
@@ -284,10 +290,6 @@ RESKIN:
   Clean those things up and the pages should load faster.
 * I also have some work to do here: https://developers.google.com/web/tools/lighthouse/#devtools using the audit tab on Chrome's dev tools
   I saved an image of the baseline to the speed_test_images folder
-* I believe I need to get my www to non-www redirect working properly. I can do that using instructions here:
-  https://support.dnsimple.com/articles/redirect-heroku/#redirect-https
-  and here:
-  https://stackoverflow.com/questions/22235977/ruby-on-rails-redirecting-www-to-non-www-version-of-site
 
 Nav:
 * Account link in mobile collapsed nav hasn't quite got the right selector yet in the css. I'm
@@ -356,17 +358,8 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
     b. I'm serving Images through my image bucket name, and not the cname or cloudfront.
     c. Add some stuff to protect me from some of these hack requests. Check out: https://github.com/kickstarter/rack-attack/wiki/Example-Configuration
       Also, look into seeing if I can block a specific user agent, since a lot of bad requests seem to be coming from the same user agent.
-    d. Still a issue with http vs https for twitter and facebook on prettyPhoto when popping open that window.
     e. Make it more obvious how to get to the cart.
-    f. Work on the ordering of products in the store... I want the popular modulars showing up first.
-    g. Move sales report to a background task.
-    h. Tweak my papertrail settings to filter out more unnecessary logs. I ran into my 10MB limit early today.
     i. Double check cancellation process and authentication removal process for BCD account holders.
-    j. Create task that checks redis to see if there are any jobs that need to be processed. If there are, try to fire up
-    a worker for that queue. Afterwards, ensure the worker is fired. The task should also fire workers if there are no
-    jobs that need to be processed. This should be set up as a rake task and run via the scheduler every 10 minutes. This
-    should serve as a backup to the regular hire/fire process, and should help keep a queue from getting loaded up with
-    unsent emails, etc.
     k. See if I can set up anything to notify me/us on email bounces/rejects.
     l. Order confirmation emails should go to both the users email they supplied and their paypal email, unless the 2
     match. See if I can get the users paypal address back from them.
@@ -380,7 +373,6 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
     q. Also, can trim down on the size of images by having them processed by tinypng during the upload process. Will
     have to figure out some way to hook into carrierwave to accomplish it. Maybe a carrierwave-tinypng gem is called
     for. https://tinypng.com/developers
-    r. For adding search features in the admin console, or in the front end, check out the ransack gem.
     s. Add a check to get user agent string from browser, if there is a logged in user. Store in it's own table with a
     foreign key to User. That way I can see what browser people were using when they had trouble downloading. It might
     make sense to only set this up to get stored when people go to the 'My Account' page, or for guests when they go to
@@ -393,17 +385,13 @@ paypal hasn't talked to us yet, and we can say that we haven't heard back from p
      be to just upload the html lists to S3, make them public, and then serve them through cloudfront. Clicking on the
      link would just pop a new tab via target=_blank and display the html file. But I don't want to do this until I've
      converted the old html lists to use the images hosted on S3.
-    u. Emails not going out for parts list update. Looks like heroku wasn't notified to update number of workers for email queue.
+    u. Emails not going out for parts list update. (Still an issue? Probably not)
     v. Users coming back from twitter have to accept TOS again. Bleh.
     w. Users with no orders still can't download the free instructions.
     x. Set up utm params for advertising campaigns: http://www.koozai.com/blog/analytics/utm-parameters/  Add fields in the form,
         and then use them to generate params for urls used in emails, banner ads, etc.
     y. Seems I don't have sitemaps sent to Google yet. Fix!
 
-* FOR THE BUSINESS, NOT THE WEBSITE: Get the script working that creates images for parts, and get it to upload to
-    the S3 image bucket. Then update all parts lists to use the cloudfront url to get images. Also, update the parts
-    lists to use a logo I upload to S3 via cloudfront. That will ease the load of requests coming in for the logo to
-    be served by Heroku.
 
 * Set up Modernizr and https://github.com/ai/autoprefixer-rails
 
@@ -420,12 +408,9 @@ GETTING READY FOR PROD #######################################################
 * Paypal!
     a. Do a test for a physical product against prod.
 
-* Set up cron job via scheduler add-on to weekly send sitemap to google. Make sure google accepts the sitemap. It may
+* Set up scheduled sidekiq job to weekly send the sitemap to google. Make sure google accepts the sitemap. It may
     not work properly to submit the sitemap from the s3 url until the https prod version is set up, because all the urls
-    in the sitemap are for https://www.brickcitydepot.com  Heroku's scheduler doesn't have options for weekly or monthly,
-    but I can fake it by wrapping the call to the rake task in a bash if statement:
-    if [ "$(date +%u)" = 1 ]; then MY_COMMAND; fi       where 1 is mondays
-    if [ "$(date +%d)" = 01 ]; then MY_COMMAND; fi      where 01 is the first day of the month
+    in the sitemap are for https://www.brickcitydepot.com
     Resources:
         https://www.google.com/webmasters/tools
         https://support.google.com/webmasters/answer/75712
@@ -433,13 +418,6 @@ GETTING READY FOR PROD #######################################################
         http://googlewebmastercentral.blogspot.com/2007/10/dealing-with-sitemap-cross-submissions.html
         http://stackoverflow.com/questions/9342805/manually-add-sitemap-located-in-s3-into-google-webmaster-tools
 
-###########################
-THINGS I NEED TO DO FOR LAUNCH:
-
-* Set up maintenance rake tasks(reap stale carts, etc.)
-* Set up some sort of database backup task.
-
-##########################
 
 ##########################
 IMMEDIATELY AFTER LAUNCH:
@@ -456,8 +434,6 @@ V1.1: (Revisit this after 1.0 gets launched.)
 
 * Make it so that the product_details action renders a page that says "We can't find that item, check out these other great items."
 instead of rendering a 404 if we can't find the item.
-
-* Some way of creating discounts for a product, or multiple products, or for an entire category/subcategory
 
 * Have a way for customers to rate a product and leave comments about it.
 
@@ -496,8 +472,6 @@ making that check if the category has subcategories, and if so, display subcateg
 display categories.
 
 * I really need to spend some time cleaning and DRYing up my tests.
-
-* Look into pros/cons of moving from thin to unicorn on heroku
 
 * Work on adding titles to most of the customer facing pages. Also, I might want to do a little more customization
    on the facebook meta tags to reflect the current page. Maybe the product pages could have the image be the medium image.
@@ -548,11 +522,6 @@ Maybe I could just have something that spit out a csv with all users created_at 
 import that data into some graphing something-or-other offline.
 
 * Make it so ALL of my styled buttons give some indication they've been hovered over and clicked
-
-* I might want to re-do the 422 and 500 pages a little bit. They seem... meh. Maybe freshen up the 404 page too.
-
-* For full-site maintenance mode, I'm currently using the stock Heroku mm page. I'd like to set up a custom mm page
-at public/maintenance_mode.html
 
 * Content slider on main page:
      a.) Need to set up to position text and image. Image can have no position, peg to the top or bottom, left or right. Then I

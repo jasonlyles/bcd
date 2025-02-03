@@ -1,5 +1,10 @@
 DEPLOYING
 
+RAILS_ENV=production bundle exec rake assets:precompile
+RAILS_ENV=production bundle exec rake assets:clean
+sudo systemctl restart rails
+sudo systemctl restart sidekiq
+
 (Need to sort through my notes before adding back to this section)
 For updating sitemap manually: `bundle exec rake sitemap:refresh` (Change to sitemap:refresh:no_ping
     if I don't want to update search engines)
