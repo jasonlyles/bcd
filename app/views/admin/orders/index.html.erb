@@ -68,7 +68,7 @@
                 <% end %>
               </td>
               <td class="align-middle text-center">
-                <%= order.user.email %>
+                <%= order.user&.email %>
               </td>
               <td class="align-middle text-center">
                 <%= number_to_currency(order.total_price) %>
