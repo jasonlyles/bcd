@@ -125,7 +125,7 @@ class Order < ApplicationRecord
   end
 
   def third_party_order_incomplete_for_more_than_a_day?
-    PENDING_ORDER_STATUSES.include?(status.upcase) && updated_at < 1.day.ago
+    status.present? && PENDING_ORDER_STATUSES.include?(status.upcase) && updated_at < 1.day.ago
   end
 
   # rubocop:disable Metrics/AbcSize
