@@ -59,7 +59,7 @@ class Order < ApplicationRecord
   end
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[status source transaction_id request_id third_party_order_identifier created_at_month created_at_year belongs_to_user is_concerning_third_party_order unknown_status]
+    %w[status source transaction_id request_id third_party_order_identifier created_at created_at_month created_at_year belongs_to_user is_concerning_third_party_order unknown_status]
   end
 
   # Nothing here yet (if ever), but ransack insists I define it.

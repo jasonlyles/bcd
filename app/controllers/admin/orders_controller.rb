@@ -6,7 +6,7 @@ class Admin::OrdersController < AdminController
   # GET /orders
   def index
     @q = Order.ransack(params[:q])
-    @orders = @q.result.includes(:user, :line_items).page(params[:page]).per(20)
+    @orders = @q.result.includes(:user, :line_items).order('created_at desc').page(params[:page]).per(20)
   end
 
   # GET /orders/1
