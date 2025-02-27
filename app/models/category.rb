@@ -12,7 +12,7 @@ class Category < ApplicationRecord
   validates :description, presence: true, length: { maximum: 350, minimum: 100 }
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[name]
+    %w[name ready_for_public]
   end
 
   # Nothing here yet (if ever), but ransack insists I define it.

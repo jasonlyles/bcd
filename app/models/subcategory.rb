@@ -11,7 +11,7 @@ class Subcategory < ApplicationRecord
   validates :code, uniqueness: true
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[name code]
+    %w[name code description]
   end
 
   # Nothing here yet (if ever), but ransack insists I define it.

@@ -11,7 +11,7 @@ class AdvertisingCampaign < ApplicationRecord
   validates :reference_code, presence: true, length: { minimum: 10, maximum: 10 }, uniqueness: true
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[partner_id reference_code]
+    %w[partner_id reference_code campaign_live]
   end
 
   # Nothing here yet (if ever), but ransack insists I define it.

@@ -12,7 +12,7 @@ class EmailCampaign < ApplicationRecord
   validates_presence_of :description, :subject
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[subject description]
+    %w[subject description click_throughs emails_sent]
   end
 
   # Nothing here yet (if ever), but ransack insists I define it.

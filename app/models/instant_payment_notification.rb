@@ -7,7 +7,7 @@ class InstantPaymentNotification < ApplicationRecord
   belongs_to :order, optional: true
 
   def self.ransackable_attributes(_auth_object = nil)
-    %w[payment_status request_id txn_id order_id payer_email]
+    %w[payment_status request_id txn_id order_id payer_email created_at]
   end
 
   # Nothing here yet (if ever), but ransack insists I define it.
