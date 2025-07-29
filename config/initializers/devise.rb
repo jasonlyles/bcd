@@ -80,7 +80,7 @@ Devise.setup do |config|
   # I've tried to use this config setting in the application controller, but
   # behavior was unstable. So, if we want to change this value, change it in the
   # application controller also. (Using the auto-session-timeout may obsolete this value anyways.)
-  config.timeout_in = 1.hour
+  config.timeout_in = 60.minutes
 
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.
