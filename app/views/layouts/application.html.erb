@@ -28,6 +28,9 @@
   </head>
 
   <body>
+    <% if user_signed_in? %>
+      <%= auto_session_timeout_js frequency: 120 %>
+    <% end %>
     <%= render partial: 'shared/navigation' %>
 
     <main>
