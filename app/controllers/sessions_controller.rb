@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class SessionsController < Devise::SessionsController
+  # This helper adds the active and timeout actions, which can be seen in the
+  # skip_before_action calls below. These actions are used to make auto-timeout work.
+  auto_session_timeout_actions
+  skip_before_action :find_cart, only: %i[active timeout]
+  skip_before_action :prepare_exception_notifier, only: %i[active timeout]
+  skip_before_action :check_admin_mode, only: %i[active timeout]
+  skip_before_action :set_users_referrer_code, only: %i[active timeout]
   after_action :kill_guest_checkout_flag, only: [:register_guest]
 
   # rubocop:disable Style/RedundantCondition

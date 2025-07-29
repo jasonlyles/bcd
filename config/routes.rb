@@ -117,6 +117,9 @@ Rails.application.routes.draw do
     get '/third_party_guest_registration' => 'sessions#third_party_guest_registration', as: :third_party_guest_registration
     post '/register_third_party_guest' => 'sessions#register_third_party_guest', as: :register_third_party_guest
     patch 'passwords/update_password', to: 'passwords#update_password'
+    # The active and timeout routes are used by the auto-session-timeout gem.
+    get 'active',  to: 'sessions#active'
+    get 'timeout', to: 'sessions#timeout'
   end
 
   get '/etsy/callback' => 'admin/etsy#callback'

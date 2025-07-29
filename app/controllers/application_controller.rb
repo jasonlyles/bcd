@@ -8,6 +8,12 @@ class ApplicationController < ActionController::Base
   before_action :find_cart
   before_action :set_users_referrer_code
   before_action :prepare_exception_notifier
+
+  # I've tried to use the Devise config setting here, but behavior was unstable.
+  # So, if we want to change this value, change it in the Devise config also.
+  # This value is set for the auto-session-timeout gem
+  auto_session_timeout 1.hour
+
   # before_action :set_locale #Don't need this yet
   # before_action :configure_permitted_parameters, if: :devise_controller?
   #
