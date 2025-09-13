@@ -130,7 +130,7 @@
           "@context": "http://schema.org",
           "@type": "Product",
           "name": "<%= @product.name %>",
-          "image": '<%="#{host_url}#{ @product.images.first.try(:url) }"%>',
+          "image": '<%="#{ @product.images.first.try(:url) }"%>',
           "description": "<%= @product.description %>",
           "offers": {
             "@type": "Offer",
