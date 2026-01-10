@@ -201,8 +201,7 @@ Rails.application.routes.draw do
   get 'store/models', to: 'store#models'
   get 'thank_you', to: 'store#thank_you_for_your_order'
   get 'store', to: 'store#index'
-  post 'add_to_cart/:product_code', to: 'store#add_to_cart'
-  get 'add_to_cart/:product_code', to: 'store#add_to_cart'
+  post 'add_to_cart/:product_code', to: 'store#add_to_cart', as: :add_to_cart
   get 'cart', to: 'store#cart'
   post 'empty_cart', to: 'store#empty_cart'
   post 'remove_item_from_cart/:id', to: 'store#remove_item_from_cart'

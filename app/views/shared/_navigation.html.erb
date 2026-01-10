@@ -58,11 +58,19 @@
                   <% if (user_signed_in? && !current_user.guest?) || radmin_signed_in? %>
                     <% if current_user %>
                       <%= link_to "Edit Profile", account_edit_path, class: 'dropdown-item' %>
-                      <%= link_to("Sign Out", destroy_user_session_path, class: 'dropdown-item', method: :delete) %>
+                      <%= button_to "Sign Out",
+                        destroy_user_session_path,
+                        method: :delete,
+                        class: "dropdown-item",
+                        form: { class: "d-inline" } %>
                     <% end %>
                     <% if current_radmin %>
                       <%= link_to("Admin Stuff", admin_index_path, class: 'dropdown-item') %>
-                      <%= link_to("Sign Out Admin", destroy_radmin_session_path, class: 'dropdown-item', method: :delete) %>
+                      <%= button_to "Sign Out Admin",
+                        destroy_radmin_session_path,
+                        method: :delete,
+                        class: "dropdown-item",
+                        form: { class: "d-inline" } %>
                     <% end %>
                   <% else %>
                     <%= link_to("Sign In",new_user_session_path, class: 'dropdown-item') %>

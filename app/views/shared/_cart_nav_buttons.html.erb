@@ -1,4 +1,9 @@
 <div class="float-right">
   <%= link_to "Checkout", checkout_path, class: 'btn btn-primary btn-sm' %>
-  <%= link_to "Empty Cart", empty_cart_path, class: 'btn btn-primary btn-sm', data: {disable_with: 'Emptying...'}, method: :post %>
+  <%= button_to "Empty Cart",
+              empty_cart_path,
+              method: :post,
+              class: 'btn btn-primary btn-sm',
+              data: { disable_with: 'Emptying...' },
+              form: { class: 'd-inline' } %>
 </div>

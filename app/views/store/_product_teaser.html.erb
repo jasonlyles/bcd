@@ -17,7 +17,15 @@
         <%= number_to_currency(product.current_price) %>
       </span>
       <div class="mt-2">
-        <%= link_to raw("<i class='fas fa-cart-plus'></i>&nbsp; <span style='font-size:larger'>Add to Cart</span>"), { action: "add_to_cart", product_code: product.product_code }, class: 'btn btn-primary btn-block', data: { disable_with: 'Adding...' }, method: :post %>
+        <%= button_to add_to_cart_path(product.product_code),
+              method: :post,
+              class: 'btn btn-primary btn-block',
+              data: { disable_with: 'Adding...' },
+              form: { class: 'd-block' } do %>
+          <i class="fas fa-cart-plus"></i>&nbsp;
+          <span style="font-size:larger">Add to Cart</span>
+        <% end %>
+
       </div>
     <% end %>
   </div>
