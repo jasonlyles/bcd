@@ -124,7 +124,11 @@
         <div class="dropdown-menu">
           <%= link_to 'Maintenance Mode', maintenance_mode_path, class: 'dropdown-item' %>
           <%= link_to 'Edit Admin profile', admin_profile_admin_path(current_radmin.id), class: 'dropdown-item' %>
-          <%= link_to 'Sign out', destroy_radmin_session_path, class: 'dropdown-item', method: :delete %>
+          <%= button_to "Sign Out",
+            destroy_radmin_session_path,
+            method: :delete,
+            class: "dropdown-item",
+            form: { class: "d-inline" } %>
           <div class="dropdown-divider"></div>
           <%= link_to 'Sidekiq Dashboard', '/sidekiq', class: 'dropdown-item' %>
         </div>

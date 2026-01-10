@@ -75,9 +75,18 @@
 </div>
 <br/>
 <br/>
-<p class="text-center">
-  Unhappy with Brick City Depot?
-  <%= link_to "Cancel my account", registration_path(resource_name), data: {confirm: "Are you sure? You will no longer be able to download PDFs you have paid for!"}, method: :delete %>.
-</p>
+<div class="d-flex justify-content-center">
+  <div class="d-inline-flex align-items-baseline">
+    <span>Unhappy with Brick City Depot?</span>
+    <%= button_to registration_path(resource_name),
+                  method: :delete,
+                  data: { confirm: "Are you sure? You will no longer be able to download PDFs you have paid for!" },
+                  class: "btn btn-link p-0 m-0 align-baseline",
+                  form: { class: "d-inline p-0 m-0 pl-2" } do %>
+      Cancel my account
+    <% end %>
+  </div>
+</div>
+
 </div>
 </section>
