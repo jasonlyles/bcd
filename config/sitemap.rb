@@ -45,7 +45,7 @@ SitemapGenerator::Sitemap.create do
     add "store/products/instructions/#{category.name}", priority: 0.7, changefreq: 'monthly' unless category.name == 'Retired'
   end
 
-  Product.ready.find_each do |product|
+  Product.ready.instructions.find_each do |product|
     if product.main_image.nil?
       add("/#{product.product_code}/#{product.name.to_snake_case}", priority: 0.6, changefreq: 'weekly')
     else
