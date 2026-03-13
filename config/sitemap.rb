@@ -10,7 +10,7 @@ end
 SitemapGenerator::Sitemap.default_host = 'https://brickcitydepot.com'
 
 # The directory to write sitemaps to locally
-SitemapGenerator::Sitemap.public_path = 'tmp/'
+SitemapGenerator::Sitemap.public_path = 'public/'
 
 # Instance of `SitemapGenerator::WaveAdapter`
 SitemapGenerator::Sitemap.adapter = SitemapGenerator::WaveAdapter.new
@@ -38,9 +38,6 @@ SitemapGenerator::Sitemap.create do
   add faq_path, priority: 0.8, changefreq: 'monthly'
   add new_user_tutorial_path, changefreq: 'yearly'
   add store_instructions_path, priority: 0.8, changefreq: 'monthly'
-  add store_kits_path, changefreq: 'monthly'
-  add store_models_path, changefreq: 'monthly'
-  add store_path, priority: 0.8, changefreq: 'weekly'
   add '/users/sign_in', priority: 0.8, changefreq: 'monthly'
   add '/users/sign_up', priority: 0.8, changefreq: 'monthly'
 

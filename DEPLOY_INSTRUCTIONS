@@ -149,3 +149,104 @@ On server:
 
 SET UP SIDEKIQ:
 * copy in file from server/sidekiq.service to /etc/systemd/system/sidekiq.service and start the service.
+
+
+
+
+
+
+old /etc/nginx/sites-available/rails:
+server {
+    root /home/rails/example/public;
+    server_name www.brickcitydepot.com brickcitydepot.com;
+    index index.htm index.html;
+
+        location ~ /.well-known {
+            allow all;
+        }
+
+        location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/brickcitydepot.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/brickcitydepot.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+
+server {
+    if ($host = www.brickcitydepot.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = brickcitydepot.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen   80;
+    server_name brickcitydepot.com www.brickcitydepot.com;
+    return 404; # managed by Certbot
+}
+
+new /etc/nginx/sites-available/rails:
+# --------------------------
+# Rails app: non-www HTTPS
+# --------------------------
+server {
+    listen 443 ssl;
+    server_name brickcitydepot.com;
+
+    root /home/rails/example/public;
+    index index.htm index.html;
+
+    location ~ /.well-known {
+        allow all;
+    }
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    ssl_certificate /etc/letsencrypt/live/brickcitydepot.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/brickcitydepot.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+# --------------------------
+# Redirect www → non-www (HTTPS)
+# --------------------------
+server {
+    listen 443 ssl;
+    server_name www.brickcitydepot.com;
+
+    ssl_certificate /etc/letsencrypt/live/brickcitydepot.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/brickcitydepot.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    return 301 https://brickcitydepot.com$request_uri;
+}
+
+# --------------------------
+# Redirect all HTTP → HTTPS
+# --------------------------
+server {
+    listen 80;
+    server_name brickcitydepot.com www.brickcitydepot.com;
+    return 301 https://brickcitydepot.com$request_uri;
+}

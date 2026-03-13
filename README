@@ -1,5 +1,8 @@
 DEPLOYING
-
+ssh root@143.244.144.159
+sudo su rails
+cd ~/apps/brick_city_depot/current
+git pull
 RAILS_ENV=production bundle exec rake assets:precompile
 RAILS_ENV=production bundle exec rake assets:clean
 sudo systemctl restart rails
@@ -24,3 +27,9 @@ http://lucapette.com/rails/multiple-files-upload-with-carrierwave-and-nested_for
 HTML EMAILS
 
 Used this as a template and reference: https://github.com/InterNations/antwort  http://internations.github.io/antwort/index.html
+
+UPDATING SITEMAP:
+* SSH to the DigitalOcean droplet
+* sudo su rails
+* cd to the current dir
+* RAILS_ENV=production bundle exec rake sitemap:refresh
