@@ -13,6 +13,9 @@
   <li class="nav-item">
     <a class="nav-link" id="tags-tab" data-toggle="tab" href="#tags" role="tab" aria-controls="tags" aria-selected="false">Tags</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" id="meta-tab" data-toggle="tab" href="#meta" role="tab" aria-controls="meta" aria-selected="false">Meta</a>
+  </li>
 </ul>
 <%= nested_form_for [:admin, product], html: { multipart: true } do |f| %>
   <div class="tab-content" id="myTabContent">
@@ -171,6 +174,26 @@
             <%= f.label :tag_list, "Comma-separated list of tags to make our products more findable. Etsy takes the first 13 of these.", class: 'form-label' %>
             <br/>
             <%= f.text_field :tag_list, placeholder: "Lego, Lego Bricks, Chili's", class: 'form-control', value: product.tag_list.present? ? product.tag_list.join(', ') : 'lego, legos, lego bricks, moc, afol, instructions, lego instructions' %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="meta" role="tabpanel" aria-labelledby="meta-tab">
+      <div class="card mt-4">
+        <div class="card-header">
+          <b>Meta</b>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <%= f.label :meta_keywords, "Comma-separated list of keywords specific to this product/group of products, used for search engines", class: 'form-label' %>
+            <br/>
+            <%= f.text_field :meta_keywords, placeholder: "Winter Village Post Office, Christmas LEGO", class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= f.label :meta_description, "Description used for meta description and Schema.org descriptions", class: 'form-label' %>
+            <br/>
+            <%= f.text_area :meta_description, placeholder: "Download step-by-step building instructions for the Winter Village Victorian House from Brick City Depot. Part of the Winter Village series, this Victorian-style house brings holiday charm and LEGO nostalgia to your collection.", class: 'form-control' %>
           </div>
         </div>
       </div>

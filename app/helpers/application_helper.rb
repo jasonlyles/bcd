@@ -22,12 +22,17 @@ module ApplicationHelper
     content_for(:title) { page_title }
   end
 
-  def meta_keywords
-    t(:keywords, scope: [:meta])
+  def meta_keywords(product = nil)
+    base_keywords = t(:keywords, scope: [:meta]) # default from en.yml
+    if product&.meta_keywords.present?
+      "#{base_keywords}, #{product.meta_keywords}"
+    else
+      base_keywords
+    end
   end
 
-  def meta_description
-    t(:description, scope: [:meta])
+  def meta_description(product = nil)
+    product&.meta_description.presence || t(:description, scope: [:meta])
   end
 
   def opengraph_metadata

@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta content="m6aCl_TMUyZi-kR1BIijxqWbYrix12cNmvBR7VWX6U0" name="google-site-verification"/>
-    <meta content="<%= meta_keywords %>" name="keywords"/>
-    <meta content="<%= meta_description %>" name="description"/>
+    <% content_for :head do %>
+      <meta name="keywords" content="<%= meta_keywords(@product) %>">
+      <meta name="description" content="<%= meta_description(@product) %>">
+    <% end %>
     <meta content="<%= opengraph_metadata[:image] %>" property="og:image"/>
     <meta content="<%= content_for?(:title) ? yield(:title) : "Brick City Depot" %>" property="og:title"/>
     <meta content="<%= opengraph_metadata[:description] %>" property="og:description"/>
