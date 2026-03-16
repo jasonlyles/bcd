@@ -1,4 +1,4 @@
-<%= title("Custom Lego #{@product.product_type.name.downcase}: #{@product.name}") %>
+<%= title("#{@product.name} #{@product.product_type.name} | Brick City Depot") %>
 <section class="content">
   <div class="container">
     <nav aria-label="breadcrumb">
@@ -23,7 +23,7 @@
         </span>
         <div class="row">
           <div class="col-md-5 mb-4">
-            <h1><%= "#{@product.product_code} #{@product.name}" %></h1><br/>
+            <h1><%= product_header(@product) %></h1><br/>
             <% if @product.youtube_url? %>
               <a data-toggle="lightbox" data-gallery="product-images" href="https://www.youtube.com/watch?v=<%= @product.youtube_url %>">
                 <div class='border rounded-circle m-1 d-inline-block youtube-logo'></div>
@@ -43,16 +43,15 @@
           </div>
           <div class="col-md-7">
             <div class="card">
-              <div class="card-header">
-                <h3 class="card-title mt-1 mb-0"><%= "#{@product.product_code} #{@product.name} #{@product.product_type.name unless ['Models', 'Kits'].include? @product.product_type.name}" %></h3>
-              </div>
+              <!-- <div class="card-header">
+              </div> -->
               <div class="card-body">
                 <div>
                   <div class="float-right">
                     <%= picture_tag("figs/product_#{@product.designer}.avif", "figs/product_#{@product.designer}.png", image: { alt: "#{@product.designer}", class: "sigfig-sm" }) %>
                   </div>
                   <div>
-                    <p class="card-text" itemprop="description">
+                    <p class="card-text mb-3" itemprop="description">
                       <%= @product.description %>
                     </p>
                   </div>
@@ -77,9 +76,9 @@
                     <h5 class="d-inline">Instructions only!</h5>
                   <% end %>
                   What do I get?
-                  <a tabindex="0" role="button" class="btn-lg" data-toggle="popover" data-trigger="focus" data-placement="bottom" title="<%= @product.product_type.comes_with_title %>" data-content="<%= @product.product_type.comes_with_description %>">
-                    <i class="fa fa-question-circle"></i>
-                  </a>
+                  <p class="mt-3">
+                    <%= auto_link(@product.product_type.comes_with_description) %>
+                  </p>
                   <% if @product.free? %>
                     <h5>
                       <strong>FREE</strong>
@@ -91,8 +90,6 @@
                       to download instructions)
                     </p>
                   <% else %>
-                    <br/>
-                    <br/>
                     <% if @product.discount_percentage > 0 %>
                       <h5 class="d-inline">Regular Price:</h5>
                       <%= number_to_currency(@product.price) %>
