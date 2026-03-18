@@ -42,7 +42,7 @@ SitemapGenerator::Sitemap.create do
   add '/users/sign_up', priority: 0.8, changefreq: 'monthly'
 
   Category.find_each do |category|
-    add "store/products/instructions/#{category.name}", priority: 0.7, changefreq: 'monthly' unless category.name == 'Retired'
+    add "store/products/instructions/#{category.name}", priority: 0.7, changefreq: 'monthly' unless ['Alternative Builds', 'Retired'].include?(category.name)
   end
 
   Product.ready.instructions.find_each do |product|

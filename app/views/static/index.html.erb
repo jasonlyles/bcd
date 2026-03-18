@@ -16,13 +16,17 @@
             <strong>high quality</strong>
             instructions to help you expand your Lego® collection and building skills.
           </p>
-          <%= link_to 'Shop Instructions', '#instructions', class: 'scroll-to-anchor mt-5 btn btn-primary btn-lg' %>
+          <div class="mt-5 pt-2">
+            <%= link_to 'Shop Instructions', '#instructions', class: 'scroll-to-anchor btn btn-primary btn-lg' %>
+            <%= link_to 'Shop Books', books_path, class: 'btn btn-outline-brick btn-lg ml-2' %>
+            <%= link_to 'Shop Kits', store_products_path(product_type_name: 'kits'), class: 'btn btn-outline-brick btn-lg ml-2' %>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="news" class="pt-5 mt-5">
+  <section id="news" class="pt-3 mt-5">
     <div class="container">
       <div class="row">
         <div class="col-12 col-lg-9">
@@ -82,7 +86,7 @@
         <div class="col-lg-5 col-md-6 offset-md-6 offset-lg-4">
           <h2 class="text-center text-white">Free instructions!</h2>
           <div class="card">
-            <a href="/account"><img class="img-fluid object-fit-contain" loading="lazy" style="height: 248px" alt="Adventure Truck" src="https://d1f3s1yrq7p474.cloudfront.net/assets/adventure_truck_banner-887c0a0e23cc82f348e84e10e47dc9070ee605e0e37d8fed5f32894dc01c4699.jpg"></a>
+            <a href="/CV013/adventure_truck"><img class="img-fluid object-fit-contain" loading="lazy" style="height: 248px" alt="Adventure Truck" src="https://d1f3s1yrq7p474.cloudfront.net/assets/adventure_truck_banner-887c0a0e23cc82f348e84e10e47dc9070ee605e0e37d8fed5f32894dc01c4699.jpg"></a>
           </div>
         </div>
       </div>
