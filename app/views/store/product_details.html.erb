@@ -32,7 +32,11 @@
             <% unless @product.images.empty? %>
               <% @product.images.each_with_index do |image, index| %>
                 <a href="<%= image.url %>" data-toggle="lightbox" data-gallery="product-images">
-                  <div class="rounded-circle m-1 border img-fluid d-inline-block" itemprop="<%= 'image' if index == 0 %>" style="background-image: url(<%= image.url.thumb %>);background-size:cover;background-position:center;height:100px;width:100px;"></div>
+                  <%= image_tag image.url.thumb.url,
+                        alt: "#{@product.name} - image #{index + 1}",
+                        class: "rounded-circle m-1 border img-fluid d-inline-block",
+                        itemprop: (index == 0 ? 'image' : nil),
+                        style: "height:100px;width:100px;object-fit:cover;vertical-align: top;" %>
                 </a>
               <% end %>
               <br/>
@@ -135,7 +139,7 @@
           "@context": "http://schema.org",
           "@type": "Product",
           "name": "<%= @product.name %>",
-          "image": '<%="#{ @product.images.first.try(:url) }"%>',
+          "image": "<%="#{ @product.images.first.try(:url) }"%>",
           "description": "<%= @product.description %>",
           "offers": {
             "@type": "Offer",

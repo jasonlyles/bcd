@@ -14,11 +14,11 @@ class StoreController < ApplicationController
   # :nocov:
 
   def products
-    @product_type = ProductType.where('name=?', params[:product_type_name])[0]
+    @product_type = ProductType.find_by('LOWER(name) = ?', params[:product_type_name].downcase)
     if @product_type.blank?
       flash[:notice] = "Sorry. We don't have any of those."
       redirect_to(root_path)
-    elsif params[:product_type_name].casecmp('instructions').positive?
+    elsif params[:product_type_name].to_s.downcase != 'instructions'
       @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
     else
       @top_categories = Category.find_live_categories
@@ -40,7 +40,7 @@ class StoreController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def categories
     case params[:category_name]
-    when 'Alternatives'
+    when 'alternatives'
       @category = Category.find_by_name('Alternative Builds')
       @products = Product.alternative_builds.page(params[:page]).per(12)
     when 'group_on_price'
@@ -54,7 +54,7 @@ class StoreController < ApplicationController
       end
       @products = Product.find_all_by_price(params[:price]).page(params[:page]).per(12)
     else
-      @category = Category.find_by_name(params[:category_name])
+      @category = Category.find_by('LOWER(name) = ?', params[:category_name].downcase)
       if @category
         @products = @category.products.find_instructions_for_sale.includes(:images).order('product_code ASC').page(params[:page]).per(12)
       else

@@ -17,16 +17,8 @@
           <li class="nav-item">
             <%= link_to "Home", root_path, class: 'text-white nav-link h3' %>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link text-white h3" href="#" id="navbarStoreDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Store
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarStoreDropdown">
-              <%= link_to 'Instructions', store_products_path(product_type_name: 'Instructions'), class: 'dropdown-item' %>
-              <%= link_to 'Books', books_path, class: 'dropdown-item' %>
-              <%= link_to 'Kits', store_products_path(product_type_name: 'Kits'), class: 'dropdown-item' %>
-              <%= link_to 'Models', store_products_path(product_type_name: 'Models'), class: 'dropdown-item' %>
-            </div>
+          <li class="nav-item">
+            <%= link_to "Instructions", store_products_path(product_type_name: 'instructions'), class: 'text-white nav-link h3' %>
           </li>
           <li class="nav-item">
             <%= link_to "Books", books_path, class: 'text-white nav-link h3' %>
