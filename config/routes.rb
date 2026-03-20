@@ -220,6 +220,8 @@ Rails.application.routes.draw do
   get '/500', to: 'errors#internal_server'
   get '/422', to: 'errors#unprocessable'
 
+  get '/sitemap.xml.gz', to: 'sitemaps#show', format: :xml
+
   get ':product_code/:product_name', to: 'store#product_details'
 
   root to: 'static#index'
