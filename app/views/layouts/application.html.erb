@@ -9,9 +9,10 @@
       <meta name="keywords" content="<%= meta_keywords(@product) %>">
       <meta name="description" content="<%= meta_description(@product) %>">
     <% end %>
-    <meta content="<%= opengraph_metadata[:image] %>" property="og:image"/>
-    <meta content="<%= content_for?(:title) ? yield(:title) : "Brick City Depot" %>" property="og:title"/>
-    <meta content="<%= opengraph_metadata[:description] %>" property="og:description"/>
+    <meta content="<%= content_for?(:og_image) ? yield(:og_image) : opengraph_metadata[:image] %>" property="og:image"/>
+    <meta content="<%= content_for?(:og_title) ? yield(:og_title) : (content_for?(:title) ? yield(:title) : opengraph_metadata[:title]) %>" property="og:title"/>
+    <meta content="<%= content_for?(:og_description) ? yield(:og_description) : opengraph_metadata[:description] %>" property="og:description"/>
+    <meta content="<%= content_for?(:og_type) ? yield(:og_type) : opengraph_metadata[:type] %>" property="og:type"/>
     <meta content="<%= opengraph_metadata[:app_id] %>" property="fb:app_id"/>
     <meta content="<%= opengraph_metadata[:site_name] %>" property="og:site_name"/>
     <meta content="<%= opengraph_metadata[:url] %>" property="og:url"/>

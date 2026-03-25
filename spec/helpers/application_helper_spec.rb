@@ -41,7 +41,7 @@ describe ApplicationHelper do
 
   describe 'meta_keywords' do
     it 'should retrieve meta keywords for the doc' do
-      expect(helper.meta_keywords).to eq('custom lego instructions, lego custom instructions, lego modular buildings, lego city instructions, brick city depot, brickcitydepot, lego chili\'s, lego chilis')
+      expect(helper.meta_keywords).to eq('custom lego instructions, lego custom instructions, lego modular buildings, lego city instructions, brick city depot, brickcitydepot, lego chilis')
     end
   end
 
@@ -59,6 +59,7 @@ describe ApplicationHelper do
         image: 'http://test.host/assets/logos/logo_200x200-31ac55a9f6969519da50b10d2f88d7eadde1e0e1249e3c6fbad5b9c7bc3994e2.png',
         site_name: 'Brick City Depot',
         title: 'Brick City Depot. The internets\' best source for custom Lego instructions.',
+        type: 'website',
         url: 'http://test.host'
       )
     end

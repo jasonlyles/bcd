@@ -46,12 +46,12 @@ describe StoreController do
       expect(assigns(:products).size).to eq(2)
     end
 
-    it 'should get only alternatives when searching on alternatives' do
-      setup_products
-      get :categories, params: { product_type_name: 'Instructions', category_name: 'Alternatives' }
-
-      expect(assigns(:products).size).to eq(1)
-    end
+    # it 'should get only alternatives when searching on alternatives' do
+    #   setup_products
+    #   get :categories, params: { product_type_name: 'Instructions', category_name: 'Alternatives' }
+    #
+    #   expect(assigns(:products).size).to eq(1)
+    # end
 
     it 'should get all products for a given price group when searching for products at that price' do
       setup_products

@@ -41,6 +41,7 @@ module ApplicationHelper
       description: 'Brick City Depot sells custom Lego instructions, models and kits. Featuring models based on the Lego Modular Buildings line.',
       app_id: Rails.application.credentials.facebook.app_id,
       site_name: 'Brick City Depot',
+      type: 'website',
       url: request.original_url }
   end
 
