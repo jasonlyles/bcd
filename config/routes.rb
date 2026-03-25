@@ -194,11 +194,12 @@ Rails.application.routes.draw do
   get 'unsubscribe', to: 'account#unsubscribe_from_emails'
 
   # store routes
-  match '/store/products/*path', to: redirect { |params, _request|
-    "/store/products/#{params[:path].downcase}"
-  }, via: :all, constraints: lambda { |req|
-    req.path.match(/[A-Z]/)
-  }
+  # TODO: I think something here is breaking some bot. Revisit when I have more time.
+  # match '/store/products/*path', to: redirect { |params, _request|
+  #   "/store/products/#{params[:path].downcase}"
+  # }, via: :all, constraints: lambda { |req|
+  #   req.path.match(/[A-Z]/)
+  # }
   get 'store/products/:product_type_name', to: 'store#products', action: 'store/products/:product_type_name', as: :store_products
   get 'store/products/:product_type_name/:category_name', to: 'store#categories', action: 'store/products/:product_type_name/:category_name', as: :store_categories
   get 'store/instructions', to: 'store#instructions'
