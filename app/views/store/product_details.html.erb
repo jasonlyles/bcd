@@ -1,4 +1,12 @@
 <%= title("#{@product.name} #{@product.product_type.name} | Brick City Depot") %>
+<% content_for :og_title, "#{@product.name} #{@product.product_type.name}" %>
+<% content_for :og_description, @product.description %>
+<% if (image = @product.images&.first).present? %>
+  <% url = image.url.to_s %>
+  <% full_url = url.start_with?('http') ? url : "#{request.base_url}#{url}" %>
+  <% content_for :og_image, full_url %>
+<% end %>
+<% content_for :og_type, "product" %>
 <section class="content">
   <div class="container">
     <nav aria-label="breadcrumb">
