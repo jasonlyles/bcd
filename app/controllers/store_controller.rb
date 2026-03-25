@@ -39,6 +39,7 @@ class StoreController < ApplicationController
 
   # rubocop:disable Metrics/AbcSize
   def categories
+    @canonical_url = request.original_url.downcase
     case params[:category_name]
     when 'alternatives'
       @category = Category.find_by_name('Alternative Builds')
