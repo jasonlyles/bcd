@@ -4,7 +4,7 @@ source 'http://rubygems.org'
 
 ruby '3.3.6'
 
-gem 'rails', '7.2.2'
+gem 'rails', '7.2.3.1'
 
 gem 'activerecord-session_store'
 gem 'acts_as_list'
