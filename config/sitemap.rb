@@ -38,11 +38,12 @@ SitemapGenerator::Sitemap.create do
   add faq_path, priority: 0.8, changefreq: 'monthly'
   add new_user_tutorial_path, changefreq: 'yearly'
   add store_instructions_path, priority: 0.8, changefreq: 'monthly'
+  add books_path, priority: 0.8, changefreq: 'monthly'
   add '/users/sign_in', priority: 0.8, changefreq: 'monthly'
   add '/users/sign_up', priority: 0.8, changefreq: 'monthly'
 
   Category.find_each do |category|
-    add "store/products/instructions/#{category.name}", priority: 0.7, changefreq: 'monthly' unless ['Alternative Builds', 'Retired'].include?(category.name)
+    add "store/products/instructions/#{category.name.parameterize(separator: '_')}", priority: 0.7, changefreq: 'monthly' unless ['Alternative Builds', 'Retired'].include?(category.name)
   end
 
   Product.ready.instructions.find_each do |product|

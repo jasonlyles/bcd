@@ -37,9 +37,14 @@ class StoreController < ApplicationController
     render :cart
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def categories
-    @canonical_url = request.original_url.downcase
+    # Set up canonical url
+    slug = params[:category_name].to_s.parameterize(separator: '_')
+    @canonical_url = "#{request.base_url}/store/products/instructions/#{slug}"
+    # Adding this so we can avoid our paginated pages getting crawled
+    @noindex = params[:page].present?
+
     case params[:category_name]
     when 'alternatives'
       @category = Category.find_by_name('Alternative Builds')
@@ -55,7 +60,7 @@ class StoreController < ApplicationController
       end
       @products = Product.find_all_by_price(params[:price]).page(params[:page]).per(12)
     else
-      @category = Category.find_by('LOWER(name) = ?', params[:category_name].downcase)
+      @category = Category.find_by(name: params[:category_name].titleize.gsub('%20', ''))
       if @category
         @products = @category.products.find_instructions_for_sale.includes(:images).order('product_code ASC').page(params[:page]).per(12)
       else
@@ -64,7 +69,7 @@ class StoreController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # TODO: Split this out into methods for regular adding to cart, and adding to
   # cart via the new product email. Extract out the common code into a 3rd method
