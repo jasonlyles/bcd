@@ -523,6 +523,8 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
+    redis (5.4.1)
+      redis-client (>= 0.22.0)
     redis-client (0.23.2)
       connection_pool
     reek (6.3.0)
@@ -735,6 +737,7 @@ DEPENDENCIES
   rails_best_practices
   rake
   ransack
+  redis (>= 4.0.1)
   reek
   rexml
   roboto

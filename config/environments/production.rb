@@ -61,7 +61,9 @@ Rails.application.configure do
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
-  config.cache_store = :redis_cache_store, { url: Rails.application.credentials.redis.url }
+  config.cache_store = :memory_store, { size: 64.megabytes }
+  # I want to use the following, but there's some conflict, maybe between gem versions. Revisit.
+  # config.cache_store = :redis_cache_store, { url: Rails.application.credentials.redis.url }
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :sidekiq
