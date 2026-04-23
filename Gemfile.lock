@@ -454,8 +454,8 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (2.2.22)
-    rack-protection (3.0.5)
-      rack
+    rack-attack (6.8.0)
+      rack (>= 1.0, < 4)
     rack-session (1.0.2)
       rack (< 3)
     rack-test (2.2.0)
@@ -728,7 +728,7 @@ DEPENDENCIES
   pkce_challenge
   pry-rails
   puma
-  rack-protection
+  rack-attack
   rails (= 7.2.3.1)
   rails-controller-testing
   rails_autolink

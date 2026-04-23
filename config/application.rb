@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module BrickCity
   class Application < Rails::Application
+    # Force Rack::Attack to the top of the middleware stack
+    config.middleware.insert_before 0, Rack::Attack
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
