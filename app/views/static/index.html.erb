@@ -17,9 +17,16 @@
             instructions to help you expand your Lego® collection and building skills.
           </p>
           <div class="mt-5 pt-2">
-            <%= link_to 'Shop Instructions', '#instructions', class: 'scroll-to-anchor btn btn-primary btn-lg' %>
-            <%= link_to 'Shop Books', books_path, class: 'btn btn-outline-brick btn-lg ml-2' %>
-            <%= link_to 'Shop Kits', store_products_path(product_type_name: 'kits'), class: 'btn btn-outline-brick btn-lg ml-2' %>
+            <div class="row no-gutters">
+              <div class="col-12 col-md-auto mb-3">
+                <%= link_to 'Shop Instructions', '#instructions', class: 'scroll-to-anchor btn btn-primary btn-lg w-100' %>
+              </div>
+
+              <div class="col-12 col-md-auto d-flex ml-lg-2">
+                <%= link_to 'Shop Books', books_path, class: 'btn btn-outline-brick btn-lg mb-3 mr-2 flex-fill' %>
+                <%= link_to 'Shop Kits', store_products_path(product_type_name: 'kits'), class: 'btn btn-outline-brick btn-lg mb-3 flex-fill' %>
+              </div>
+            </div>
           </div>
         </div>
       </div>
