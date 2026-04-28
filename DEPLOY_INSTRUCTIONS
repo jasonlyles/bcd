@@ -206,7 +206,7 @@ server {
     listen 443 ssl;
     server_name brickcitydepot.com;
 
-    root /home/rails/example/public;
+    root /home/rails/apps/brick_city_depot/current/public;
     index index.htm index.html;
 
     location ~ /.well-known {
@@ -214,6 +214,10 @@ server {
     }
 
     location / {
+        try_files $uri @rails;
+    }
+
+    location @rails {
         proxy_pass http://localhost:3000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
