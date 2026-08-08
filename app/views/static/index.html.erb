@@ -201,7 +201,8 @@
           <div class="row">
             <% @updates.first(3).each do |update| %>
               <div class="col-md-4 mb-4 d-flex">
-                <div class="card content-card w-100 border-0 shadow-sm h-100 bg-white">
+                <!-- Ensure position-relative is present so stretched-link scopes to this card -->
+                <div class="card content-card w-100 border-0 shadow-sm h-100 bg-white position-relative">
                   <% if update.image.present? %>
                     <div class="content-card-img-wrap">
                       <img src="<%= update.image %>" class="card-img-top" alt="<%= update.title %>" loading="lazy">
@@ -214,7 +215,8 @@
                     <p class="card-text text-secondary small mb-3">
                       <%= update.body %>
                     </p>
-                    <%= link_to 'Learn More', update.link, class: 'btn btn-sm btn-outline-primary mt-auto align-self-start font-weight-bold', aria: { label: "Learn more about #{update.title}" } %> %>
+                    <!-- Added 'stretched-link' below -->
+                    <%= link_to 'Learn More', update.link, class: 'btn btn-sm btn-outline-primary mt-auto align-self-start font-weight-bold stretched-link', aria: { label: "Learn more about #{update.title}" } %>
                   </div>
                 </div>
               </div>
