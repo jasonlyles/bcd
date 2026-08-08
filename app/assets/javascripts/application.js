@@ -8,29 +8,6 @@
 //= require cookies_eu
 //= require_tree .
 
-// $('.scroll-to-anchor').click(function() {
-//     var sectionTo = $(this).attr('href');
-//     $('html, body').animate({
-//       scrollTop: $(sectionTo).offset().top
-//     }, 1500);
-// });
-
-// $('.scroll-to-anchor').click(function(e) {
-//   e.preventDefault(); // Prevents the instant default browser jump
-//
-//   var sectionTo = $(this).attr('href');
-//
-//   if ($(sectionTo).length) {
-//     // Dynamically grab the height of your fixed navbar (falls back to 80px if not found)
-//     // var navbarHeight = $('.navbar').outerHeight() || 80;
-//     var navbarHeight = 200;
-//
-//     $('html, body').animate({
-//       scrollTop: $(sectionTo).offset().top - navbarHeight
-//     }, 1500);
-//   }
-// });
-
 $(window).scroll(function() {
   var navBar = $('.navbar')[0];
   if (typeof navBar !== "undefined") {
@@ -53,17 +30,6 @@ $(function() {
 $(function() {
   $('[data-toggle="tooltip"]').tooltip()
 })
-/*
-$(function() {
-  $('.page-scroll a').bind('click', function(e) {
-    var $anchor = $(this);
-    $('html, body').stop().animate({
-      scrollTop: $($anchor.attr('href')).offset().top
-    }, 1500, 'easeInOutExpo');
-    e.preventDefault();
-  })
-})
-*/
 
 // This anonymous function looks to see if there is a field with the field_with_errors
 // class applied inside a tab that we need to jump to when the page reloads after
@@ -264,39 +230,3 @@ function giftInstructions(user_id, product_id) {
     }
   });
 };
-
-/*
-//This function is used in the products/new and edit pages to ajax-ily create a model code for the product
-$(function() {
-  $("#product_subcategory_id").change(function(){
-    var id_value_string = $(this).val();
-    if (id_value_string == "") {
-      //do nothing!
-    }
-    else {
-      //Send the request and update product_code text field
-      $.ajax({
-        dataType: "json",
-        cache: false,
-        url: '/subcategories/' + id_value_string + '/model_code.json',
-        timeout: 2000,
-        error: function(XMLHttpRequest, errorTextStatus, error){
-          alert("Failed to submit : "+ errorTextStatus +" ;"+error);
-        },
-        success: function(data){
-          $("#product_product_code").val(data);
-        }
-      });
-    };
-  });
-});
-*/
-/*
-$(function(){
-    $('#alert_wrapper').delay(5000).queue(function(){
-        $('#alert_message').replaceWith('K, bye');
-        $(this).dequeue();
-    });
-    $('#alert_wrapper').delay(2000).fadeOut(1000);
-});
-*/
