@@ -145,6 +145,8 @@ Rails.application.routes.draw do
   resources :parts_lists, only: %i[show]
   resources :user_parts_lists, only: %i[update]
 
+  resources :news, only: %i[index]
+
   # TODO: Some of these routes/actions probably belong in different controllers. Re-work them.
   get '/featured_products' => 'admin#featured_products'
   post '/gift_instructions' => 'admin#gift_instructions'

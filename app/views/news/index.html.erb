@@ -1,0 +1,49 @@
+<section class="content">
+  <div class="container mb-5">
+    <h1 class="mb-1">News &amp; Updates</h1>
+    <p class="text-muted mb-0">The latest model announcements, instruction updates, and stories from Brick City Depot.</p>
+  </div>
+  <div class="container-fluid mb-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <% if @updates.any? %>
+          <div class="row">
+            <% @updates.each do |update| %>
+              <div class="col-12 col-md-6 col-lg-4 mb-4 d-flex">
+                <div class="card content-card w-100 border-0 shadow-sm h-100 bg-white">
+                  <% if update.image.present? %>
+                    <div class="content-card-img-wrap">
+                      <img src="<%= update.image %>" class="card-img-top" alt="<%= update.title %>">
+                    </div>
+                  <% end %>
+
+                  <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title text-dark font-weight-bold mb-3">
+                      <%= update.title %>
+                    </h5>
+
+                    <div class="card-text text-secondary small mb-4 flex-grow-1">
+                      <%= simple_format(update.body) %>
+                    </div>
+
+                    <% if update.link.present? %>
+                      <%= link_to 'Learn More', update.link, class: 'btn btn-sm btn-outline-primary mt-auto align-self-start font-weight-bold' %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="d-flex justify-content-center mt-5">
+            <%= paginate @updates %>
+          </div>
+
+        <% else %>
+          <div class="text-center py-5">
+            <p class="lead text-muted">No news updates published yet. Check back soon!</p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>

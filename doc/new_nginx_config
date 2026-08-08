@@ -1,0 +1,72 @@
+# --------------------------
+# Default: Drop direct IP & unknown host scans
+# --------------------------
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+
+    server_name _;
+
+    # Uses existing Let's Encrypt certs to complete TLS handshake on raw IP requests
+    ssl_certificate /etc/letsencrypt/live/brickcitydepot.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/brickcitydepot.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Instantly closes connection without sending headers or payload
+    return 444;
+}
+
+# --------------------------
+# Rails app: non-www HTTPS
+# --------------------------
+server {
+    listen 443 ssl;
+    server_name brickcitydepot.com;
+
+    root /home/rails/apps/brick_city_depot/current/public;
+    index index.htm index.html;
+
+    location ~ /.well-known {
+        allow all;
+    }
+
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    ssl_certificate /etc/letsencrypt/live/brickcitydepot.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/brickcitydepot.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+}
+
+# --------------------------
+# Redirect www → non-www (HTTPS)
+# --------------------------
+server {
+    listen 443 ssl;
+    server_name www.brickcitydepot.com;
+
+    ssl_certificate /etc/letsencrypt/live/brickcitydepot.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/brickcitydepot.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    return 301 https://brickcitydepot.com$request_uri;
+}
+
+# --------------------------
+# Redirect all HTTP → HTTPS (Domain requests only)
+# --------------------------
+server {
+    listen 80;
+    server_name brickcitydepot.com www.brickcitydepot.com;
+    return 301 https://brickcitydepot.com$request_uri;
+}

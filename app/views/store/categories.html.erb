@@ -25,14 +25,15 @@
         <%= "Sorry, there are currently no #{@category.name.capitalize} products for sale." %>
       </div>
     <% end %>
-    <%= paginate @products %>
-    <div class="row">
-      <% @products.each do |product| %>
-        <div class="col-md-4 col-lg-3 d-flex">
-          <%= render 'product_teaser_medium', product: product %>
-        </div>
-      <% end %>
+    <div class="container">
+      <div class="row">
+        <% @products.each do |product| %>
+          <%= render partial: "product_teaser", locals: { product: } %>
+        <% end %>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+        <%= paginate @products %>
+      </div>
     </div>
-    <%= paginate @products %>
   </div>
 </section>

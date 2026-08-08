@@ -1,10 +1,81 @@
 <% if notice %>
-  <div id="notice" class="m-auto alert alert-success" role="alert" style="width: 90%;">
-    <%= notice %>
+  <div class="toast-notification alert-success shadow-sm mb-2 d-flex align-items-center justify-content-between" role="alert">
+    <div class="d-flex align-items-center mr-2">
+      <i class="fas fa-check-circle mr-2 flex-shrink-0" style="font-size: 1.1rem;"></i>
+      <span class="small font-weight-bold"><%= notice %></span>
+    </div>
+    <button type="button" class="toast-close" aria-label="Close" onclick="this.closest('.toast-notification').classList.add('fade-out'); setTimeout(() => this.closest('.toast-notification').remove(), 500);">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
 <% end %>
+
 <% if alert %>
-  <div id="alert" class="m-auto alert alert-danger" role="alert" style="width: 90%;">
-    <%= alert %>
+  <div class="toast-notification alert-danger shadow-sm mb-2 d-flex align-items-center justify-content-between" role="alert">
+    <div class="d-flex align-items-center mr-2">
+      <i class="fas fa-exclamation-circle mr-2 flex-shrink-0" style="font-size: 1.1rem;"></i>
+      <span class="small font-weight-bold"><%= alert %></span>
+    </div>
+    <button type="button" class="toast-close" aria-label="Close" onclick="this.closest('.toast-notification').classList.add('fade-out'); setTimeout(() => this.closest('.toast-notification').remove(), 500);">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
 <% end %>
+
+<script>
+  (function() {
+    function setupToastAutoDismiss() {
+      document.querySelectorAll('.toast-notification').forEach(function(toast) {
+        if (toast.dataset.dismissScheduled) return;
+        toast.dataset.dismissScheduled = "true";
+
+        let duration = 3500; // Total display time in ms
+        let remaining = duration;
+        let startTime = null;
+        let timerId = null;
+
+        function startTimer() {
+          startTime = Date.now();
+          timerId = setTimeout(dismiss, remaining);
+        }
+
+        function pauseTimer() {
+          if (!timerId) return;
+          clearTimeout(timerId);
+          timerId = null;
+          // Calculate how much time was left before pausing
+          remaining -= (Date.now() - startTime);
+          // Give at least 1 second remaining so it doesn't vanish instantly on mouseleave
+          if (remaining < 1000) remaining = 1000;
+        }
+
+        function resumeTimer() {
+          if (timerId) return; // Prevent duplicate timers
+          startTimer();
+        }
+
+        function dismiss() {
+          toast.classList.add('fade-out');
+          setTimeout(function() {
+            if (toast.parentNode) toast.remove();
+          }, 500);
+        }
+
+        // Desktop hover events
+        toast.addEventListener('mouseenter', pauseTimer);
+        toast.addEventListener('mouseleave', resumeTimer);
+
+        // Mobile touch events
+        toast.addEventListener('touchstart', pauseTimer, { passive: true });
+        toast.addEventListener('touchend', resumeTimer);
+
+        // Kick off the initial countdown
+        startTimer();
+      });
+    }
+
+    setupToastAutoDismiss();
+    document.addEventListener('turbolinks:load', setupToastAutoDismiss);
+    document.addEventListener('turbo:load', setupToastAutoDismiss);
+  })();
+</script>

@@ -1,0 +1,51 @@
+/* Base Card Layout */
+.category-card {
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45) !important;
+
+    .category-card-bg {
+      transform: scale(1.06);
+    }
+  }
+}
+/* Background image transition container */
+.category-card-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.category-card-content {
+  position: relative;
+  z-index: 2;
+}
+/* Height Control */
+.featured-card {
+  min-height: 480px;
+  /* Gives the featured item plenty of visual weight */
+}
+
+.small-card {
+  height: 228px;
+  /* Two of these (228px * 2) + gap (24px) match the 480px featured height */
+}
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 991px) {
+  .featured-card {
+    min-height: 320px;
+    /* Slightly shorter when stacked above on tablets */
+  }
+}
+@media (max-width: 575px) {
+  .small-card {
+    height: 180px;
+    /* Compact height for mobile screens */
+  }
+}
