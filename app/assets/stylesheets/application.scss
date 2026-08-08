@@ -5,6 +5,10 @@
 @import 'cookies_eu';
 @import "ekko-lightbox";
 @import 'yanone';
+@import "lego-buttons";
+@import "instructions-categories";
+@import "content-card";
+@import "media-card";
 /* stylelint-disable selector-list-comma-newline-after */
 html {
   width: 100%;
@@ -44,40 +48,126 @@ h6 {
   width: 100%;
   height: 30px;
 }
-
+/* Top-Right Container */
+#flash_messages,
 #notifications {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  left: auto;
   width: 100%;
-  position: absolute;
-  top: 150px;
-  min-height: 40px;
+  max-width: 380px;
+  z-index: 1090;
+  pointer-events: none;
 }
+/* Toast Base Style */
+.toast-notification {
+  pointer-events: auto;
+  padding: 12px 12px 12px 16px;
+  min-height: 64px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  border-left-width: 5px;
+  /* Pronounced accent border on the left */
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Success / Notice: Classic Bootstrap Light Green */
+  &.alert-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    border-left-color: #28a745;
+    color: #155724;
 
-#lifting-fig {
-  position: absolute;
-  bottom: -115px;
-  right: 0;
-  z-index: 1000;
-}
-@media (max-width: 992px) and (min-width: 480px) {
-  #lifting-fig {
-    right: -32px;
+    .toast-close {
+      color: #155724;
+    }
   }
+  /* Danger / Alert: Classic Bootstrap Light Red */
+  &.alert-danger {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    border-left-color: #dc3545;
+    color: #721c24;
 
-  #books {
-    margin-top: 80px;
+    .toast-close {
+      color: #721c24;
+    }
+  }
+  /* Smooth fade-out state */
+  &.fade-out {
+    opacity: 0 !important;
+    transform: translateY(-10px);
   }
 }
-@media (min-width: 992px) {
-  #books {
-    margin-top: 40px;
-  }
-}
+/* Close button styled for dark text contrast */
+.toast-close {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
 
-#hanging-fig {
-  position: absolute;
-  bottom: -205px;
-  left: 0;
+  &:hover {
+    opacity: 1;
+  }
 }
+// @media (max-width: 576px) {
+//   #flash_messages,
+//   #notifications {
+//     top: 65px;
+//     right: 15px;
+//     max-width: calc(100% - 30px);
+//   }
+// }
+/* Mobile Screen Override (< 576px) */
+@media (max-width: 576px) {
+  #flash_messages,
+  #notifications {
+    top: auto;
+    /* Cancel top positioning */
+    bottom: 20px;
+    /* Anchor to the bottom of the screen */
+    left: 15px;
+    right: 15px;
+    width: auto;
+    max-width: none;
+    /* Stretches neatly across mobile width */
+  }
+  /* Fade downward instead of upward on mobile */
+  .toast-notification.fade-out {
+    transform: translateY(10px);
+  }
+}
+// #lifting-fig {
+//   position: absolute;
+//   bottom: -115px;
+//   right: 0;
+//   z-index: 1000;
+// }
+// @media (max-width: 992px) and (min-width: 480px) {
+//   #lifting-fig {
+//     right: -32px;
+//   }
+//
+//   #books {
+//     margin-top: 80px;
+//   }
+// }
+// @media (min-width: 992px) {
+//   #books {
+//     margin-top: 40px;
+//   }
+// }
+//
+// #hanging-fig {
+//   position: absolute;
+//   bottom: -205px;
+//   left: 0;
+// }
 /* Class styles */
 .container-100 {
   width: 100%;
@@ -198,11 +288,12 @@ h6 {
     font-size: 3rem;
   }
 }
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .brand-heading {
     font-size: 2.3rem;
   }
-
+}
+@media (max-width: 480px) {
   .intro-text {
     font-size: 1.3rem;
   }
@@ -245,7 +336,6 @@ h6 {
   background-attachment: fixed;
   background-size: cover;
   min-height: 100vh;
-  /* Ensure full viewport height */
 }
 
 .background {
@@ -254,6 +344,11 @@ h6 {
 
 .short-background {
   height: 40px;
+}
+
+#hero,
+.short-background {
+  background-color: rgba(0, 0, 0, 0.55);
 }
 
 .field_with_errors label {
@@ -394,10 +489,6 @@ Large Devices, Wide Screens
 @media (max-width: 480px) {
   .short-background {
     height: 20px;
-  }
-
-  #notifications {
-    top: 120px;
   }
 }
 /* Pagination */
@@ -579,4 +670,188 @@ Large Devices, Wide Screens
 .btn-outline-brick:hover {
   color: #fff;
   background-color: #0069D9;
+}
+
+.hero-container {
+  width: 100%;
+  max-width: 1400px;
+  /* Wider than standard 1140px */
+  margin: 0 auto;
+  padding-left: 40px;
+  /* Loosen up the x-margins */
+  padding-right: 40px;
+}
+/* Ensure the card doesn't balloon vertically */
+.compact-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.compact-card .card-body {
+  flex: 1;
+  padding: 1.25rem;
+}
+
+.featured-product-bg {
+  background-size: cover;
+  background-position: center;
+  min-height: 450px;
+  /* Sets a consistent height for the hero card */
+  position: relative;
+  overflow: hidden;
+}
+/* The Opaque Overlay */
+.featured-product-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  /* 65% black overlay */
+  z-index: 0;
+}
+
+.card.featured-product-bg {
+  border: 4px solid rgba(255, 255, 255, 0.9) !important;
+  /* Force this border */
+  border-radius: 16px !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5) !important;
+  background-clip: padding-box;
+  /* IMPORTANT: This stops the image from bleeding under the border */
+  overflow: hidden;
+}
+/* Ensure the card body sits above the overlay */
+.featured-product-bg .card-body {
+  position: relative;
+  z-index: 1;
+}
+@media (min-width: 992px) {
+  /* Make the hero section full viewport height */
+  #hero {
+    min-height: calc(100vh - 40px);
+    display: flex;
+    align-items: center;
+    /* This vertically centers the content */
+    padding-top: 5rem;
+    /* Accounts for the sticky navbar height */
+    padding-bottom: 5rem;
+  }
+
+  #hero.py-5 {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .featured-product-bg {
+    min-height: 500px;
+    /* Gives the featured card more presence in the 100vh container */
+  }
+}
+
+#news .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Ensure both transform and shadow transition smoothly */
+  cursor: pointer;
+  /* Hints to the user that it's clickable */
+}
+
+#news .card:hover {
+  transform: scale(1.03);
+  /* Pops out by 3% */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  /* Adds a deeper shadow as it 'lifts' toward the user */
+  z-index: 10;
+  /* Ensures it pops over adjacent cards */
+}
+
+.book-cover-img {
+  height: 500px;
+  /* Constrains the image height */
+  width: 100%;
+  object-fit: contain;
+  /* Ensures the whole cover shows without cropping */
+  padding: 1rem;
+  /* Adds a little breathing room around the cover */
+  background: #fcfcfc;
+  /* Subtle background color to make the book 'pop' */
+}
+
+.hero-fig {
+  // height: 250px;
+  // /* Constrains the image height */
+  // width: 100%;
+  // object-fit: contain;
+  // /* Ensures the whole cover shows without cropping */
+  // padding: 1rem;
+  max-height: 250px;
+  max-width: 100%;
+  /* Maintains aspect ratio when scaling down */
+  height: auto;
+  width: auto;
+}
+
+.header-glass {
+  display: inline-block;
+  padding: 1rem;
+  border-radius: 1rem;
+  /* The magic: Semi-transparent white background with a blur */
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  /* For Safari compatibility */
+  /* A subtle border adds to the 'premium' feel */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+/* Optional: Make text inside a bit darker to ensure contrast */
+.header-glass h2,
+.header-glass p {
+  color: #333;
+  /* Use a dark charcoal instead of pure black for softness */
+}
+/* Standard Product Card Styling */
+.product-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15) !important;
+
+    .product-card-img-wrap img {
+      transform: scale(1.04);
+    }
+  }
+
+  .product-card-img-wrap {
+    background: #f8fafc;
+
+    img {
+      transition: transform 0.35s ease;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  .product-title-link {
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #0056b3 !important;
+      /* Matches your brand link color */
+    }
+  }
+}
+
+[id],
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+.section-title {
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.85);
 }

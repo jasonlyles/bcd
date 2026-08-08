@@ -5,11 +5,29 @@ class StaticController < ApplicationController
     # session.delete(:guest_has_arrived_for_downloads)
     # session.delete(:guest) #for testing
     # reset_session #for testing
+
+    # Get some semi-random colors for the Lego buttons
+    lego_button_colors = random_lego_color_combos
+    top_row_position = [0, 1, 2].shuffle
+    @button_colors = {
+      one: lego_button_colors[top_row_position.pop],
+      two: lego_button_colors[top_row_position.pop],
+      three: lego_button_colors[top_row_position.pop],
+      four: lego_button_colors[3]
+    }
+
+    @instruction_categories = Category.find_live_categories
+    @product_counts_by_category = Product.sellable_instructions
+                                         .where(category_id: @instruction_categories.map(&:id))
+                                         .group(:category_id)
+                                         .count
+
     @product_type = ProductType.where(name: 'Instructions').first
-    # TODO: Sticking with pagination for now, even though the per is greater than the
-    # actual number of products. I'm still interested in looking at maybe doing
-    # infinite scroll for the products.
-    @products = Product.where('product_type_id=?', @product_type.id).ready_instructions_without_includes.order(Arel.sql('popularity_order ASC NULLS LAST')).includes([:images]).page(params[:page]).per(80)
+    @best_sellers = Product.where('product_type_id=?', @product_type.id)
+                           .ready_instructions_without_includes
+                           .order(Arel.sql('popularity_order ASC NULLS LAST'))
+                           .includes([:images])
+                           .limit(8)
     @updates = Update.live_updates
   end
 
@@ -70,5 +88,18 @@ class StaticController < ApplicationController
       flash[:alert] = 'Uh oh. Look below to see what you need to fix.'
       render :contact
     end
+  end
+
+  private
+
+  def random_lego_color_combos
+    [
+      %w[lego-red lego-blue lego-yellow lego-green], # Classic
+      %w[lego-yellow lego-orange lego-red lego-darkorange], # Sunset
+      %w[lego-lime lego-darkazure lego-blue lego-darkblue], # Ocean & Ice
+      %w[lego-purple lego-yellow lego-darkazure lego-darkred], # High-Energy
+      %w[lego-lime lego-green lego-orange lego-darkgreen],     # Forest
+      %w[lego-darkred lego-yellow lego-purple lego-darkblue] # Royal Bold
+    ].sample
   end
 end

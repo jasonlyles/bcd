@@ -18,10 +18,12 @@ class StoreController < ApplicationController
     if @product_type.blank?
       flash[:notice] = "Sorry. We don't have any of those."
       redirect_to(root_path)
-    elsif params[:product_type_name].to_s.downcase != 'instructions'
-      @products = Product.where('product_type_id=?', @product_type.id).in_stock.page(params[:page]).per(12)
     else
-      @top_categories = Category.find_live_categories
+      @products = Product.where('product_type_id=?', @product_type.id)
+                         .in_stock
+                         .order(Arel.sql('popularity_order ASC NULLS LAST'))
+                         .includes([:images])
+                         .page(params[:page]).per(24)
     end
   end
 
@@ -332,7 +334,7 @@ class StoreController < ApplicationController
 
     return redirect_to '/cart' if @cart.nil?
 
-    orders = current_user.orders.includes(line_items: [product: :product_type])
+    orders = current_user.orders.includes(line_items: [{ product: :product_type }])
     @products_from_previous_orders = []
     orders.each do |order|
       order.line_items.each do |line_item|

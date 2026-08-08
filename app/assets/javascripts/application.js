@@ -8,12 +8,28 @@
 //= require cookies_eu
 //= require_tree .
 
-$('.scroll-to-anchor').click(function() {
-    var sectionTo = $(this).attr('href');
-    $('html, body').animate({
-      scrollTop: $(sectionTo).offset().top
-    }, 1500);
-});
+// $('.scroll-to-anchor').click(function() {
+//     var sectionTo = $(this).attr('href');
+//     $('html, body').animate({
+//       scrollTop: $(sectionTo).offset().top
+//     }, 1500);
+// });
+
+// $('.scroll-to-anchor').click(function(e) {
+//   e.preventDefault(); // Prevents the instant default browser jump
+//
+//   var sectionTo = $(this).attr('href');
+//
+//   if ($(sectionTo).length) {
+//     // Dynamically grab the height of your fixed navbar (falls back to 80px if not found)
+//     // var navbarHeight = $('.navbar').outerHeight() || 80;
+//     var navbarHeight = 200;
+//
+//     $('html, body').animate({
+//       scrollTop: $(sectionTo).offset().top - navbarHeight
+//     }, 1500);
+//   }
+// });
 
 $(window).scroll(function() {
   var navBar = $('.navbar')[0];

@@ -1,0 +1,276 @@
+/* ==========================================================================
+   FLUID CONTAINER (Scales from 100% mobile screen up to 540px desktop)
+   ========================================================================== */
+.lego-container {
+  width: 100%;
+  /* Caps desktop size */
+  max-width: 540px;
+  /* Enables cqw (container query width) units */
+  container-type: inline-size;
+  margin-top: 2rem;
+}
+/* ==========================================================================
+   FLUID 3-STUD BUTTON
+   ========================================================================== */
+.lego-btn {
+  /* Shape math remains identical */
+  --brick-shape: polygon(0% 100%, 0% 20%, 6.667% 20%, 6.667% 0%, 26.667% 0%, 26.667% 20%, 40.0% 20%, 40.0% 0%, 60.0% 0%, 60.0% 20%, 73.333% 20%, 73.333% 0%, 93.333% 0%, 93.333% 20%, 100% 20%, 100% 100%);
+  clip-path: var(--brick-shape);
+  position: relative;
+  /* Fluid Sizing */
+  width: 33.333%;
+  /* Each brick takes 1/3 of row width */
+  flex: 0 0 33.333%;
+  aspect-ratio: 3 / 1;
+  /* Locks height relative to width (180x60 profile) */
+  height: auto;
+  /* Lets aspect-ratio drive height */
+  /* Fluid Spacing & Typography using container query width (cqw) */
+  padding-top: 2.2cqw;
+  /* Keeps text clear of the top studs at any scale */
+  font-size: clamp(0.65rem, 3.2cqw, 1rem);
+  /* Scales text smoothly with brick size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transform: translateY(0);
+  filter: drop-shadow(0px 0.9cqw 0px rgba(0, 0, 0, 0.4));
+  transition: transform 0.1s ease, filter 0.1s ease;
+  /* Engraving Font & Uppercase Styling */
+  font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  /* Engraved bricks are almost exclusively ALL CAPS */
+  text-transform: uppercase;
+  /* Gives laser-cut letters breathing room */
+  letter-spacing: 0.45em;
+  font-weight: 800;
+}
+/* ==========================================================================
+   FLUID 9-STUD LONG BUTTON
+   ========================================================================== */
+.lego-btn-long {
+  --brick-shape-long: polygon(0% 100%, 0% 20%, 2.222% 20%, 2.222% 0%, 8.889% 0%, 8.889% 20%, 13.333% 20%, 13.333% 0%, 20.0% 0%, 20.0% 20%, 24.444% 20%, 24.444% 0%, 31.111% 0%, 31.111% 20%, 35.556% 20%, 35.556% 0%, 42.222% 0%, 42.222% 20%, 46.667% 20%, 46.667% 0%, 53.333% 0%, 53.333% 20%, 57.778% 20%, 57.778% 0%, 64.444% 0%, 64.444% 20%, 68.889% 20%, 68.889% 0%, 75.556% 0%, 75.556% 20%, 80.0% 20%, 80.0% 0%, 86.667% 0%, 86.667% 20%, 91.111% 20%, 91.111% 0%, 97.778% 0%, 97.778% 20%, 100% 20%, 100% 100%);
+  clip-path: var(--brick-shape-long);
+  /* Fluid Sizing */
+  width: 100%;
+  /* Fills full width of container */
+  flex: 0 0 100%;
+  aspect-ratio: 9 / 1;
+  /* Locks height relative to width (540x60 profile) */
+  height: auto;
+  padding-top: 2.2cqw;
+  font-size: clamp(0.75rem, 3.5cqw, 1rem);
+}
+/* ==========================================================================
+   STACKING & INTERLOCKING OVERLAP
+   ========================================================================== */
+/* Top Row Wrapper: Must sit on top of the bottom brick */
+.lego-top-row {
+  position: relative;
+  z-index: 2;
+  /* Keeps top row above bottom studs */
+}
+/* Bottom Row Wrapper: Pulled up by the exact height of its studs (2.222cqw) */
+.lego-bottom-row {
+  position: relative;
+  z-index: 1;
+  margin-top: -2.322cqw;
+  /* Overlaps bottom studs directly under top bricks */
+}
+/* ==========================================================================
+   FLUID INTERACTIONS (Shadows and lifts scale dynamically)
+   ========================================================================== */
+.lego-btn:hover {
+  transform: translateY(-0.8cqw);
+  filter: drop-shadow(0px 1.2cqw 0px rgba(0, 0, 0, 0.3));
+}
+
+.lego-btn:active {
+  transform: translateY(-1.2cqw);
+  filter: drop-shadow(0px 1.5cqw 0px rgba(0, 0, 0, 0.2));
+}
+/* Sinks slightly on hover */
+.lego-btn-long:hover {
+  transform: translateY(0.8cqw);
+  filter: drop-shadow(0px 0.5cqw 0px rgba(0, 0, 0, 0.5));
+  z-index: 1;
+}
+/* Presses deeper down on click */
+.lego-btn-long:active {
+  transform: translateY(1.2cqw);
+  filter: drop-shadow(0px 0.2cqw 0px rgba(0, 0, 0, 0.6));
+  z-index: 1;
+}
+/* ==========================================================================
+   SPECULAR OVERLAYS
+   ========================================================================== */
+.lego-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  clip-path: var(--brick-shape);
+  /* Stud Highlights centered at 16.667%, 50%, and 83.333% */
+  background-image:radial-gradient(circle at 16.667% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 50% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 83.333% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px),
+  /* Bevels */
+  linear-gradient(to bottom, transparent calc(20% - 0.75px), rgba(255, 255, 255, 0.5) 20%, transparent calc(20% + 0.75px)), linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 1.5px), linear-gradient(to right, rgba(255, 255, 255, 0.3) 0%, transparent 1.5px), linear-gradient(to left, rgba(0, 0, 0, 0.4) 0%, transparent 1.5px), linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.15) 45%, transparent 55%);
+}
+
+.lego-btn-long::before {
+  clip-path: var(--brick-shape-long);
+  /* 9 Stud Radial Highlights */
+  background-image:radial-gradient(circle at 5.556% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 16.667% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 27.778% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 38.889% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 50.0% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 61.111% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 72.222% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 83.333% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px), radial-gradient(circle at 94.444% 8%, rgba(255, 255, 255, 0.5) 0%, transparent 3px),
+  /* Bevels */
+  linear-gradient(to bottom, transparent calc(20% - 0.75px), rgba(255, 255, 255, 0.5) 20%, transparent calc(20% + 0.75px)), linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 1.5px), linear-gradient(to right, rgba(255, 255, 255, 0.3) 0%, transparent 1.5px), linear-gradient(to left, rgba(0, 0, 0, 0.4) 0%, transparent 1.5px), linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.15) 45%, transparent 55%);
+}
+/* ==========================================================================
+   NO TEXT DECORATION ON LINKS
+   ========================================================================== */
+/* Prevents default browser focus ring from breaking the brick outline */
+.lego-btn,
+.lego-btn:active,
+.lego-btn:focus,
+.lego-btn:hover,
+.lego-btn:visited {
+  text-decoration: none;
+  outline: none;
+}
+/* ==========================================================================
+   COLORS
+   ========================================================================== */
+.lego-darkorange,
+.lego-darkorange:active,
+.lego-darkorange:focus,
+.lego-darkorange:hover,
+.lego-darkorange:visited {
+  background-color: #A95500;
+  color: #ffffff;
+}
+
+.lego-orange,
+.lego-orange:active,
+.lego-orange:focus,
+.lego-orange:hover,
+.lego-orange:visited {
+  background-color: #FE8A18;
+  color: #ffffff;
+}
+
+.lego-purple,
+.lego-purple:active,
+.lego-purple:focus,
+.lego-purple:hover,
+.lego-purple:visited {
+  background-color: #6B327B;
+  color: #ffffff;
+}
+
+.lego-darkazure,
+.lego-darkazure:active,
+.lego-darkazure:focus,
+.lego-darkazure:hover,
+.lego-darkazure:visited {
+  background-color: #078BC9;
+  color: #ffffff;
+}
+
+.lego-lime,
+.lego-lime:active,
+.lego-lime:focus,
+.lego-lime:hover,
+.lego-lime:visited {
+  background-color: #A4BD46;
+  color: #222222;
+}
+
+.lego-darkred,
+.lego-darkred:active,
+.lego-darkred:focus,
+.lego-darkred:hover,
+.lego-darkred:visited {
+  background-color: #7B2E2F;
+  color: #ffffff;
+}
+
+.lego-darkgreen,
+.lego-darkgreen:active,
+.lego-darkgreen:focus,
+.lego-darkgreen:hover,
+.lego-darkgreen:visited {
+  background-color: #27462C;
+  color: #ffffff;
+}
+
+.lego-darkblue,
+.lego-darkblue:active,
+.lego-darkblue:focus,
+.lego-darkblue:hover,
+.lego-darkblue:visited {
+  background-color: #203A56;
+  color: #ffffff;
+}
+
+.lego-red,
+.lego-red:active,
+.lego-red:focus,
+.lego-red:hover,
+.lego-red:visited {
+  background-color: #C4281B;
+  color: #ffffff;
+}
+
+.lego-blue,
+.lego-blue:active,
+.lego-blue:focus,
+.lego-blue:hover,
+.lego-blue:visited {
+  background-color: #0055BF;
+  color: #ffffff;
+}
+
+.lego-yellow,
+.lego-yellow:active,
+.lego-yellow:focus,
+.lego-yellow:hover,
+.lego-yellow:visited {
+  background-color: #F5CD2F;
+  color: #222222;
+}
+
+.lego-green,
+.lego-green:active,
+.lego-green:focus,
+.lego-green:hover,
+.lego-green:visited {
+  background-color: #287F46;
+  color: #ffffff;
+}
+/* ==========================================================================
+   ENGRAVED INSET TEXT EFFECT (White Text on Dark Bricks)
+   ========================================================================== */
+.lego-btn span {
+  position: relative;
+  z-index: 2;
+  /* Offsets the trailing letter-spacing gap so visual text is 100% centered */
+  margin-right: -0.45em;
+  /*
+     Recessed Light Physics:
+     - Top dark shadow casts INSIDE the carved groove.
+     - Bottom light highlight catches the lower lip of the cut.
+  */
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.8), 0 1px 1px rgba(255, 255, 255, 0.35);
+}
+/* ==========================================================================
+   ENGRAVED INSET TEXT EFFECT (Dark Text on Bright Bricks: Yellow & Lime)
+   ========================================================================== */
+.lego-lime span,
+.lego-yellow span {
+  /* Adjusted so dark text still looks recessed into bright plastic */
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 0.8);
+}

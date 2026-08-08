@@ -5,113 +5,369 @@
     </div>
   </div>
 
-  <section id="hero">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-9 col-md-8">
-          <h1 class="brand-heading mt-4">Welcome to Brick City Depot</h1>
-          <p class="intro-text">
-            At Brick City Depot, we make
-            <strong>affordable</strong>,
-            <strong>high quality</strong>
-            instructions to help you expand your Lego® collection and building skills.
-          </p>
-          <div class="mt-5 pt-2">
-            <div class="row no-gutters">
-              <div class="col-12 col-md-auto mb-3">
-                <%= link_to 'Shop Instructions', '#instructions', class: 'scroll-to-anchor btn btn-primary btn-lg w-100' %>
-              </div>
+  <section id="hero" class="pt-5 pb-4 py-md-5">
+    <div class="hero-container">
+      <div class="row align-items-stretch">
+        <div class="col-xl-7 col-12 mt-5 mt-md-4 mb-5 mb-xl-0">
+          <h1 class="brand-heading mb-3">Welcome to Brick City Depot</h1>
+          <p class="intro-text lead mb-4">At Brick City Depot, we make <strong>affordable</strong>, <strong>high quality</strong> instructions to help you expand your Lego® collection and building skills.</p>
+          <p class="intro-text lead">Every set of instructions includes:</p>
 
-              <div class="col-12 col-md-auto d-flex ml-lg-2">
-                <%= link_to 'Shop Books', books_path, class: 'btn btn-outline-brick btn-lg mb-3 mr-2 flex-fill' %>
-                <%= link_to 'Shop Kits', store_products_path(product_type_name: 'kits'), class: 'btn btn-outline-brick btn-lg mb-3 flex-fill' %>
-              </div>
+          <!-- Flexible Checklist + Minifig Container -->
+          <div class="d-flex align-items-center my-3">
+            <ul class="list-unstyled intro-text lead mb-0 mr-3 mr-md-4">
+              <li class="mb-2">
+                <span class="text-success font-weight-bold mr-2">✓</span> Instant PDF Downloads
+              </li>
+              <li class="mb-2">
+                <span class="text-success font-weight-bold mr-2">✓</span> Parts Checklists
+              </li>
+              <li class="mb-2">
+                <span class="text-success font-weight-bold mr-2">✓</span> XML Parts Lists
+              </li>
+              <li class="mb-2">
+                <span class="text-success font-weight-bold mr-2">✓</span> High-Res Step-by-Step Guides
+              </li>
+              <li class="mb-2">
+                <span class="text-success font-weight-bold mr-2">✓</span> Customer Service
+              </li>
+            </ul>
+
+            <div>
+              <%= image_tag('figs/product_jason_lyles.png', class: "hero-fig", alt: "Jason Lyles Minifig") %>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section id="news" class="pt-3 mt-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-12 col-lg-9">
-          <h2 class="text-center text-white">News</h2>
-          <%= render partial: 'shared/carousel', locals: { updates: @updates, preview: false } %>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section-spacer" style="height: 25px;"></section>
-
-  <section class="pt-3 mt-3 pt-md-5 mt-md-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm position-relative">
-          <h2 class="text-center text-white">Books</h2>
-          <div class="card flex-md-row mb-4 box-shadow">
-            <div class="card-body d-flex flex-column align-items-start">
-              <strong class="d-inline-block mb-2 text-primary">Books</strong>
-              <h3 class="mb-0">
-                Our 2nd book!
-              </h3>
-              <p class="card-text">
-                Check out our 2nd book! The book is published by No Starch Press and is available all over the internet, and also in Barnes & Noble stores.
-              </p>
-              <%= link_to 'Continue reading', '/books' %>
+          <!-- Lego Buttons -->
+          <div class="lego-container d-flex flex-column align-items-center align-items-md-start">
+            <div class="d-flex w-100 lego-top-row">
+              <%= link_to '#merch', class: "scroll-to-anchor lego-btn #{@button_colors[:one]}" do %>
+                <span>Merch</span>
+              <% end %>
+              <%= link_to books_path, class: "lego-btn #{@button_colors[:two]}" do %>
+                <span>Books</span>
+              <% end %>
+              <%= link_to store_products_path(product_type_name: 'kits'), class: "lego-btn #{@button_colors[:three]}" do %>
+                <span>Kits</span>
+              <% end %>
             </div>
-            <%= link_to(image_tag('lego_neighborhood_2.jpg', class: "card-img-right flex-auto img-fluid", alt: "The Lego Neighborhood Book 2", loading: "lazy"), "/books") %>
-          </div>
-          <%= picture_tag("figs/hanging.avif", "figs/hanging.png", id: 'hanging-fig', image: { alt: "Hanging Minifig", class: "img-fluid sigfig d-none d-md-block" }) %>
-        </div>
-
-        <% featured_items.each do |product| %>
-          <div class="col-sm mt-3 mt-sm-0">
-            <h2 class="text-center text-white">Featured Product</h2>
-            <div class="card flex-md-row mb-4 box-shadow">
-              <div class="card-body d-flex flex-column align-items-start">
-                <strong class="d-inline-block mb-2 text-success">Instructions</strong>
-                <h3 class="mb-0">
-                  <%= product.discount_percentage.to_i %>% Off All <%= current_month %>!
-                </h3>
-                <% unless product.nil? %>
-                  <p class="text-muted"><%= "#{product.product_code} #{product.name}" %></p>
-                  <p class="card-text mb-auto"><%= snippet(product.description, word_count: 15) %></p>
-                  <%= link_to "Continue Reading", {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case} %>
-                <% end %>
-              </div>
-              <% unless product.nil? || product.main_image.blank? %>
-                <%= link_to(image_tag(product.main_image.medium.url, class: 'card-img-right flex-auto img-fluid', alt: "#{product.name}", loading: "lazy"), controller: :store, action: :product_details, product_code: product.product_code, product_name: product.name.to_snake_case) unless product.main_image.medium.blank? %>
+            <div class="w-100 lego-bottom-row">
+              <%= link_to '#instructions', class: "scroll-to-anchor lego-btn lego-btn-long #{@button_colors[:four]}" do %>
+                <span>Instructions</span>
               <% end %>
             </div>
           </div>
+        </div>
+
+        <!-- Right Column: Featured Product Card -->
+        <div class="col-xl-5 col-12 d-flex justify-content-center justify-content-xl-start">
+          <% if featured_items.any? %>
+            <% product = featured_items.first %>
+
+            <div class="card border-0 shadow-lg h-100 overflow-hidden text-white w-100"
+                 style="max-width: 520px;
+                        min-height: 380px;
+                        background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.1) 100%),
+                                    url('<%= product.main_image.medium.url %>') center/cover no-repeat;
+                        border-radius: 8px;">
+
+              <!-- Top Badge Area -->
+              <div class="p-3">
+                <span class="badge badge-warning shadow-sm" style="font-size: 0.8rem; padding: 6px 10px;">
+                  Featured Product
+                </span>
+              </div>
+
+              <!-- Card Body Anchored at the Bottom -->
+              <div class="card-body d-flex flex-column justify-content-end p-4">
+                <h4 class="mb-1 text-white font-weight-bold">
+                  <%= product.discount_percentage.to_i %>% Off All <%= current_month %>!
+                </h4>
+                <h6 class="text-warning font-weight-bold mb-2">
+                  <%= "#{product.product_code} #{product.name}" %>
+                </h6>
+                <p class="card-text mb-4 text-light" style="font-size: 0.9rem; line-height: 1.5; opacity: 0.95;">
+                  <%= snippet(product.description, word_count: 30) %>
+                </p>
+                <%= link_to "Continue Reading",
+                            {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case},
+                            class: 'btn btn-primary align-self-start font-weight-bold shadow-sm' %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="instructions" class="pt-5">
+    <div class="container">
+      <!-- Section Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-end mb-4">
+        <div class="mb-3 mb-sm-0">
+          <h2 class="section-title mb-1">Best Sellers</h2>
+          <p class="text-light mb-0 opacity-90">Our fan-favorite instructions</p>
+        </div>
+        <%= link_to "View All Instructions →", store_products_path(product_type_name: 'instructions'), class: "btn btn-outline-light btn-sm font-weight-bold align-self-start align-self-sm-auto" %>
+      </div>
+
+      <div class="row">
+        <% @best_sellers.each do |product| %>
+          <div class="col-xl-3 col-lg-4 col-md-6 col-12 mb-4">
+            <div class="card media-card border-0 shadow-lg h-100 overflow-hidden text-white position-relative">
+              <!-- Background Image -->
+              <img src="<%= product.main_image.medium.url %>" class="media-card-img" alt="<%= product.name %>">
+              <!-- Dark Gradient Overlay -->
+              <div class="media-card-overlay"></div>
+              <!-- Top Card Badge Area -->
+              <div class="p-3 d-flex justify-content-between align-items-start media-card-top-content">
+                <span class="badge badge-warning font-weight-bold shadow-sm text-dark hero-price">
+                  <% if product.discount_percentage > 0 %>
+                    <span class="text-danger pr-2">On Sale!</span>
+                  <% end %>
+                  <strong>$<%= product.current_price.floor %><span class='cents'><%= ("%.2f" % product.current_price).split('.')[1] %></span></strong>
+                </span>
+              </div>
+
+              <!-- Card Body Anchored at Bottom -->
+              <div class="card-body media-card-body d-flex flex-column justify-content-end p-3">
+                <h5 class="card-title font-weight-bold mb-1">
+                  <%= link_to "#{product.product_code} #{product.name}",
+                              { :controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case },
+                              class: "text-white text-decoration-none stretched-link" %>
+                </h5>
+
+                <p class="card-text text-light small mb-3">
+                  <%= snippet(product.description, word_count: 14) %>
+                </p>
+
+                <!-- Dual Action Buttons -->
+                <div class="mt-2 media-card-action d-flex align-items-center justify-content-between position-relative" style="z-index: 3;">
+                  <%= link_to({ :controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case },
+                              class: 'btn btn-outline-light btn-sm font-weight-bold flex-grow-1 mr-2') do %>
+                    View Details &rarr;
+                  <% end %>
+
+                  <%= button_to add_to_cart_path(product.product_code),
+                                method: :post,
+                                class: 'btn btn-primary btn-sm px-3',
+                                data: { disable_with: '<i class="fas fa-spinner fa-spin"></i>' },
+                                form: { class: 'd-inline-block mb-0' },
+                                title: "Add to Cart" do %>
+                    <i class="fas fa-cart-plus"></i>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
         <% end %>
       </div>
-      <div class="row pt-2 mt-2 pt-md-1 mt-md-1">
-        <div class="col-lg-5 col-md-6 offset-md-6 offset-lg-4">
-          <h2 class="text-center text-white">Free instructions!</h2>
-          <div class="card">
-            <a href="/CV013/adventure_truck"><img class="img-fluid object-fit-contain" loading="lazy" style="height: 248px" alt="Adventure Truck" src="https://d1f3s1yrq7p474.cloudfront.net/assets/adventure_truck_banner-887c0a0e23cc82f348e84e10e47dc9070ee605e0e37d8fed5f32894dc01c4699.jpg"></a>
+    </div>
+  </section>
+
+  <section id="categories" class="pt-4">
+    <div class="container">
+      <!-- Section Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-end mb-4">
+        <div class="mb-3 mb-sm-0">
+          <h2 class="section-title mb-1">Explore Instructions by Category</h2>
+          <p class="text-light mb-0 opacity-90">Choose a category to start building</p>
+        </div>
+      </div>
+
+      <%
+        # Separate featured category from the remaining 4
+        featured_category = @instruction_categories.first
+        other_categories  = @instruction_categories.offset(1).limit(4)
+      %>
+
+      <div class="row">
+        <!-- Left Column: Featured Large Card -->
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <% featured_count = @product_counts_by_category[featured_category.id] || 0 %>
+          <%= link_to url_for(controller: :store, action: :categories, product_type_name: 'instructions', category_name: featured_category.name.parameterize(separator: '_')), class: "category-card featured-card position-relative shadow-lg overflow-hidden text-decoration-none rounded d-block h-100" do %>
+            <div class="category-card-bg" style="background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%), url('<%= featured_category.image.url %>') center/cover no-repeat;"></div>
+            <div class="category-card-content p-4 d-flex flex-column justify-content-end h-100">
+              <span class="badge badge-warning font-weight-bold mb-2 align-self-start text-dark" style="font-size: 0.85rem; padding: 6px 10px;">
+                Most Popular
+              </span>
+              <h3 class="font-weight-bold text-white mb-1"><%= featured_category.name %></h3>
+              <span class="small text-warning font-weight-bold">Browse <%= featured_count %> &rarr;</span>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Right Column: 2x2 Grid for Remaining 4 Categories -->
+        <div class="col-lg-6">
+          <div class="row">
+            <% other_categories.each_with_index do |cat, index| %>
+              <% count = @product_counts_by_category[cat.id] || 0 %>
+              <div class="col-sm-6 <%= 'mb-4' if index < 2 %> <%= 'mb-4 mb-sm-0' if index >= 2 %>">
+                <%= link_to url_for(controller: :store, action: :categories, product_type_name: 'instructions', category_name: cat.name.parameterize(separator: '_')), class: "category-card small-card position-relative shadow-lg overflow-hidden text-decoration-none rounded d-block" do %>
+                  <div class="category-card-bg" style="background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.1) 100%), url('<%= cat.image.url %>') center/cover no-repeat;"></div>
+
+                  <div class="category-card-content p-3 d-flex flex-column justify-content-end h-100">
+                    <h5 class="font-weight-bold text-white mb-1"><%= cat.name %></h5>
+                    <span class="small text-warning font-weight-bold"><%= count %> &rarr;</span>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="instructions" class="pt-3 mt-3 pt-md-5 mt-md-5">
+  <section id="freebies" class="mt-5 py-5 text-white" style="background: #2c3e50;">
     <div class="container">
-      <h2 class="text-center text-white">Instructions</h2>
-      <div class="row">
-        <% @products.each do |product| %>
-          <div class="col-md-4 col-lg-3 d-flex">
-            <%= render 'store/product_teaser_medium', product: product %>
+      <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-end mb-4">
+        <div class="mb-3 mb-sm-0">
+          <h2 class="section-title mb-1">Get Started for Free</h2>
+          <p class="text-light mb-0 opacity-90">Test drive our step-by-step guides with a complimentary build</p>
+        </div>
+        <%= link_to "Check Out Adventure Truck →", '/CV013/adventure_truck', class: "btn btn-outline-light btn-sm font-weight-bold align-self-start align-self-sm-auto" %>
+      </div>
+      <p class="lead mb-4">Want to check out the quality of our instructions and parts lists? Sign up for a free account to download our free instructions and test it out. You'll only hear from us about marketing or sales if you explicitly choose to subscribe—no surprise emails, ever.</p>
+    </div>
+  </section>
+
+  <section id="news" class="pt-5 pb-4 text-white">
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+          <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-end mb-4">
+            <div class="mb-3 mb-sm-0">
+              <h2 class="section-title mb-1">Latest News</h2>
+              <p class="text-light mb-0 opacity-90">All the news that's fit to print</p>
+            </div>
+            <%= link_to "View All Updates →", news_index_path, class: "btn btn-outline-light btn-sm font-weight-bold align-self-start align-self-sm-auto" %>
           </div>
-        <% end %>
+
+          <div class="row">
+            <% @updates.first(3).each do |update| %>
+              <div class="col-md-4 mb-4 d-flex">
+                <div class="card content-card w-100 border-0 shadow-sm h-100 bg-white">
+                  <% if update.image.present? %>
+                    <div class="content-card-img-wrap">
+                      <img src="<%= update.image %>" class="card-img-top" alt="News Image">
+                    </div>
+                  <% end %>
+                  <div class="card-body d-flex flex-column p-4">
+                    <h5 class="card-title text-dark font-weight-bold mb-2">
+                      <%= update.title %>
+                    </h5>
+                    <p class="card-text text-secondary small mb-3">
+                      <%= update.body %>
+                    </p>
+                    <%= link_to 'Learn More', update.link, class: 'btn btn-sm btn-outline-primary mt-auto align-self-start font-weight-bold' %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section-spacer" style="height: 100px;"></section>
+  <section id="books" class="py-5" style="background: #2c3e50;">
+    <div class="container">
+      <!-- Section Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-end mb-4">
+        <div class="mb-3 mb-sm-0">
+          <h2 class="section-title mb-1">Our Library</h2>
+          <p class="text-light mb-0 opacity-90">Books written by Brick City Depot</p>
+        </div>
+        <%= link_to "View All Books →", books_path, class: "btn btn-outline-light btn-sm font-weight-bold align-self-start align-self-sm-auto" %>
+      </div>
+      <div class="row">
+        <!-- Book 1 -->
+        <div class="col-md-6 mb-4 d-flex">
+          <div class="card content-card w-100 border-0 shadow-sm h-100 bg-white">
+            <%= link_to image_tag('lego_neighborhood_book.webp', class: "card-img-top book-cover-img", alt: "The Lego Neighborhood Book"), books_path %>
+
+            <div class="card-body d-flex flex-column p-4">
+              <h3 class="card-title text-dark font-weight-bold mb-2 h4">The Lego Neighborhood Book</h3>
+              <p class="card-text text-secondary small mb-3">Our first book! A deep dive into classic building techniques and city planning.</p>
+              <%= link_to 'View Details', books_path, class: 'btn btn-sm btn-outline-primary mt-auto align-self-start font-weight-bold' %>
+            </div>
+          </div>
+        </div>
+        <!-- Book 2 -->
+        <div class="col-md-6 mb-4 d-flex">
+          <div class="card content-card w-100 border-0 shadow-sm h-100 bg-white">
+            <%= link_to image_tag('lego_neighborhood_book2.webp', class: "card-img-top book-cover-img", alt: "The Lego Neighborhood Book 2"), books_path %>
+
+            <div class="card-body d-flex flex-column p-4">
+              <h3 class="card-title text-dark font-weight-bold mb-2 h4">The Lego Neighborhood Book 2</h3>
+              <p class="card-text text-secondary small mb-3">Our second book! Available online and in Barnes & Noble stores.</p>
+              <%= link_to 'View Details', books_path, class: 'btn btn-sm btn-outline-primary mt-auto align-self-start font-weight-bold' %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="merch" class="py-5">
+    <div class="container">
+      <!-- Section Header -->
+      <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-end mb-4">
+        <div class="mb-3 mb-sm-0">
+          <h2 class="section-title mb-1">Official Apparel &amp; Merch</h2>
+          <p class="text-light mb-0 opacity-90">Shirts, mugs, and gear printed on-demand via Redbubble</p>
+        </div>
+        <%= link_to "Visit Full Redbubble Storefront →", "https://www.redbubble.com/shop/ap/173474782", class: "btn btn-outline-light btn-sm font-weight-bold align-self-start align-self-sm-auto", target: "_blank", rel: "noopener" %>
+      </div>
+
+      <%
+        # 6 Redbubble Merch Items
+        merch_items = [
+          { name: "Classic T-Shirt - BCD Logo", price: "$20.39", image: "merch/classic_t_shirt.jpg", url: "https://www.redbubble.com/i/t-shirt/Brick-City-Depot-Logo-by-lylesjt/173474782.WFLAH?asc=u" },
+          { name: "Fitted T-Shirt - BCD Logo", price: "$24.14", image: "merch/fitted_t_shirt.jpg", url: "https://www.redbubble.com/i/t-shirt/Brick-City-Depot-Logo-by-lylesjt/173474782.8PZ5B?asc=u" },
+          { name: "Pullover Hoodie - BCD Logo", price: "$46.79", image: "merch/pullover_hoodie.jpg", url: "https://www.redbubble.com/i/hoodie/Brick-City-Depot-Logo-by-lylesjt/173474782.VR8OC?asc=u" },
+          { name: "Classic Mug - BCD Logo", price: "$15.11", image: "merch/classic_mug.jpg", url: "https://www.redbubble.com/i/mug/Brick-City-Depot-Logo-by-lylesjt/173474782.9Q0AD?asc=u" },
+          { name: "Magnet - BCD Logo", price: "$7.99", image: "merch/magnet.jpg", url: "https://www.redbubble.com/i/magnet/Brick-City-Depot-Logo-by-lylesjt/173474782.TBCTK?asc=u" },
+          { name: "Sticker - BCD Logo", price: "$1.79",  image: "merch/sticker.jpg", url: "https://www.redbubble.com/i/sticker/Brick-City-Depot-Logo-by-lylesjt/173474782.EJUG5?asc=u" }
+        ]
+      %>
+
+      <!-- 6-Item Grid (3 columns on desktop, 2 on tablet, 1 on mobile) -->
+      <div class="row">
+        <% merch_items.each do |item| %>
+        <div class="col-12 col-sm-6 col-lg-4 mb-4">
+          <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
+            <!-- Image Wrapper with Redbubble Badge -->
+            <a href="<%= item[:url] %>" target="_blank" rel="noopener" class="product-card-img-wrap position-relative d-block overflow-hidden">
+              <%= image_tag item[:image], alt: item[:name], class: "card-img-top w-100" %>
+              <span class="badge badge-light position-absolute top-0 right-0 m-2 shadow-sm border text-muted px-2 py-1" style="font-size: 0.75rem;">
+                Redbubble <i class="fas fa-external-link-alt ml-1" style="font-size: 0.65rem;"></i>
+              </span>
+            </a>
+            <!-- Card Body -->
+            <div class="card-body d-flex flex-column justify-content-between p-3">
+              <div>
+                <h5 class="card-title font-weight-bold mb-2" style="font-size: 1.05rem;">
+                  <a href="<%= item[:url] %>" target="_blank" rel="noopener" class="text-dark text-decoration-none product-title-link">
+                    <%= item[:name] %>
+                  </a>
+                </h5>
+              </div>
+              <div class="pt-3 border-top d-flex align-items-center justify-content-between mt-3">
+                <span class="font-weight-bold text-dark" style="font-size: 1.1rem;">From <%= item[:price] %></span>
+                <a href="<%= item[:url] %>" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm font-weight-bold">
+                  Buy on Redbubble &nearr;
+                </a>
+              </div>
+              <div class="text-center mt-2" style="font-size: 0.75rem;">
+                Prices subject to change
+              </div>
+            </div>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
 </div>

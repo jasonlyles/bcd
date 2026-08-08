@@ -6,29 +6,54 @@
       <%= @product_type.description %>
     </p>
     <br/>
-    <% if @product_type.name == 'Instructions' %>
+    <div class="container">
       <div class="row">
-        <% @top_categories.each do |category| %>
-          <div class="col-md-6 d-flex">
-            <div class="card mb-4 mt-4">
-              <div class="category-header">
-                <%= link_to image_tag(category.image.url, class: 'card-img-top img-fluid'), { controller: :store, action: :categories, product_type_name: @product_type.name.downcase, category_name: category.name.parameterize(separator: '_') } unless category.image.url.blank? %>
+        <% @products.each do |product| %>
+          <div class="col-xl-3 col-lg-4 col-md-6 col-12 mb-4">
+            <div class="card media-card border-0 shadow-lg h-100 overflow-hidden text-white position-relative">
+              <!-- Background Image -->
+              <img src="<%= product.main_image&.medium&.url %>" class="media-card-img" alt="<%= product.name %>">
+              <!-- Dark Gradient Overlay -->
+              <div class="media-card-overlay"></div>
+              <!-- Top Card Badge Area -->
+              <div class="p-3 d-flex justify-content-between align-items-start media-card-top-content">
+                <span class="badge badge-warning font-weight-bold shadow-sm text-dark hero-price">
+                  <% if product.discount_percentage > 0 %>
+                    <span class="text-danger pr-2">On Sale!</span>
+                  <% end %>
+                  <strong>$<%= product.current_price.floor %><span class='cents'><%= ("%.2f" % product.current_price).split('.')[1] %></span></strong>
+                </span>
               </div>
-              <div class="card-body">
-                <h3 class="card-title"><%= category.name %></h3>
-                <p class="card-text">
-                  <%= category.description %>
+              <!-- Card Body Anchored at Bottom -->
+              <div class="card-body media-card-body d-flex flex-column justify-content-end p-3">
+                <!-- Stretched Link turns the entire card background & title into the product details link -->
+                <h5 class="card-title font-weight-bold mb-1">
+                  <%= link_to "#{product.product_code} #{product.name}",
+                              {:controller => :store, :action => :product_details, :product_code => product.product_code, :product_name => product.name.to_snake_case},
+                              class: "text-white text-decoration-none stretched-link" %>
+                </h5>
+                <p class="card-text text-light small mb-3">
+                  <%= snippet(product.description, word_count: 16) %>
                 </p>
-              </div>
-              <div class="card-footer card-footer-no-border bg-transparent text-center">
-                <%= link_to 'Shop Instructions', { controller: :store, action: :categories, product_type_name: @product_type.name.downcase, category_name: category.name.parameterize(separator: '_') }, class: 'btn btn-primary' %>
+                <!-- Sits at z-index: 3 so the Add to Cart POST action works independently over stretched-link -->
+                <div class="mt-2 media-card-action">
+                  <%= button_to add_to_cart_path(product.product_code),
+                                method: :post,
+                                class: 'btn btn-primary btn-block',
+                                data: { disable_with: 'Adding...' },
+                                form: { class: 'd-block' } do %>
+                    <i class="fas fa-cart-plus"></i>&nbsp;
+                    <span style="font-size:larger">Add to Cart</span>
+                  <% end %>
+                </div>
               </div>
             </div>
           </div>
         <% end %>
       </div>
-    <% else %>
-      <%= render 'products_list', product_type: @product_type.name, products: @products %>
-    <% end %>
+      <div class="d-flex justify-content-center mt-5">
+        <%= paginate @products %>
+      </div>
+    </div>
   </div>
 </section>
