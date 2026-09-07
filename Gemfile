@@ -114,5 +114,6 @@ group :profile do
 end
 
 group :production, :staging do
+  gem 'cloudflare-rails'
   gem 'lograge'
 end
