@@ -6,15 +6,12 @@ class Rack::Attack
     ['127.0.0.1', '::1'].include?(req.ip)
   end
 
-  # Expanded static assets list
-  safelist('allow-assets') do |req|
-    req.path =~ %r{\.(css|js|png|jpg|jpeg|gif|svg|webp|avif|ico|woff|woff2|ttf|otf|eot|map)$}i
-  end
-
-  ### 2. Blocklist (Fail2Ban for Vulnerability Scanners) ###
   blocklist('block-exploit-seekers') do |req|
+    # Exclude safelisted extensions first
+    next false if req.path =~ %r{\.(css|js|png|jpg|jpeg|gif|svg|webp|avif|ico|woff|woff2|ttf|otf|eot|map)$}i
+
     req.path =~ %r{^/(wp-admin|wp-login|wp-content|phpmyadmin|\.env|\.git|config/|xmlrpc\.php)}i ||
-      req.path =~ %r{\.(php|asp|aspx|jsp|cgi|env|bak|sql|config)$}i ||
+      req.path =~ %r{\.(php|asp|aspx|jsp|cgi|env|bak|sql|config)\b}i ||
       req.path.include?('..')
   end
 
