@@ -13,12 +13,9 @@ class Rack::Attack
 
   ### 2. Blocklist (Fail2Ban for Vulnerability Scanners) ###
   blocklist('block-exploit-seekers') do |req|
-    Rack::Attack::Fail2Ban.filter("pentesters-#{req.ip}", maxretry: 3, findtime: 10.minutes, bantime: 1.hour) do
-      # Target common cms/admin paths or file extension scans directly
-      req.path =~ %r{^/(wp-admin|wp-login|wp-content|phpmyadmin|\.env|\.git|config/|xmlrpc\.php)}i ||
-        req.path =~ %r{\.(php|asp|aspx|jsp|cgi|env|bak|sql|config)$}i ||
-        req.path.include?('..') # Catches basic path traversal attempts
-    end
+    req.path =~ %r{^/(wp-admin|wp-login|wp-content|phpmyadmin|\.env|\.git|config/|xmlrpc\.php)}i ||
+      req.path =~ %r{\.(php|asp|aspx|jsp|cgi|env|bak|sql|config)$}i ||
+      req.path.include?('..')
   end
 
   blocklist('Cloudflare WAF bypass') do |req|
@@ -37,9 +34,4 @@ class Rack::Attack
   self.blocklisted_responder = lambda do |_env|
     [403, { 'Content-Type' => 'text/plain' }, ["Forbidden.\n"]]
   end
-end
-
-ActiveSupport::Notifications.subscribe('rack_attack.rack_attack') do |_name, _start, _finish, _request_id, payload|
-  req = payload[:request]
-  Rails.logger.warn "[Rack::Attack][#{req.env['rack.attack.match_type']}] IP: #{req.ip} Path: #{req.path}" if %i[throttle blocklist].include?(req.env['rack.attack.match_type'])
 end
