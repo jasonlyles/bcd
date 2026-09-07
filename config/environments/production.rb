@@ -138,4 +138,10 @@ Rails.application.configure do
   config.web_host = 'https://brickcitydepot.com'
 
   config.pinterest_api_url = 'https://api.pinterest.com/v5'
+
+  # Only allow requests addressed to your actual custom domains
+  config.hosts = [
+    'brickcitydepot.com',
+    'www.brickcitydepot.com'
+  ]
 end
