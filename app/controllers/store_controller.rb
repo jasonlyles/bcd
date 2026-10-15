@@ -21,6 +21,7 @@ class StoreController < ApplicationController
     else
       @products = Product.where('product_type_id=?', @product_type.id)
                          .in_stock
+                         .ready
                          .order(Arel.sql('popularity_order ASC NULLS LAST'))
                          .includes([:images])
                          .page(params[:page]).per(24)
